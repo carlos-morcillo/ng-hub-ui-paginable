@@ -1,0 +1,85 @@
+<div class="container">
+	<!--The content below is only a placeholder and can be replaced.-->
+	<div style="text-align:center">
+		<h1>
+			Welcome to {{ title }}!
+		</h1>
+		<img width="300" alt="Angular Logo"
+			src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+	</div>
+	<h2>NB Table Sorter </h2>
+
+	<section class="mb-5">
+		<h3>Tabla con cabeceras</h3>
+		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Paginación arriba</h3>
+		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" paginationPosition="top">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Paginación abajo</h3>
+		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" paginationPosition="bottom">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Paginación arriba y abajo</h3>
+		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" paginationPosition="both">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>3 items por página</h3>
+		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" [limit]="3">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Información de la paginación</h3>
+		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" [paginationInfo]="true">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Sin paginación</h3>
+		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" [limit]="0">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Cabeceras con títulos e iconos personalizados</h3>
+		<table-sorter [headers]="columns2" [rows]="items">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Tabla sin buscador</h3>
+		<table-sorter [headers]="columns2" [rows]="items" [showSearchInput]="false">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Tabla sin datos</h3>
+		<table-sorter [headers]="columns2" [rows]="[]">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Tabla sin y mensaje personalizado</h3>
+		<table-sorter [headers]="columns2" [rows]="[]">
+			<ng-template nbTableSorterNotFound>
+				<div class="alert alert-info" role="alert">
+					<i class="fa fa-fw fa-info-circle" aria-hidden="true"></i> No se han encontrado nada...
+					<div class="text-center">
+						<img src="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" alt="Sorry!">
+					</div>
+				</div>
+			</ng-template>
+		</table-sorter>
+	</section>
+</div>
