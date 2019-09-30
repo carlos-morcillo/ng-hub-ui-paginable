@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Pagination } from '../../table-sorter.component';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { TableSorterPagination } from '../../table-sorter.component';
 
 @Component({
 	selector: 'nb-table-sorter-paginator',
@@ -8,6 +8,10 @@ import { Pagination } from '../../table-sorter.component';
 })
 export class NbTableSorterPaginatorComponent {
 
-	@Input() pagination: Pagination;
+	@Input() pagination: TableSorterPagination;
+	@Output() onPageClick = new EventEmitter<number>();
 
+	pageClick(page: number) {
+		this.onPageClick.next(page);
+	}
 }

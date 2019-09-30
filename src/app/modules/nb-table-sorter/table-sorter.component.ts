@@ -1,94 +1,32 @@
-import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { NbTableSorterHeader } from './nb-table-sorter-header';
 import { NbTableSorterNotFoundDirective } from './nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from './nb-table-sorter-row.directive';
+import { PaginationService } from './services/pagination.service';
 
-export class Pagination {
+export interface TableSorterOptions {
+	serverSidePagination?: boolean
+};
 
-	total: number;
-
-	private _perPage: number = 10;
-	get perPage(): number {
-		return this._perPage;
-	}
-	set perPage(v: number) {
-		this._perPage = v;
-		this.currentPage = 1;
-		this.lastPage = Math.ceil(this._data.length / this._perPage);
-	}
-
-
-	private _currentPage: number = 1;
-	get currentPage(): number {
-		return this._currentPage;
-	}
-	set currentPage(v: number) {
-		this._currentPage = v;
-		if (this.perPage) {
-			if (this._data && this._data.length) {
-				this.from = this.perPage * (this._currentPage - 1);
-				this.to = this.from + this.perPage;
-			} else {
-				this.from = 0;
-				this.to = 0;
-			}
-			this.prevPage = this.currentPage - 1 > 0 ? this.currentPage - 1 : null;
-			this.nextPage = this.currentPage + 1 <= this.lastPage ? this.currentPage + 1 : null;
-		} else {
-			this.from = 0;
-			this.to = this.total;
-			this.prevPage = null;
-			this.nextPage = null;
-		}
-		this.itemsToShow = this.data.slice(this.from, this.to);
-
-
-	}
-	prevPage: number;
-	nextPage: number;
-	lastPage: number;
-	from: number = 1;
+export interface TableSorterPagination {
+	current_page: number;
+	first_page_url?: string;
+	from: number;
+	last_page: number;
+	last_page_url?: string;
+	next_page_url?: string;
+	path?: string;
+	per_page: number;
+	prev_page_url?: any;
 	to: number;
+	total: number;
+	data?: any[]
+}
 
-	private _data: any[];
-	get data(): any[] {
-		return this._data;
-	}
-	set data(v: any[]) {
-		this._data = v;
-		if (this._data) {
-			this.total = this._data.length;
-			this.lastPage = Math.ceil(this._data.length / this._perPage);
-			this.currentPage = 1;
-		}
-	}
-	itemsToShow;
-	// get items(): any[] {
-	// 	this.itemsToShow =  this.data.splice((this.currentPage - 1) * this.perPage, this.perPage);
-	// }
-
-	constructor(data: any[] = []) {
-		this.data = data;
-	}
-
-	prev() {
-		const prev = this.currentPage - 1;
-		if (prev >= 0) {
-			this.currentPage = prev;
-		}
-	}
-
-	next() {
-		const next = this.currentPage + 1;
-		if (next <= this.lastPage) {
-			this.currentPage = next;
-		}
-	}
-
-	reset() {
-		this.currentPage = 1;
-	}
+export interface TableSorterOrdination {
+	property: string;
+	direction: string;
 }
 
 @Component({
@@ -96,13 +34,11 @@ export class Pagination {
 	templateUrl: './table-sorter.component.html',
 	styleUrls: ['./table-sorter.component.scss']
 })
-export class TableSorterComponent implements OnInit, AfterContentInit {
+export class TableSorterComponent implements OnInit {
 	private _headers: NbTableSorterHeader[] | string[];
 
 	@Input() showSearchInput: boolean = true;
-
-	@Input() options: any;
-
+	@Input() options: TableSorterOptions = {};
 	@Input()
 	get headers(): NbTableSorterHeader[] | string[] {
 		if (!this._headers) {
@@ -114,10 +50,13 @@ export class TableSorterComponent implements OnInit, AfterContentInit {
 		}
 		return this._headers;
 	}
-
 	set headers(v: NbTableSorterHeader[] | string[]) {
 		this._headers = v;
 	}
+
+	// private _pagination: TableSorterPagination;
+	@Input() pagination: TableSorterPagination;
+	// @Output() paginationValue = new EventEmitter<TableSorterPagination>();
 
 	private _rows: any[];
 
@@ -128,61 +67,105 @@ export class TableSorterComponent implements OnInit, AfterContentInit {
 
 	set rows(v: any[]) {
 		this._rows = v;
-		this.filter();
+		const params = {
+			page: 1,
+			ordenation: this.ordenation,
+			searchText: this.searchText,
+			searchKeys: this.searchKeys
+		};
+		this.pagination = this._paginationSvc.generate(this.rows, params);
 	}
-
-	pagination = new Pagination();
 
 	@Input() paginationPosition: 'bottom' | 'top' | 'both' = 'bottom';
 
 	@Input() paginationInfo: boolean = false;
 
-	private _limit: number = 10;
-	@Input()
-	get limit(): number {
-		return this._limit;
-	}
-
-	set limit(v: number) {
-		this._limit = v;
-		this.pagination.perPage = this._limit;
-	}
-
 	searchText: string = '';
+	@Input() searchKeys: string[] = ['name'];
 
-	get searchKeys(): string[] {
-		return ['nombre'];
-	}
+	ordenation: TableSorterOrdination = null;
 
 	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
 	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) templateNotFound: NbTableSorterNotFoundDirective;
 
 	@Output() itemClick = new EventEmitter<any>();
+	@Output() onPageClick = new EventEmitter<number>();
+	@Output() onParamsChange = new EventEmitter<any>();
 
-	constructor() { }
+	constructor(
+		private _paginationSvc: PaginationService
+	) { }
 
-	ngOnInit() {
-	}
+	ngOnInit(): void { }
 
-	ngAfterContentInit() {
+	itemClicked(item: any) {
+		this.itemClick.next(item);
 	}
 
 	filter() {
-		const value = this.searchText.toLowerCase();
-
-		let filtered = this.rows;
-
-		if (value && value.trim() !== '') {
-			filtered = this.rows.filter((item) => {
-				return this.searchKeys.some(o => {
-					return _.get(item, o).toLowerCase().indexOf(value) > -1;
-				});
-			});
+		const params = {
+			page: 1,
+			ordenation: this.ordenation,
+			searchText: this.searchText,
+			searchKeys: this.searchKeys
+		};
+		if (!this.rows) {
+			this.onParamsChange.next(params);
+		} else {
+			this.pagination = this._paginationSvc.generate(this.rows, params);
 		}
-		this.pagination.data = filtered;
 	}
 
-	itemClicked(event: Event, item: any) {
-		this.itemClick.next(item);
+	pageClicked(page: number) {
+		const params = {
+			page,
+			ordenation: this.ordenation,
+			searchText: this.searchText,
+			searchKeys: this.searchKeys
+		};
+		if (!this.rows) {
+			this.onParamsChange.next(params);
+		} else {
+			this.pagination.current_page = page;
+			this.pagination = this._paginationSvc.generate(this.rows, params);
+		}
 	}
+
+	sort(header: NbTableSorterHeader) {
+		if (!header.sortable) {
+			return;
+		}
+		if (!this.ordenation || this.ordenation.property !== header.property) {
+			this.ordenation = {
+				property: header.property,
+				direction: 'asc'
+			}
+		} else {
+			this.ordenation = {
+				property: header.property,
+				direction: this.ordenation.direction === 'asc' ? 'desc' : 'asc'
+			}
+		}
+
+		const params = {
+			page: this.pagination.current_page,
+			ordenation: this.ordenation,
+			searchText: this.searchText,
+			searchKeys: this.searchKeys
+		};
+
+		if (!this.rows) {
+			this.onParamsChange.next(params);
+		} else {
+			this.pagination = this._paginationSvc.generate(this.rows, params);
+		}
+	}
+
+	getOrdenationClass(header: NbTableSorterHeader) {
+		if (!this.ordenation || this.ordenation.property !== header.property) {
+			return 'fa-sort';
+		}
+		return this.ordenation.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+	}
+
 }

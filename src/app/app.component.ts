@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { setTheme } from 'ngx-bootstrap/utils';
 import { NbTableSorterHeader } from './modules/nb-table-sorter/nb-table-sorter-header';
-import { UsersService } from './users.service';
+import { TableSorterOptions, TableSorterPagination } from './modules/nb-table-sorter/table-sorter.component';
+import { MockedUsersService } from './mocked-users.service';
 
 @Component({
 	selector: 'app-root',
@@ -10,45 +11,79 @@ import { UsersService } from './users.service';
 })
 export class AppComponent implements OnInit {
 
+	options: TableSorterOptions = {
+	}
 	title = 'nb-table-sorter';
 	items: any[];
+	pagination: TableSorterPagination;
 
-	columns1: (NbTableSorterHeader | string)[] = [
-		'nombre',
+	headers1: (NbTableSorterHeader | string)[] = [
+		'name',
 		{
-			property: 'role.nombre',
-			title: 'Rol'
+			property: 'email',
+			title: 'Email'
 		}
 	];
 
-	columns2: (NbTableSorterHeader | string)[] = [
+	headers2: (NbTableSorterHeader | string)[] = [
 		{
-			property: 'idUsuario',
+			property: 'id',
 			title: 'Id'
 		},
 		{
-			property: 'nombre',
+			property: 'name',
 			title: 'Nombre y apellidos',
-			icon: 'user'
+			icon: 'user',
+
 		},
 		{
-			property: 'role.nombre',
-			title: 'Rol',
-			icon: 'road'
+			property: 'email',
+			title: 'Corre electrónico',
+			icon: 'at'
 		}
 	];
 
+	items3: any[];
+	headers3: (NbTableSorterHeader | string)[] = [
+		'id',
+		{
+			property: 'username',
+			title: 'Usuario',
+			icon: 'person',
+			sortable: true
+		},
+		{
+			property: 'email',
+			title: 'Email',
+			icon: 'at',
+			sortable: true
+		},
+		'name'
+	];
+	searchKeys3: string[] = ['id', 'username', 'email', 'name']
+
 	constructor(
-		private _usersSvc: UsersService
+		private _mockedUsersSvc: MockedUsersService
 	) {
-		setTheme('bs4');
+		// setTheme('bs4');
 	}
 
 	ngOnInit(): void {
-		this.items = this._usersSvc.get();
+		this.items = this._mockedUsersSvc.items;
+		this.fetch('pagination');
 	}
 
 	load(event: Event) {
 		alert('Item clicked!');
+	}
+
+	async fetch(collectionName: string, event: any = {}) {
+		try {
+			event.searchKeys = this.searchKeys3;
+			this[collectionName] = this._mockedUsersSvc.get(event);
+			console.log(this[collectionName]);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 }

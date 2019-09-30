@@ -10,44 +10,58 @@
 	<h2>NB Table Sorter </h2>
 
 	<section class="mb-5">
-		<h3>Tabla con cabeceras</h3>
-		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)">
+		<h3>Tabla con paginación ajax</h3>
+		<table-sorter (onParamsChange)="fetch('pagination', $event)" [headers]="headers3"
+			[pagination]="pagination" (itemClick)="load($event)" [paginationInfo]="true"
+			[searchKeys]="searchKeys3">
 		</table-sorter>
 	</section>
 
 	<section class="mb-5">
+		<h3>Tabla con cabeceras</h3>
+		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)">
+		</table-sorter>
+	</section>
+
+	<section class="mb-5">
+		<h3>Tabla ordenable por nombre de usuario y email</h3>
+		<table-sorter [headers]="headers3" [rows]="items" (itemClick)="load($event)">
+		</table-sorter>
+	</section>
+
+	<!-- <section class="mb-5">
 		<h3>Paginación arriba</h3>
-		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" paginationPosition="top">
+		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="top">
 		</table-sorter>
 	</section>
 
 	<section class="mb-5">
 		<h3>Paginación abajo</h3>
-		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" paginationPosition="bottom">
+		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="bottom">
 		</table-sorter>
 	</section>
 
 	<section class="mb-5">
 		<h3>Paginación arriba y abajo</h3>
-		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" paginationPosition="both">
+		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="both">
 		</table-sorter>
 	</section>
 
 	<section class="mb-5">
 		<h3>3 items por página</h3>
-		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" [limit]="3">
+		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [limit]="3">
 		</table-sorter>
 	</section>
 
 	<section class="mb-5">
 		<h3>Información de la paginación</h3>
-		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" [paginationInfo]="true">
+		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [paginationInfo]="true">
 		</table-sorter>
 	</section>
 
 	<section class="mb-5">
 		<h3>Sin paginación</h3>
-		<table-sorter [headers]="columns1" [rows]="items" (itemClick)="load($event)" [limit]="0">
+		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [limit]="0">
 		</table-sorter>
 	</section>
 
@@ -81,5 +95,5 @@
 				</div>
 			</ng-template>
 		</table-sorter>
-	</section>
+	</section> -->
 </div>

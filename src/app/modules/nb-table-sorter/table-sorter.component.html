@@ -1,4 +1,4 @@
-<ng-container *ngIf="!rows">
+<ng-container *ngIf="!pagination">
 	<div class="d-flex justify-content-center">
 		<div class="spinner-border m-4" style="width: 3rem; height: 3rem;" role="status">
 			<span class="sr-only">Loading...</span>
@@ -6,7 +6,7 @@
 	</div>
 </ng-container>
 
-<ng-container *ngIf="rows && showSearchInput">
+<ng-container *ngIf="pagination?.data && showSearchInput">
 	<div class="row">
 		<div class="col-xs-12 offset-md-6 col-md-6">
 			<div class="input-group mb-3">
@@ -22,22 +22,24 @@
 	</div>
 </ng-container>
 
-<ng-container *ngIf="pagination.itemsToShow && !pagination.itemsToShow.length"
+<ng-container *ngIf="pagination?.data && !pagination.data.length"
 	[ngTemplateOutlet]="templateNotFound || defaultTemplateNotFound">
 </ng-container>
 
-<ng-container *ngIf="pagination.itemsToShow?.length">
-	<nb-table-sorter-paginator *ngIf="limit && (paginationPosition == 'top' || paginationPosition === 'both')"
+<ng-container *ngIf="pagination?.data.length">
+	<nb-table-sorter-paginator *ngIf="pagination && (paginationPosition == 'top' || paginationPosition === 'both')"
 		[pagination]="pagination"></nb-table-sorter-paginator>
 
 	<table class="table table-striped table-inverse table-responsive-sm">
 		<thead>
 			<tr>
-				<th *ngFor="let item of headers" [ngClass]="'text-' + (item.align || 'text-left')">
+				<th *ngFor="let item of headers" [ngClass]="'text-' + (item.align || 'text-left')" (click)="sort(item)">
 					<ng-container *ngIf="item | isObject">
 						<i class="fa fa-{{ item.icon }}" [ngClass]="{'fa-fw': item.title}" *ngIf="item.icon"
 							aria-hidden="true"></i>
 						<span *ngIf="item.title">{{ item.title | ucfirst }}</span>
+						<i class="fa float-right" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)"
+							aria-hidden="true"></i>
 					</ng-container>
 					<ng-container *ngIf="item | isString">
 						{{ item | ucfirst }}
@@ -48,8 +50,8 @@
 		</thead>
 
 		<tbody>
-			<ng-container *ngFor="let item of pagination.itemsToShow; let i=index">
-				<tr (click)="itemClicked($event, item)">
+			<ng-container *ngFor="let item of pagination.data; let i=index">
+				<tr (click)="itemClicked(item)">
 					<ng-container [ngTemplateOutlet]="normalTemplate || defaultTemplateOptionNotFound"
 						[ngTemplateOutletContext]="{$implicit: item}"></ng-container>
 					<!-- <td *ngIf="options" class="text-center">
@@ -74,11 +76,11 @@
 			</ng-container>
 		</tbody>
 	</table>
-	<p class="text-right" *ngIf="paginationInfo">
-		<small class="text-muted">Mostrando {{ pagination.itemsToShow.length }} de {{ pagination.total }}
+	<p class="text-right" *ngIf="pagination && paginationInfo">
+		<small class="text-muted">Mostrando {{ pagination.data.length }} de {{ pagination.total }}
 			registros</small>
 	</p>
-	<nb-table-sorter-paginator *ngIf="limit && (paginationPosition == 'bottom' || paginationPosition === 'both')"
+	<nb-table-sorter-paginator (onPageClick)="pageClicked($event)" *ngIf="pagination && (paginationPosition == 'bottom' || paginationPosition === 'both')"
 		[pagination]="pagination"></nb-table-sorter-paginator>
 
 	<!-- <nav aria-label="Pagination" class="text-right" *ngIf="pages">
