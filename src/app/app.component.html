@@ -9,43 +9,124 @@
 	</div>
 	<h2>NB Table Sorter </h2>
 
-	<section class="mb-5">
-		<h3>Tabla con paginación ajax</h3>
-		<table-sorter (onParamsChange)="fetch('pagination', $event)" [headers]="headers3"
-			[pagination]="pagination" (itemClick)="load($event)" [paginationInfo]="true"
-			[searchKeys]="searchKeys3">
-		</table-sorter>
-	</section>
+	<h2>Paginación en servidor</h2>
 
-	<section class="mb-5">
-		<h3>Tabla con cabeceras</h3>
-		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)">
-		</table-sorter>
-	</section>
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Tabla con cabeceras ordenables</h4>
+			<table-sorter (onParamsChange)="fetch('pagination', $event)" [headers]="headers3" [pagination]="pagination"
+				(itemClick)="load($event)" [paginationInfo]="true" [searchKeys]="searchKeys3">
+			</table-sorter>
+		</div>
+	</div>
+	<h2>Paginación en cliente</h2>
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Tabla con cabeceras</h4>
+			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)">
+			</table-sorter>
+		</div>
+	</div>
 
-	<section class="mb-5">
-		<h3>Tabla ordenable por nombre de usuario y email</h3>
-		<table-sorter [headers]="headers3" [rows]="items" (itemClick)="load($event)">
-		</table-sorter>
-	</section>
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Cabeceras con títulos e iconos personalizados</h4>
+			<table-sorter [headers]="headers2" [rows]="items"></table-sorter>
+		</div>
+	</div>
 
-	<!-- <section class="mb-5">
-		<h3>Paginación arriba</h3>
-		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="top">
-		</table-sorter>
-	</section>
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Tabla ordenable por nombre de usuario y email</h4>
+			<table-sorter [headers]="headers3" [rows]="items" (itemClick)="load($event)">
+			</table-sorter>
+		</div>
+	</div>
 
-	<section class="mb-5">
-		<h3>Paginación abajo</h3>
-		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="bottom">
-		</table-sorter>
-	</section>
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Paginación arriba</h4>
+			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="top">
+			</table-sorter>
+		</div>
+	</div>
 
-	<section class="mb-5">
-		<h3>Paginación arriba y abajo</h3>
-		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="both">
-		</table-sorter>
-	</section>
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Paginación abajo</h4>
+			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="bottom">
+			</table-sorter>
+		</div>
+	</div>
+
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Paginación arriba y abajo</h4>
+			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="both">
+			</table-sorter>
+		</div>
+	</div>
+
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Información de la paginación</h4>
+			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [paginationInfo]="true">
+			</table-sorter>
+		</div>
+	</div>
+
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Tabla sin buscador</h4>
+			<table-sorter [headers]="headers2" [rows]="items" [showSearchInput]="false">
+			</table-sorter>
+		</div>
+	</div>
+
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Tabla sin datos</h4>
+			<table-sorter [rows]="[]">
+			</table-sorter>
+		</div>
+	</div>
+
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Tabla sin datos y mensaje personalizado</h4>
+			<table-sorter [rows]="[]">
+				<ng-template nbTableSorterNotFound>
+					<div class="alert alert-info" role="alert">
+						<i class="fa fa-fw fa-info-circle" aria-hidden="true"></i> No se ha encontrado nada...
+						<div class="text-center">
+							<img src="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" alt="Sorry!">
+						</div>
+					</div>
+				</ng-template>
+			</table-sorter>
+		</div>
+	</div>
+
+	<!-- 
+			<section class="mb-5">
+				<h3>Tabla sin datos</h3>
+				<table-sorter [headers]="columns2" [rows]="[]">
+				</table-sorter>
+			</section>
+		
+			<section class="mb-5">
+				<h3>Tabla sin y mensaje personalizado</h3>
+				<table-sorter [headers]="columns2" [rows]="[]">
+					<ng-template nbTableSorterNotFound>
+						<div class="alert alert-info" role="alert">
+							<i class="fa fa-fw fa-info-circle" aria-hidden="true"></i> No se han encontrado nada...
+							<div class="text-center">
+								<img src="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" alt="Sorry!">
+							</div>
+						</div>
+					</ng-template>
+				</table-sorter>
+			</section>
 
 	<section class="mb-5">
 		<h3>3 items por página</h3>
@@ -54,46 +135,8 @@
 	</section>
 
 	<section class="mb-5">
-		<h3>Información de la paginación</h3>
-		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [paginationInfo]="true">
-		</table-sorter>
-	</section>
-
-	<section class="mb-5">
 		<h3>Sin paginación</h3>
 		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [limit]="0">
-		</table-sorter>
-	</section>
-
-	<section class="mb-5">
-		<h3>Cabeceras con títulos e iconos personalizados</h3>
-		<table-sorter [headers]="columns2" [rows]="items">
-		</table-sorter>
-	</section>
-
-	<section class="mb-5">
-		<h3>Tabla sin buscador</h3>
-		<table-sorter [headers]="columns2" [rows]="items" [showSearchInput]="false">
-		</table-sorter>
-	</section>
-
-	<section class="mb-5">
-		<h3>Tabla sin datos</h3>
-		<table-sorter [headers]="columns2" [rows]="[]">
-		</table-sorter>
-	</section>
-
-	<section class="mb-5">
-		<h3>Tabla sin y mensaje personalizado</h3>
-		<table-sorter [headers]="columns2" [rows]="[]">
-			<ng-template nbTableSorterNotFound>
-				<div class="alert alert-info" role="alert">
-					<i class="fa fa-fw fa-info-circle" aria-hidden="true"></i> No se han encontrado nada...
-					<div class="text-center">
-						<img src="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" alt="Sorry!">
-					</div>
-				</div>
-			</ng-template>
 		</table-sorter>
 	</section> -->
 </div>
