@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { setTheme } from 'ngx-bootstrap/utils';
 import { NbTableSorterHeader } from './modules/nb-table-sorter/nb-table-sorter-header';
 import { TableSorterOptions, TableSorterPagination } from './modules/nb-table-sorter/table-sorter.component';
 import { MockedUsersService } from './mocked-users.service';
@@ -64,9 +63,7 @@ export class AppComponent implements OnInit {
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService
-	) {
-		// setTheme('bs4');
-	}
+	) {}
 
 	ngOnInit(): void {
 		this.items = this._mockedUsersSvc.items;

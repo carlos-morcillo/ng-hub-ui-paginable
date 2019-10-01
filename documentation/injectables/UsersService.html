@@ -1,0 +1,1048 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>nb-table-sorter documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">nb-table-sorter documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>UsersService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/users.service.ts</code>
+        </p>
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#get">get</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor()</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="6" class="link-to-prism">src/app/users.service.ts:6</a></div>
+                            </td>
+                        </tr>
+
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="get"></a>
+                    <span class="name">
+                        <b>
+                            get
+                        </b>
+                        <a href="#get"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>get()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="11"
+                            class="link-to-prism">src/app/users.service.ts:11</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>{}</code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+
+@Injectable({
+	providedIn: &#x27;root&#x27;
+})
+export class UsersService {
+
+	constructor() {
+	}
+
+	get() {
+		return [{
+			&quot;idUsuario&quot;: 46,
+			&quot;nombre&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 46,
+			&quot;value&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 54,
+			&quot;nombre&quot;: &quot;Antonio García&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 54,
+			&quot;value&quot;: &quot;Antonio García&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 90,
+			&quot;nombre&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 90,
+			&quot;value&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 92,
+			&quot;nombre&quot;: &quot;Rubén Hernández&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 92,
+			&quot;value&quot;: &quot;Rubén Hernández&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 116,
+			&quot;nombre&quot;: &quot;Francisco Calvo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 116,
+			&quot;value&quot;: &quot;Francisco Calvo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 136,
+			&quot;nombre&quot;: &quot;Rubén Ortega&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 136,
+			&quot;value&quot;: &quot;Rubén Ortega&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 40,
+			&quot;nombre&quot;: &quot;Vicent Alonso&quot;,
+			&quot;idRol&quot;: 1,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 40,
+			&quot;value&quot;: &quot;Vicent Alonso&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 1,
+				&quot;nombre&quot;: &quot;Director&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 89,
+			&quot;nombre&quot;: &quot;Jesús Garcia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 89,
+			&quot;value&quot;: &quot;Jesús Garcia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 122,
+			&quot;nombre&quot;: &quot;Jose Heredia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 122,
+			&quot;value&quot;: &quot;Jose Heredia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 133,
+			&quot;nombre&quot;: &quot;José Joaquín&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 133,
+			&quot;value&quot;: &quot;José Joaquín&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 134,
+			&quot;nombre&quot;: &quot;Roberto&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 134,
+			&quot;value&quot;: &quot;Roberto&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 143,
+			&quot;nombre&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 143,
+			&quot;value&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 9,
+			&quot;nombre&quot;: &quot;Javier Alfaro&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 9,
+			&quot;value&quot;: &quot;Javier Alfaro&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 25,
+			&quot;nombre&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 25,
+			&quot;value&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 83,
+			&quot;nombre&quot;: &quot;Conrado Pardo&quot;,
+			&quot;idRol&quot;: 4,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 83,
+			&quot;value&quot;: &quot;Conrado Pardo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 4,
+				&quot;nombre&quot;: &quot;Diseñador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 91,
+			&quot;nombre&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 91,
+			&quot;value&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 46,
+			&quot;nombre&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 46,
+			&quot;value&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 54,
+			&quot;nombre&quot;: &quot;Antonio García&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 54,
+			&quot;value&quot;: &quot;Antonio García&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 90,
+			&quot;nombre&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 90,
+			&quot;value&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 92,
+			&quot;nombre&quot;: &quot;Rubén Hernández&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 92,
+			&quot;value&quot;: &quot;Rubén Hernández&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 116,
+			&quot;nombre&quot;: &quot;Francisco Calvo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 116,
+			&quot;value&quot;: &quot;Francisco Calvo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 136,
+			&quot;nombre&quot;: &quot;Rubén Ortega&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 136,
+			&quot;value&quot;: &quot;Rubén Ortega&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 40,
+			&quot;nombre&quot;: &quot;Vicent Alonso&quot;,
+			&quot;idRol&quot;: 1,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 40,
+			&quot;value&quot;: &quot;Vicent Alonso&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 1,
+				&quot;nombre&quot;: &quot;Director&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 89,
+			&quot;nombre&quot;: &quot;Jesús Garcia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 89,
+			&quot;value&quot;: &quot;Jesús Garcia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 122,
+			&quot;nombre&quot;: &quot;Jose Heredia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 122,
+			&quot;value&quot;: &quot;Jose Heredia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 133,
+			&quot;nombre&quot;: &quot;José Joaquín&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 133,
+			&quot;value&quot;: &quot;José Joaquín&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 134,
+			&quot;nombre&quot;: &quot;Roberto&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 134,
+			&quot;value&quot;: &quot;Roberto&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 143,
+			&quot;nombre&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 143,
+			&quot;value&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 9,
+			&quot;nombre&quot;: &quot;Javier Alfaro&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 9,
+			&quot;value&quot;: &quot;Javier Alfaro&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 25,
+			&quot;nombre&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 25,
+			&quot;value&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 83,
+			&quot;nombre&quot;: &quot;Conrado Pardo&quot;,
+			&quot;idRol&quot;: 4,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 83,
+			&quot;value&quot;: &quot;Conrado Pardo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 4,
+				&quot;nombre&quot;: &quot;Diseñador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 91,
+			&quot;nombre&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 91,
+			&quot;value&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 46,
+			&quot;nombre&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 46,
+			&quot;value&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 54,
+			&quot;nombre&quot;: &quot;Antonio García&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 54,
+			&quot;value&quot;: &quot;Antonio García&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 90,
+			&quot;nombre&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 90,
+			&quot;value&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 92,
+			&quot;nombre&quot;: &quot;Rubén Hernández&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 92,
+			&quot;value&quot;: &quot;Rubén Hernández&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 116,
+			&quot;nombre&quot;: &quot;Francisco Calvo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 116,
+			&quot;value&quot;: &quot;Francisco Calvo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 136,
+			&quot;nombre&quot;: &quot;Rubén Ortega&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 136,
+			&quot;value&quot;: &quot;Rubén Ortega&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 40,
+			&quot;nombre&quot;: &quot;Vicent Alonso&quot;,
+			&quot;idRol&quot;: 1,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 40,
+			&quot;value&quot;: &quot;Vicent Alonso&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 1,
+				&quot;nombre&quot;: &quot;Director&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 89,
+			&quot;nombre&quot;: &quot;Jesús Garcia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 89,
+			&quot;value&quot;: &quot;Jesús Garcia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 122,
+			&quot;nombre&quot;: &quot;Jose Heredia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 122,
+			&quot;value&quot;: &quot;Jose Heredia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 133,
+			&quot;nombre&quot;: &quot;José Joaquín&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 133,
+			&quot;value&quot;: &quot;José Joaquín&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 134,
+			&quot;nombre&quot;: &quot;Roberto&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 134,
+			&quot;value&quot;: &quot;Roberto&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 143,
+			&quot;nombre&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 143,
+			&quot;value&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 9,
+			&quot;nombre&quot;: &quot;Javier Alfaro&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 9,
+			&quot;value&quot;: &quot;Javier Alfaro&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 25,
+			&quot;nombre&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 25,
+			&quot;value&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 83,
+			&quot;nombre&quot;: &quot;Conrado Pardo&quot;,
+			&quot;idRol&quot;: 4,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 83,
+			&quot;value&quot;: &quot;Conrado Pardo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 4,
+				&quot;nombre&quot;: &quot;Diseñador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 91,
+			&quot;nombre&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 91,
+			&quot;value&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 46,
+			&quot;nombre&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 46,
+			&quot;value&quot;: &quot;Carlos Morcillo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 54,
+			&quot;nombre&quot;: &quot;Antonio García&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 54,
+			&quot;value&quot;: &quot;Antonio García&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 90,
+			&quot;nombre&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 90,
+			&quot;value&quot;: &quot;Gregorio Jiménez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 92,
+			&quot;nombre&quot;: &quot;Rubén Hernández&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 92,
+			&quot;value&quot;: &quot;Rubén Hernández&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 116,
+			&quot;nombre&quot;: &quot;Francisco Calvo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 116,
+			&quot;value&quot;: &quot;Francisco Calvo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 136,
+			&quot;nombre&quot;: &quot;Rubén Ortega&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 2,
+			&quot;id&quot;: 136,
+			&quot;value&quot;: &quot;Rubén Ortega&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 40,
+			&quot;nombre&quot;: &quot;Vicent Alonso&quot;,
+			&quot;idRol&quot;: 1,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 40,
+			&quot;value&quot;: &quot;Vicent Alonso&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 1,
+				&quot;nombre&quot;: &quot;Director&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 89,
+			&quot;nombre&quot;: &quot;Jesús Garcia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 89,
+			&quot;value&quot;: &quot;Jesús Garcia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 122,
+			&quot;nombre&quot;: &quot;Jose Heredia&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 122,
+			&quot;value&quot;: &quot;Jose Heredia&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 133,
+			&quot;nombre&quot;: &quot;José Joaquín&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 133,
+			&quot;value&quot;: &quot;José Joaquín&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 134,
+			&quot;nombre&quot;: &quot;Roberto&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 134,
+			&quot;value&quot;: &quot;Roberto&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 143,
+			&quot;nombre&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 1,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 143,
+			&quot;value&quot;: &quot;Jose Luis Muñoz&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 9,
+			&quot;nombre&quot;: &quot;Javier Alfaro&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 9,
+			&quot;value&quot;: &quot;Javier Alfaro&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 25,
+			&quot;nombre&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;idRol&quot;: 6,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 25,
+			&quot;value&quot;: &quot;Guillermo Sánchez&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 6,
+				&quot;nombre&quot;: &quot;Jefe de proyecto&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 83,
+			&quot;nombre&quot;: &quot;Conrado Pardo&quot;,
+			&quot;idRol&quot;: 4,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 83,
+			&quot;value&quot;: &quot;Conrado Pardo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 4,
+				&quot;nombre&quot;: &quot;Diseñador&quot;
+			}
+		},
+		{
+			&quot;idUsuario&quot;: 91,
+			&quot;nombre&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;idRol&quot;: 2,
+			&quot;idDept&quot;: 3,
+			&quot;activo&quot;: true,
+			&quot;id&quot;: 91,
+			&quot;value&quot;: &quot;Pedro Monteagudo&quot;,
+			&quot;role&quot;: {
+				&quot;idRol&quot;: 2,
+				&quot;nombre&quot;: &quot;Desarrollador&quot;
+			}
+		}
+		];
+	}
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'UsersService.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
