@@ -48,7 +48,6 @@ export class AppComponent implements OnInit {
 		{
 			property: 'username',
 			title: 'Usuario',
-			icon: 'person',
 			sortable: true
 		},
 		{
@@ -59,14 +58,39 @@ export class AppComponent implements OnInit {
 		},
 		'name'
 	];
+	headers4: (NbTableSorterHeader | string)[] = [
+		{
+			property: null,
+			title: '',
+			wrapping: 'nowrap'
+		},
+		{
+			property: 'name',
+			title: 'Nombre',
+			sortable: true
+		},
+		{
+			property: 'email',
+			title: 'Email',
+			icon: 'at',
+			sortable: true
+		},
+		{
+			property: null,
+			title: '',
+			wrapping: 'nowrap'
+		}
+	];
 	searchKeys3: string[] = ['id', 'username', 'email', 'name']
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService
-	) {}
+	) { }
 
 	ngOnInit(): void {
-		this.items = this._mockedUsersSvc.items;
+		setTimeout(() => {
+			this.items = this._mockedUsersSvc.items;
+		}, 2048);
 		this.fetch('pagination');
 	}
 
@@ -78,7 +102,6 @@ export class AppComponent implements OnInit {
 		try {
 			event.searchKeys = this.searchKeys3;
 			this[collectionName] = this._mockedUsersSvc.get(event);
-			console.log(this[collectionName]);
 		} catch (error) {
 			console.error(error);
 		}

@@ -522,7 +522,8 @@ import { NbTableSorterRowDirective } from &#x27;./nb-table-sorter-row.directive&
 import { PaginationService } from &#x27;./services/pagination.service&#x27;;
 
 export interface TableSorterOptions {
-	serverSidePagination?: boolean
+	serverSidePagination?: boolean,
+	cursor?: &#x27;pointer&#x27; | &#x27;default&#x27;
 };
 
 export interface TableSorterPagination {
@@ -554,7 +555,9 @@ export class TableSorterComponent implements OnInit {
 	private _headers: NbTableSorterHeader[] | string[];
 
 	@Input() showSearchInput: boolean &#x3D; true;
-	@Input() options: TableSorterOptions &#x3D; {};
+	@Input() options: TableSorterOptions &#x3D; {
+		cursor: &#x27;default&#x27;
+	};
 	@Input()
 	get headers(): NbTableSorterHeader[] | string[] {
 		if (!this._headers) {
@@ -589,7 +592,7 @@ export class TableSorterComponent implements OnInit {
 			searchText: this.searchText,
 			searchKeys: this.searchKeys
 		};
-		this.pagination &#x3D; this._paginationSvc.generate(this.rows, params);
+		this.pagination &#x3D; this.rows ? this._paginationSvc.generate(this.rows, params) : null;
 	}
 
 	@Input() paginationPosition: &#x27;bottom&#x27; | &#x27;top&#x27; | &#x27;both&#x27; &#x3D; &#x27;bottom&#x27;;

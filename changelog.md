@@ -1,0 +1,22 @@
+# Changelog
+
+## [1.2.0] - 2019-10-07
+
+### Added
+
+- Posibilidad de personalizar las filas con plantillas
+
+### Changed
+
+- Sustituidas las llamadas a funciones de Lodash con funciones personalizadas
+
+### Fixed
+
+- Errores cuando se pasaba undefined o null como parámetros al componente
+
+## [1.1.0] - 2019-10-02
+
+### Added
+
+- Posibilidad de controlar la paginación pasando un objeto de paginación de Laravel.
+- Ordenación de resultados y eventos de ordenación.

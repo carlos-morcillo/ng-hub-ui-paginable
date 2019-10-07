@@ -1,26 +1,29 @@
 import { Injectable } from '@angular/core';
 import { TableSorterPagination } from '../table-sorter.component';
-import * as _ from 'lodash';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class PaginationService {
 	generate(items: any[], params: any): any {
-		let filtered = items.concat();
-		if (params.searchText && params.searchKeys) {
-			const searchText = params.searchText;
-			if (searchText && searchText.trim() !== '') {
-				filtered = filtered.filter((item) => {
-					return params.searchKeys.some(o => {
-						return _.get(item, o).toString().toLowerCase().indexOf(searchText) > -1;
+		let filtered = [];
+		if (items && items.length) {
+			filtered = items.concat();
+			if (params.searchText && params.searchKeys) {
+				const searchText = params.searchText;
+				if (searchText && searchText.trim() !== '') {
+					filtered = filtered.filter((item) => {
+						return params.searchKeys.some(o =>
+							this.get(item, o).toString().toLowerCase().indexOf(searchText) > -1
+						);
 					});
-				});
+				}
 			}
-		}
 
-		if (params.ordenation) {
-			filtered = _.orderBy(filtered, [params.ordenation.property], [params.ordenation.direction]);
+			if (params.ordenation) {
+				filtered = this.orderBy(filtered, params.ordenation.property, params.ordenation.direction);
+
+			}
 		}
 		const page = params && params.page || 1;
 
@@ -35,4 +38,33 @@ export class PaginationService {
 		};
 		return pagination;
 	}
+
+	/**
+	 * Creates an array of elements, sorted in ascending or descending order by the results of running each element 
+	 * in a collection thru each iteratee. This method performs a stable sort, that is, it preserves the original s
+	 * ort order of equal elements. The iteratees are invoked with one argument: (value).
+	 * 
+	 * @param collection 
+	 * @param iteratee 
+	 * @param direction 
+	 */
+	orderBy(collection: any[], iteratee: string, direction: string = 'asc') {
+		return collection.sort((b, a) => {
+			const aSort = this.get(a, iteratee);
+			const bSort = this.get(b, iteratee);
+			if (direction === 'desc') {
+				return (aSort > bSort) ? 1 : (bSort > aSort ? -1 : 0);
+			} else {
+				return (aSort < bSort) ? 1 : (bSort < aSort ? -1 : 0)
+			}
+		});
+	}
+
+	get(object: any, path: string | any[]) {
+		if (path.constructor.name === 'String') {
+			path = (path as string).split('.');
+		}
+		return (path as any[]).reduce((o, k) => (o && o[k] !== 'undefined') ? o[k] : undefined, object);
+	}
+
 }

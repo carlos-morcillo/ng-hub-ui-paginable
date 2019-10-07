@@ -3,5 +3,6 @@ export interface NbTableSorterHeader {
 	property: string;
 	icon?: string;
 	align?: string;
-	sortable?: boolean
+	sortable?: boolean,
+	wrapping?: 'wrap' | 'nowrap'
 }

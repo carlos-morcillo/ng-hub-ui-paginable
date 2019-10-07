@@ -97,6 +97,10 @@
                                             <span class="modifier">Optional</span>
                                         <a href="#title">title</a>
                                 </li>
+                                <li>
+                                            <span class="modifier">Optional</span>
+                                        <a href="#wrapping">wrapping</a>
+                                </li>
                             </ul>
                         </td>
                     </tr>
@@ -273,6 +277,40 @@
 
                         </tbody>
                     </table>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="wrapping"></a>
+                                        <span class="name"><b>wrapping</b><a href="#wrapping"><span class="icon ion-ios-link"></span></a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>wrapping:     <code>&quot;wrap&quot; | &quot;nowrap&quot;</code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>    <code>&quot;wrap&quot; | &quot;nowrap&quot;</code>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Optional</i>
+                                        </td>
+                                    </tr>
+
+
+
+
+                        </tbody>
+                    </table>
             </section>
     </div>
 
@@ -283,7 +321,8 @@
 	property: string;
 	icon?: string;
 	align?: string;
-	sortable?: boolean
+	sortable?: boolean,
+	wrapping?: &#x27;wrap&#x27; | &#x27;nowrap&#x27;
 }
 </code></pre>
     </div>

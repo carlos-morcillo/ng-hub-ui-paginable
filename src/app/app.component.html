@@ -10,12 +10,12 @@
 	<h2>NB Table Sorter </h2>
 
 	<h2>Paginación en servidor</h2>
-
 	<div class="card mb-5">
 		<div class="card-body">
 			<h4 class="card-title">Tabla con cabeceras ordenables</h4>
 			<table-sorter (onParamsChange)="fetch('pagination', $event)" [headers]="headers3" [pagination]="pagination"
-				(itemClick)="load($event)" [paginationInfo]="true" [searchKeys]="searchKeys3">
+				(itemClick)="load($event)" [paginationInfo]="true" [searchKeys]="searchKeys3"
+				[options]="{cursor: 'pointer'}">
 			</table-sorter>
 		</div>
 	</div>
@@ -139,4 +139,46 @@
 		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [limit]="0">
 		</table-sorter>
 	</section> -->
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Filas personalizadas</h4>
+			<table-sorter [headers]="headers4" [rows]="items" (itemClick)="load($event)">
+				<ng-template nbTableSorterRow let-item>
+					<tr>
+						<td>
+							<img [src]="'assets/avatars/64_' + (item.id % 16 + 1) + '.png'" [alt]="item.name">
+						</td>
+						<td>{{ item.name }}</td>
+						<td>{{ item.email }}</td>
+						<td>
+							<a class="btn btn-link" (click)="item.unfold  = !item.unfold">
+								<i class="fa"
+									[ngClass]="{'fa-chevron-down': !item.unfold, 'fa-chevron-up': item.unfold}"></i>
+							</a>
+						</td>
+					</tr>
+					<ng-container *ngIf="item.unfold">
+						<tr>
+							<td colspan="4">
+								Columna personalizada
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Columna personalizada 1
+							</td>
+							<td>
+								Columna personalizada 2
+							</td>
+							<td>
+								Columna personalizada 3
+							</td>
+							<td>
+							</td>
+						</tr>
+					</ng-container>
+				</ng-template>
+			</table-sorter>
+		</div>
+	</div>
 </div>
