@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NbTableSorterHeader } from './modules/nb-table-sorter/nb-table-sorter-header';
 import { TableSorterOptions, TableSorterPagination } from './modules/nb-table-sorter/table-sorter.component';
 import { MockedUsersService } from './mocked-users.service';
+import { NbTableSorterRowAction } from './modules/nb-table-sorter/nb-table-sorter-row-action';
 
 @Component({
 	selector: 'app-root',
@@ -23,6 +24,20 @@ export class AppComponent implements OnInit {
 			title: 'Email'
 		}
 	];
+
+	actions1: NbTableSorterRowAction[] = [
+		{
+			title: 'edit',
+			icon: 'fa fa-pencil',
+			handle: () => alert('edit')
+		},
+		{
+			title: 'delete',
+			color: 'danger',
+			icon: 'fa fa-trash',
+			handle: () => alert('delete')
+		}
+	]
 
 	headers2: (NbTableSorterHeader | string)[] = [
 		{

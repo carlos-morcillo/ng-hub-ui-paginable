@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.0] - 2019-12-12
+
+### Added
+
+- Posibilidad de añadir una columna de acciones personalizadas sobre cada fila
+
 ## [1.2.0] - 2019-10-07
 
 ### Added

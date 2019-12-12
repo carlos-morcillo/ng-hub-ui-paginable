@@ -47,6 +47,7 @@
 						{{ item | ucfirst }}
 					</ng-container>
 				</th>
+				<th *ngIf="actions?.length"></th>
 			</tr>
 		</thead>
 
@@ -77,6 +78,13 @@
 	<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
 		<td *ngFor="let header of headers">
 			{{ item | get : (header?.property || header) }}
+		</td>
+		<td *ngIf="actions?.length" class="actions">
+			<button *ngFor="let action of actions" class="btn btn-link px-2"
+				[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
+				(click)="action.handle()">
+				<i *ngIf="action.icon" [ngClass]="action.icon"></i>
+			</button>
 		</td>
 	</tr>
 </ng-template>

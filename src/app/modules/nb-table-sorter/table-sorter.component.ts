@@ -4,6 +4,7 @@ import { NbTableSorterHeader } from './nb-table-sorter-header';
 import { NbTableSorterNotFoundDirective } from './nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from './nb-table-sorter-row.directive';
 import { PaginationService } from './services/pagination.service';
+import { NbTableSorterRowAction } from './nb-table-sorter-row-action';
 
 export interface TableSorterOptions {
 	serverSidePagination?: boolean,
@@ -87,6 +88,8 @@ export class TableSorterComponent implements OnInit {
 	@Input() searchKeys: string[] = ['name'];
 
 	ordenation: TableSorterOrdination = null;
+
+	@Input() actions: NbTableSorterRowAction[] = [];
 
 	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
 	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) templateNotFound: NbTableSorterNotFoundDirective;
