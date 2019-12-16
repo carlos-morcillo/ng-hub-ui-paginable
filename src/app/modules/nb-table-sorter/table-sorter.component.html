@@ -68,25 +68,25 @@
 		[pagination]="pagination"></nb-table-sorter-paginator>
 </ng-container>
 
-<!-- <ng-template #defaultTemplateOptionNotFound let-item>
-	<td *ngFor="let header of headers">
-		{{ item | get : (header?.property || header) }}
-	</td>
-</ng-template> -->
-
 <ng-template #defaultRowTemplate let-item>
 	<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
 		<td *ngFor="let header of headers">
-			{{ item | get : (header?.property || header) }}
+			<ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate"
+				[ngTemplateOutletContext]="{ $implicit: getProperty(item, header?.property || header) }">
+			</ng-container>
 		</td>
 		<td *ngIf="actions?.length" class="actions">
 			<button *ngFor="let action of actions" class="btn btn-link px-2"
 				[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
-				(click)="action.handle()">
+				(click)="action.handler()">
 				<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 			</button>
 		</td>
 	</tr>
+</ng-template>
+
+<ng-template #defaultCellTemplate let-item>
+	{{ item }}
 </ng-template>
 
 <ng-template #defaultNotFoundTemplate>

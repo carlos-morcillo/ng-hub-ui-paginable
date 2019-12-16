@@ -12,12 +12,14 @@ import { PaginatePipe } from './paginate.pipe';
 import { TableSorterComponent } from './table-sorter.component';
 import { UcfirstPipe } from './ucfirst.pipe';
 import { ValueOrDatePipe } from './value-or-date.pipe';
+import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 
 @NgModule({
 	declarations: [
 		TableSorterComponent,
 		NbTableSorterHeaderDirective,
 		NbTableSorterRowDirective,
+		NbTableSorterCellDirective,
 		GetPipe,
 		PaginatePipe,
 		NbTableSorterNotFoundDirective,
@@ -35,6 +37,7 @@ import { ValueOrDatePipe } from './value-or-date.pipe';
 		TableSorterComponent,
 		NbTableSorterHeaderDirective,
 		NbTableSorterRowDirective,
+		NbTableSorterCellDirective,
 		GetPipe,
 		PaginatePipe,
 		NbTableSorterNotFoundDirective,

@@ -28,14 +28,14 @@ export class AppComponent implements OnInit {
 	actions1: NbTableSorterRowAction[] = [
 		{
 			title: 'edit',
-			icon: 'fa fa-pencil',
-			handle: () => alert('edit')
+			icon: 'fa fa-edit',
+			handler: () => alert('edit')
 		},
 		{
 			title: 'delete',
 			color: 'danger',
 			icon: 'fa fa-trash',
-			handle: () => alert('delete')
+			handler: () => alert('delete')
 		}
 	]
 
@@ -48,7 +48,6 @@ export class AppComponent implements OnInit {
 			property: 'name',
 			title: 'Nombre y apellidos',
 			icon: 'user',
-
 		},
 		{
 			property: 'email',

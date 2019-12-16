@@ -1,6 +1,6 @@
 export interface NbTableSorterRowAction {
 	title?: string;
 	icon?: string;
-	handle?: CallableFunction;
+	handler?: any;
 	color?: string
 }

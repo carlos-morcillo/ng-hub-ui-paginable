@@ -1,10 +1,13 @@
-import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges } from '@angular/core';
+import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ContentChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { NbTableSorterHeader } from './nb-table-sorter-header';
 import { NbTableSorterNotFoundDirective } from './nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from './nb-table-sorter-row.directive';
 import { PaginationService } from './services/pagination.service';
 import { NbTableSorterRowAction } from './nb-table-sorter-row-action';
+import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
+import { QueryList } from '@angular/core';
+import { isString } from 'util';
 
 export interface TableSorterOptions {
 	serverSidePagination?: boolean,
@@ -92,6 +95,7 @@ export class TableSorterComponent implements OnInit {
 	@Input() actions: NbTableSorterRowAction[] = [];
 
 	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
+	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
 	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) templateNotFound: NbTableSorterNotFoundDirective;
 
 	@Output() itemClick = new EventEmitter<any>();
@@ -100,9 +104,23 @@ export class TableSorterComponent implements OnInit {
 
 	constructor(
 		private _paginationSvc: PaginationService
-	) { }
+	) {
+		console.log(this.templateCells);
+	}
 
 	ngOnInit(): void { }
+
+	/**
+	 * Obtiene la propiedad del objeto cuya clave es pasada por parámetro
+	 *
+	 * @param {object} item
+	 * @param {string} key
+	 * @returns {*}
+	 * @memberof TableSorterComponent
+	 */
+	getProperty(item: object, key: string): any {
+		return _.get(item, key);
+	}
 
 	itemClicked(item: any) {
 		this.itemClick.next(item);
@@ -172,6 +190,22 @@ export class TableSorterComponent implements OnInit {
 			return 'fa-sort';
 		}
 		return this.ordenation.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+	}
+
+	/**
+	 * If it exists, returns the cell template for the header passed by parameter
+	 *
+	 * @param {(NbTableSorterHeader)} header
+	 * @returns {TemplateRef<NbTableSorterCellDirective>}
+	 * @memberof TableSorterComponent
+	 */
+	getCellTemplate(header: NbTableSorterHeader): TemplateRef<NbTableSorterCellDirective> {
+		const property = isString(header) ? header : header.property;
+		if (!property) {
+			return null;
+		}
+		const directive = this.templateCells.find(o => o.header === property);
+		return directive ? directive.template : null;
 	}
 
 }

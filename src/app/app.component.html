@@ -1,5 +1,4 @@
 <div class="container">
-	<!--The content below is only a placeholder and can be replaced.-->
 	<div style="text-align:center">
 		<h1>
 			Welcome to {{ title }}!
@@ -107,38 +106,6 @@
 		</div>
 	</div>
 
-	<!-- 
-			<section class="mb-5">
-				<h3>Tabla sin datos</h3>
-				<table-sorter [headers]="columns2" [rows]="[]">
-				</table-sorter>
-			</section>
-		
-			<section class="mb-5">
-				<h3>Tabla sin y mensaje personalizado</h3>
-				<table-sorter [headers]="columns2" [rows]="[]">
-					<ng-template nbTableSorterNotFound>
-						<div class="alert alert-info" role="alert">
-							<i class="fa fa-fw fa-info-circle" aria-hidden="true"></i> No se han encontrado nada...
-							<div class="text-center">
-								<img src="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" alt="Sorry!">
-							</div>
-						</div>
-					</ng-template>
-				</table-sorter>
-			</section>
-
-	<section class="mb-5">
-		<h3>3 items por página</h3>
-		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [limit]="3">
-		</table-sorter>
-	</section>
-
-	<section class="mb-5">
-		<h3>Sin paginación</h3>
-		<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [limit]="0">
-		</table-sorter>
-	</section> -->
 	<div class="card mb-5">
 		<div class="card-body">
 			<h4 class="card-title">Filas personalizadas</h4>
@@ -181,12 +148,34 @@
 			</table-sorter>
 		</div>
 	</div>
-	<h2>Filas con acciones</h2>
+
 	<div class="card mb-5">
 		<div class="card-body">
-			<h4 class="card-title">Tabla con cabeceras</h4>
+			<h4 class="card-title">Celdas personalizadas</h4>
+			<table-sorter [headers]="headers4" [rows]="items" (itemClick)="load($event)">
+				<ng-template nbTableSorterCell header="name" let-item>
+					<span class="badge badge-pill badge-info">
+						customized column
+					</span>
+					{{ item }}
+				</ng-template>
+				<ng-template nbTableSorterCell header="email" let-item>
+					{{ item }}
+					<span class="badge badge-pill badge-warning">
+						also customized
+					</span>
+				</ng-template>
+			</table-sorter>
+		</div>
+	</div>
+
+	<div class="card mb-5">
+		<div class="card-body">
+			<h4 class="card-title">Filas con acciones</h4>
 			<table-sorter [headers]="headers1" [rows]="items" [actions]="actions1">
 			</table-sorter>
 		</div>
 	</div>
+
+
 </div>
