@@ -11,7 +11,6 @@ import { NbTableSorterRowDirective } from './nb-table-sorter-row.directive';
 import { PaginatePipe } from './paginate.pipe';
 import { TableSorterComponent } from './table-sorter.component';
 import { UcfirstPipe } from './ucfirst.pipe';
-import { ValueOrDatePipe } from './value-or-date.pipe';
 import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 
 @NgModule({
@@ -23,7 +22,6 @@ import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 		GetPipe,
 		PaginatePipe,
 		NbTableSorterNotFoundDirective,
-		ValueOrDatePipe,
 		IsObjectPipe,
 		UcfirstPipe,
 		IsStringPipe,
@@ -41,7 +39,6 @@ import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 		GetPipe,
 		PaginatePipe,
 		NbTableSorterNotFoundDirective,
-		ValueOrDatePipe,
 		IsObjectPipe,
 		UcfirstPipe,
 		IsStringPipe,

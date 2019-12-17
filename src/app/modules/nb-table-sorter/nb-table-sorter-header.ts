@@ -3,6 +3,6 @@ export interface NbTableSorterHeader {
 	property: string;
 	icon?: string;
 	align?: string;
-	sortable?: boolean,
-	wrapping?: 'wrap' | 'nowrap'
+	sortable?: boolean;
+	wrapping?: 'wrap' | 'nowrap';
 }

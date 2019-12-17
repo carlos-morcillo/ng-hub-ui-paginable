@@ -1,6 +1,17 @@
 # Changelog
 
-## [1.4.0] - 2019-12-12
+## [1.4.1] - 2019-12-17
+### Fixed
+- Corregido el funcionamiento del handler de las acciones
+### Removed
+- Useless pipes
+
+### Added
+- Posibilidad de personalizar la plantilla de una columna especificada por parámetro
+### Fixed
+- Renombrado la propiedad de la interfaz NbTableSorterRowAction de handle a handler
+
+## [1.4.0] - 2019-12-15
 
 ### Added
 - Posibilidad de personalizar la plantilla de una columna especificada por parámetro

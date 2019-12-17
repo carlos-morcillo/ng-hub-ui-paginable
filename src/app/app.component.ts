@@ -12,7 +12,7 @@ import { NbTableSorterRowAction } from './modules/nb-table-sorter/nb-table-sorte
 export class AppComponent implements OnInit {
 
 	options: TableSorterOptions = {
-	}
+	};
 	title = 'nb-table-sorter';
 	items: any[];
 	pagination: TableSorterPagination;
@@ -29,15 +29,15 @@ export class AppComponent implements OnInit {
 		{
 			title: 'edit',
 			icon: 'fa fa-edit',
-			handler: () => alert('edit')
+			handler: (item) => console.log('edit', item)
 		},
 		{
 			title: 'delete',
 			color: 'danger',
 			icon: 'fa fa-trash',
-			handler: () => alert('delete')
+			handler: (item) => console.log('delete', item)
 		}
-	]
+	];
 
 	headers2: (NbTableSorterHeader | string)[] = [
 		{
@@ -95,7 +95,7 @@ export class AppComponent implements OnInit {
 			wrapping: 'nowrap'
 		}
 	];
-	searchKeys3: string[] = ['id', 'username', 'email', 'name']
+	searchKeys3: string[] = ['id', 'username', 'email', 'name'];
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService

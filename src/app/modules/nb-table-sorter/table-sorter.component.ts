@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ContentChildren } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, ContentChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { NbTableSorterHeader } from './nb-table-sorter-header';
 import { NbTableSorterNotFoundDirective } from './nb-table-sorter-not-found.directive';
@@ -10,9 +10,9 @@ import { QueryList } from '@angular/core';
 import { isString } from 'util';
 
 export interface TableSorterOptions {
-	serverSidePagination?: boolean,
-	cursor?: 'pointer' | 'default'
-};
+	serverSidePagination?: boolean;
+	cursor?: 'pointer' | 'default';
+}
 
 export interface TableSorterPagination {
 	current_page: number;
@@ -26,7 +26,7 @@ export interface TableSorterPagination {
 	prev_page_url?: any;
 	to: number;
 	total: number;
-	data?: any[]
+	data?: any[];
 }
 
 export interface TableSorterOrdination {
@@ -163,12 +163,12 @@ export class TableSorterComponent implements OnInit {
 			this.ordenation = {
 				property: header.property,
 				direction: 'asc'
-			}
+			};
 		} else {
 			this.ordenation = {
 				property: header.property,
 				direction: this.ordenation.direction === 'asc' ? 'desc' : 'asc'
-			}
+			};
 		}
 
 		const params = {
@@ -208,4 +208,14 @@ export class TableSorterComponent implements OnInit {
 		return directive ? directive.template : null;
 	}
 
+	/**
+	 * Handle the action to execute
+	 *
+	 * @param {Function} handler
+	 * @param {*} item
+	 * @memberof TableSorterComponent
+	 */
+	handleAction(handler: (...args: any) => void, item: any) {
+		handler(item);
+	}
 }

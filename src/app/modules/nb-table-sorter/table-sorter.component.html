@@ -78,7 +78,7 @@
 		<td *ngIf="actions?.length" class="actions">
 			<button *ngFor="let action of actions" class="btn btn-link px-2"
 				[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
-				(click)="action.handler()">
+				(click)="handleAction(action.handler, item)">
 				<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 			</button>
 		</td>
