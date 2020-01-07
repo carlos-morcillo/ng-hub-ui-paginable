@@ -1,10 +1,18 @@
 # Changelog
 
+## [1.4.2] - 2020-01-07
+### WIP
+- Página de documentación
+### Changed
+- Ahora el buscador se muestra unque no haya resultados
+### Fixed
+- Corregido el funcionamiento del handler de las acciones para que no se ejecute el evento de la fila.
+
 ## [1.4.1] - 2019-12-17
 ### Fixed
 - Corregido el funcionamiento del handler de las acciones
 ### Removed
-- Useless pipes
+- Eliminadas las pipes sin uso
 
 ### Added
 - Posibilidad de personalizar la plantilla de una columna especificada por parámetro

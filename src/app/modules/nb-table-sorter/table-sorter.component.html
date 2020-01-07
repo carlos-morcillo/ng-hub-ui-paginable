@@ -6,12 +6,12 @@
 	</div>
 </ng-container>
 
-<ng-container *ngIf="pagination?.data?.length && showSearchInput">
+<ng-container *ngIf="showSearchInput">
 	<div class="row">
 		<div class="col-xs-12 offset-md-6 col-md-6">
 			<div class="input-group mb-3">
-				<input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Buscar"
-					aria-label="Buscar" (keyup.enter)="filter()">
+				<input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Search"
+					aria-label="Search" (keyup.enter)="filter()">
 				<div class="input-group-append">
 					<button class="btn btn-secondary" type="button" (click)="filter()">
 						<i class="fa fa-search" aria-hidden="true"></i>
@@ -78,7 +78,7 @@
 		<td *ngIf="actions?.length" class="actions">
 			<button *ngFor="let action of actions" class="btn btn-link px-2"
 				[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
-				(click)="handleAction(action.handler, item)">
+				(click)="handleAction($event, action.handler, item)">
 				<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 			</button>
 		</td>

@@ -29,12 +29,12 @@ export class PaginationService {
 
 		const pagination: TableSorterPagination = {
 			current_page: page,
-			last_page: Math.ceil(filtered.length / 15),
-			per_page: 15,
-			from: (page - 1) * 15,
-			to: page * 15,
+			last_page: Math.ceil(filtered.length / 10),
+			per_page: 10,
+			from: (page - 1) * 10,
+			to: page * 10,
 			total: filtered.length,
-			data: filtered.slice((page - 1) * 15, page * 15)
+			data: filtered.slice((page - 1) * 10, page * 10)
 		};
 		return pagination;
 	}

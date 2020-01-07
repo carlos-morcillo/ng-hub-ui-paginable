@@ -94,9 +94,9 @@ export class TableSorterComponent implements OnInit {
 
 	@Input() actions: NbTableSorterRowAction[] = [];
 
-	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
+	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef, static: false }) templateRow: NbTableSorterRowDirective;
 	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
-	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) templateNotFound: NbTableSorterNotFoundDirective;
+	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef, static: false }) templateNotFound: NbTableSorterNotFoundDirective;
 
 	@Output() itemClick = new EventEmitter<any>();
 	@Output() onPageClick = new EventEmitter<number>();
@@ -104,9 +104,7 @@ export class TableSorterComponent implements OnInit {
 
 	constructor(
 		private _paginationSvc: PaginationService
-	) {
-		console.log(this.templateCells);
-	}
+	) { }
 
 	ngOnInit(): void { }
 
@@ -215,7 +213,8 @@ export class TableSorterComponent implements OnInit {
 	 * @param {*} item
 	 * @memberof TableSorterComponent
 	 */
-	handleAction(handler: (...args: any) => void, item: any) {
+	handleAction(event: Event, handler: (...args: any) => void, item: any) {
+		event.stopPropagation();
 		handler(item);
 	}
 }

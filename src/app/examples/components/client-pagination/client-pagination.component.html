@@ -1,0 +1,27 @@
+<h2>Client side pagination</h2>
+<table-sorter [headers]="headers" [rows]="items" (itemClick)="itemClicked($event)">
+</table-sorter>
+
+<!-- <h3>Usage</h3>
+<div class="card mb-5">
+	<div class="card-header">
+		<ul class="nav nav-tabs card-header-tabs">
+			<li class="nav-item">
+				<a class="nav-link" [ngClass]="{'active': language == 'typescript'}"
+					(click)="language = 'typescript'">Typescript</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [ngClass]="{'active': language == 'html'}" (click)="language = 'html'">HTML</a>
+			</li>
+		</ul>
+	</div>
+	<div class="card-body" [ngSwitch]="language">
+		<div *ngSwitchCase="'html'">
+			<div [highlight]="code"></div>
+		</div>
+		<div *ngSwitchCase="'typescript'">
+			<div [highlight]="typescript"></div>
+		</div>
+
+	</div>
+</div> -->
