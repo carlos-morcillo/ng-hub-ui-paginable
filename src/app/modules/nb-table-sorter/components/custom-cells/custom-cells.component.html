@@ -1,0 +1,18 @@
+<div class="mb-5">
+	<h2 class="d-inline">Custom cells</h2>
+	<a class="btn btn-outline-primary float-right" href="#"><i class="fa fa-fw fa-github"></i>View code in Github</a>
+</div>
+<table-sorter [headers]="headers" [rows]="items">
+	<ng-template nbTableSorterCell header="name" let-item>
+		<span class="badge badge-pill badge-info">
+			customized column
+		</span>
+		{{ item }}
+	</ng-template>
+	<ng-template nbTableSorterCell header="email" let-item>
+		{{ item }}
+		<span class="badge badge-pill badge-warning">
+			also customized
+		</span>
+	</ng-template>
+</table-sorter>

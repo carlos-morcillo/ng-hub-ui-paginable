@@ -8,6 +8,7 @@ import { NbTableSorterRowAction } from './nb-table-sorter-row-action';
 import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 import { QueryList } from '@angular/core';
 import { isString } from 'util';
+import { NbTableSorterService } from './services/nb-table-sorter.service';
 
 export interface TableSorterOptions {
 	serverSidePagination?: boolean;
@@ -102,11 +103,16 @@ export class TableSorterComponent implements OnInit {
 	@Output() onPageClick = new EventEmitter<number>();
 	@Output() onParamsChange = new EventEmitter<any>();
 
+	mapping: any = this._configSvc.mapping;
+
 	constructor(
-		private _paginationSvc: PaginationService
+		private _paginationSvc: PaginationService,
+		private _configSvc: NbTableSorterService
 	) { }
 
-	ngOnInit(): void { }
+	ngOnInit(): void {
+		console.log(this._configSvc);
+	}
 
 	/**
 	 * Obtiene la propiedad del objeto cuya clave es pasada por parámetro

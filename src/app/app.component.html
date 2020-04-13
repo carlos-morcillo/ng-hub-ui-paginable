@@ -1,218 +1,62 @@
 <header>
-	<nav class="navbar sticky-top navbar-expand-sm navbar-light bg-light">
-		<a class="navbar-brand" href="/">NB Table Sorter</a>
-		<button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsableNavbar"
-			aria-controls="collapsableNavbar" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="collapsableNavbar">
-			<!-- <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item active">
-					<a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-					<div class="dropdown-menu" aria-labelledby="dropdownId">
-						<a class="dropdown-item" href="#">Action 1</a>
-						<a class="dropdown-item" href="#">Action 2</a>
-					</div>
-				</li>
-			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search">
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form> -->
-		</div>
+	<nav class="navbar sticky-top navbar-light bg-light">
+		<a class="navbar-brand" href="/">
+			<img src="assets/icons/80-logo-02.png" height="32" alt="80 y media">
+		</a>
+		<!-- NB Table Sorter -->
+
 	</nav>
-	<ul class="nav nav-pills container my-4">
+	<ul class="nav nav-pills container my-4 text-center">
 		<li class="nav-item">
 			<a class="nav-link" [routerLink]="['server-pagination']" routerLinkActive="active">Server pagination</a>
+		</li>
 		<li class="nav-item">
 			<a class="nav-link" [routerLink]="['client-pagination']" routerLinkActive="active">Client pagination</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" [routerLink]="['rows-with-actions']" routerLinkActive="active">Rows with actions</a>
 		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['custom-headers']" routerLinkActive="active">Custom headers</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['sortable']" routerLinkActive="active">Sortable</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['pagination-up']" routerLinkActive="active">Pagination up</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['pagination-down']" routerLinkActive="active">Pagination down</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['pagination-on-both-sites']" routerLinkActive="active">Pagination on both
+				sites</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['pagination-info']" routerLinkActive="active">Pagination info</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['without-search']" routerLinkActive="active">Without search</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['custom-no-data-message']" routerLinkActive="active">Custom no data
+				message</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['custom-rows']" routerLinkActive="active">Custom rows</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" [routerLink]="['custom-cells']" routerLinkActive="active">Custom cells</a>
+		</li>
 	</ul>
 </header>
 
-<body class="container">
+<main class="container">
 	<router-outlet></router-outlet>
-</body>
+</main>
+
 <footer>
 	<nav class="navbar fixed-bottom navbar-light bg-light">
 		<a class="navbar-brand" href="#">80ymedia</a>
 	</nav>
 </footer>
-
-<!-- <div class="container">
-	<div style="text-align:center">
-		<h1>
-			Welcome to {{ title }}!
-		</h1>
-		<img width="300" alt="Angular Logo"
-			src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-	</div>
-	<h2>NB Table Sorter </h2>
-
-	<h2>Paginación en cliente</h2>
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Tabla con cabeceras</h4>
-			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Cabeceras con títulos e iconos personalizados</h4>
-			<table-sorter [headers]="headers2" [rows]="items"></table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Tabla ordenable por nombre de usuario y email</h4>
-			<table-sorter [headers]="headers3" [rows]="items" (itemClick)="load($event)">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Paginación arriba</h4>
-			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="top">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Paginación abajo</h4>
-			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="bottom">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Paginación arriba y abajo</h4>
-			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" paginationPosition="both">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Información de la paginación</h4>
-			<table-sorter [headers]="headers1" [rows]="items" (itemClick)="load($event)" [paginationInfo]="true">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Tabla sin buscador</h4>
-			<table-sorter [headers]="headers2" [rows]="items" [showSearchInput]="false">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Tabla sin datos</h4>
-			<table-sorter [rows]="[]">
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Tabla sin datos y mensaje personalizado</h4>
-			<table-sorter [rows]="[]">
-				<ng-template nbTableSorterNotFound>
-					<div class="alert alert-info" role="alert">
-						<i class="fa fa-fw fa-info-circle" aria-hidden="true"></i> No se ha encontrado nada...
-						<div class="text-center">
-							<img src="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" alt="Sorry!">
-						</div>
-					</div>
-				</ng-template>
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Filas personalizadas</h4>
-			<table-sorter [headers]="headers4" [rows]="items" (itemClick)="load($event)">
-				<ng-template nbTableSorterRow let-item>
-					<tr>
-						<td>
-							<img [src]="'assets/avatars/64_' + (item.id % 16 + 1) + '.png'" [alt]="item.name">
-						</td>
-						<td>{{ item.name }}</td>
-						<td>{{ item.email }}</td>
-						<td>
-							<a class="btn btn-link" (click)="item.unfold  = !item.unfold">
-								<i class="fa"
-									[ngClass]="{'fa-chevron-down': !item.unfold, 'fa-chevron-up': item.unfold}"></i>
-							</a>
-						</td>
-					</tr>
-					<ng-container *ngIf="item.unfold">
-						<tr>
-							<td colspan="4">
-								Columna personalizada
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Columna personalizada 1
-							</td>
-							<td>
-								Columna personalizada 2
-							</td>
-							<td>
-								Columna personalizada 3
-							</td>
-							<td>
-							</td>
-						</tr>
-					</ng-container>
-				</ng-template>
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Celdas personalizadas</h4>
-			<table-sorter [headers]="headers4" [rows]="items" (itemClick)="load($event)">
-				<ng-template nbTableSorterCell header="name" let-item>
-					<span class="badge badge-pill badge-info">
-						customized column
-					</span>
-					{{ item }}
-				</ng-template>
-				<ng-template nbTableSorterCell header="email" let-item>
-					{{ item }}
-					<span class="badge badge-pill badge-warning">
-						also customized
-					</span>
-				</ng-template>
-			</table-sorter>
-		</div>
-	</div>
-
-	<div class="card mb-5">
-		<div class="card-body">
-			<h4 class="card-title">Filas con acciones</h4>
-			<table-sorter [headers]="headers1" [rows]="items" [actions]="actions1">
-			</table-sorter>
-		</div>
-	</div>
-
-
-</div> -->

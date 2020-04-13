@@ -11,8 +11,7 @@ import { NbTableSorterRowAction } from './modules/nb-table-sorter/nb-table-sorte
 })
 export class AppComponent implements OnInit {
 
-	options: TableSorterOptions = {
-	};
+	options: TableSorterOptions = {};
 	title = 'nb-table-sorter';
 	items: any[];
 	pagination: TableSorterPagination;

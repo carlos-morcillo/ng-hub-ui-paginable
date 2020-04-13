@@ -39,9 +39,4 @@ export class RowsWithActionsComponent implements OnInit {
 	ngOnInit() {
 		this.items = this._mockedUsersSvc.items;
 	}
-
-	itemClicked(item: any) {
-		console.log(item);
-	}
-
 }

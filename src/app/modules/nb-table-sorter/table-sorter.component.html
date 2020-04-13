@@ -22,7 +22,7 @@
 	</div>
 </ng-container>
 
-<ng-container *ngIf="pagination?.data && !pagination.data.length"
+<ng-container *ngIf="pagination?.data && !pagination[mapping.data].length"
 	[ngTemplateOutlet]="templateNotFound || defaultNotFoundTemplate">
 </ng-container>
 
@@ -52,7 +52,7 @@
 		</thead>
 
 		<tbody>
-			<ng-container *ngFor="let item of pagination.data; let i=index">
+			<ng-container *ngFor="let item of pagination[mapping.data]; let i=index">
 				<ng-container [ngTemplateOutlet]="templateRow || defaultRowTemplate"
 					[ngTemplateOutletContext]="{$implicit: item}">
 				</ng-container>
@@ -60,7 +60,7 @@
 		</tbody>
 	</table>
 	<p class="text-right" *ngIf="pagination && paginationInfo">
-		<small class="text-muted">Mostrando {{ pagination.data.length }} de {{ pagination.total }}
+		<small class="text-muted">Mostrando {{ pagination[mapping.data].length }} de {{ pagination[mapping.total] }}
 			registros</small>
 	</p>
 	<nb-table-sorter-paginator (onPageClick)="pageClicked($event)"

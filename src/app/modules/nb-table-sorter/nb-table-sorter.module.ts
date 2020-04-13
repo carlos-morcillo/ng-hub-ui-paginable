@@ -8,10 +8,13 @@ import { IsStringPipe } from './is-string.pipe';
 import { NbTableSorterHeaderDirective } from './nb-table-sorter-header.directive';
 import { NbTableSorterNotFoundDirective } from './nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from './nb-table-sorter-row.directive';
-import { PaginatePipe } from './paginate.pipe';
 import { TableSorterComponent } from './table-sorter.component';
 import { UcfirstPipe } from './ucfirst.pipe';
 import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
+import { ModuleWithProviders } from '@angular/compiler/src/core';
+import { NbTableSorterService } from './services/nb-table-sorter.service';
+import { NbTableSorterConfig } from './models/nb-table-sorter-config';
+import { NbTableSorterConfigService } from './services/nb-table-sorter-config.service';
 
 @NgModule({
 	declarations: [
@@ -20,7 +23,6 @@ import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 		NbTableSorterRowDirective,
 		NbTableSorterCellDirective,
 		GetPipe,
-		PaginatePipe,
 		NbTableSorterNotFoundDirective,
 		IsObjectPipe,
 		UcfirstPipe,
@@ -37,7 +39,6 @@ import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 		NbTableSorterRowDirective,
 		NbTableSorterCellDirective,
 		GetPipe,
-		PaginatePipe,
 		NbTableSorterNotFoundDirective,
 		IsObjectPipe,
 		UcfirstPipe,
@@ -45,6 +46,19 @@ import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
 		NbTableSorterPaginatorComponent
 	]
 
-
 })
-export class NbTableSorterModule { }
+export class NbTableSorterModule {
+
+	static forRoot(config: NbTableSorterConfig): ModuleWithProviders {
+		return {
+			ngModule: NbTableSorterModule,
+			providers: [
+				NbTableSorterService,
+				{
+					provide: NbTableSorterConfigService,
+					useValue: config
+				}
+			]
+		}
+	}
+}
