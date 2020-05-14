@@ -12,9 +12,7 @@ export class CustomCellsComponent implements OnInit {
 	items: any[];
 	headers: (NbTableSorterHeader | string)[] = [
 		{
-			property: null,
-			title: '',
-			wrapping: 'nowrap'
+			property: 'avatar'
 		},
 		{
 			property: 'name',
@@ -26,11 +24,6 @@ export class CustomCellsComponent implements OnInit {
 			title: 'Email',
 			icon: 'at',
 			sortable: true
-		},
-		{
-			property: null,
-			title: '',
-			wrapping: 'nowrap'
 		}
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];

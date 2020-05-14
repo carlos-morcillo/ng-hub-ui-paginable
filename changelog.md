@@ -1,10 +1,20 @@
 # Changelog
 
+## [1.6.0] - 2020-05-14
+### Added
+- Ahora se dispone de la propiedad y el item completo en las celdas personalizadas
+
+## [1.5.0] - 2020-04-13
+### WIP
+- Página de documentación
+### Added
+- Posibilidad de mapear los elementos de la paginación.
+
 ## [1.4.2] - 2020-01-07
 ### WIP
 - Página de documentación
 ### Changed
-- Ahora el buscador se muestra unque no haya resultados
+- Ahora el buscador se muestra aunque no haya resultados
 ### Fixed
 - Corregido el funcionamiento del handler de las acciones para que no se ejecute el evento de la fila.
 

@@ -16,6 +16,7 @@ import { WithoutSearchComponent } from '../modules/nb-table-sorter/components/wi
 import { CustomNoDataMessageComponent } from '../modules/nb-table-sorter/components/custom-no-data-message/custom-no-data-message.component';
 import { CustomRowsComponent } from '../modules/nb-table-sorter/components/custom-rows/custom-rows.component';
 import { CustomCellsComponent } from '../modules/nb-table-sorter/components/custom-cells/custom-cells.component';
+import { AvatarModule } from 'ngx-avatar';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -54,7 +55,8 @@ const routes: Routes = [
 		CommonModule,
 		RouterModule.forChild(routes),
 		NbTableSorterModule,
-		HighlightModule
+		HighlightModule,
+		AvatarModule
 	]
 })
 export class ExamplesModule { }

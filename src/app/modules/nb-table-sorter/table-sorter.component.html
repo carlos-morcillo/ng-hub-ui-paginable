@@ -72,7 +72,7 @@
 	<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
 		<td *ngFor="let header of headers">
 			<ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate"
-				[ngTemplateOutletContext]="{ $implicit: getProperty(item, header?.property || header) }">
+				[ngTemplateOutletContext]="{item: item, property: getProperty(item, header?.property || header)}">
 			</ng-container>
 		</td>
 		<td *ngIf="actions?.length" class="actions">
@@ -85,8 +85,8 @@
 	</tr>
 </ng-template>
 
-<ng-template #defaultCellTemplate let-item>
-	{{ item }}
+<ng-template #defaultCellTemplate let-property="property">
+	{{ property }}
 </ng-template>
 
 <ng-template #defaultNotFoundTemplate>
