@@ -77,8 +77,7 @@
 		"component-selector": [
 			true,
 			"element",
-			"",
-			"page",
+			"nb",
 			"kebab-case"
 		],
 		"variable-name": {
@@ -89,7 +88,7 @@
 		"directive-selector": [
 			true,
 			"attribute",
-			"",
+			"nb",
 			"camelCase"
 		]
 	}

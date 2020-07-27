@@ -1,0 +1,47 @@
+<div class="mb-5">
+	<h2 class="d-inline">Expanding rows</h2>
+	<a class="btn btn-outline-primary float-right" href="#"><i class="fa fa-fw fa-github"></i>View code in Github</a>
+</div>
+<table-sorter [headers]="headers" [rows]="items" [showSearchInput]="false">
+	<ng-template nbTableSorterExpandingRow let-item="item">
+		<tr class="bg-warning">
+			<td [attr.colspan]="headers.length + 1">
+				<div class="d-flex">
+					<div class="align-self-center pr-4">
+						<ngx-avatar [name]="item.name"></ngx-avatar>
+					</div>
+					<div class="flex-grow">
+						<h3>{{ item.email }}</h3>
+						<h4>{{ item.name }}</h4>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</ng-template>
+	<ng-template nbTableSorterExpandingRow let-item="item">
+		<tr class="bg-warning">
+			<td [attr.colspan]="headers.length + 1" class="bg-success">
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla commodo leo eget elementum
+					condimentum.
+					Morbi commodo posuere nulla, nec egestas lorem. Etiam et consectetur quam, in vestibulum eros. Sed
+					nisl
+					velit, venenatis imperdiet condimentum pellentesque, molestie nec nisl. Mauris vel tempus lectus.
+					Donec
+					laoreet congue tellus a ullamcorper. Nullam eget consectetur lectus. Morbi vel mi leo. Donec sed
+					vehicula leo. Fusce eget mauris consequat, vulputate sem quis, pharetra augue. Ut quis arcu
+					tristique
+					sapien vestibulum aliquet vitae eu lectus.</p>
+			</td>
+		</tr>
+	</ng-template>
+	<ng-template nbTableSorterExpandingRow let-item="item">
+		<tr>
+			<td [attr.colspan]="3">
+				Mauris aliquam, felis vel fermentum mattis, nulla metus porttitor libero, ut ultrices elit leo eu nulla.
+			</td>
+			<td [attr.colspan]="2" class="bg-info">
+				Sed sapien lacus, vulputate sed tortor a, mollis sagittis erat.
+			</td>
+		</tr>
+	</ng-template>
+</table-sorter>

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NbTableSorterHeader } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-header';
-import { MockedUsersService } from '../../../mocked-users.service';
 import { NbTableSorterRowAction } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-row-action';
+import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'app-rows-with-actions',
-	templateUrl: './rows-with-actions.component.html',
-	styleUrls: ['./rows-with-actions.component.scss']
+	selector: 'nb-expanding-rows',
+	templateUrl: './expanding-rows.component.html',
+	styleUrls: ['./expanding-rows.component.scss']
 })
-export class RowsWithActionsComponent implements OnInit {
+export class ExpandingRowsComponent implements OnInit {
 
 	items: any[];
 	headers: (NbTableSorterHeader | string)[] = [

@@ -1,50 +1,30 @@
 import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, ContentChildren } from '@angular/core';
 import * as _ from 'lodash';
-import { NbTableSorterHeader } from './nb-table-sorter-header';
-import { NbTableSorterNotFoundDirective } from './nb-table-sorter-not-found.directive';
-import { NbTableSorterRowDirective } from './nb-table-sorter-row.directive';
-import { PaginationService } from './services/pagination.service';
-import { NbTableSorterRowAction } from './nb-table-sorter-row-action';
-import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
+import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
+import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
+import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
+import { PaginationService } from '../../services/pagination.service';
+import { NbTableSorterRowAction } from '../../interfaces/nb-table-sorter-row-action';
+import { NbTableSorterCellDirective } from '../../directives/nb-table-sorter-cell.directive';
 import { QueryList } from '@angular/core';
 import { isString } from 'util';
-import { NbTableSorterService } from './services/nb-table-sorter.service';
-
-export interface TableSorterOptions {
-	serverSidePagination?: boolean;
-	cursor?: 'pointer' | 'default';
-}
-
-export interface TableSorterPagination {
-	current_page: number;
-	first_page_url?: string;
-	from: number;
-	last_page: number;
-	last_page_url?: string;
-	next_page_url?: string;
-	path?: string;
-	per_page: number;
-	prev_page_url?: any;
-	to: number;
-	total: number;
-	data?: any[];
-}
-
-export interface TableSorterOrdination {
-	property: string;
-	direction: string;
-}
+import { NbTableSorterService } from '../../services/nb-table-sorter.service';
+import { NbTableSorterExpandingRowDirective } from '../../directives/nb-table-sorter-expanding-row.directive';
+import { NbTableSorterOptions } from '../../interfaces/nb-table-sorter-options';
+import { NbTableSorterPagination } from '../../interfaces/nb-table-sorter-pagination';
+import { NbTableSorterOrdination } from '../../interfaces/nb-table-sorter-ordination';
+import { NbTableSorterItem } from '../../interfaces/nb-table-sorter-item';
 
 @Component({
 	selector: 'table-sorter',
 	templateUrl: './table-sorter.component.html',
 	styleUrls: ['./table-sorter.component.scss']
 })
-export class TableSorterComponent implements OnInit {
+export class TableSorterComponent {
 	private _headers: NbTableSorterHeader[] | string[];
 
 	@Input() showSearchInput: boolean = true;
-	@Input() options: TableSorterOptions = {
+	@Input() options: NbTableSorterOptions = {
 		cursor: 'default'
 	};
 	@Input()
@@ -62,9 +42,9 @@ export class TableSorterComponent implements OnInit {
 		this._headers = v;
 	}
 
-	// private _pagination: TableSorterPagination;
-	@Input() pagination: TableSorterPagination;
-	// @Output() paginationValue = new EventEmitter<TableSorterPagination>();
+	// private _pagination: NbTableSorterPagination;
+	@Input() pagination: NbTableSorterPagination;
+	// @Output() paginationValue = new EventEmitter<NbTableSorterPagination>();
 
 	private _rows: any[];
 
@@ -91,13 +71,14 @@ export class TableSorterComponent implements OnInit {
 	searchText: string = '';
 	@Input() searchKeys: string[] = ['name'];
 
-	ordenation: TableSorterOrdination = null;
+	ordenation: NbTableSorterOrdination = null;
 
 	@Input() actions: NbTableSorterRowAction[] = [];
 
 	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef, static: false }) templateRow: NbTableSorterRowDirective;
 	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
 	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef, static: false }) templateNotFound: NbTableSorterNotFoundDirective;
+	@ContentChildren(NbTableSorterExpandingRowDirective) templateExpandingRows !: QueryList<NbTableSorterExpandingRowDirective>;
 
 	@Output() itemClick = new EventEmitter<any>();
 	@Output() onPageClick = new EventEmitter<number>();
@@ -109,10 +90,6 @@ export class TableSorterComponent implements OnInit {
 		private _paginationSvc: PaginationService,
 		private _configSvc: NbTableSorterService
 	) { }
-
-	ngOnInit(): void {
-		console.log(this._configSvc);
-	}
 
 	/**
 	 * Obtiene la propiedad del objeto cuya clave es pasada por parámetro
@@ -222,5 +199,10 @@ export class TableSorterComponent implements OnInit {
 	handleAction(event: Event, handler: (...args: any) => void, item: any) {
 		event.stopPropagation();
 		handler(item);
+	}
+
+	toggleExpandedRow(item: NbTableSorterItem) {
+		item.unfold = !item.unfold;
+		console.log(item.unfold);
 	}
 }

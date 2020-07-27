@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../nb-table-sorter-header';
-import { MockedUsersService } from '../../../../mocked-users.service';
+import { NbTableSorterHeader } from '../../../modules/nb-table-sorter';
+import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'app-custom-no-data-message',
-	templateUrl: './custom-no-data-message.component.html',
-	styleUrls: ['./custom-no-data-message.component.scss']
+	selector: 'app-without-search',
+	templateUrl: './without-search.component.html',
+	styleUrls: ['./without-search.component.scss']
 })
-export class CustomNoDataMessageComponent implements OnInit {
+export class WithoutSearchComponent implements OnInit {
 
 	items: any[];
 	headers: (NbTableSorterHeader | string)[] = [
@@ -17,12 +17,12 @@ export class CustomNoDataMessageComponent implements OnInit {
 		},
 		{
 			property: 'name',
-			title: 'Nombre y apellidos',
+			title: 'Name',
 			icon: 'user',
 		},
 		{
 			property: 'email',
-			title: 'Corre electrónico',
+			title: 'Email',
 			icon: 'at'
 		}
 	];

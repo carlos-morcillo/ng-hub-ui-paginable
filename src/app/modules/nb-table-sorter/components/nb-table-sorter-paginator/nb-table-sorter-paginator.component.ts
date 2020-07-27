@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { TableSorterPagination } from '../../table-sorter.component';
 import { NbTableSorterService } from '../../services/nb-table-sorter.service';
+import { NbTableSorterPagination } from '../../interfaces/nb-table-sorter-pagination';
 
 @Component({
 	selector: 'nb-table-sorter-paginator',
@@ -9,7 +9,7 @@ import { NbTableSorterService } from '../../services/nb-table-sorter.service';
 })
 export class NbTableSorterPaginatorComponent {
 
-	@Input() pagination: TableSorterPagination;
+	@Input() pagination: NbTableSorterPagination;
 	@Output() onPageClick = new EventEmitter<number>();
 
 	mapping: any = this._configSvc.mapping;

@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../nb-table-sorter-header';
-import { MockedUsersService } from '../../../../mocked-users.service';
+import { NbTableSorterHeader } from '../../../modules/nb-table-sorter';
+import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'app-sortable',
-	templateUrl: './sortable.component.html',
-	styleUrls: ['./sortable.component.scss']
+	selector: 'app-custom-cells',
+	templateUrl: './custom-cells.component.html',
+	styleUrls: ['./custom-cells.component.scss']
 })
-export class SortableComponent implements OnInit {
+export class CustomCellsComponent implements OnInit {
 
 	items: any[];
 	headers: (NbTableSorterHeader | string)[] = [
-		'id',
 		{
-			property: 'username',
-			title: 'Usuario',
+			property: 'avatar'
+		},
+		{
+			property: 'name',
+			title: 'Nombre',
 			sortable: true
 		},
 		{
@@ -22,8 +24,7 @@ export class SortableComponent implements OnInit {
 			title: 'Email',
 			icon: 'at',
 			sortable: true
-		},
-		'name'
+		}
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];
 

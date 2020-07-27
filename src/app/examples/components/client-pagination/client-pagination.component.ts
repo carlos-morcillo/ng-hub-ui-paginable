@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../../modules/nb-table-sorter/nb-table-sorter-header';
+import { NbTableSorterHeader } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-header';
 import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({

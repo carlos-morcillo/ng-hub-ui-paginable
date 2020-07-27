@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../nb-table-sorter-header';
-import { MockedUsersService } from '../../../../mocked-users.service';
+import { NbTableSorterHeader } from '../../../modules/nb-table-sorter';
+import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'app-pagination-on-both-sites',
-	templateUrl: './pagination-on-both-sites.component.html',
-	styleUrls: ['./pagination-on-both-sites.component.scss']
+	selector: 'app-pagination-up',
+	templateUrl: './pagination-up.component.html',
+	styleUrls: ['./pagination-up.component.scss']
 })
-export class PaginationOnBothSitesComponent implements OnInit {
+export class PaginationUpComponent implements OnInit {
 
 	items: any[];
 	headers: (NbTableSorterHeader | string)[] = [

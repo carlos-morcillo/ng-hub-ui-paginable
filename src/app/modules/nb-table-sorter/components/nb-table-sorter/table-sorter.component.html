@@ -47,7 +47,7 @@
 						{{ item | ucfirst }}
 					</ng-container>
 				</th>
-				<th *ngIf="actions?.length"></th>
+				<th *ngIf="actions?.length || templateExpandingRows.length"></th>
 			</tr>
 		</thead>
 
@@ -75,14 +75,23 @@
 				[ngTemplateOutletContext]="{item: item, property: getProperty(item, header?.property || header)}">
 			</ng-container>
 		</td>
-		<td *ngIf="actions?.length" class="actions">
+		<td *ngIf="actions?.length || templateExpandingRows?.length" class="actions">
 			<button *ngFor="let action of actions" class="btn btn-link px-2"
 				[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
 				(click)="handleAction($event, action.handler, item)">
 				<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 			</button>
+			<button (click)="toggleExpandedRow(item)" class="btn btn-link">
+				<i class="fa" [ngClass]="item.unfold ? 'fa-sort-asc' : 'fa-sort-desc'"></i>
+			</button>
 		</td>
 	</tr>
+	<ng-container *ngIf="item.unfold">
+		<ng-container *ngFor="let template of templateExpandingRows">
+			<ng-container [ngTemplateOutlet]="template.template" [ngTemplateOutletContext]="{item: item}">
+			</ng-container>
+		</ng-container>
+	</ng-container>
 </ng-template>
 
 <ng-template #defaultCellTemplate let-property="property">

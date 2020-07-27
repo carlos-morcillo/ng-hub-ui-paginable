@@ -2,21 +2,23 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServerPaginationComponent } from './components/server-pagination/server-pagination.component';
 import { Routes, RouterModule } from '@angular/router';
-import { NbTableSorterModule } from '../modules/nb-table-sorter/nb-table-sorter.module';
 import { HighlightModule } from 'ngx-highlightjs';
 import { ClientPaginationComponent } from './components/client-pagination/client-pagination.component';
 import { RowsWithActionsComponent } from './components/rows-with-actions/rows-with-actions.component';
-import { CustomHeadersComponent } from '../modules/nb-table-sorter/components/custom-headers/custom-headers.component';
-import { SortableComponent } from '../modules/nb-table-sorter/components/sortable/sortable.component';
-import { PaginationUpComponent } from '../modules/nb-table-sorter/components/pagination-up/pagination-up.component';
-import { PaginationDownComponent } from '../modules/nb-table-sorter/components/pagination-down/pagination-down.component';
-import { PaginationOnBothSitesComponent } from '../modules/nb-table-sorter/components/pagination-on-both-sites/pagination-on-both-sites.component';
-import { PaginationInfoComponent } from '../modules/nb-table-sorter/components/pagination-info/pagination-info.component';
-import { WithoutSearchComponent } from '../modules/nb-table-sorter/components/without-search/without-search.component';
-import { CustomNoDataMessageComponent } from '../modules/nb-table-sorter/components/custom-no-data-message/custom-no-data-message.component';
-import { CustomRowsComponent } from '../modules/nb-table-sorter/components/custom-rows/custom-rows.component';
-import { CustomCellsComponent } from '../modules/nb-table-sorter/components/custom-cells/custom-cells.component';
+
 import { AvatarModule } from 'ngx-avatar';
+import { ExpandingRowsComponent } from './components/expanding-rows/expanding-rows.component';
+import { NbTableSorterModule } from '../modules/nb-table-sorter';
+import { CustomHeadersComponent } from './components/custom-headers/custom-headers.component';
+import { SortableComponent } from './components/sortable/sortable.component';
+import { PaginationUpComponent } from './components/pagination-up/pagination-up.component';
+import { PaginationDownComponent } from './components/pagination-down/pagination-down.component';
+import { PaginationOnBothSitesComponent } from './components/pagination-on-both-sites/pagination-on-both-sites.component';
+import { PaginationInfoComponent } from './components/pagination-info/pagination-info.component';
+import { WithoutSearchComponent } from './components/without-search/without-search.component';
+import { CustomNoDataMessageComponent } from './components/custom-no-data-message/custom-no-data-message.component';
+import { CustomRowsComponent } from './components/custom-rows/custom-rows.component';
+import { CustomCellsComponent } from './components/custom-cells/custom-cells.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -32,7 +34,8 @@ const routes: Routes = [
 	{ path: 'without-search', component: WithoutSearchComponent },
 	{ path: 'custom-no-data-message', component: CustomNoDataMessageComponent },
 	{ path: 'custom-rows', component: CustomRowsComponent },
-	{ path: 'custom-cells', component: CustomCellsComponent }
+	{ path: 'custom-cells', component: CustomCellsComponent },
+	{ path: 'expanding-rows', component: ExpandingRowsComponent },
 ];
 
 @NgModule({
@@ -49,7 +52,8 @@ const routes: Routes = [
 		WithoutSearchComponent,
 		CustomNoDataMessageComponent,
 		CustomRowsComponent,
-		CustomCellsComponent
+		CustomCellsComponent,
+		ExpandingRowsComponent
 	],
 	imports: [
 		CommonModule,

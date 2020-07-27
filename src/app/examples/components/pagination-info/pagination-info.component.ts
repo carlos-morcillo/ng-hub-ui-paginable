@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../nb-table-sorter-header';
-import { MockedUsersService } from '../../../../mocked-users.service';
+import { NbTableSorterHeader } from '../../../modules/nb-table-sorter';
+import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'app-without-search',
-	templateUrl: './without-search.component.html',
-	styleUrls: ['./without-search.component.scss']
+	selector: 'app-pagination-info',
+	templateUrl: './pagination-info.component.html',
+	styleUrls: ['./pagination-info.component.scss']
 })
-export class WithoutSearchComponent implements OnInit {
+export class PaginationInfoComponent implements OnInit {
 
 	items: any[];
 	headers: (NbTableSorterHeader | string)[] = [
@@ -17,12 +17,12 @@ export class WithoutSearchComponent implements OnInit {
 		},
 		{
 			property: 'name',
-			title: 'Nombre y apellidos',
+			title: 'Name',
 			icon: 'user',
 		},
 		{
 			property: 'email',
-			title: 'Corre electrónico',
+			title: 'Email',
 			icon: 'at'
 		}
 	];

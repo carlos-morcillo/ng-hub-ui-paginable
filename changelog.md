@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.7.0] - 2020-05-14
+### Added
+- Posibilidad de crear filas expansivas que muestran su contenido a través de un toggle.
+### Changed
+- Reorganización de ficheros
+
 ## [1.6.0] - 2020-05-14
 ### Added
 - Ahora se dispone de la propiedad y el item completo en las celdas personalizadas

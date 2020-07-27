@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TableSorterPagination } from '../../../modules/nb-table-sorter/table-sorter.component';
-import { NbTableSorterHeader } from '../../../modules/nb-table-sorter/nb-table-sorter-header';
 import { MockedUsersService } from '../../../mocked-users.service';
+import { NbTableSorterPagination, NbTableSorterHeader } from '../../../modules/nb-table-sorter';
 
 @Component({
 	selector: 'app-server-pagination',
@@ -10,7 +9,7 @@ import { MockedUsersService } from '../../../mocked-users.service';
 })
 export class ServerPaginationComponent implements OnInit {
 
-	pagination: TableSorterPagination;
+	pagination: NbTableSorterPagination;
 	headers: (NbTableSorterHeader | string)[] = [
 		'id',
 		'username',
