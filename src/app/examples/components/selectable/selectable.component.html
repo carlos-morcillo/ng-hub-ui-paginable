@@ -1,0 +1,10 @@
+<div class="mb-5">
+	<h2 class="d-inline">Selectable rows</h2>
+	<a class="btn btn-outline-primary float-right" href="#"><i class="fa fa-fw fa-github"></i>View code in Github</a>
+</div>
+<table-sorter [headers]="headers" [rows]="items" [selectable]="true" selectableProperty="id"
+	(onSelected)="selectedItems = $event;"></table-sorter>
+<div class="alert alert-info" role="alert">
+	<strong>Result: </strong>
+	<pre>{{ selectedItems | json }} </pre>
+</div>

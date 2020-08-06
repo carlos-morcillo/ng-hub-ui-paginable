@@ -25,16 +25,17 @@ export class PaginationService {
 
 			}
 		}
-		const page = params && params.page || 1;
+		const page = params.page || 1;
+		const perPage = params.perPage || 20;
 
 		const pagination: NbTableSorterPagination = {
 			current_page: page,
-			last_page: Math.ceil(filtered.length / 10),
-			per_page: 10,
-			from: (page - 1) * 10,
-			to: page * 10,
+			last_page: Math.ceil(filtered.length / perPage),
+			per_page: perPage,
+			from: (page - 1) * perPage,
+			to: page * perPage,
 			total: filtered.length,
-			data: filtered.slice((page - 1) * 10, page * 10)
+			data: filtered.slice((page - 1) * perPage, page * perPage)
 		};
 		return pagination;
 	}

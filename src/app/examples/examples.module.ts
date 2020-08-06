@@ -19,6 +19,8 @@ import { WithoutSearchComponent } from './components/without-search/without-sear
 import { CustomNoDataMessageComponent } from './components/custom-no-data-message/custom-no-data-message.component';
 import { CustomRowsComponent } from './components/custom-rows/custom-rows.component';
 import { CustomCellsComponent } from './components/custom-cells/custom-cells.component';
+import { SelectableComponent } from './components/selectable/selectable.component';
+import { CustomRowsPerPageComponent } from './components/custom-rows-per-page/custom-rows-per-page.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -36,6 +38,8 @@ const routes: Routes = [
 	{ path: 'custom-rows', component: CustomRowsComponent },
 	{ path: 'custom-cells', component: CustomCellsComponent },
 	{ path: 'expanding-rows', component: ExpandingRowsComponent },
+	{ path: 'selectable', component: SelectableComponent },
+	{ path: 'custom-rows-per-page', component: CustomRowsPerPageComponent }
 ];
 
 @NgModule({
@@ -53,7 +57,9 @@ const routes: Routes = [
 		CustomNoDataMessageComponent,
 		CustomRowsComponent,
 		CustomCellsComponent,
-		ExpandingRowsComponent
+		ExpandingRowsComponent,
+		SelectableComponent,
+		CustomRowsPerPageComponent
 	],
 	imports: [
 		CommonModule,

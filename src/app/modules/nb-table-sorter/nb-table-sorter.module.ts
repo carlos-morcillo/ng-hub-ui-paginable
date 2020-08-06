@@ -13,7 +13,7 @@ import { UcfirstPipe } from './pipes/ucfirst.pipe';
 import { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';
 import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { NbTableSorterService } from './services/nb-table-sorter.service';
-import { NbTableSorterConfig } from './models/nb-table-sorter-config';
+import { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
 import { NbTableSorterConfigService } from './services/nb-table-sorter-config.service';
 import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
 
@@ -52,7 +52,7 @@ import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter
 })
 export class NbTableSorterModule {
 
-	static forRoot(config: NbTableSorterConfig): ModuleWithProviders {
+	static forRoot(config?: NbTableSorterConfig): ModuleWithProviders {
 		return {
 			ngModule: NbTableSorterModule,
 			providers: [

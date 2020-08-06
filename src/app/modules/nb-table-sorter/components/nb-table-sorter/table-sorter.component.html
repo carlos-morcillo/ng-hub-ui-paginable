@@ -6,21 +6,19 @@
 	</div>
 </ng-container>
 
-<ng-container *ngIf="showSearchInput">
-	<div class="row">
-		<div class="col-xs-12 offset-md-6 col-md-6">
-			<div class="input-group mb-3">
-				<input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Search"
-					aria-label="Search" (keyup.enter)="filter()">
-				<div class="input-group-append">
-					<button class="btn btn-secondary" type="button" (click)="filter()">
-						<i class="fa fa-search" aria-hidden="true"></i>
-					</button>
-				</div>
+<div class="row justify-content-end">
+	<div *ngIf="showSearchInput" class="col-offset col-sm-6 col-md-4">
+		<div class="input-group mb-3">
+			<input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Search" aria-label="Search"
+				(keyup.enter)="filter()">
+			<div class="input-group-append">
+				<button class="btn btn-secondary" type="button" (click)="filter()">
+					<i class="fa fa-search" aria-hidden="true"></i>
+				</button>
 			</div>
 		</div>
 	</div>
-</ng-container>
+</div>
 
 <ng-container *ngIf="pagination?.data && !pagination[mapping.data].length"
 	[ngTemplateOutlet]="templateNotFound || defaultNotFoundTemplate">
@@ -28,20 +26,30 @@
 
 <ng-container *ngIf="pagination?.data.length">
 	<nb-table-sorter-paginator *ngIf="pagination && (paginationPosition == 'top' || paginationPosition === 'both')"
-		[pagination]="pagination"></nb-table-sorter-paginator>
+		[pagination]="pagination">
+	</nb-table-sorter-paginator>
 
 	<table class="table">
 		<thead>
 			<tr>
-				<th *ngFor="let item of headers"
-					[ngClass]="{'text-wrap': item.wrapping === 'wrap', 'text-nowrap': item.wrapping === 'nowrap'}"
-					(click)="sort(item)" [style.width]="item.wrapping === 'nowrap' ? '1%' : 'auto'">
+				<th *ngIf="selectable">
+					<input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()">
+				</th>
+				<th *ngFor="let item of headers" (click)="sort(item)" class="p-2">
 					<ng-container *ngIf="item | isObject">
-						<i class="fa fa-{{ item.icon }}" [ngClass]="{'fa-fw': item.title}" *ngIf="item.icon"
-							aria-hidden="true"></i>
-						<span *ngIf="item.title">{{ item.title | ucfirst }}</span>
-						<i class="fa float-right" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)"
-							aria-hidden="true"></i>
+						<div class="row align-items-center m-0">
+							<div class="col-auto p-0">
+								<i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}" *ngIf="item.icon"
+									aria-hidden="true"></i>
+							</div>
+							<div class="col p-0">
+								<span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
+							</div>
+							<div class="col-auto p-0">
+								<i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)"
+									aria-hidden="true"></i>
+							</div>
+						</div>
 					</ng-container>
 					<ng-container *ngIf="item | isString">
 						{{ item | ucfirst }}
@@ -59,10 +67,22 @@
 			</ng-container>
 		</tbody>
 	</table>
-	<p class="text-right" *ngIf="pagination && paginationInfo">
-		<small class="text-muted">Mostrando {{ pagination[mapping.data].length }} de {{ pagination[mapping.total] }}
-			registros</small>
-	</p>
+	<div class="row justify-content-end align-items-center mb-4">
+		<div class="form-group form-group-sm row col-auto mb-0 mr-2">
+			<label for="RowsPerPageInput" class="col col-form-label text-nowrap"><small>Rows per page:</small></label>
+			<div class="col pl-0">
+				<select class="form-control form-control-sm" id="RowsPerPageInput" [(ngModel)]="itemsPerPage">
+					<option *ngFor="let option of perPageOptions" [value]="option">{{ option }}</option>
+				</select>
+			</div>
+		</div>
+		<p class="col-auto mb-0" *ngIf="pagination && paginationInfo">
+			<small class="text-muted">Showing {{ pagination[mapping.data].length }} of
+				{{ pagination[mapping.total] }}
+				rows</small>
+		</p>
+	</div>
+
 	<nb-table-sorter-paginator (onPageClick)="pageClicked($event)"
 		*ngIf="pagination && (paginationPosition == 'bottom' || paginationPosition === 'both')"
 		[pagination]="pagination"></nb-table-sorter-paginator>
@@ -70,6 +90,9 @@
 
 <ng-template #defaultRowTemplate let-item>
 	<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
+		<td *ngIf="selectable">
+			<input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
+		</td>
 		<td *ngFor="let header of headers">
 			<ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate"
 				[ngTemplateOutletContext]="{item: item, property: getProperty(item, header?.property || header)}">
@@ -81,7 +104,7 @@
 				(click)="handleAction($event, action.handler, item)">
 				<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 			</button>
-			<button (click)="toggleExpandedRow(item)" class="btn btn-link">
+			<button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link">
 				<i class="fa" [ngClass]="item.unfold ? 'fa-sort-asc' : 'fa-sort-desc'"></i>
 			</button>
 		</td>

@@ -1,6 +1,26 @@
 # Changelog
 
-## [1.7.0] - 2020-05-14
+## [1.8.1] - 2020-08-06
+### Fixed
+- Visualización de la información sobre la paginación
+- Visualización de los headers
+
+## [1.8.0] - 2020-08-05
+### Added
+- Posibilidad de hacer los elementos de las tablas seleccionables.
+- Posibilidad de cambiar el número de elementos por página.
+### Changed
+- La información de la paginación aparece por defectos
+
+## [1.7.3] - 2020-07-27
+### Fixed
+- Corrección de la exportación de las pipes.
+
+## [1.7.2] - 2020-07-27
+### Fixed
+- Referencias a la exportación de todos los módulos, componentes, directivas, pipes, etc.
+
+## [1.7.0] - 2020-07-27
 ### Added
 - Posibilidad de crear filas expansivas que muestran su contenido a través de un toggle.
 ### Changed

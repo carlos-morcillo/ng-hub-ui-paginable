@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { NbTableSorterConfig } from '../models/nb-table-sorter-config';
+import { NbTableSorterConfig } from '../interfaces/nb-table-sorter-config';
 
 /**
  * This is not a real service, but it looks like it from the outside.
