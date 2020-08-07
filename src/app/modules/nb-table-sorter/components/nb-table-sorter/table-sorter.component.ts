@@ -217,9 +217,9 @@ export class TableSorterComponent {
 		this.triggerTheParamChanges();
 	}
 
-	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef, static: false }) templateRow: NbTableSorterRowDirective;
+	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
 	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
-	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef, static: false }) templateNotFound: NbTableSorterNotFoundDirective;
+	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) templateNotFound: NbTableSorterNotFoundDirective;
 	@ContentChildren(NbTableSorterExpandingRowDirective) templateExpandingRows !: QueryList<NbTableSorterExpandingRowDirective>;
 
 	constructor(
