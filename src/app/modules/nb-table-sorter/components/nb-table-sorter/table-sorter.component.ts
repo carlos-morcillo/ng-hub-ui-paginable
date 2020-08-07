@@ -65,7 +65,9 @@ export class TableSorterComponent {
 	set pagination(v: NbTableSorterPagination) {
 		this._pagination = v;
 		this.allRowsSelected = false;
-		this.markSelected();
+		if (this.selectable) {
+			this.markSelected();
+		}
 	}
 
 	/**
@@ -393,7 +395,7 @@ export class TableSorterComponent {
 	 * @memberof TableSorterComponent
 	 */
 	markSelected() {
-		if (this.pagination[this.mapping.data]) {
+		if (this.pagination?.[this.mapping.data]?.length) {
 			return;
 		}
 		this.pagination[this.mapping.data].forEach(o => {
