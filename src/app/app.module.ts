@@ -4,7 +4,6 @@ import { AppComponent } from './app.component';
 import { NbTableSorterModule } from './modules/nb-table-sorter/nb-table-sorter.module';
 import { HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
-import { HighlightModule } from 'ngx-highlightjs';
 
 const routes: Routes = [
 	{ path: '', loadChildren: () => import('./examples/examples.module').then(m => m.ExamplesModule) },
@@ -18,14 +17,12 @@ const routes: Routes = [
 		BrowserModule,
 		NbTableSorterModule.forRoot({
 			mapping: {
-				currentPage: 'current_page',
-				lastPage: 'last_page',
+				currentPage: 'currentPage',
+				lastPage: 'lastPage',
 			}
 		}),
 		HttpClientModule,
-		RouterModule.forRoot(routes),
-		HighlightModule
-
+		RouterModule.forRoot(routes)
 	],
 	bootstrap: [AppComponent]
 })

@@ -8,7 +8,7 @@
 			<td [attr.colspan]="headers.length + 1">
 				<div class="d-flex">
 					<div class="align-self-center pr-4">
-						<ngx-avatar [name]="item.name"></ngx-avatar>
+						<img [src]="'assets/avatars/64_' + (item.id % 16 + 1) + '.png'" [alt]="item.name">
 					</div>
 					<div class="flex-grow">
 						<h3>{{ item.email }}</h3>

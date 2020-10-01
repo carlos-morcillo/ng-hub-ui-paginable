@@ -1,10 +1,21 @@
 # Changelog
 
-## [1.8.2] - 2020-08-07
+## [1.10.0] - 2020-09-24
+### Added
+- Posibilidad de crear tablas sin paginación estableciendo el parámetro paginate a false.
+### Changed
+- El evento triggerTheParamChanges solo emite propiedades distintas de null.
+### Fixed
+- Botón de expanding rows compatible con fontawesome 5.
+- Corrección del paginador en paginación en cliente.
+
+## [1.9.0] - 2020-08-07
 ### Changed
 - Actualización a Angular 10
 ### Fixed
 - Control del marcado de elementos cuando estos no existen.
+### Removed
+- Dependencia ngx-avatar
 
 ## [1.8.1] - 2020-08-06
 ### Fixed

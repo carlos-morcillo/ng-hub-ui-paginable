@@ -26,12 +26,17 @@ export class PaginationService {
 			}
 		}
 		const page = params.page || 1;
-		const perPage = params.perPage || 20;
+
+		// Si la paginación viene del servidor y no está establecida, establecer a true
+		if (params.paginate === undefined) {
+			params.paginate = true;
+		}
+		const perPage = params.paginate ? (params.perPage || 20) : filtered.length;
 
 		const pagination: NbTableSorterPagination = {
-			current_page: page,
-			last_page: Math.ceil(filtered.length / perPage),
-			per_page: perPage,
+			currentPage: page,
+			lastPage: Math.ceil(filtered.length / perPage),
+			perPage: perPage,
 			from: (page - 1) * perPage,
 			to: page * perPage,
 			total: filtered.length,

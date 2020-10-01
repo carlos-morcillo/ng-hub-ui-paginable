@@ -2,11 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ServerPaginationComponent } from './components/server-pagination/server-pagination.component';
 import { Routes, RouterModule } from '@angular/router';
-import { HighlightModule } from 'ngx-highlightjs';
 import { ClientPaginationComponent } from './components/client-pagination/client-pagination.component';
 import { RowsWithActionsComponent } from './components/rows-with-actions/rows-with-actions.component';
 
-import { AvatarModule } from 'ngx-avatar';
 import { ExpandingRowsComponent } from './components/expanding-rows/expanding-rows.component';
 import { NbTableSorterModule } from '../modules/nb-table-sorter';
 import { CustomHeadersComponent } from './components/custom-headers/custom-headers.component';
@@ -21,6 +19,7 @@ import { CustomRowsComponent } from './components/custom-rows/custom-rows.compon
 import { CustomCellsComponent } from './components/custom-cells/custom-cells.component';
 import { SelectableComponent } from './components/selectable/selectable.component';
 import { CustomRowsPerPageComponent } from './components/custom-rows-per-page/custom-rows-per-page.component';
+import { NotPaginatedComponent } from './components/not-paginated/not-paginated.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -39,7 +38,8 @@ const routes: Routes = [
 	{ path: 'custom-cells', component: CustomCellsComponent },
 	{ path: 'expanding-rows', component: ExpandingRowsComponent },
 	{ path: 'selectable', component: SelectableComponent },
-	{ path: 'custom-rows-per-page', component: CustomRowsPerPageComponent }
+	{ path: 'custom-rows-per-page', component: CustomRowsPerPageComponent },
+	{ path: 'not-paginated', component: NotPaginatedComponent }
 ];
 
 @NgModule({
@@ -59,14 +59,13 @@ const routes: Routes = [
 		CustomCellsComponent,
 		ExpandingRowsComponent,
 		SelectableComponent,
-		CustomRowsPerPageComponent
+		CustomRowsPerPageComponent,
+		NotPaginatedComponent
 	],
 	imports: [
 		CommonModule,
 		RouterModule.forChild(routes),
-		NbTableSorterModule,
-		HighlightModule,
-		AvatarModule
+		NbTableSorterModule
 	]
 })
 export class ExamplesModule { }

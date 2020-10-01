@@ -14,6 +14,14 @@ export class NbTableSorterPaginatorComponent {
 
 	mapping: any = this._configSvc.mapping;
 
+	get currentPage(): number {
+		return this.pagination[this.mapping.currentPage] || this.pagination.currentPage
+	}
+
+	get lastPage(): number {
+		return this.pagination[this.mapping.lastPage] || this.pagination.lastPage
+	}
+
 	constructor(
 		private _configSvc: NbTableSorterService
 	) { }

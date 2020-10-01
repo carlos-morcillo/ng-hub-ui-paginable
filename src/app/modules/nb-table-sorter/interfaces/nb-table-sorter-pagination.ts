@@ -1,14 +1,14 @@
 
 export interface NbTableSorterPagination {
-	current_page: number;
-	first_page_url?: string;
+	currentPage: number;
+	firstPageUrl?: string;
 	from: number;
-	last_page: number;
-	last_page_url?: string;
-	next_page_url?: string;
+	lastPage: number;
+	lastPageUrl?: string;
+	nextPageUrl?: string;
 	path?: string;
-	per_page: number;
-	prev_page_url?: any;
+	perPage: number;
+	prevPageUrl?: any;
 	to: number;
 	total: number;
 	data?: any[];

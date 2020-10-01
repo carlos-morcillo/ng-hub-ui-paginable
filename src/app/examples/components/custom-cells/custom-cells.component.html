@@ -4,7 +4,7 @@
 </div>
 <table-sorter [headers]="headers" [rows]="items">
 	<ng-template nbTableSorterCell header="avatar" let-item="item">
-		<ngx-avatar [name]="item.name"></ngx-avatar>
+		<img [src]="'assets/avatars/64_' + (item.id % 16 + 1) + '.png'" [alt]="item.name">
 	</ng-template>
 	<ng-template nbTableSorterCell header="name" let-property="property">
 		<span class="badge badge-pill badge-info">

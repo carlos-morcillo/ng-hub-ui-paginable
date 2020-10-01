@@ -1,46 +1,42 @@
 <nav aria-label="Page navigation">
 	<ul class="pagination justify-content-center">
-		<li class="page-item" [ngClass]="{'disabled': pagination[mapping.currentPage] === 1}">
+		<li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
 			<a class="page-link" href="javascript:{}" (click)="pageClick(1)">
 				<i class="fa fa-angle-double-left"></i>
 			</a>
 		</li>
-		<li class="page-item" [ngClass]="{'disabled': pagination[mapping.currentPage] <= 1}">
-			<a class="page-link" href="javascript:{}" aria-label="Previous"
-				(click)="pageClick(pagination[mapping.currentPage] - 1)">
+		<li class="page-item" [ngClass]="{'disabled': currentPage <= 1}">
+			<a class="page-link" href="javascript:{}" aria-label="Previous" (click)="pageClick(currentPage - 1)">
 				<span aria-hidden="true">
 					<i class="fa fa-angle-left"></i>
 				</span>
 			</a>
 		</li>
-		<li class="page-item disabled" *ngIf="(pagination[mapping.currentPage] - 1) > 1">
+		<li class="page-item disabled" *ngIf="(currentPage - 1) > 1">
 			<a class="page-link" href="javascript:{}">...</a>
 		</li>
 		<li class="page-item">
-			<a class="page-link" href="javascript:{}" *ngIf="(pagination[mapping.currentPage] - 1) >= 1"
-				(click)="pageClick(pagination[mapping.currentPage] - 1)">{{ pagination[mapping.currentPage] - 1 }}</a>
+			<a class="page-link" href="javascript:{}" *ngIf="(currentPage - 1) >= 1"
+				(click)="pageClick(currentPage - 1)">{{ currentPage - 1 }}</a>
 		</li>
-		<li class="page-item active"><a class="page-link" href="javascript:{}">{{ pagination[mapping.currentPage] }}</a>
+		<li class="page-item active"><a class="page-link" href="javascript:{}">{{ currentPage }}</a>
 		</li>
 		<li class="page-item">
-			<a class="page-link" href="javascript:{}"
-				*ngIf="(pagination[mapping.currentPage] + 1) <= pagination[mapping.lastPage]"
-				(click)="pageClick(pagination[mapping.currentPage] + 1)">{{ pagination[mapping.currentPage] + 1 }}</a>
+			<a class="page-link" href="javascript:{}" *ngIf="(currentPage + 1) <= lastPage"
+				(click)="pageClick(currentPage + 1)">{{ currentPage + 1 }}</a>
 		</li>
-		<li class="page-item disabled" *ngIf="(pagination[mapping.currentPage] + 1) < pagination[mapping.lastPage]">
+		<li class="page-item disabled" *ngIf="(currentPage + 1) < lastPage">
 			<a class="page-link" href="javascript:{}">...</a>
 		</li>
-		<li class="page-item" [ngClass]="{'disabled': pagination[mapping.currentPage] >= pagination[mapping.lastPage]}">
-			<a class="page-link" href="javascript:{}" aria-label="Next"
-				(click)="pageClick(pagination[mapping.currentPage] + 1)">
+		<li class="page-item" [ngClass]="{'disabled': currentPage >= lastPage}">
+			<a class="page-link" href="javascript:{}" aria-label="Next" (click)="pageClick(currentPage + 1)">
 				<span aria-hidden="true">
 					<i class="fa fa-angle-right"></i>
 				</span>
 			</a>
 		</li>
-		<li class="page-item"
-			[ngClass]="{'disabled': pagination[mapping.currentPage] === pagination[mapping.lastPage]}">
-			<a class="page-link" href="javascript:{}" (click)="pageClick(pagination[mapping.lastPage])">
+		<li class="page-item" [ngClass]="{'disabled': currentPage === lastPage}">
+			<a class="page-link" href="javascript:{}" (click)="pageClick(lastPage)">
 				<i class="fa fa-angle-double-right"></i>
 			</a>
 		</li>

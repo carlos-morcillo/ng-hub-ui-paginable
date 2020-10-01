@@ -88,7 +88,8 @@ export class TableSorterComponent {
 			page: 1,
 			ordenation: this.ordenation,
 			searchText: this.searchText,
-			searchKeys: this.searchKeys
+			searchKeys: this.searchKeys,
+			paginate: this.paginate
 		};
 		this.pagination = this.rows ? this._paginationSvc.generate(this.rows, params) : null;
 		this.allRowsSelected = false;
@@ -213,9 +214,17 @@ export class TableSorterComponent {
 		return this._itemsPerPage;
 	}
 	set itemsPerPage(v: number) {
-		this._itemsPerPage = v;
+		this._itemsPerPage = +v;
 		this.triggerTheParamChanges();
 	}
+
+	/**
+	 * Set if the data must be paginated
+	 *
+	 * @type {boolean}
+	 * @memberof TableSorterComponent
+	 */
+	@Input() paginate: boolean = true;
 
 	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
 	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
@@ -244,12 +253,12 @@ export class TableSorterComponent {
 	}
 
 	filter() {
-		this.pagination.current_page = 1;
+		this.pagination.currentPage = 1;
 		this.triggerTheParamChanges();
 	}
 
 	pageClicked(page: number) {
-		this.pagination.current_page = page;
+		this.pagination.currentPage = page;
 		this.triggerTheParamChanges();
 	}
 
@@ -268,12 +277,12 @@ export class TableSorterComponent {
 		if (!this.ordenation || this.ordenation.property !== header.property) {
 			this.ordenation = {
 				property: header.property,
-				direction: 'asc'
+				direction: 'ASC'
 			};
 		} else {
 			this.ordenation = {
 				property: header.property,
-				direction: this.ordenation.direction === 'asc' ? 'desc' : 'asc'
+				direction: this.ordenation.direction === 'ASC' ? 'DESC' : 'ASC'
 			};
 		}
 
@@ -282,12 +291,15 @@ export class TableSorterComponent {
 
 	triggerTheParamChanges() {
 		const params = {
-			page: this.pagination.current_page,
+			page: this.pagination.currentPage,
 			perPage: this.itemsPerPage,
 			ordenation: this.ordenation,
 			searchText: this.searchText,
-			searchKeys: this.searchKeys
+			searchKeys: this.searchKeys,
+			paginate: this.paginate
 		};
+
+		Object.keys(params).forEach((k) => (params[k] == null) && delete params[k]);
 
 		if (!this.rows) {
 			this.onParamsChange.next(params);

@@ -25,7 +25,8 @@
 </ng-container>
 
 <ng-container *ngIf="pagination?.data.length">
-	<nb-table-sorter-paginator *ngIf="pagination && (paginationPosition == 'top' || paginationPosition === 'both')"
+	<nb-table-sorter-paginator
+		*ngIf="paginate && pagination && (paginationPosition == 'top' || paginationPosition === 'both')"
 		[pagination]="pagination">
 	</nb-table-sorter-paginator>
 
@@ -67,7 +68,7 @@
 			</ng-container>
 		</tbody>
 	</table>
-	<div class="row justify-content-end align-items-center mb-4">
+	<div *ngIf="paginate" class="row justify-content-end align-items-center mb-4">
 		<div class="form-group form-group-sm row col-auto mb-0 mr-2">
 			<label for="RowsPerPageInput" class="col col-form-label text-nowrap"><small>Rows per page:</small></label>
 			<div class="col pl-0">
@@ -84,7 +85,7 @@
 	</div>
 
 	<nb-table-sorter-paginator (onPageClick)="pageClicked($event)"
-		*ngIf="pagination && (paginationPosition == 'bottom' || paginationPosition === 'both')"
+		*ngIf="paginate && pagination && (paginationPosition == 'bottom' || paginationPosition === 'both')"
 		[pagination]="pagination"></nb-table-sorter-paginator>
 </ng-container>
 
@@ -105,7 +106,7 @@
 				<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 			</button>
 			<button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link">
-				<i class="fa" [ngClass]="item.unfold ? 'fa-sort-asc' : 'fa-sort-desc'"></i>
+				<i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
 			</button>
 		</td>
 	</tr>
