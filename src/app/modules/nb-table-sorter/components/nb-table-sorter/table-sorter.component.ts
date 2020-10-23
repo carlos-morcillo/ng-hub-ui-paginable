@@ -14,6 +14,9 @@ import { NbTableSorterOptions } from '../../interfaces/nb-table-sorter-options';
 import { NbTableSorterPagination } from '../../interfaces/nb-table-sorter-pagination';
 import { NbTableSorterOrdination } from '../../interfaces/nb-table-sorter-ordination';
 import { NbTableSorterItem } from '../../interfaces/nb-table-sorter-item';
+import { locale as enLang } from '../../assets/i18n/en';
+import { locale as esLang } from '../../assets/i18n/es';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
 	selector: 'table-sorter',
@@ -233,8 +236,11 @@ export class TableSorterComponent {
 
 	constructor(
 		private _paginationSvc: PaginationService,
-		private _configSvc: NbTableSorterService
-	) { }
+		private _configSvc: NbTableSorterService,
+		private _translationSvc: TranslationService
+	) {
+		this._translationSvc.loadTranslations(enLang, esLang);
+	}
 
 	/**
 	 * Obtiene la propiedad del objeto cuya clave es pasada por parámetro

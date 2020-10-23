@@ -2,6 +2,10 @@
 
 ## [1.10.0] - 2020-09-24
 ### Added
+- Incorporación de @ngx-translate y los idiomas español e inglés
+
+## [1.10.0] - 2020-09-24
+### Added
 - Posibilidad de crear tablas sin paginación estableciendo el parámetro paginate a false.
 ### Changed
 - El evento triggerTheParamChanges solo emite propiedades distintas de null.

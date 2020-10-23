@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { NbTableSorterModule } from './modules/nb-table-sorter/nb-table-sorter.module';
 import { HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
 	{ path: '', loadChildren: () => import('./examples/examples.module').then(m => m.ExamplesModule) },
@@ -15,6 +16,7 @@ const routes: Routes = [
 	],
 	imports: [
 		BrowserModule,
+		TranslateModule.forRoot(),
 		NbTableSorterModule.forRoot({
 			mapping: {
 				currentPage: 'currentPage',

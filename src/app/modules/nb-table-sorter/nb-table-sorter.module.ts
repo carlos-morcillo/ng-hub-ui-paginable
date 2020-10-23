@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
 import { GetPipe } from './pipes/get.pipe';
@@ -16,6 +16,8 @@ import { NbTableSorterService } from './services/nb-table-sorter.service';
 import { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
 import { NbTableSorterConfigService } from './services/nb-table-sorter-config.service';
 import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslationService } from './services/translation.service'
 
 @NgModule({
 	declarations: [
@@ -33,7 +35,8 @@ import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter
 	],
 	imports: [
 		CommonModule,
-		FormsModule
+		FormsModule,
+		TranslateModule.forChild()
 	],
 	exports: [
 		TableSorterComponent,
@@ -48,7 +51,6 @@ import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter
 		UcfirstPipe,
 		IsStringPipe
 	]
-
 })
 export class NbTableSorterModule {
 
