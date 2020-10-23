@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.10.0] - 2020-09-24
+## [1.11.0] - 2020-10-23
 ### Added
 - Incorporación de @ngx-translate y los idiomas español e inglés
 
