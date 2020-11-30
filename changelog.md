@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.11.1] - 2020-11-30
+### Removed
+- Eliminación del establecimineto del idioma por defecto
+
 ## [1.11.0] - 2020-10-23
 ### Added
 - Incorporación de @ngx-translate y los idiomas español e inglés
