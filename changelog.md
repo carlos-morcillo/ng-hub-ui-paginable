@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.13.0] - 2020-12-21
+### Added
+- Implementación de control value accessor
+### Fixed
+- Selección de items al cambiar de página
+
+## [1.12.0] - 2020-12-18
+### Added
+- Atributo para hacer la tabla responsive según los puntos de ruptura xs, sm, md, lg, xl
+- Incorporación de la propiedad sticky en las cabeceras de las columnas haciendo estableciendo la disposición de ellas sticky al inicio o al final. Los posibles valores son start y end.
+
 ## [1.11.1] - 2020-11-30
 ### Removed
 - Eliminación del establecimineto del idioma por defecto

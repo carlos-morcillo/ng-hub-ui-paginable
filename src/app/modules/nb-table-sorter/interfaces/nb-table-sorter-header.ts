@@ -5,4 +5,5 @@ export interface NbTableSorterHeader {
 	align?: string;
 	sortable?: boolean;
 	wrapping?: 'wrap' | 'nowrap';
+	sticky?: 'start' | 'end';
 }

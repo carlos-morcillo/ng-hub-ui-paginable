@@ -1,9 +1,38 @@
 :host {
+
+  display: block;
+
+
+  .table-container {
+    max-width: 100%;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  th,
+  td {
+    &.sticky-start {
+      background: white;
+      left: 0;
+      position: sticky;
+      z-index: 9;
+    }
+
+    &.sticky-end {
+      background: white;
+      right: 0;
+      position: sticky;
+      z-index: 9;
+    }
+  }
+
   .actions {
     white-space: nowrap;
     width: 1%;
+
     button {
       opacity: 0.4;
+
       &:hover {
         opacity: 1;
       }

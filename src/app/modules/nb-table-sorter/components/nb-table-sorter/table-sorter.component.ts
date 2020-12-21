@@ -1,4 +1,4 @@
-import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef, ContentChildren } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef, ContentChildren, forwardRef } from '@angular/core';
 import * as _ from 'lodash';
 import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
 import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
@@ -17,11 +17,20 @@ import { NbTableSorterItem } from '../../interfaces/nb-table-sorter-item';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
 import { TranslationService } from '../../services/translation.service';
+import { BREAKPOINTS } from '../../constants/breakpoints';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
 	selector: 'table-sorter',
 	templateUrl: './table-sorter.component.html',
-	styleUrls: ['./table-sorter.component.scss']
+	styleUrls: ['./table-sorter.component.scss'],
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => TableSorterComponent),
+			multi: true
+		}
+	]
 })
 export class TableSorterComponent {
 	private _headers: NbTableSorterHeader[] | string[];
@@ -163,6 +172,15 @@ export class TableSorterComponent {
 	 */
 	@Input() actions: NbTableSorterRowAction[] = [];
 
+
+	/**
+	 * Sets the action column to sticky
+	 *
+	 * @type {NbTableSorterRowAction[]}
+	 * @memberof TableSorterComponent
+	 */
+	@Input() stickyActions: boolean = true;
+
 	/**
 	 * On item click event emitter
 	 *
@@ -221,6 +239,26 @@ export class TableSorterComponent {
 		this.triggerTheParamChanges();
 	}
 
+	responsiveCSSClass: string = '';
+	private _responsive: string;
+	@Input()
+	get responsive(): string {
+		return this._responsive;
+	}
+	set responsive(v: string) {
+		this._responsive = v;
+		if (this._responsive && BREAKPOINTS.indexOf(this._responsive) > -1) {
+			this.responsiveCSSClass = this.responsive === 'xs' ? 'table-responsive' : 'table-responsive-' + this.responsive;
+		} else {
+			this.responsiveCSSClass = '';
+		}
+	}
+
+	disabled: boolean = false;
+
+	onChange = (_: any) => { }
+	onTouch = () => { }
+
 	/**
 	 * Set if the data must be paginated
 	 *
@@ -240,6 +278,26 @@ export class TableSorterComponent {
 		private _translationSvc: TranslationService
 	) {
 		this._translationSvc.loadTranslations(enLang, esLang);
+	}
+
+	writeValue(value: any): void {
+		if (value) {
+			this.selectedItems = value || [];
+		} else {
+			this.selectedItems = [];
+		}
+	}
+
+	registerOnChange(fn: any): void {
+		this.onChange = fn;
+	}
+
+	registerOnTouched(fn: any): void {
+		this.onTouch = fn;
+	}
+
+	setDisabledState(isDisabled: boolean): void {
+		this.disabled = isDisabled;
 	}
 
 	/**
@@ -384,6 +442,7 @@ export class TableSorterComponent {
 			o.selected = this.allRowsSelected;
 		});
 		this.onSelected.emit(this.selectedItems);
+		this.onChange(this.selectedItems);
 	}
 
 	/**
@@ -405,6 +464,7 @@ export class TableSorterComponent {
 
 		this.allRowsSelected = this.pagination[this.mapping.data].every(o => o.selected);
 		this.onSelected.emit(this.selectedItems);
+		this.onChange(this.selectedItems);
 	}
 
 	/**
@@ -413,7 +473,7 @@ export class TableSorterComponent {
 	 * @memberof TableSorterComponent
 	 */
 	markSelected() {
-		if (this.pagination?.[this.mapping.data]?.length) {
+		if (!this.pagination?.[this.mapping.data]?.length) {
 			return;
 		}
 		this.pagination[this.mapping.data].forEach(o => {

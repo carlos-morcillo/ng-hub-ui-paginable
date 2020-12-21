@@ -20,6 +20,8 @@ export class SelectableComponent implements OnInit {
 
 	selectedItems: any[];
 
+	value: any[];
+
 	constructor(
 		private _mockedUsersSvc: MockedUsersService
 	) { }

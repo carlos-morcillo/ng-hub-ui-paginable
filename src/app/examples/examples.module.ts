@@ -20,6 +20,9 @@ import { CustomCellsComponent } from './components/custom-cells/custom-cells.com
 import { SelectableComponent } from './components/selectable/selectable.component';
 import { CustomRowsPerPageComponent } from './components/custom-rows-per-page/custom-rows-per-page.component';
 import { NotPaginatedComponent } from './components/not-paginated/not-paginated.component';
+import { StickyColumnsComponent } from './components/sticky-columns/sticky-columns.component';
+import { ResponsiveComponent } from './components/responsive/responsive.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -39,7 +42,9 @@ const routes: Routes = [
 	{ path: 'expanding-rows', component: ExpandingRowsComponent },
 	{ path: 'selectable', component: SelectableComponent },
 	{ path: 'custom-rows-per-page', component: CustomRowsPerPageComponent },
-	{ path: 'not-paginated', component: NotPaginatedComponent }
+	{ path: 'not-paginated', component: NotPaginatedComponent },
+	{ path: 'sticky-columns', component: StickyColumnsComponent },
+	{ path: 'responsive', component: ResponsiveComponent },
 ];
 
 @NgModule({
@@ -60,10 +65,13 @@ const routes: Routes = [
 		ExpandingRowsComponent,
 		SelectableComponent,
 		CustomRowsPerPageComponent,
-		NotPaginatedComponent
+		NotPaginatedComponent,
+		StickyColumnsComponent,
+		ResponsiveComponent
 	],
 	imports: [
 		CommonModule,
+		FormsModule,
 		RouterModule.forChild(routes),
 		NbTableSorterModule
 	]

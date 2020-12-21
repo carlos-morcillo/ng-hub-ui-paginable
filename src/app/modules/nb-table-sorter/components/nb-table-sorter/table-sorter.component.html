@@ -30,43 +30,46 @@
     [pagination]="pagination">
   </nb-table-sorter-paginator>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th *ngIf="selectable">
-          <input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()">
-        </th>
-        <th *ngFor="let item of headers" (click)="sort(item)" class="p-2">
-          <ng-container *ngIf="item | isObject">
-            <div class="row align-items-center m-0">
-              <div class="col-auto p-0">
-                <i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}" *ngIf="item.icon"
-                  aria-hidden="true"></i>
+  <div class="table-container {{ responsiveCSSClass }}">
+    <table class="table">
+      <thead>
+        <tr>
+          <th *ngIf="selectable" class="sticky-start">
+            <input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()" [disabled]="disabled">
+          </th>
+          <th *ngFor="let item of headers" (click)="sort(item)" class="p-2"
+            [ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end'}">
+            <ng-container *ngIf="item | isObject">
+              <div class="row align-items-center m-0">
+                <div class="col-auto p-0">
+                  <i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}" *ngIf="item.icon"
+                    aria-hidden="true"></i>
+                </div>
+                <div class="col p-0">
+                  <span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
+                </div>
+                <div class="col-auto p-0">
+                  <i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
+                </div>
               </div>
-              <div class="col p-0">
-                <span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
-              </div>
-              <div class="col-auto p-0">
-                <i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
-              </div>
-            </div>
+            </ng-container>
+            <ng-container *ngIf="item | isString">
+              {{ item | ucfirst }}
+            </ng-container>
+          </th>
+          <th *ngIf="actions?.length || templateExpandingRows.length" class="sticky-end"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of pagination[mapping.data]; let i=index">
+          <ng-container [ngTemplateOutlet]="templateRow || defaultRowTemplate"
+            [ngTemplateOutletContext]="{$implicit: item}">
           </ng-container>
-          <ng-container *ngIf="item | isString">
-            {{ item | ucfirst }}
-          </ng-container>
-        </th>
-        <th *ngIf="actions?.length || templateExpandingRows.length"></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <ng-container *ngFor="let item of pagination[mapping.data]; let i=index">
-        <ng-container [ngTemplateOutlet]="templateRow || defaultRowTemplate"
-          [ngTemplateOutletContext]="{$implicit: item}">
         </ng-container>
-      </ng-container>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
+
   <div *ngIf="paginate" class="row justify-content-end align-items-center mb-4">
     <div class="form-group form-group-sm row col-auto mb-0 mr-2">
       <label for="RowsPerPageInput"
@@ -94,12 +97,14 @@
     <td *ngIf="selectable">
       <input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
     </td>
-    <td *ngFor="let header of headers">
+    <td *ngFor="let header of headers"
+      [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end'}">
       <ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate"
         [ngTemplateOutletContext]="{item: item, property: getProperty(item, header?.property || header)}">
       </ng-container>
     </td>
-    <td *ngIf="actions?.length || templateExpandingRows?.length" class="actions">
+    <td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end"
+      [class.sticky-end]="stickyActions">
       <button *ngFor="let action of actions" class="btn btn-link px-2"
         [ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
         (click)="handleAction($event, action.handler, item)">

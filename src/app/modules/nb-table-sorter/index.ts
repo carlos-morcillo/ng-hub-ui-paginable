@@ -26,3 +26,6 @@ export { NbTableSorterOrdination } from './interfaces/nb-table-sorter-ordination
 export { NbTableSorterPagination } from './interfaces/nb-table-sorter-pagination';
 export { NbTableSorterItem } from './interfaces/nb-table-sorter-item';
 export { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
+
+// Constants
+export { BREAKPOINTS } from './constants/breakpoints';
