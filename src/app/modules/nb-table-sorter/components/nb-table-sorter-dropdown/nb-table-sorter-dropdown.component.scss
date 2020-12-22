@@ -1,0 +1,22 @@
+:host {
+  display: inline-block;
+
+  .dropdown {
+    .toggle:focus {
+      box-shadow: none;
+      ;
+    }
+
+    .dropdown-menu {
+      min-width: auto;
+      transform: translateX(-100%);
+      top: 0;
+
+      .dropdown-item {
+        text-align: left;
+
+      }
+    }
+
+  }
+}

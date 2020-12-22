@@ -20,6 +20,8 @@ export { UcfirstPipe } from './pipes/ucfirst.pipe';
 
 // Interfaces
 export { NbTableSorterHeader } from './interfaces/nb-table-sorter-header';
+export { NbTableSorterDropdown } from './interfaces/nb-table-sorter-dropdown';
+export { NbTableSorterButton } from './interfaces/nb-table-sorter-button';
 export { NbTableSorterRowAction } from './interfaces/nb-table-sorter-row-action';
 export { NbTableSorterOptions } from './interfaces/nb-table-sorter-options';
 export { NbTableSorterOrdination } from './interfaces/nb-table-sorter-ordination';

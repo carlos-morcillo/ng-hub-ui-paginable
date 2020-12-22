@@ -17,7 +17,7 @@ import { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
 import { NbTableSorterConfigService } from './services/nb-table-sorter-config.service';
 import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
 import { TranslateModule } from '@ngx-translate/core';
-import { TranslationService } from './services/translation.service'
+import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component'
 
 @NgModule({
 	declarations: [
@@ -32,6 +32,7 @@ import { TranslationService } from './services/translation.service'
 		IsObjectPipe,
 		UcfirstPipe,
 		IsStringPipe,
+		NbTableSorterDropdownComponent,
 	],
 	imports: [
 		CommonModule,

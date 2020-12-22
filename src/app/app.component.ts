@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MockedUsersService } from './mocked-users.service';
+declare var require: any;
+const packageJson = require('../../package.json');
 
 @Component({
 	selector: 'app-root',
@@ -9,6 +11,7 @@ import { MockedUsersService } from './mocked-users.service';
 export class AppComponent implements OnInit {
 
 	items: any[];
+	version: string = packageJson.version;
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService

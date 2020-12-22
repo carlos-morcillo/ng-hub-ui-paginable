@@ -1,0 +1,13 @@
+<div class="dropdown" [class.show]="shown">
+  <button class="btn btn-link px-2 toggle"
+    [ngClass]="dropdownToggle.color ? 'text-' + dropdownToggle.color : 'text-dark'" [title]="dropdownToggle.title"
+    data-toggle="dropdown" [attr.aria-expanded]="shown" (click)="shown = !shown">
+    <i *ngIf="dropdownToggle.icon || 'fa fa-ellipsis-v'" [ngClass]="dropdownToggle.icon"></i>
+  </button>
+  <div class="dropdown-menu" [class.show]="shown">
+    <a class="dropdown-item" *ngFor="let dropdownItem of dropdownToggle.buttons"
+      [ngClass]="dropdownItem.color ? 'text-' + dropdownItem.color : 'text-dark'" (click)="handle(dropdownItem)">
+      <i *ngIf="dropdownToggle.icon" class="mr-2 {{ dropdownItem.icon }}"></i>{{ dropdownItem.title | titlecase }}
+    </a>
+  </div>
+</div>

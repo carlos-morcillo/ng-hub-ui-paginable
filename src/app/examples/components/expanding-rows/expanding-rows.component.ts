@@ -15,22 +15,26 @@ export class ExpandingRowsComponent implements OnInit {
 		'id',
 		'username',
 		'email',
-		'name'
-	];
-	searchKeys: string[] = ['id', 'username', 'email', 'name'];
-	actions: NbTableSorterRowAction[] = [
+		'name',
 		{
-			title: 'edit',
-			icon: 'fa fa-edit',
-			handler: (item) => console.log('edit', item)
-		},
-		{
-			title: 'delete',
-			color: 'danger',
-			icon: 'fa fa-trash',
-			handler: (item) => console.log('delete', item)
+			property: 'actions',
+			sticky: 'end',
+			buttons: [
+				{
+					title: 'edit',
+					icon: 'fa fa-edit',
+					handler: (item) => console.log('edit', item)
+				},
+				{
+					title: 'delete',
+					color: 'danger',
+					icon: 'fa fa-trash',
+					handler: (item) => console.log('delete', item)
+				}
+			]
 		}
 	];
+	searchKeys: string[] = ['id', 'username', 'email', 'name'];
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService

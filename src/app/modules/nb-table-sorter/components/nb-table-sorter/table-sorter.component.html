@@ -38,7 +38,7 @@
             <input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()" [disabled]="disabled">
           </th>
           <th *ngFor="let item of headers" (click)="sort(item)" class="p-2"
-            [ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end'}">
+            [ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons}">
             <ng-container *ngIf="item | isObject">
               <div class="row align-items-center m-0">
                 <div class="col-auto p-0">
@@ -98,9 +98,9 @@
       <input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
     </td>
     <td *ngFor="let header of headers"
-      [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end'}">
+      [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons}">
       <ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate"
-        [ngTemplateOutletContext]="{item: item, property: getProperty(item, header?.property || header)}">
+        [ngTemplateOutletContext]="{header: header, item: item, property: getProperty(item, header?.property || header)}">
       </ng-container>
     </td>
     <td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end"
@@ -110,7 +110,7 @@
         (click)="handleAction($event, action.handler, item)">
         <i *ngIf="action.icon" [ngClass]="action.icon"></i>
       </button>
-      <button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link">
+      <button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link px-2">
         <i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
       </button>
     </td>
@@ -123,8 +123,27 @@
   </ng-container>
 </ng-template>
 
-<ng-template #defaultCellTemplate let-property="property">
-  {{ property }}
+<ng-template #defaultCellTemplate let-property="property" let-item="item" let-header="header">
+  <ng-container *ngIf="header.buttons; else propertyCellTpt">
+    <ng-container *ngFor="let button of header.buttons">
+      <ng-container *ngIf="button.buttons; else elseTemplate">
+        <nb-table-sorter-dropdown [dropdownToggle]="button" [item]="item"></nb-table-sorter-dropdown>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <button class="btn btn-link px-2" [ngClass]="button.color ? 'text-' + button.color : 'text-dark'"
+          [title]="button.title" (click)="handleAction($event, button.handler, item)">
+          <i *ngIf="button.icon" [ngClass]="button.icon"></i>
+        </button>
+      </ng-template>
+    </ng-container>
+    <!-- <button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link">
+      <i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
+    </button> -->
+  </ng-container>
+  <ng-template #propertyCellTpt>
+    {{ property }}
+  </ng-template>
+
 </ng-template>
 
 <ng-template #defaultNotFoundTemplate>

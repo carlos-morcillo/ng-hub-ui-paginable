@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NbTableSorterHeader } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-header';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterRowAction } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-row-action';
 
 @Component({
 	selector: 'app-rows-with-actions',
@@ -14,23 +13,53 @@ export class RowsWithActionsComponent implements OnInit {
 	headers: (NbTableSorterHeader | string)[] = [
 		'id',
 		'username',
-		'email',
-		'name'
-	];
-	searchKeys: string[] = ['id', 'username', 'email', 'name'];
-	actions: NbTableSorterRowAction[] = [
 		{
-			title: 'edit',
-			icon: 'fa fa-edit',
-			handler: (item) => console.log('edit', item)
+			buttons: [
+				{
+					title: 'view',
+					icon: 'fa fa-eye',
+					handler: (item) => console.log('view', item)
+				}
+			]
 		},
+		'email',
+		'name',
 		{
-			title: 'delete',
-			color: 'danger',
-			icon: 'fa fa-trash',
-			handler: (item) => console.log('delete', item)
+			property: 'actions',
+			buttons: [
+				{
+					title: 'edit',
+					icon: 'fa fa-edit',
+					handler: (item) => console.log('edit', item)
+				},
+				{
+					title: 'delete',
+					color: 'danger',
+					icon: 'fa fa-trash',
+					handler: (item) => console.log('delete', item)
+				},
+				{
+					title: 'delete',
+					color: 'info',
+					icon: 'fa fa-ellipsis-v',
+					buttons: [
+						{
+							title: 'edit',
+							icon: 'fa fa-edit',
+							handler: (item) => console.log('edit', item)
+						},
+						{
+							title: 'delete',
+							color: 'danger',
+							icon: 'fa fa-trash',
+							handler: (item) => console.log('delete', item)
+						}
+					]
+				},
+			]
 		}
 	];
+	searchKeys: string[] = ['id', 'username', 'email', 'name'];
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService

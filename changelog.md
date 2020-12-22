@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.14.0] - 2020-12-22
+### Added
+- Posibilidad de añadir dropdowns como acciones
+### Changed
+- Las acciones ahora se pueden meter en cualquier columna. 
+
 ## [1.13.0] - 2020-12-21
 ### Added
 - Implementación de control value accessor

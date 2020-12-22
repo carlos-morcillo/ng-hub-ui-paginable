@@ -18,7 +18,7 @@ import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
 import { TranslationService } from '../../services/translation.service';
 import { BREAKPOINTS } from '../../constants/breakpoints';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
 	selector: 'table-sorter',
@@ -412,6 +412,10 @@ export class TableSorterComponent {
 	handleAction(event: Event, handler: (...args: any) => void, item: any) {
 		event.stopPropagation();
 		handler(item);
+	}
+
+	toggledropdown(event: Event, header: NbTableSorterHeader, item: any) {
+		console.log(arguments);
 	}
 
 	/**
