@@ -23,6 +23,7 @@ import { NotPaginatedComponent } from './components/not-paginated/not-paginated.
 import { StickyColumnsComponent } from './components/sticky-columns/sticky-columns.component';
 import { ResponsiveComponent } from './components/responsive/responsive.component';
 import { FormsModule } from '@angular/forms';
+import { BatchActionsComponent } from './components/batch-actions/batch-actions.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -45,6 +46,7 @@ const routes: Routes = [
 	{ path: 'not-paginated', component: NotPaginatedComponent },
 	{ path: 'sticky-columns', component: StickyColumnsComponent },
 	{ path: 'responsive', component: ResponsiveComponent },
+	{ path: 'batch-actions', component: BatchActionsComponent },
 ];
 
 @NgModule({
@@ -67,7 +69,8 @@ const routes: Routes = [
 		CustomRowsPerPageComponent,
 		NotPaginatedComponent,
 		StickyColumnsComponent,
-		ResponsiveComponent
+		ResponsiveComponent,
+		BatchActionsComponent
 	],
 	imports: [
 		CommonModule,

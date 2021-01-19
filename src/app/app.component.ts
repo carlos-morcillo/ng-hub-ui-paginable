@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { MockedUsersService } from './mocked-users.service';
 declare var require: any;
 const packageJson = require('../../package.json');
@@ -14,12 +15,14 @@ export class AppComponent implements OnInit {
 	version: string = packageJson.version;
 
 	constructor(
-		private _mockedUsersSvc: MockedUsersService
+		private _mockedUsersSvc: MockedUsersService,
+		private _translationSvc: TranslateService
 	) { }
 
 	ngOnInit(): void {
 		setTimeout(() => {
 			this.items = this._mockedUsersSvc.items;
 		}, 2048);
+		this._translationSvc.setDefaultLang('en');
 	}
 }

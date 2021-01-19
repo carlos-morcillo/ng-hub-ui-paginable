@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.15.0] - 2020-12-29
+### Added
+- Posibilidad de añadir acciones en lote
+
+## [1.14.2] - 2020-12-22
+### Fixed
+- Exportación del componente dropdown
+
 ## [1.14.0] - 2020-12-22
 ### Added
 - Posibilidad de añadir dropdowns como acciones

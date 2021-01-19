@@ -4,6 +4,7 @@ export { NbTableSorterModule } from './nb-table-sorter.module';
 // Components
 export { TableSorterComponent } from './components/nb-table-sorter/table-sorter.component';
 export { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
+export { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
 
 // Directives
 export { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';

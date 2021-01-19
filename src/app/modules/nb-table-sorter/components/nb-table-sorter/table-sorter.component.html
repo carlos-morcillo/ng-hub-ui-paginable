@@ -6,9 +6,21 @@
   </div>
 </ng-container>
 
-<div class="row justify-content-end">
-  <div *ngIf="showSearchInput" class="col-offset col-sm-6 col-md-4">
-    <div class="input-group mb-3">
+<div class="row justify-content-between">
+  <div class="col-md-4 mb-4" *ngIf="batchActions?.length">
+    <div class="input-group">
+      <select class="form-control" [(ngModel)]="batchAction">
+        <option [ngValue]="null">{{ 'BATCH_ACTIONS' | translate }}</option>
+        <option *ngFor="let action of batchActions" [ngValue]="action">{{ action.title }}</option>
+      </select>
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" [disabled]="!batchAction || !selectedItems.length"
+          (click)="handleBatchAction($event)">{{ 'APPLY' | translate }}</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4 ml-auto" *ngIf="showSearchInput">
+    <div class="input-group">
       <input type="text" class="form-control" [(ngModel)]="searchText" [placeholder]="'SEARCH' | translate | ucfirst"
         aria-label="Search" (keyup.enter)="filter()">
       <div class="input-group-append">
@@ -34,7 +46,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th *ngIf="selectable" class="sticky-start">
+          <th *ngIf="selectable || batchActions?.length" class="sticky-start">
             <input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()" [disabled]="disabled">
           </th>
           <th *ngFor="let item of headers" (click)="sort(item)" class="p-2"
@@ -94,7 +106,7 @@
 
 <ng-template #defaultRowTemplate let-item>
   <tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
-    <td *ngIf="selectable">
+    <td *ngIf="selectable || batchActions?.length">
       <input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
     </td>
     <td *ngFor="let header of headers"

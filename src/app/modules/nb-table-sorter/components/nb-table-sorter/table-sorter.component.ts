@@ -19,6 +19,7 @@ import { locale as esLang } from '../../assets/i18n/es';
 import { TranslationService } from '../../services/translation.service';
 import { BREAKPOINTS } from '../../constants/breakpoints';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
 
 @Component({
 	selector: 'table-sorter',
@@ -172,6 +173,15 @@ export class TableSorterComponent {
 	 */
 	@Input() actions: NbTableSorterRowAction[] = [];
 
+	/**
+	 * Collection of actions for items
+	 *
+	 * @type {NbTableSorterRowAction[]}
+	 * @memberof TableSorterComponent
+	 */
+	@Input() batchActions: NbTableSorterButton[] = [];
+
+	batchAction: NbTableSorterButton = null;
 
 	/**
 	 * Sets the action column to sticky
@@ -403,7 +413,7 @@ export class TableSorterComponent {
 	}
 
 	/**
-	 * Handle the action to execute
+	 * Handles the action to execute
 	 *
 	 * @param {Function} handler
 	 * @param {*} item
@@ -412,6 +422,17 @@ export class TableSorterComponent {
 	handleAction(event: Event, handler: (...args: any) => void, item: any) {
 		event.stopPropagation();
 		handler(item);
+	}
+
+	/**
+	 * Hadles the action to be executed in a batch
+	 *
+	 * @param {Event} event
+	 * @memberof TableSorterComponent
+	 */
+	handleBatchAction(event: Event) {
+		event.stopPropagation();
+		this.batchAction.handler(this.selectedItems);
 	}
 
 	toggledropdown(event: Event, header: NbTableSorterHeader, item: any) {
