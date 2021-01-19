@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.15.1] - 2021-01-19
+### Fixed
+- Se comparan correctamente los objetos seleccionados.
+
 ## [1.15.0] - 2020-12-29
 ### Added
 - Posibilidad de añadir acciones en lote
@@ -12,7 +16,7 @@
 ### Added
 - Posibilidad de añadir dropdowns como acciones
 ### Changed
-- Las acciones ahora se pueden meter en cualquier columna. 
+- Las acciones ahora se pueden meter en cualquier columna
 
 ## [1.13.0] - 2020-12-21
 ### Added
