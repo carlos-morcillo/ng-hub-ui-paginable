@@ -266,8 +266,8 @@ export class TableSorterComponent {
 
 	disabled: boolean = false;
 
-	onChange = (_: any) => { }
-	onTouch = () => { }
+	onChange = (_: any) => { };
+	onTouch = () => { };
 
 	/**
 	 * Set if the data must be paginated
@@ -503,7 +503,8 @@ export class TableSorterComponent {
 		}
 		this.pagination[this.mapping.data].forEach(o => {
 			const needle = this.selectableProperty ? o[this.selectableProperty] : o;
-			o.selected = this.selectedItems.indexOf(needle) > -1;
+			// o.selected = this.selectedItems.indexOf(needle) > -1;
+			o.selected = !!this.selectedItems.filter(item => _.isEqual(item, o)).length;
 		});
 		this.allRowsSelected = this.pagination[this.mapping.data].every(o => o.selected);
 	}

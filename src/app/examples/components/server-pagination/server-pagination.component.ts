@@ -17,6 +17,12 @@ export class ServerPaginationComponent implements OnInit {
 		'name'
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];
+	batchActions = [
+		{
+			title: 'export',
+			handler: (items) => this._export(items)
+		}
+	];
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService
@@ -35,4 +41,9 @@ export class ServerPaginationComponent implements OnInit {
 		}
 	}
 
+	private _export(items) {
+		console.log('export', items);
+		this.pagination = null;
+		this.fetch();
+	}
 }
