@@ -30,13 +30,14 @@ export class RowsWithActionsComponent implements OnInit {
 				{
 					title: 'edit',
 					icon: 'fa fa-edit',
-					handler: (item) => console.log('edit', item)
+					handler: (item) => console.log('edit', item),
+					hidden: true
 				},
 				{
 					title: 'delete',
 					color: 'danger',
 					icon: 'fa fa-trash',
-					handler: (item) => console.log('delete', item)
+					handler: (item) => console.log('delete', item),
 				},
 				{
 					title: 'delete',
@@ -46,13 +47,20 @@ export class RowsWithActionsComponent implements OnInit {
 						{
 							title: 'edit',
 							icon: 'fa fa-edit',
-							handler: (item) => console.log('edit', item)
+							handler: (item) => console.log('edit', item),
 						},
 						{
 							title: 'delete',
 							color: 'danger',
 							icon: 'fa fa-trash',
-							handler: (item) => console.log('delete', item)
+							handler: (item) => console.log('delete', item),
+						},
+						{
+							title: 'delete',
+							color: 'warning',
+							icon: 'fa fa-trash',
+							handler: (item) => console.log('delete', item),
+							hidden: true,
 						}
 					]
 				},

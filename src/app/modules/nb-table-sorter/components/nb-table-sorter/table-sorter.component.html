@@ -117,11 +117,13 @@
     </td>
     <td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end"
       [class.sticky-end]="stickyActions">
-      <button *ngFor="let action of actions" class="btn btn-link px-2"
-        [ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
-        (click)="handleAction($event, action.handler, item)">
-        <i *ngIf="action.icon" [ngClass]="action.icon"></i>
-      </button>
+      <ng-container *ngFor="let action of actions">
+        <button *ngIf="action.hidden !== false" class="btn btn-link px-2"
+          [ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
+          (click)="handleAction($event, action.handler, item)">
+          <i *ngIf="action.icon" [ngClass]="action.icon"></i>
+        </button>
+      </ng-container>
       <button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link px-2">
         <i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
       </button>
@@ -142,8 +144,9 @@
         <nb-table-sorter-dropdown [dropdownToggle]="button" [item]="item"></nb-table-sorter-dropdown>
       </ng-container>
       <ng-template #elseTemplate>
-        <button class="btn btn-link px-2" [ngClass]="button.color ? 'text-' + button.color : 'text-dark'"
-          [title]="button.title" (click)="handleAction($event, button.handler, item)">
+        <button *ngIf="!button.hidden" class="btn btn-link px-2"
+          [ngClass]="button.color ? 'text-' + button.color : 'text-dark'" [title]="button.title"
+          (click)="handleAction($event, button.handler, item)">
           <i *ngIf="button.icon" [ngClass]="button.icon"></i>
         </button>
       </ng-template>

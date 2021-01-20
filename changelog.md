@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.0] - 2021-01-20
+### Added
+- Es posible mostrar u ocultar botones de acciones en función del valor hidden del propio botón.
+
 ## [1.15.1] - 2021-01-19
 ### Fixed
 - Se comparan correctamente los objetos seleccionados.
