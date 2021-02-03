@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.2] - 2021-02-03
+### Changed
+- Angular 11.
+
 ## [1.16.1] - 2021-02-03
 ### Fixed
 - Tslint detecta correctamente el componente.
