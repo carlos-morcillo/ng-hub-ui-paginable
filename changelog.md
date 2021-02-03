@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.1] - 2021-02-03
+### Fixed
+- Tslint detecta correctamente el componente.
+
 ## [1.16.0] - 2021-01-20
 ### Added
 - Es posible mostrar u ocultar botones de acciones en función del valor hidden del propio botón.

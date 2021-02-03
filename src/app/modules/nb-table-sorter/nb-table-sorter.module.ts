@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
 import { GetPipe } from './pipes/get.pipe';
@@ -17,7 +17,7 @@ import { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
 import { NbTableSorterConfigService } from './services/nb-table-sorter-config.service';
 import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
 import { TranslateModule } from '@ngx-translate/core';
-import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component'
+import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
 
 @NgModule({
 	declarations: [
@@ -51,10 +51,12 @@ import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dro
 		IsObjectPipe,
 		UcfirstPipe,
 		IsStringPipe
+	],
+	entryComponents: [
+		TableSorterComponent
 	]
 })
 export class NbTableSorterModule {
-
 	static forRoot(config?: NbTableSorterConfig): ModuleWithProviders {
 		return {
 			ngModule: NbTableSorterModule,
@@ -65,6 +67,6 @@ export class NbTableSorterModule {
 					useValue: config
 				}
 			]
-		}
+		};
 	}
 }
