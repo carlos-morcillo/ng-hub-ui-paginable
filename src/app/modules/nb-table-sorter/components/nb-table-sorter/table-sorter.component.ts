@@ -394,7 +394,7 @@ export class TableSorterComponent {
         if (!this.ordenation || this.ordenation.property !== header.property) {
             return 'fa-sort';
         }
-        return this.ordenation.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+        return this.ordenation.direction === 'ASC' ? 'fa-sort-up' : 'fa-sort-down';
     }
 
     /**

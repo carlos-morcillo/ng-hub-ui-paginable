@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.3] - 2021-02-23
+### Fixed
+- Corrige la ordenación de los elementos.
+
 ## [1.16.2] - 2021-02-03
 ### Changed
 - Angular 11.
