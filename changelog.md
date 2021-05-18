@@ -1,5 +1,5 @@
 # Changelog
-## [1.16.6] - 2021-03-24
+## [1.16.7] - 2021-03-24
 ### Fixed
 - Corregida la alineación de las columnas.
 ## [1.16.5] - 2021-05-18
