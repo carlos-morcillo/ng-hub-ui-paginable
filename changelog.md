@@ -1,5 +1,6 @@
 # Changelog
 
+<<<<<<< HEAD
 ## [1.16.6] - 2021-03-29
 ### Fixed
 - Corregida la alineación de las columnas.
@@ -7,6 +8,11 @@
 ## [1.16.5] - 2021-03-24
 ### Fixed
 - Corregida la alineación de las columnas.
+=======
+## [1.16.5] - 2021-05-18
+### Fixed
+- Al cambiar el número de elementos por página la paginación va a la página 1.
+>>>>>>> 980eb3d70c98ea465fd77348a27e90fecc8c7977
 
 ## [1.16.3] - 2021-02-23
 ### Fixed

@@ -2,9 +2,13 @@
   <h2 class="d-inline">Server side pagination</h2>
   <a class="btn btn-outline-primary float-right" href="#"><i class="fa fa-fw fa-github"></i>View code in Github</a>
 </div>
+<<<<<<< HEAD
 <table-sorter (onParamsChange)="fetch($event)" [selectable]="true" [batchActions]="batchActions" [headers]="headers"
   [pagination]="pagination" [paginationInfo]="true" [searchKeys]="searchKeys">
   <ng-template nbTableSorterCell header="email" let-property="property">
     <a href="mailto:{{ property }}">{{ property }}</a>
   </ng-template>
 </table-sorter>
+=======
+<table-sorter (onParamsChange)="fetch($event)" [selectable]="true" [batchActions]="batchActions" [headers]="headers" [pagination]="pagination" [paginationInfo]="true" [searchKeys]="searchKeys"></table-sorter>
+>>>>>>> 980eb3d70c98ea465fd77348a27e90fecc8c7977
