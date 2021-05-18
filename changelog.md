@@ -1,4 +1,10 @@
 # Changelog
+
+## [1.16.8] - 2021-05-18
+### Fixed
+- Corregida la selección de elementos al cambiar de página.
+- Corregida la visualización del componente principal.
+
 ## [1.16.7] - 2021-03-24
 ### Fixed
 - Corregida la alineación de las columnas.
