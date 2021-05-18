@@ -1,168 +1,131 @@
 <ng-container *ngIf="!pagination">
-  <div class="d-flex justify-content-center">
-    <div class="spinner-border m-4" style="width: 3rem; height: 3rem;" role="status">
-      <span class="sr-only">{{ 'LOADING' | translate | ucfirst }}...</span>
-    </div>
-  </div>
+	<div class="d-flex justify-content-center">
+		<div class="spinner-border m-4" style="width: 3rem; height: 3rem;" role="status">
+			<span class="sr-only">{{ 'LOADING' | translate | ucfirst }}...</span>
+		</div>
+	</div>
 </ng-container>
 
 <div class="row justify-content-between">
-  <div class="col-md-4 mb-4" *ngIf="batchActions?.length">
-    <div class="input-group">
-      <select class="form-control" [(ngModel)]="batchAction">
-        <option [ngValue]="null">{{ 'BATCH_ACTIONS' | translate }}</option>
-        <option *ngFor="let action of batchActions" [ngValue]="action">{{ action.title }}</option>
-      </select>
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" [disabled]="!batchAction || !selectedItems.length"
-          (click)="handleBatchAction($event)">{{ 'APPLY' | translate }}</button>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4 mb-4 ml-auto" *ngIf="showSearchInput">
-    <div class="input-group">
-      <input type="text" class="form-control" [(ngModel)]="searchText" [placeholder]="'SEARCH' | translate | ucfirst"
-        aria-label="Search" (keyup.enter)="filter()">
-      <div class="input-group-append">
-        <button class="btn btn-secondary" type="button" (click)="filter()">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
-  </div>
+	<div class="col-md-4 mb-4" *ngIf="batchActions?.length">
+		<div class="input-group">
+			<select class="form-control" [(ngModel)]="batchAction">
+				<option [ngValue]="null">{{ 'BATCH_ACTIONS' | translate }}</option>
+				<option *ngFor="let action of batchActions" [ngValue]="action">{{ action.title }}</option>
+			</select>
+			<div class="input-group-append">
+				<button class="btn btn-outline-secondary" type="button" [disabled]="!batchAction || !selectedItems.length" (click)="handleBatchAction($event)">{{ 'APPLY' | translate }}</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4 mb-4 ml-auto" *ngIf="showSearchInput">
+		<div class="input-group">
+			<input type="text" class="form-control" [(ngModel)]="searchText" [placeholder]="'SEARCH' | translate | ucfirst" aria-label="Search" (keyup.enter)="filter()">
+			<div class="input-group-append">
+				<button class="btn btn-secondary" type="button" (click)="filter()">
+					<i class="fa fa-search" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+	</div>
 </div>
 
-<ng-container *ngIf="pagination?.data && !pagination[mapping.data].length"
-  [ngTemplateOutlet]="templateNotFound || defaultNotFoundTemplate">
-</ng-container>
+<ng-container *ngIf="pagination?.data && !pagination[mapping.data].length" [ngTemplateOutlet]="templateNotFound || defaultNotFoundTemplate"></ng-container>
 
 <ng-container *ngIf="pagination?.data.length">
-  <nb-table-sorter-paginator
-    *ngIf="paginate && pagination && (paginationPosition == 'top' || paginationPosition === 'both')"
-    [pagination]="pagination">
-  </nb-table-sorter-paginator>
+	<nb-table-sorter-paginator *ngIf="paginate && pagination && (paginationPosition == 'top' || paginationPosition === 'both')" [pagination]="pagination"></nb-table-sorter-paginator>
 
-  <div class="table-container {{ responsiveCSSClass }}">
-    <table class="table">
-      <thead>
-        <tr>
-          <th *ngIf="selectable || batchActions?.length" class="sticky-start">
-            <input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()" [disabled]="disabled">
-          </th>
-          <th *ngFor="let item of headers" (click)="sort(item)" class="p-2"
-            [ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons}">
-            <ng-container *ngIf="item | isObject">
-              <div class="row align-items-center m-0">
-                <div class="col-auto p-0">
-                  <i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}" *ngIf="item.icon"
-                    aria-hidden="true"></i>
-                </div>
-                <div class="col p-0">
-                  <span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
-                </div>
-                <div class="col-auto p-0">
-                  <i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
-                </div>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="item | isString">
-              {{ item | ucfirst }}
-            </ng-container>
-          </th>
-          <th *ngIf="actions?.length || templateExpandingRows.length" class="sticky-end"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let item of pagination[mapping.data]; let i=index">
-          <ng-container [ngTemplateOutlet]="templateRow || defaultRowTemplate"
-            [ngTemplateOutletContext]="{$implicit: item}">
-          </ng-container>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
+	<div class="table-container {{ responsiveCSSClass }}">
+		<table class="table">
+			<thead>
+				<tr>
+					<th *ngIf="selectable || batchActions?.length" class="sticky-start">
+						<input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()" [disabled]="disabled">
+					</th>
 
-  <div *ngIf="paginate" class="row justify-content-end align-items-center mb-4">
-    <div class="form-group form-group-sm row col-auto mb-0 mr-2">
-      <label for="RowsPerPageInput"
-        class="col col-form-label text-nowrap"><small>{{ 'ROWS_PER_PAGE' | translate | ucfirst}}:</small></label>
-      <div class="col pl-0">
-        <select class="form-control form-control-sm" id="RowsPerPageInput" [(ngModel)]="itemsPerPage">
-          <option *ngFor="let option of perPageOptions" [value]="option">{{ option }}</option>
-        </select>
-      </div>
-    </div>
-    <p class="col-auto mb-0" *ngIf="pagination && paginationInfo">
-      <small class="text-muted">
-        {{ 'SHOWING_X_OF_Y_ROWS' | translate : { amount : pagination[mapping.data].length, total: pagination[mapping.total]} | ucfirst }}
-      </small>
-    </p>
-  </div>
+					<th *ngFor="let item of headers" (click)="sort(item)" class="p-2" [ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons}">
+						<ng-container *ngIf="item | isObject">
+							<div class="row align-items-center m-0">
+								<div class="col-auto p-0">
+									<i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}" *ngIf="item.icon" aria-hidden="true"></i>
+								</div>
+								<div class="col p-0">
+									<span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
+								</div>
+								<div class="col-auto p-0">
+									<i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
+								</div>
+							</div>
+						</ng-container>
 
-  <nb-table-sorter-paginator (onPageClick)="pageClicked($event)"
-    *ngIf="paginate && pagination && (paginationPosition == 'bottom' || paginationPosition === 'both')"
-    [pagination]="pagination"></nb-table-sorter-paginator>
+						<ng-container *ngIf="item | isString">{{ item | ucfirst }}</ng-container>
+					</th>
+
+					<th *ngIf="actions?.length || templateExpandingRows.length" class="sticky-end"></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<ng-container *ngFor="let item of pagination[mapping.data]; let i=index">
+					<ng-container [ngTemplateOutlet]="templateRow || defaultRowTemplate" [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
+				</ng-container>
+			</tbody>
+		</table>
+	</div>
+
+	<div *ngIf="paginate" class="row justify-content-end align-items-center mb-4">
+		<div class="form-group form-group-sm row col-auto mb-0 mr-2">
+			<label for="RowsPerPageInput" class="col col-form-label text-nowrap"><small>{{ 'ROWS_PER_PAGE' | translate | ucfirst}}:</small></label>
+			<div class="col pl-0">
+				<select class="form-control form-control-sm" id="RowsPerPageInput" [(ngModel)]="itemsPerPage">
+					<option *ngFor="let option of perPageOptions" [value]="option">{{ option }}</option>
+				</select>
+			</div>
+		</div>
+		<p class="col-auto mb-0" *ngIf="pagination && paginationInfo">
+			<small class="text-muted">{{ 'SHOWING_X_OF_Y_ROWS' | translate : { amount : pagination[mapping.data].length, total: pagination[mapping.total]} | ucfirst }}</small>
+		</p>
+	</div>
+
+	<nb-table-sorter-paginator (onPageClick)="pageClicked($event)" *ngIf="paginate && pagination && (paginationPosition == 'bottom' || paginationPosition === 'both')" [pagination]="pagination"></nb-table-sorter-paginator>
 </ng-container>
 
 <ng-template #defaultRowTemplate let-item>
-  <tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
-    <td *ngIf="selectable || batchActions?.length">
-      <input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
-    </td>
-    <td *ngFor="let header of headers"
-      [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons}">
-      <ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate"
-        [ngTemplateOutletContext]="{header: header, item: item, property: getProperty(item, header?.property || header)}">
-      </ng-container>
-    </td>
-    <td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end"
-      [class.sticky-end]="stickyActions">
-      <ng-container *ngFor="let action of actions">
-        <button *ngIf="action.hidden !== false" class="btn btn-link px-2"
-          [ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
-          (click)="handleAction($event, action.handler, item)">
-          <i *ngIf="action.icon" [ngClass]="action.icon"></i>
-        </button>
-      </ng-container>
-      <button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link px-2">
-        <i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
-      </button>
-    </td>
-  </tr>
-  <ng-container *ngIf="item.unfold">
-    <ng-container *ngFor="let template of templateExpandingRows">
-      <ng-container [ngTemplateOutlet]="template.template" [ngTemplateOutletContext]="{item: item}">
-      </ng-container>
-    </ng-container>
-  </ng-container>
+	<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
+		<td *ngIf="selectable || batchActions?.length">
+			<input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
+		</td>
+		<td *ngFor="let header of headers" [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons}">
+			<ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate" [ngTemplateOutletContext]="{header: header, item: item, property: getProperty(item, header?.property || header)}"></ng-container>
+		</td>
+		<td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end" [class.sticky-end]="stickyActions"></td>
+	</tr>
+	<ng-container *ngIf="item.unfold">
+		<ng-container *ngFor="let template of templateExpandingRows">
+			<ng-container [ngTemplateOutlet]="template.template" [ngTemplateOutletContext]="{item: item}"></ng-container>
+		</ng-container>
+	</ng-container>
 </ng-template>
 
 <ng-template #defaultCellTemplate let-property="property" let-item="item" let-header="header">
-  <ng-container *ngIf="header.buttons; else propertyCellTpt">
-    <ng-container *ngFor="let button of header.buttons">
-      <ng-container *ngIf="button.buttons; else elseTemplate">
-        <nb-table-sorter-dropdown [dropdownToggle]="button" [item]="item"></nb-table-sorter-dropdown>
-      </ng-container>
-      <ng-template #elseTemplate>
-        <button *ngIf="!button.hidden" class="btn btn-link px-2"
-          [ngClass]="button.color ? 'text-' + button.color : 'text-dark'" [title]="button.title"
-          (click)="handleAction($event, button.handler, item)">
-          <i *ngIf="button.icon" [ngClass]="button.icon"></i>
-        </button>
-      </ng-template>
-    </ng-container>
-    <!-- <button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" class="btn btn-link">
-      <i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
-    </button> -->
-  </ng-container>
-  <ng-template #propertyCellTpt>
-    {{ property }}
-  </ng-template>
+	<ng-container *ngIf="header.buttons; else propertyCellTpt">
+		<ng-container *ngFor="let button of header.buttons">
+			<ng-container *ngIf="button.buttons; else elseTemplate">
+				<nb-table-sorter-dropdown [dropdownToggle]="button" [item]="item"></nb-table-sorter-dropdown>
+			</ng-container>
+			<ng-template #elseTemplate>
+				<button *ngIf="!button.hidden" class="btn btn-link px-2" [ngClass]="button.color ? 'text-' + button.color : 'text-dark'" [title]="button.title" (click)="handleAction($event, button.handler, item)">
+					<i *ngIf="button.icon" [ngClass]="button.icon"></i>
+				</button>
+			</ng-template>
+		</ng-container>
+	</ng-container>
 
+	<ng-template #propertyCellTpt>{{ property }}</ng-template>
 </ng-template>
 
 <ng-template #defaultNotFoundTemplate>
-  <div class="alert alert-info d-flex align-items-center" role="alert">
-    <i class="fa fa-info fa-2x mr-4" aria-hidden="true"></i> {{ 'NO_RESULTS_FOUND' | translate | ucfirst}}
-  </div>
+	<div class="alert alert-info d-flex align-items-center" role="alert">
+		<i class="fa fa-info fa-2x mr-4" aria-hidden="true"></i> {{ 'NO_RESULTS_FOUND' | translate | ucfirst}}
+	</div>
 </ng-template>

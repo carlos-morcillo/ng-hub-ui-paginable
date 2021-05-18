@@ -7,28 +7,28 @@ import * as _ from 'lodash';
 export class NbTableSorterService {
 
 
-	config: NbTableSorterConfig = {};
+    config: NbTableSorterConfig = {};
 
-	default: NbTableSorterConfig = {
-		theme: null,
-		mapping: {
-			currentPage: 'currentPage',
-			lastPage: 'lastPage',
-			data: 'data',
-			total: 'total'
-		}
-	};
+    default: NbTableSorterConfig = {
+        theme: null,
+        mapping: {
+            currentPage: 'currentPage',
+            lastPage: 'lastPage',
+            data: 'data',
+            total: 'total'
+        }
+    };
 
-	public get mapping(): any {
-		return this.config.mapping;
-	}
+    public get mapping(): any {
+        return this.config.mapping;
+    }
 
 
-	constructor(@Inject(NbTableSorterConfigService) private _config) {
-		this.initialize();
-	}
+    constructor(@Inject(NbTableSorterConfigService) private _config) {
+        this.initialize();
+    }
 
-	initialize() {
-		_.defaultsDeep(this.config, this._config, this.default);
-	}
+    initialize() {
+        _.defaultsDeep(this.config, this._config, this.default);
+    }
 }

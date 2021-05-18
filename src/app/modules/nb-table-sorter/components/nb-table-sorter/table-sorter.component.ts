@@ -247,6 +247,7 @@ export class TableSorterComponent {
     }
     set itemsPerPage(v: number) {
         this._itemsPerPage = +v;
+        this.pagination.currentPage = 1;
         this.triggerTheParamChanges();
     }
 

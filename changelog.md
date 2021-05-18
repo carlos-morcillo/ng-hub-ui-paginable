@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.5] - 2021-05-18
+### Fixed
+- Al cambiar el número de elementos por página la paginación va a la página 1.
+
 ## [1.16.3] - 2021-02-23
 ### Fixed
 - Corrige la ordenación de los elementos.
