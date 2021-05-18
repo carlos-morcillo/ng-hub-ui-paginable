@@ -13,7 +13,12 @@ export class ServerPaginationComponent implements OnInit {
 	headers: (NbTableSorterHeader | string)[] = [
 		'id',
 		'username',
-		'email',
+		{
+			title: 'email',
+			property: 'email',
+			align: 'end',
+			sticky: 'end'
+		},
 		'name'
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];

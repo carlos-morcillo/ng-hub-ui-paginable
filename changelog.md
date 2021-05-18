@@ -1,8 +1,16 @@
 # Changelog
 
+## [1.16.6] - 2021-03-29
+### Fixed
+- Corregida la alineación de las columnas.
+
+## [1.16.5] - 2021-03-24
+### Fixed
+- Corregida la alineación de las columnas.
+
 ## [1.16.3] - 2021-02-23
 ### Fixed
-- Corrige la ordenación de los elementos.
+- Corregida la ordenación de los elementos.
 
 ## [1.16.2] - 2021-02-03
 ### Changed

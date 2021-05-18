@@ -5,7 +5,7 @@ export interface NbTableSorterHeader {
 	title?: string;
 	property?: string;
 	icon?: string;
-	align?: string;
+	align?: 'start' | 'end' | 'center';
 	sortable?: boolean;
 	wrapping?: 'wrap' | 'nowrap';
 	sticky?: 'start' | 'end';

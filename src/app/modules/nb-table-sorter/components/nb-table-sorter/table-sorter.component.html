@@ -52,17 +52,14 @@
           <th *ngFor="let item of headers" (click)="sort(item)" class="p-2"
             [ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons}">
             <ng-container *ngIf="item | isObject">
-              <div class="row align-items-center m-0">
-                <div class="col-auto p-0">
-                  <i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}" *ngIf="item.icon"
-                    aria-hidden="true"></i>
-                </div>
-                <div class="col p-0">
+              <div class="d-flex flex-nowrap align-items-center justify-content-between">
+                <i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}" *ngIf="item.icon"
+                  aria-hidden="true"></i>
+                <div
+                  [ngClass]="{'mr-auto': item.align === 'start', 'ml-auto': item.align === 'end', 'mx-auto': item.align === 'center'}">
                   <span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
                 </div>
-                <div class="col-auto p-0">
-                  <i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
-                </div>
+                <i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
               </div>
             </ng-container>
             <ng-container *ngIf="item | isString">
@@ -110,7 +107,7 @@
       <input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
     </td>
     <td *ngFor="let header of headers"
-      [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons}">
+      [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-left': header.align === 'start', 'text-right': header.align === 'end'}">
       <ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTemplate"
         [ngTemplateOutletContext]="{header: header, item: item, property: getProperty(item, header?.property || header)}">
       </ng-container>
@@ -155,9 +152,7 @@
       <i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
     </button> -->
   </ng-container>
-  <ng-template #propertyCellTpt>
-    {{ property }}
-  </ng-template>
+  <ng-template #propertyCellTpt> {{ property }} </ng-template>
 
 </ng-template>
 
