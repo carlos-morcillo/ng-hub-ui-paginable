@@ -44,7 +44,7 @@
 	</nb-table-sorter-paginator>
 
 	<div class="table-container {{ responsiveCSSClass }}">
-		<table class="table">
+		<table class="table" [ngClass]="{'table-hover': options.hoverableRows}">
 			<thead>
 				<tr>
 					<th *ngIf="selectable || batchActions?.length" class="sticky-start">
@@ -107,7 +107,7 @@
 <ng-template #defaultRowTemplate let-item>
 	<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
 		<td *ngIf="selectable || batchActions?.length">
-			<input type="checkbox" [(ngModel)]="item.selected" (click)="toggle(item)">
+			<input type="checkbox" [(ngModel)]="item.selected" (click)="$event.stopPropagation(); toggle(item);">
 		</td>
 		<td *ngFor="let header of headers"
 			[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-left': header.align === 'start', 'text-right': header.align === 'end'}">

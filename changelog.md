@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.16.13] - 2021-05-19
+### Fixed
+- Marcación de elementos seleccionables cuando los elementos son objectos.
+
+## [1.16.12] - 2021-05-19
+### Fixed
+- Marcación de elementos seleccionables cuando los elementos son objectos.
+- Marcación de los elementos cuando la fila es también clicable.
+
+## [1.16.11] - 2021-05-19
+### Added
+- Posibilidad de hacer la tabla hoverable.
+### Fixed
+- Marcación de elementos seleccionables cuando el elemento no es selectable pero si tiene batchActions.
+
+## [1.16.10] - 2021-05-18
+### Fixed
+- Al cambiar el número de elementos por página se autoestablece el valor de la página como 1.
+
 ## [1.16.8] - 2021-05-18
 ### Fixed
 - Corregida la selección de elementos al cambiar de página.

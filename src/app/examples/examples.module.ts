@@ -1,29 +1,30 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ServerPaginationComponent } from './components/server-pagination/server-pagination.component';
-import { Routes, RouterModule } from '@angular/router';
-import { ClientPaginationComponent } from './components/client-pagination/client-pagination.component';
-import { RowsWithActionsComponent } from './components/rows-with-actions/rows-with-actions.component';
-
-import { ExpandingRowsComponent } from './components/expanding-rows/expanding-rows.component';
-import { NbTableSorterModule } from '../modules/nb-table-sorter';
-import { CustomHeadersComponent } from './components/custom-headers/custom-headers.component';
-import { SortableComponent } from './components/sortable/sortable.component';
-import { PaginationUpComponent } from './components/pagination-up/pagination-up.component';
-import { PaginationDownComponent } from './components/pagination-down/pagination-down.component';
-import { PaginationOnBothSitesComponent } from './components/pagination-on-both-sites/pagination-on-both-sites.component';
-import { PaginationInfoComponent } from './components/pagination-info/pagination-info.component';
-import { WithoutSearchComponent } from './components/without-search/without-search.component';
-import { CustomNoDataMessageComponent } from './components/custom-no-data-message/custom-no-data-message.component';
-import { CustomRowsComponent } from './components/custom-rows/custom-rows.component';
-import { CustomCellsComponent } from './components/custom-cells/custom-cells.component';
-import { SelectableComponent } from './components/selectable/selectable.component';
-import { CustomRowsPerPageComponent } from './components/custom-rows-per-page/custom-rows-per-page.component';
-import { NotPaginatedComponent } from './components/not-paginated/not-paginated.component';
-import { StickyColumnsComponent } from './components/sticky-columns/sticky-columns.component';
-import { ResponsiveComponent } from './components/responsive/responsive.component';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { NbTableSorterModule } from '../modules/nb-table-sorter';
 import { BatchActionsComponent } from './components/batch-actions/batch-actions.component';
+import { ClientPaginationComponent } from './components/client-pagination/client-pagination.component';
+import { CustomCellsComponent } from './components/custom-cells/custom-cells.component';
+import { CustomHeadersComponent } from './components/custom-headers/custom-headers.component';
+import { CustomNoDataMessageComponent } from './components/custom-no-data-message/custom-no-data-message.component';
+import { CustomRowsPerPageComponent } from './components/custom-rows-per-page/custom-rows-per-page.component';
+import { CustomRowsComponent } from './components/custom-rows/custom-rows.component';
+import { ExpandingRowsComponent } from './components/expanding-rows/expanding-rows.component';
+import { HoverableRowsComponent } from './components/hoverable-rows/hoverable-rows.component';
+import { NotPaginatedComponent } from './components/not-paginated/not-paginated.component';
+import { PaginationDownComponent } from './components/pagination-down/pagination-down.component';
+import { PaginationInfoComponent } from './components/pagination-info/pagination-info.component';
+import { PaginationOnBothSitesComponent } from './components/pagination-on-both-sites/pagination-on-both-sites.component';
+import { PaginationUpComponent } from './components/pagination-up/pagination-up.component';
+import { ResponsiveComponent } from './components/responsive/responsive.component';
+import { RowsWithActionsComponent } from './components/rows-with-actions/rows-with-actions.component';
+import { SelectableComponent } from './components/selectable/selectable.component';
+import { ServerPaginationComponent } from './components/server-pagination/server-pagination.component';
+import { SortableComponent } from './components/sortable/sortable.component';
+import { StickyColumnsComponent } from './components/sticky-columns/sticky-columns.component';
+import { WithoutSearchComponent } from './components/without-search/without-search.component';
+
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -47,6 +48,7 @@ const routes: Routes = [
 	{ path: 'sticky-columns', component: StickyColumnsComponent },
 	{ path: 'responsive', component: ResponsiveComponent },
 	{ path: 'batch-actions', component: BatchActionsComponent },
+	{ path: 'hoverable-rows', component: HoverableRowsComponent }
 ];
 
 @NgModule({
@@ -70,7 +72,8 @@ const routes: Routes = [
 		NotPaginatedComponent,
 		StickyColumnsComponent,
 		ResponsiveComponent,
-		BatchActionsComponent
+		BatchActionsComponent,
+		HoverableRowsComponent
 	],
 	imports: [
 		CommonModule,

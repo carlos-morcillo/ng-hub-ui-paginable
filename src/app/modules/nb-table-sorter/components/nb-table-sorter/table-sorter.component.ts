@@ -38,7 +38,8 @@ export class TableSorterComponent {
 
 	@Input() showSearchInput: boolean = true;
 	@Input() options: NbTableSorterOptions = {
-		cursor: 'default'
+		cursor: 'default',
+		hoverableRows: false
 	};
 
 	/**
@@ -78,7 +79,7 @@ export class TableSorterComponent {
 	set pagination(v: NbTableSorterPagination) {
 		this._pagination = v;
 		this.allRowsSelected = false;
-		if (this.selectable) {
+		if (this.selectable || this.batchActions?.length) {
 			this.markSelected();
 		}
 	}
@@ -106,7 +107,7 @@ export class TableSorterComponent {
 		};
 		this.pagination = this.rows ? this._paginationSvc.generate(this.rows, params) : null;
 		this.allRowsSelected = false;
-		if (this.selectable) {
+		if (this.selectable || this.batchActions?.length) {
 			this.markSelected();
 		}
 	}
@@ -246,6 +247,7 @@ export class TableSorterComponent {
 	}
 	set itemsPerPage(v: number) {
 		this._itemsPerPage = +v;
+		this.pagination.currentPage = 1;
 		this.triggerTheParamChanges();
 	}
 
@@ -503,8 +505,32 @@ export class TableSorterComponent {
 		}
 		this.pagination[this.mapping.data].forEach(o => {
 			const needle = this.selectableProperty ? o[this.selectableProperty] : o;
-			o.selected = this.selectedItems.indexOf(needle) > -1;
+			o.selected = this._contains(this.selectedItems, needle);
 		});
 		this.allRowsSelected = this.pagination[this.mapping.data].every(o => o.selected);
+	}
+
+	/**
+	 * Check if a needle exists in a list
+	 *
+	 * @private
+	 * @param {any[]} list
+	 * @param {*} needle
+	 * @return {*}  {boolean}
+	 * @memberof TableSorterComponent
+	 */
+	private _contains(list: any[], needle: any): boolean {
+
+		if (typeof needle === 'object' && needle !== null) {
+
+			list = list.map(o => {
+				const { selected, ...clone } = o;
+				return clone;
+			});
+
+			const { selected, ...p } = needle;
+			return list.some(o => JSON.stringify(o) === JSON.stringify(p));
+		}
+		return list.indexOf(needle) > -1;
 	}
 }
