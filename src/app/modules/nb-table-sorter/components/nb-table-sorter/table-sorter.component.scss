@@ -7,6 +7,24 @@
 		position: relative;
 	}
 
+	table {
+		margin-bottom: 0;
+	}
+
+	thead {
+		tr {
+			th {
+				padding: 8px;
+				transition: box-shadow 0.3s;
+			}
+			&:hover {
+				th:not(:last-child) {
+					box-shadow: -1px 0px 0px 0px #eee, 1px 0px 0px 0px #eee;
+				}
+			}
+		}
+	}
+
 	th,
 	td {
 		&.sticky-start {
@@ -25,6 +43,7 @@
 	}
 
 	.actions {
+		text-align: center;
 		white-space: nowrap;
 		width: 1%;
 

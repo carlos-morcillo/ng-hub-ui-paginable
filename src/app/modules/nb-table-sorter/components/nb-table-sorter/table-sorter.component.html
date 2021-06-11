@@ -14,8 +14,7 @@
 				<option *ngFor="let action of batchActions" [ngValue]="action">{{ action.title }}</option>
 			</select>
 			<div class="input-group-append">
-				<button class="btn btn-outline-secondary" type="button"
-					[disabled]="!batchAction || !selectedItems.length"
+				<button class="btn btn-secondary" type="button" [disabled]="!batchAction || !selectedItems.length"
 					(click)="handleBatchAction($event)">{{ 'APPLY' | translate }}</button>
 			</div>
 		</div>
@@ -47,11 +46,11 @@
 		<table class="table" [ngClass]="{'table-hover': options.hoverableRows}">
 			<thead>
 				<tr>
-					<th *ngIf="selectable || batchActions?.length" class="sticky-start">
+					<th *ngIf="selectable || batchActions?.length" class="sticky-start actions">
 						<input type="checkbox" [(ngModel)]="allRowsSelected" (click)="toggleAll()"
 							[disabled]="disabled">
 					</th>
-					<th *ngFor="let item of headers" (click)="sort(item)" class="p-2"
+					<th resizable *ngFor="let item of headers" (click)="sort(item)"
 						[ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons}">
 						<ng-container *ngIf="item | isObject">
 							<div class="d-flex flex-nowrap align-items-center justify-content-between">

@@ -18,6 +18,8 @@ import { NbTableSorterConfigService } from './services/nb-table-sorter-config.se
 import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
 import { TranslateModule } from '@ngx-translate/core';
 import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
+import { ResizableDirective } from './directives/resizable.directive';
+import { ResizableComponent } from './components/resizable/resizable.component';
 
 @NgModule({
 	declarations: [
@@ -33,6 +35,8 @@ import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dro
 		UcfirstPipe,
 		IsStringPipe,
 		NbTableSorterDropdownComponent,
+		ResizableComponent,
+		ResizableDirective
 	],
 	imports: [
 		CommonModule,
@@ -50,7 +54,8 @@ import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dro
 		GetPipe,
 		IsObjectPipe,
 		UcfirstPipe,
-		IsStringPipe
+		IsStringPipe,
+		ResizableComponent
 	],
 	entryComponents: [
 		TableSorterComponent

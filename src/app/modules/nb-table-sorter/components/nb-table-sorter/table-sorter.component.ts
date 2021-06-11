@@ -1,25 +1,23 @@
-import { Component, ContentChild, EventEmitter, Input, Output, TemplateRef, ContentChildren, forwardRef } from '@angular/core';
+import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, Output, QueryList, TemplateRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'lodash';
-import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
-import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
-import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
-import { PaginationService } from '../../services/pagination.service';
-import { NbTableSorterRowAction } from '../../interfaces/nb-table-sorter-row-action';
-import { NbTableSorterCellDirective } from '../../directives/nb-table-sorter-cell.directive';
-import { QueryList } from '@angular/core';
-import { isString } from 'util';
-import { NbTableSorterService } from '../../services/nb-table-sorter.service';
-import { NbTableSorterExpandingRowDirective } from '../../directives/nb-table-sorter-expanding-row.directive';
-import { NbTableSorterOptions } from '../../interfaces/nb-table-sorter-options';
-import { NbTableSorterPagination } from '../../interfaces/nb-table-sorter-pagination';
-import { NbTableSorterOrdination } from '../../interfaces/nb-table-sorter-ordination';
-import { NbTableSorterItem } from '../../interfaces/nb-table-sorter-item';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
-import { TranslationService } from '../../services/translation.service';
 import { BREAKPOINTS } from '../../constants/breakpoints';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NbTableSorterCellDirective } from '../../directives/nb-table-sorter-cell.directive';
+import { NbTableSorterExpandingRowDirective } from '../../directives/nb-table-sorter-expanding-row.directive';
+import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
+import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
 import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
+import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
+import { NbTableSorterItem } from '../../interfaces/nb-table-sorter-item';
+import { NbTableSorterOptions } from '../../interfaces/nb-table-sorter-options';
+import { NbTableSorterOrdination } from '../../interfaces/nb-table-sorter-ordination';
+import { NbTableSorterPagination } from '../../interfaces/nb-table-sorter-pagination';
+import { NbTableSorterRowAction } from '../../interfaces/nb-table-sorter-row-action';
+import { NbTableSorterService } from '../../services/nb-table-sorter.service';
+import { PaginationService } from '../../services/pagination.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
 	selector: 'table-sorter',
@@ -406,7 +404,7 @@ export class TableSorterComponent {
 	 * @memberof TableSorterComponent
 	 */
 	getCellTemplate(header: NbTableSorterHeader): TemplateRef<NbTableSorterCellDirective> {
-		const property = isString(header) ? header : header.property;
+		const property = header instanceof String ? header : header.property;
 		if (!property) {
 			return null;
 		}

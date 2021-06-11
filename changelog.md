@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.17.0] - 2021-06-11
+### Added
+- Columnas con manejador para ajustar el tamaño
+
+## [1.16.14] - 2021-06-07
+### Fixed
+- Eliminación de uso de la función isString.
+
 ## [1.16.13] - 2021-05-19
 ### Fixed
 - Marcación de elementos seleccionables cuando los elementos son objectos.
