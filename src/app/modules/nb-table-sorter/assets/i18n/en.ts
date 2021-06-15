@@ -7,6 +7,7 @@ export const locale = {
 		SHOWING_X_OF_Y_ROWS: 'Showing {{ amount }} of {{ total }} rows',
 		NO_RESULTS_FOUND: 'No results found',
 		BATCH_ACTIONS: 'Batch actions',
-		APPLY: 'Apply'
+		APPLY: 'Apply',
+		ERROR_OCURRED: 'Ha ocurrido un error al obtener los datos.'
 	}
 }

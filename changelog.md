@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.18.0] - 2021-06-15
+### Added
+- Filtros avanzados por columnas
+- Loading cuando la paginación es un observable
+- Captura de error y mensaje cuando la paginación es un observable
+- Loading personalizable
+- Mensaje de error personalizable
+
 ## [1.17.0] - 2021-06-11
 ### Added
 - Columnas con manejador para ajustar el tamaño

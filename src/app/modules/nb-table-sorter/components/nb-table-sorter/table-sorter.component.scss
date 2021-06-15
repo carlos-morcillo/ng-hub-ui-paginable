@@ -7,12 +7,20 @@
 		position: relative;
 	}
 
+	.table_container {
+		border: 1px solid #eee;
+		border-radius: 4px;
+	}
+
 	table {
-		margin-bottom: 0;
+		position: relative;
 	}
 
 	thead {
 		tr {
+			&.filter_row {
+				background-color: #eee;
+			}
 			th {
 				padding: 8px;
 				transition: box-shadow 0.3s;
@@ -27,15 +35,14 @@
 
 	th,
 	td {
+		background-color: white;
 		&.sticky-start {
-			background: white;
 			left: 0;
 			position: sticky;
 			z-index: 9;
 		}
 
 		&.sticky-end {
-			background: white;
 			right: 0;
 			position: sticky;
 			z-index: 9;

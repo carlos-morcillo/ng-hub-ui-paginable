@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
 import { GetPipe } from './pipes/get.pipe';
 import { IsObjectPipe } from './pipes/is-object.pipe';
@@ -20,6 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
 import { ResizableDirective } from './directives/resizable.directive';
 import { ResizableComponent } from './components/resizable/resizable.component';
+import { NbTableSorterLoadingDirective } from './directives/nb-table-sorter-loading.directive';
+import { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.directive';
 
 @NgModule({
 	declarations: [
@@ -29,6 +31,7 @@ import { ResizableComponent } from './components/resizable/resizable.component';
 		NbTableSorterRowDirective,
 		NbTableSorterCellDirective,
 		NbTableSorterNotFoundDirective,
+		NbTableSorterLoadingDirective,
 		NbTableSorterExpandingRowDirective,
 		GetPipe,
 		IsObjectPipe,
@@ -36,11 +39,13 @@ import { ResizableComponent } from './components/resizable/resizable.component';
 		IsStringPipe,
 		NbTableSorterDropdownComponent,
 		ResizableComponent,
-		ResizableDirective
+		ResizableDirective,
+		NbTableSorterErrorDirective
 	],
 	imports: [
 		CommonModule,
 		FormsModule,
+		ReactiveFormsModule,
 		TranslateModule.forChild()
 	],
 	exports: [
@@ -50,7 +55,10 @@ import { ResizableComponent } from './components/resizable/resizable.component';
 		NbTableSorterRowDirective,
 		NbTableSorterCellDirective,
 		NbTableSorterNotFoundDirective,
+		NbTableSorterLoadingDirective,
+		NbTableSorterErrorDirective,
 		NbTableSorterExpandingRowDirective,
+		ResizableDirective,
 		GetPipe,
 		IsObjectPipe,
 		UcfirstPipe,

@@ -1,14 +1,20 @@
-import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, Output, QueryList, TemplateRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'lodash';
+import { Observable, of, Subscription } from 'rxjs';
+import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
 import { BREAKPOINTS } from '../../constants/breakpoints';
 import { NbTableSorterCellDirective } from '../../directives/nb-table-sorter-cell.directive';
+import { NbTableSorterErrorDirective } from '../../directives/nb-table-sorter-error.directive';
 import { NbTableSorterExpandingRowDirective } from '../../directives/nb-table-sorter-expanding-row.directive';
+import { NbTableSorterLoadingDirective } from '../../directives/nb-table-sorter-loading.directive';
 import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
 import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
+import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown';
 import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
 import { NbTableSorterItem } from '../../interfaces/nb-table-sorter-item';
 import { NbTableSorterOptions } from '../../interfaces/nb-table-sorter-options';
@@ -23,6 +29,17 @@ import { TranslationService } from '../../services/translation.service';
 	selector: 'table-sorter',
 	templateUrl: './table-sorter.component.html',
 	styleUrls: ['./table-sorter.component.scss'],
+	animations: [
+		trigger('fadeInOut', [
+			transition(':enter', [
+				style({ opacity: 0 }),
+				animate('256ms 256ms', style({ opacity: 1, height: 'auto' })),
+			]),
+			transition(':leave', [
+				animate('256ms ease-out', style({ opacity: 0, height: '0' })),
+			])
+		]),
+	],
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
@@ -31,7 +48,7 @@ import { TranslationService } from '../../services/translation.service';
 		}
 	]
 })
-export class TableSorterComponent {
+export class TableSorterComponent implements OnDestroy {
 	private _headers: NbTableSorterHeader[] | string[];
 
 	@Input() showSearchInput: boolean = true;
@@ -39,6 +56,9 @@ export class TableSorterComponent {
 		cursor: 'default',
 		hoverableRows: false
 	};
+
+	loading: boolean = false;
+	errorOcurred: boolean = false;
 
 	/**
 	 * Table headers
@@ -60,7 +80,10 @@ export class TableSorterComponent {
 	}
 	set headers(v: NbTableSorterHeader[] | string[]) {
 		this._headers = v;
+		this._initializeFilterForm();
 	}
+
+	data: NbTableSorterPagination;
 
 	/**
 	 * Items paginated
@@ -71,11 +94,30 @@ export class TableSorterComponent {
 	 */
 	private _pagination: NbTableSorterPagination;
 	@Input()
-	get pagination(): NbTableSorterPagination {
+	get pagination(): NbTableSorterPagination | Observable<NbTableSorterPagination> {
 		return this._pagination;
 	}
-	set pagination(v: NbTableSorterPagination) {
-		this._pagination = v;
+	set pagination(v: NbTableSorterPagination | Observable<NbTableSorterPagination>) {
+		if (v.constructor.name === 'Observable') {
+			this.loading = true;
+			this.errorOcurred = false;
+			this.data = null;
+
+			(v as Observable<NbTableSorterPagination>).pipe(
+				// tap(o => { throw new Error('asdf'); }),
+				catchError((err, caught) => {
+					this.errorOcurred = err;
+					return of(null);
+				}),
+				tap(o => {
+					this.loading = false;
+				})
+			).subscribe((result: NbTableSorterPagination) => {
+				this.data = result;
+			});
+		} else {
+			this.data = v as NbTableSorterPagination;
+		}
 		this.allRowsSelected = false;
 		if (this.selectable || this.batchActions?.length) {
 			this.markSelected();
@@ -103,7 +145,7 @@ export class TableSorterComponent {
 			searchKeys: this.searchKeys,
 			paginate: this.paginate
 		};
-		this.pagination = this.rows ? this._paginationSvc.generate(this.rows, params) : null;
+		this.data = this.rows ? this._paginationSvc.generate(this.rows, params) : null;
 		this.allRowsSelected = false;
 		if (this.selectable || this.batchActions?.length) {
 			this.markSelected();
@@ -178,7 +220,16 @@ export class TableSorterComponent {
 	 * @type {NbTableSorterRowAction[]}
 	 * @memberof TableSorterComponent
 	 */
-	@Input() batchActions: NbTableSorterButton[] = [];
+	private _batchActions: Array<NbTableSorterDropdown | NbTableSorterButton> = [];
+	@Input()
+	get batchActions(): Array<NbTableSorterDropdown | NbTableSorterButton> {
+		return this._batchActions;
+	}
+	set batchActions(v: Array<NbTableSorterDropdown | NbTableSorterButton>) {
+		this._batchActions = v;
+	}
+
+	batchActionsDropdown: NbTableSorterDropdown;
 
 	batchAction: NbTableSorterButton = null;
 
@@ -245,7 +296,7 @@ export class TableSorterComponent {
 	}
 	set itemsPerPage(v: number) {
 		this._itemsPerPage = +v;
-		this.pagination.currentPage = 1;
+		this.data.currentPage = 1;
 		this.triggerTheParamChanges();
 	}
 
@@ -258,16 +309,40 @@ export class TableSorterComponent {
 	set responsive(v: string) {
 		this._responsive = v;
 		if (this._responsive && BREAKPOINTS.indexOf(this._responsive) > -1) {
-			this.responsiveCSSClass = this.responsive === 'xs' ? 'table-responsive' : 'table-responsive-' + this.responsive;
+			this.responsiveCSSClass = this.responsive === 'xs' ? null : ('table-responsive-' + this.responsive);
 		} else {
-			this.responsiveCSSClass = '';
+			this.responsiveCSSClass = null;
 		}
 	}
 
-	disabled: boolean = false;
+	filterHeaders: NbTableSorterHeader[];
 
-	onChange = (_: any) => { }
-	onTouch = () => { }
+	/**
+	 * Filter form
+	 *
+	 * @type {FormGroup}
+	 * @memberof TableSorterComponent
+	 */
+	filterFG: FormGroup = new FormGroup({});
+
+	/**
+	 * Event triggered when a filter value changes
+	 *
+	 * @memberof TableSorterComponent
+	 */
+	@Output() filterChange = new EventEmitter<any>();
+
+	filterFGSct: Subscription;
+
+	/**
+	 * Time to ouput the filter form value
+	 *
+	 * @type {number}
+	 * @memberof TableSorterComponent
+	 */
+	@Input() debounce: number = 1024;
+
+	disabled: boolean = false;
 
 	/**
 	 * Set if the data must be paginated
@@ -280,14 +355,21 @@ export class TableSorterComponent {
 	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
 	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
 	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) templateNotFound: NbTableSorterNotFoundDirective;
+	@ContentChild(NbTableSorterLoadingDirective, { read: TemplateRef }) loadingTpt: NbTableSorterLoadingDirective;
+	@ContentChild(NbTableSorterErrorDirective, { read: TemplateRef }) errorTpt: NbTableSorterErrorDirective;
 	@ContentChildren(NbTableSorterExpandingRowDirective) templateExpandingRows !: QueryList<NbTableSorterExpandingRowDirective>;
 
 	constructor(
+		private _fb: FormBuilder,
 		private _paginationSvc: PaginationService,
 		private _configSvc: NbTableSorterService,
-		private _translationSvc: TranslationService
+		private _translationSvc: TranslationService,
 	) {
 		this._translationSvc.loadTranslations(enLang, esLang);
+	}
+
+	ngOnDestroy(): void {
+		this.filterFGSct?.unsubscribe();
 	}
 
 	writeValue(value: any): void {
@@ -297,6 +379,9 @@ export class TableSorterComponent {
 			this.selectedItems = [];
 		}
 	}
+
+	onChange = (_: any) => { }
+	onTouch = () => { }
 
 	registerOnChange(fn: any): void {
 		this.onChange = fn;
@@ -327,12 +412,12 @@ export class TableSorterComponent {
 	}
 
 	filter() {
-		this.pagination.currentPage = 1;
+		this.data.currentPage = 1;
 		this.triggerTheParamChanges();
 	}
 
 	pageClicked(page: number) {
-		this.pagination.currentPage = page;
+		this.data.currentPage = page;
 		this.triggerTheParamChanges();
 	}
 
@@ -365,7 +450,7 @@ export class TableSorterComponent {
 
 	triggerTheParamChanges() {
 		const params = {
-			page: this.pagination.currentPage,
+			page: this.data.currentPage,
 			perPage: this.itemsPerPage,
 			ordenation: this.ordenation,
 			searchText: this.searchText,
@@ -378,7 +463,7 @@ export class TableSorterComponent {
 		if (!this.rows) {
 			this.onParamsChange.next(params);
 		} else {
-			this.pagination = this._paginationSvc.generate(this.rows, params);
+			this.data = this._paginationSvc.generate(this.rows, params);
 		}
 	}
 
@@ -425,19 +510,22 @@ export class TableSorterComponent {
 	}
 
 	/**
-	 * Hadles the action to be executed in a batch
+	 * Handles the action to be executed in a batch
 	 *
 	 * @param {Event} event
 	 * @memberof TableSorterComponent
 	 */
-	handleBatchAction(event: Event) {
-		event.stopPropagation();
-		this.batchAction.handler(this.selectedItems);
+	handleBatchAction(event: any) {
+		event.handler(this.selectedItems);
 	}
 
-	toggledropdown(event: Event, header: NbTableSorterHeader, item: any) {
-		console.log(arguments);
-	}
+	/**
+	 * Determines whether to display the batch actions menu
+	 *
+	 * @type {boolean}
+	 * @memberof TableSorterComponent
+	 */
+	batchActionsShown: boolean = false;
 
 	/**
 	 * Expand or unexpand an expanding row
@@ -456,7 +544,7 @@ export class TableSorterComponent {
 	 */
 	toggleAll() {
 		this.allRowsSelected = !this.allRowsSelected;
-		this.pagination[this.mapping.data].forEach(o => {
+		this.data[this.mapping.data].forEach(o => {
 			const needle = this.selectableProperty ? o[this.selectableProperty] : o;
 			const index = this.selectedItems.indexOf(needle);
 			if (index > -1 && !this.allRowsSelected) {
@@ -487,7 +575,7 @@ export class TableSorterComponent {
 			item.selected = true;
 		}
 
-		this.allRowsSelected = this.pagination[this.mapping.data].every(o => o.selected);
+		this.allRowsSelected = this.data[this.mapping.data].every(o => o.selected);
 		this.onSelected.emit(this.selectedItems);
 		this.onChange(this.selectedItems);
 	}
@@ -498,14 +586,14 @@ export class TableSorterComponent {
 	 * @memberof TableSorterComponent
 	 */
 	markSelected() {
-		if (!this.pagination?.[this.mapping.data]?.length) {
+		if (!this.data?.[this.mapping.data]?.length) {
 			return;
 		}
-		this.pagination[this.mapping.data].forEach(o => {
+		this.data[this.mapping.data].forEach(o => {
 			const needle = this.selectableProperty ? o[this.selectableProperty] : o;
 			o.selected = this._contains(this.selectedItems, needle);
 		});
-		this.allRowsSelected = this.pagination[this.mapping.data].every(o => o.selected);
+		this.allRowsSelected = this.data[this.mapping.data].every(o => o.selected);
 	}
 
 	/**
@@ -530,5 +618,33 @@ export class TableSorterComponent {
 			return list.some(o => JSON.stringify(o) === JSON.stringify(p));
 		}
 		return list.indexOf(needle) > -1;
+	}
+
+	/**
+	 * Initializes the filtering form and its subscription
+	 *
+	 * @memberof TableSorterComponent
+	 */
+	_initializeFilterForm(): void {
+		this.filterFGSct?.unsubscribe();
+		const specificSearchFG = this._fb.group({});
+
+		this.filterHeaders = (this._headers as NbTableSorterHeader[]).filter(h => typeof h === 'object' && h.filter);
+		this.filterHeaders.forEach(h => {
+			specificSearchFG.addControl(h.property, new FormControl(null));
+		});
+
+		this.filterFG = this._fb.group({
+			searchText: [],
+			specificSearch: specificSearchFG
+		});
+
+		this.filterFGSct = this.filterFG.valueChanges.pipe(
+			debounceTime(this.debounce),
+			tap(o => {
+				console.log(this.filterFG.value);
+				this.filterChange.emit(this.filterFG.value)
+			})
+		).subscribe();
 	}
 }

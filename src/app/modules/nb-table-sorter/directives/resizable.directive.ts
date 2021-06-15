@@ -15,11 +15,9 @@ export class ResizableDirective {
 	).pipe(
 		tap((e) => e.preventDefault()),
 		switchMap(() => {
-			console.log('asdf');
 			const { width, right } = this.elementRef.nativeElement
 				.closest('th')!
 				.getBoundingClientRect();
-
 			return fromEvent<MouseEvent>(this.documentRef, 'mousemove').pipe(
 				map(({ clientX }) => width + clientX - right),
 				distinctUntilChanged(),
@@ -29,8 +27,7 @@ export class ResizableDirective {
 	);
 
 	constructor(
-		@Inject(DOCUMENT) private readonly documentRef: Document,
-		@Inject(ElementRef)
-		private readonly elementRef: ElementRef<HTMLElement>
+		@Inject(DOCUMENT) private readonly documentRef: any/* Document */,
+		@Inject(ElementRef) private readonly elementRef: ElementRef<HTMLElement>
 	) { }
 }

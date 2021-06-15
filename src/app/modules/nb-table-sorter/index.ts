@@ -10,6 +10,7 @@ export { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dro
 export { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';
 export { NbTableSorterHeaderDirective } from './directives/nb-table-sorter-header.directive';
 export { NbTableSorterNotFoundDirective } from './directives/nb-table-sorter-not-found.directive';
+export { NbTableSorterLoadingDirective } from './directives/nb-table-sorter-loading.directive';
 export { NbTableSorterRowDirective } from './directives/nb-table-sorter-row.directive';
 export { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input } from '@angular/core';
 import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
 import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown';
 
@@ -7,7 +7,7 @@ import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown
 	templateUrl: './nb-table-sorter-dropdown.component.html',
 	styleUrls: ['./nb-table-sorter-dropdown.component.scss']
 })
-export class NbTableSorterDropdownComponent implements OnInit {
+export class NbTableSorterDropdownComponent {
 
 	@Input() dropdownToggle: NbTableSorterDropdown;
 	@Input() item: any;
@@ -18,9 +18,6 @@ export class NbTableSorterDropdownComponent implements OnInit {
 		private _elementRef: ElementRef,
 	) { }
 
-	ngOnInit(): void {
-	}
-
 
 	@HostListener('document:click', ['$event'])
 	clickOut(event) {
@@ -30,7 +27,7 @@ export class NbTableSorterDropdownComponent implements OnInit {
 	}
 
 	handle(button: NbTableSorterButton) {
-		button.handler(this.item);
+		button.handler(...[this.item]);
 		this.close();
 	}
 

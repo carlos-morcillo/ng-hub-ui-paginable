@@ -27,6 +27,6 @@ export class SelectableComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.items = this._mockedUsersSvc.items;
+		this.items = this._mockedUsersSvc.items.map(o => Object.assign({}, o));
 	}
 }

@@ -24,6 +24,10 @@ import { ServerPaginationComponent } from './components/server-pagination/server
 import { SortableComponent } from './components/sortable/sortable.component';
 import { StickyColumnsComponent } from './components/sticky-columns/sticky-columns.component';
 import { WithoutSearchComponent } from './components/without-search/without-search.component';
+import { AdvancedFilteringComponent } from './components/advanced-filtering/advanced-filtering.component';
+import { CustomLoadingComponent } from './components/custom-loading/custom-loading.component';
+import { ErrorComponent } from './components/error/error.component';
+import { CustomErrorComponent } from './components/custom-error/custom-error.component';
 
 
 const routes: Routes = [
@@ -48,7 +52,11 @@ const routes: Routes = [
 	{ path: 'sticky-columns', component: StickyColumnsComponent },
 	{ path: 'responsive', component: ResponsiveComponent },
 	{ path: 'batch-actions', component: BatchActionsComponent },
-	{ path: 'hoverable-rows', component: HoverableRowsComponent }
+	{ path: 'hoverable-rows', component: HoverableRowsComponent },
+	{ path: 'advanced-filtering', component: AdvancedFilteringComponent },
+	{ path: 'custom-loading', component: CustomLoadingComponent },
+	{ path: 'error', component: ErrorComponent },
+	{ path: 'custom-error', component: CustomErrorComponent }
 ];
 
 @NgModule({
@@ -73,7 +81,11 @@ const routes: Routes = [
 		StickyColumnsComponent,
 		ResponsiveComponent,
 		BatchActionsComponent,
-		HoverableRowsComponent
+		HoverableRowsComponent,
+		AdvancedFilteringComponent,
+		CustomLoadingComponent,
+		ErrorComponent,
+		CustomErrorComponent
 	],
 	imports: [
 		CommonModule,

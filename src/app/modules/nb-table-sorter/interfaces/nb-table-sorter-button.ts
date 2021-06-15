@@ -1,5 +1,6 @@
 export interface NbTableSorterButton {
 	title?: string;
+	tooltip?: string;
 	icon?: string;
 	handler?: any;
 	color?: string;
