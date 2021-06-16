@@ -1,16 +1,18 @@
 <div class="table_container">
 	<form [formGroup]=" filterFG">
-		<div *ngIf="batchActions?.length || showSearchInput" class="row my-2 mx-0 justify-items-end">
+		<div *ngIf="batchActions?.length || showSearchInput" class="row mt-2 mb-4 mx-0 justify-items-end">
 			<div *ngIf="batchActions?.length" class="col-auto px-2">
-				<ng-container *ngFor="let action of batchActions">
-					<ng-container *ngIf="action['buttons']?.length; else buttonTpt">
-						<nb-table-sorter-dropdown [dropdownToggle]="action"></nb-table-sorter-dropdown>
+				<ng-container *ngFor="let button of batchActions">
+					<ng-container *ngIf="button['buttons']?.length; else buttonTpt">
+						<nb-table-sorter-dropdown [options]="button" class="d-inline-block"
+							[position]="button['position'] || 'left'">
+						</nb-table-sorter-dropdown>
 					</ng-container>
 					<ng-template #buttonTpt>
 						<a class="btn btn-link" role="button"
-							[ngClass]="action.color ? 'text-' + action.color : 'text-dark'"
-							(click)="handleBatchAction(action)">
-							<i *ngIf="action.icon" class="mr-2 {{ action.icon }}"></i>{{ action.title | titlecase }}
+							[ngClass]="button.color ? 'text-' + button.color : 'text-dark'"
+							(click)="handleBatchAction(button)">
+							<i *ngIf="button.icon" class="mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
 						</a>
 					</ng-template>
 				</ng-container>
@@ -34,11 +36,6 @@
 			</div> -->
 		</div>
 
-		<!-- No data -->
-		<ng-container *ngIf="data?.data && !data[mapping.data].length"
-			[ngTemplateOutlet]="templateNotFound || defaultNotFoundTpt">
-		</ng-container>
-
 		<!-- Pagination -->
 		<nb-table-sorter-paginator
 			*ngIf="paginate && data?.data?.length && (paginationPosition == 'top' || paginationPosition === 'both')"
@@ -60,7 +57,7 @@
 		<!-- Table -->
 		<ng-container *ngIf="data">
 			<div class="{{ responsiveCSSClass }} table-responsive mb-4">
-				<table *ngIf="data" @fadeInOut class="table mb-0" [ngClass]="{'table-hover': options.hoverableRows}">
+				<table *ngIf="data" @fadeInOut class="table mb-0" [class.table-hover]="options.hoverableRows">
 					<thead>
 						<tr>
 							<th *ngIf="selectable || batchActions?.length" class="sticky-start actions">
@@ -97,34 +94,28 @@
 								[ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons}">
 								<ng-container *ngIf="item.filter">
 									<ng-container [ngSwitch]="item.filter.type">
-										<select *ngSwitchCase="'dropdown'" [formControlName]="item.property"
-											class="form-control">
+										<select *ngSwitchCase="'dropdown'"
+											[formControlName]="item.filter.key || item.property" class="form-control">
 											<option *ngIf="item.filter.placeholder" [ngValue]="null">
 												{{ item.filter.placeholder }}
 											</option>
 											<ng-container [ngSwitch]="item.filter.options.constructor.name">
 												<ng-container *ngSwitchCase="'Observable'">
 													<option *ngFor="let option of item.filter.options | async"
-														[value]="option.value">
-														{{ option.text }}
-													</option>
-												</ng-container>
-												<ng-container *ngSwitchCase="'Promise'">
-													<option *ngFor="let option of item.filter.options | async"
-														[value]="option.value">
-														{{ option.text }}
+														[value]="option[item.filter.bindValue || 'id']">
+														{{ option[item.filter.bindLabel || 'name'] }}
 													</option>
 												</ng-container>
 												<ng-container *ngSwitchDefault>
 													<option *ngFor="let option of item.filter.options"
-														[value]="option.value">
-														{{ option.text }}
+														[value]="option[item.filter.bindValue || 'id']">
+														{{ option[item.filter.bindLabel || 'name'] }}
 													</option>
 												</ng-container>
 											</ng-container>
 										</select>
 										<input *ngSwitchDefault [type]="item.filter.type"
-											[formControlName]="item.property" class="form-control"
+											[formControlName]="item.filter.key || item.property" class="form-control"
 											[placeholder]="item.filter.placeholder || ''">
 									</ng-container>
 								</ng-container>
@@ -132,14 +123,16 @@
 							<td *ngIf="actions?.length || templateExpandingRows.length" class="sticky-end"></td>
 						</tr>
 					</thead>
-					<tbody>
-						<ng-container *ngFor="let item of data[mapping.data]; let i=index">
-							<ng-container [ngTemplateOutlet]="templateRow || defaultRowTemplate"
-								[ngTemplateOutletContext]="{$implicit: item}">
-							</ng-container>
+					<tbody *ngIf="data[mapping.data]?.length">
+						<ng-container *ngFor="let item of data[mapping.data]"
+							[ngTemplateOutlet]="templateRow || defaultRowTemplate"
+							[ngTemplateOutletContext]="{$implicit: item}">
 						</ng-container>
 					</tbody>
 				</table>
+
+				<ng-container *ngIf="!data[mapping.data]?.length" [ngTemplateOutlet]="noDataTpt || defaultNotFoundTpt">
+				</ng-container>
 			</div>
 
 			<!-- Pagination -->
@@ -207,7 +200,9 @@
 		<ng-container *ngIf="header.buttons; else propertyCellTpt">
 			<ng-container *ngFor="let button of header.buttons">
 				<ng-container *ngIf="button.buttons; else elseTemplate">
-					<nb-table-sorter-dropdown [dropdownToggle]="button" [item]="item"></nb-table-sorter-dropdown>
+					<nb-table-sorter-dropdown [options]="button" [item]="item" [position]="button.position || 'right'"
+						class="d-inline-block">
+					</nb-table-sorter-dropdown>
 				</ng-container>
 				<ng-template #elseTemplate>
 					<button *ngIf="!button.hidden" class="btn btn-link px-2"

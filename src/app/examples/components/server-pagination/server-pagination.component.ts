@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, of, timer } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { MockedUsersService } from '../../../mocked-users.service';
 import { NbTableSorterPagination, NbTableSorterHeader } from '../../../modules/nb-table-sorter';
 
@@ -9,7 +11,7 @@ import { NbTableSorterPagination, NbTableSorterHeader } from '../../../modules/n
 })
 export class ServerPaginationComponent implements OnInit {
 
-	pagination: NbTableSorterPagination;
+	pagination: Observable<NbTableSorterPagination>;
 	headers: (NbTableSorterHeader | string)[] = [
 		'id',
 		'username',
@@ -38,12 +40,8 @@ export class ServerPaginationComponent implements OnInit {
 	}
 
 	async fetch(event: any = {}) {
-		try {
-			event.searchKeys = this.searchKeys;
-			this.pagination = this._mockedUsersSvc.get(event);
-		} catch (error) {
-			console.error(error);
-		}
+		event.searchKeys = this.searchKeys;
+		this.pagination = timer(2048).pipe(map(_ => this._mockedUsersSvc.get(event)));
 	}
 
 	private _export(items) {

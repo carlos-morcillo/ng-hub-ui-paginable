@@ -1,18 +1,17 @@
 <div class="dropdown" [class.show]="shown">
-	<button class="btn btn-link px-2 toggle" role="button"
-		[ngClass]="dropdownToggle.color ? 'text-' + dropdownToggle.color : 'text-dark'"
-		[title]="dropdownToggle.title || null" data-toggle="dropdown" [attr.aria-expanded]="shown"
-		(click)="shown = !shown">
-		<i [ngClass]="dropdownToggle.icon || 'fa fa-ellipsis-v'"></i>
+	<button class="btn btn-link px-2 toggle" type="button"
+		[ngClass]="options.color ? 'text-' + options.color : 'text-dark'" [title]="options.title || null"
+		data-toggle="dropdown" [attr.aria-expanded]="shown" (click)="shown = !shown">
+		<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
 	</button>
-	<div class="dropdown-menu" [class.show]="shown">
-		<ng-container *ngFor="let dropdownItem of dropdownToggle.buttons">
-			<a class="dropdown-item" role="button" *ngIf="!dropdownItem.hidden"
+	<div class="dropdown-menu dropdown-menu-{{position}}" [class.show]="shown">
+		<ng-container *ngFor="let dropdownItem of options.buttons">
+			<button class="dropdown-item" type="button" *ngIf="!dropdownItem.hidden"
 				[ngClass]="dropdownItem.color ? 'text-' + dropdownItem.color : 'text-dark'"
 				(click)="handle(dropdownItem)">
-				<i *ngIf="dropdownToggle.icon"
+				<i *ngIf="dropdownItem.icon"
 					class="mr-2 {{ dropdownItem.icon }}"></i>{{ dropdownItem.title | titlecase }}
-			</a>
+			</button>
 		</ng-container>
 	</div>
 </div>

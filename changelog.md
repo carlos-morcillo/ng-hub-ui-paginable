@@ -1,4 +1,23 @@
 # Changelog
+## [1.18.5] - 2021-06-16
+### Fixed
+- Corrección de maquetación y formato de evento de filtros avanzados
+
+## [1.18.4] - 2021-06-15
+### Fixed
+- Corrección de observables
+
+## [1.18.3] - 2021-06-15
+### Fixed
+- Corrección de maquetación
+
+## [1.18.2] - 2021-06-15
+### Fixed
+- Exportación de componentes
+
+## [1.18.1] - 2021-06-15
+### Fixed
+- Exportación de directivas
 
 ## [1.18.0] - 2021-06-15
 ### Added

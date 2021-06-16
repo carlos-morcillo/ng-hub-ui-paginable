@@ -9,8 +9,9 @@ import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown
 })
 export class NbTableSorterDropdownComponent {
 
-	@Input() dropdownToggle: NbTableSorterDropdown;
+	@Input() options: NbTableSorterDropdown;
 	@Input() item: any;
+	@Input() position: 'left' | 'right' = 'left';
 
 	shown: boolean = false;
 

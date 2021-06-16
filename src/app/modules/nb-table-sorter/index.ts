@@ -5,6 +5,7 @@ export { NbTableSorterModule } from './nb-table-sorter.module';
 export { TableSorterComponent } from './components/nb-table-sorter/table-sorter.component';
 export { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
 export { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
+export { ResizableComponent } from './components/resizable/resizable.component';
 
 // Directives
 export { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';
@@ -13,6 +14,8 @@ export { NbTableSorterNotFoundDirective } from './directives/nb-table-sorter-not
 export { NbTableSorterLoadingDirective } from './directives/nb-table-sorter-loading.directive';
 export { NbTableSorterRowDirective } from './directives/nb-table-sorter-row.directive';
 export { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
+export { ResizableDirective } from './directives/resizable.directive';
+export { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.directive';
 
 // Pipes
 export { GetPipe } from './pipes/get.pipe';
@@ -30,6 +33,7 @@ export { NbTableSorterOrdination } from './interfaces/nb-table-sorter-ordination
 export { NbTableSorterPagination } from './interfaces/nb-table-sorter-pagination';
 export { NbTableSorterItem } from './interfaces/nb-table-sorter-item';
 export { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
+export { FilterChangeEvent } from './interfaces/filter-change-event';
 
 // Constants
 export { BREAKPOINTS } from './constants/breakpoints';

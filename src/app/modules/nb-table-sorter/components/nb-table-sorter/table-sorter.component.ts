@@ -2,8 +2,8 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'lodash';
-import { Observable, of, Subscription } from 'rxjs';
-import { catchError, debounceTime, switchMap, tap } from 'rxjs/operators';
+import { defer, isObservable, Observable, of, Subscription } from 'rxjs';
+import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
 import { BREAKPOINTS } from '../../constants/breakpoints';
@@ -13,6 +13,7 @@ import { NbTableSorterExpandingRowDirective } from '../../directives/nb-table-so
 import { NbTableSorterLoadingDirective } from '../../directives/nb-table-sorter-loading.directive';
 import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
+import { FilterChangeEvent } from '../../interfaces/filter-change-event';
 import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
 import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown';
 import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
@@ -98,19 +99,17 @@ export class TableSorterComponent implements OnDestroy {
 		return this._pagination;
 	}
 	set pagination(v: NbTableSorterPagination | Observable<NbTableSorterPagination>) {
-		if (v.constructor.name === 'Observable') {
-			this.loading = true;
-			this.errorOcurred = false;
+		if (!v) {
 			this.data = null;
-
+		} else if (v.constructor.name === 'Observable') {
 			(v as Observable<NbTableSorterPagination>).pipe(
-				// tap(o => { throw new Error('asdf'); }),
-				catchError((err, caught) => {
-					this.errorOcurred = err;
-					return of(null);
-				}),
-				tap(o => {
-					this.loading = false;
+				map((value: NbTableSorterPagination) => ({ loading: false, error: false, value: value })),
+				startWith({ loading: true, error: false, value: null }),
+				catchError(error => of({ loading: false, error, value: null })),
+				map(o => {
+					this.loading = !!o.loading;
+					this.errorOcurred = o.error;
+					return o.value;
 				})
 			).subscribe((result: NbTableSorterPagination) => {
 				this.data = result;
@@ -354,7 +353,7 @@ export class TableSorterComponent implements OnDestroy {
 
 	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
 	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
-	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) templateNotFound: NbTableSorterNotFoundDirective;
+	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) noDataTpt: NbTableSorterNotFoundDirective;
 	@ContentChild(NbTableSorterLoadingDirective, { read: TemplateRef }) loadingTpt: NbTableSorterLoadingDirective;
 	@ContentChild(NbTableSorterErrorDirective, { read: TemplateRef }) errorTpt: NbTableSorterErrorDirective;
 	@ContentChildren(NbTableSorterExpandingRowDirective) templateExpandingRows !: QueryList<NbTableSorterExpandingRowDirective>;
@@ -631,7 +630,7 @@ export class TableSorterComponent implements OnDestroy {
 
 		this.filterHeaders = (this._headers as NbTableSorterHeader[]).filter(h => typeof h === 'object' && h.filter);
 		this.filterHeaders.forEach(h => {
-			specificSearchFG.addControl(h.property, new FormControl(null));
+			specificSearchFG.addControl(h.filter.key || h.property, new FormControl(null));
 		});
 
 		this.filterFG = this._fb.group({
@@ -642,9 +641,25 @@ export class TableSorterComponent implements OnDestroy {
 		this.filterFGSct = this.filterFG.valueChanges.pipe(
 			debounceTime(this.debounce),
 			tap(o => {
-				console.log(this.filterFG.value);
-				this.filterChange.emit(this.filterFG.value)
+				const value: FilterChangeEvent = {
+					searchText: this.filterFG.get('searchText').value,
+					specificSearch: this.parseValueToConditions(this.filterFG.get('specificSearch').value)
+				};
+				console.log(value);
+				this.filterChange.emit(value);
 			})
 		).subscribe();
+	}
+
+	parseValueToConditions(value: any) {
+		return Object.keys(value).map(k => {
+			const header = this.filterHeaders.find(h => h.filter.key === k || h.property === k);
+			switch (header.filter.type) {
+				case 'dropdown':
+					return [k, 'EQUAL', value[k]];
+				default:
+					return [k, 'LIKE', value[k]];
+			}
+		});
 	}
 }

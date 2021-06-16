@@ -34,6 +34,8 @@ export class AdvancedFilteringComponent implements OnInit {
 			filter: {
 				type: 'dropdown',
 				placeholder: 'email',
+				bindValue: 'value',
+				bindLabel: 'text',
 				options: of([{
 					value: 1,
 					text: 'one'

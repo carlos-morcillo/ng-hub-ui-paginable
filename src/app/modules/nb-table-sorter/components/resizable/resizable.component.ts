@@ -6,6 +6,7 @@ import { Component, HostBinding } from "@angular/core";
 	styleUrls: ["./resizable.component.scss"],
 })
 export class ResizableComponent {
+
 	@HostBinding("style.width.px")
 	width: number | null = null;
 
