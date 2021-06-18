@@ -82,15 +82,16 @@
 									{{ item | ucfirst }}
 								</ng-container>
 							</th>
-							<th *ngIf="actions?.length || templateExpandingRows.length" class="sticky-end"></th>
+							<th *ngIf="actions?.length || templateExpandingRows.length || filterHeaders?.length"
+								class="sticky-end"></th>
 						</tr>
 
 						<!-- Filtering -->
 						<tr *ngIf="filterHeaders?.length" class="filter_row"
 							[formGroup]="filterFG.get('specificSearch')">
-							<td *ngIf="selectable || batchActions?.length" class="sticky-start">
+							<td *ngIf="selectable || batchActions?.length" class="filter_cell sticky-start">
 							</td>
-							<td *ngFor="let item of headers" (click)="sort(item)"
+							<td *ngFor="let item of headers" class="filter_cell"
 								[ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons}">
 								<ng-container *ngIf="item.filter">
 									<ng-container [ngSwitch]="item.filter.type">
@@ -114,13 +115,29 @@
 												</ng-container>
 											</ng-container>
 										</select>
+										<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number"
+											[formControlName]="item.filter.key || item.property">
+										</ng-table-sorter-range-input>
+										<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date"
+											[formControlName]="item.filter.key || item.property">
+										</ng-table-sorter-range-input>
 										<input *ngSwitchDefault [type]="item.filter.type"
 											[formControlName]="item.filter.key || item.property" class="form-control"
 											[placeholder]="item.filter.placeholder || ''">
 									</ng-container>
 								</ng-container>
 							</td>
-							<td *ngIf="actions?.length || templateExpandingRows.length" class="sticky-end"></td>
+							<td class="filter_cell sticky-end">
+								<ng-container *ngIf="filterLoading; else trashButtonTpt">
+									<i class="fa fa-circle-o-notch fa-spin"></i>
+									<span class="sr-only">Loading...</span>
+								</ng-container>
+								<ng-template #trashButtonTpt>
+									<button class="btn btn-link text-muted px-1" (click)="clearAdvancedFilters()">
+										<i class="fa fa-trash"></i>
+									</button>
+								</ng-template>
+							</td>
 						</tr>
 					</thead>
 					<tbody *ngIf="data[mapping.data]?.length">
@@ -136,13 +153,13 @@
 			</div>
 
 			<!-- Pagination -->
-			<div *ngIf="paginate && data?.data?.length" class="d-flex align-items-center mb-4">
-				<div class="col-auto">
+			<div *ngIf="paginate && data?.data?.length" class="row align-items-center mb-4">
+				<div class="col-12 col-md-auto">
 					<nb-table-sorter-paginator (onPageClick)="pageClicked($event)"
 						*ngIf="paginationPosition == 'bottom' || paginationPosition === 'both'" [pagination]="data">
 					</nb-table-sorter-paginator>
 				</div>
-				<div class="form-group form-group-sm row col-auto mb-0 ml-auto align-items-center">
+				<div class="form-group form-group-sm row col-6 col-md-auto mb-0 ml-auto align-items-center">
 					<label
 						class="col col-form-label text-nowrap"><small>{{ 'ROWS_PER_PAGE' | translate | ucfirst}}:</small></label>
 					<div class="col pl-0">
@@ -152,7 +169,7 @@
 						</select>
 					</div>
 				</div>
-				<p class="col-auto mb-0" *ngIf="paginationInfo">
+				<p class="col-6 col-md-auto mb-0" *ngIf="paginationInfo">
 					<small class="text-muted">
 						{{ 'SHOWING_X_OF_Y_ROWS' | translate : { amount : data[mapping.data].length, total: data[mapping.total]} | ucfirst }}
 					</small>
@@ -187,6 +204,7 @@
 					<i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
 				</button>
 			</td>
+			<td *ngIf="!lastColumnOnlyHasButtons && !actions.length"></td>
 		</tr>
 		<ng-container *ngIf="item.unfold">
 			<ng-container *ngFor="let template of templateExpandingRows">

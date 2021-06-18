@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterPagination, NbTableSorterHeader, NbTableSorterDropdown, NbTableSorterButton } from '../../../modules/nb-table-sorter';
+import { NbTableSorterPagination, NbTableSorterHeader, NbTableSorterDropdown, NbTableSorterButton, FilterChangeEvent } from '../../../modules/nb-table-sorter';
 
 @Component({
 	selector: 'app-advanced-filtering',
@@ -17,7 +17,7 @@ export class AdvancedFilteringComponent implements OnInit {
 			title: 'id',
 			property: 'id',
 			filter: {
-				type: 'number'
+				type: 'number-range'
 			}
 		},
 		{
@@ -47,35 +47,16 @@ export class AdvancedFilteringComponent implements OnInit {
 					text: 'three'
 				}])
 			}
+		}, {
+			title: 'date',
+			property: 'date',
+			filter: {
+				type: 'date-range'
+			}
 		},
 		'name'
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];
-	batchActions: Array<NbTableSorterButton | NbTableSorterDropdown> = [
-		{
-			buttons: [
-				{
-					icon: 'fa fa-eye',
-					title: 'view',
-					handler: (items) => this._export(items)
-				},
-				{
-					icon: 'fas fa-file-download',
-					title: 'export',
-					handler: (items) => this._export(items)
-				},
-				{
-					icon: 'fas fa-file-download',
-					title: 'export',
-					handler: (items) => this._export(items)
-				}
-			]
-		}, {
-			icon: 'fas fa-file-download',
-			title: 'export',
-			handler: (items) => this._export(items)
-		}
-	];
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService
@@ -94,8 +75,7 @@ export class AdvancedFilteringComponent implements OnInit {
 		}
 	}
 
-	private _export(items) {
-		console.log('export', items);
-		this.pagination = null;
+	onFilterChange(value: FilterChangeEvent) {
+		console.log(value);
 	}
 }

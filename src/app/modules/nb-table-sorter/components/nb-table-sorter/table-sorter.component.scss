@@ -8,7 +8,7 @@
 	}
 
 	.table_container {
-		// border: 1px solid #eee;
+		border: 1px solid #eee;
 		border-radius: 4px;
 	}
 
@@ -17,9 +17,17 @@
 	}
 
 	thead {
+		&.sticky {
+			position: sticky;
+			inset-block-start: 0;
+		}
 		tr {
 			&.filter_row {
-				background-color: #eee;
+				.filter_cell {
+					background-color: #eee;
+					padding: 0.25rem;
+					vertical-align: middle;
+				}
 			}
 			th {
 				padding: 8px;
@@ -32,44 +40,51 @@
 			}
 		}
 	}
-
-	th,
-	td {
-		background-color: white;
-		&.sticky-start {
-			left: 0;
+	tfoot {
+		&.sticky {
 			position: sticky;
-			z-index: 9;
+			inset-block-end: 0;
 		}
 
-		&.sticky-end {
-			right: 0;
-			position: sticky;
-			z-index: 9;
-		}
-	}
+		th,
+		td {
+			&.sticky-start {
+				background-color: white;
+				left: 0;
+				position: sticky;
+				z-index: 9;
+			}
 
-	.actions {
-		text-align: center;
-		white-space: nowrap;
-		width: 1%;
-
-		button {
-			opacity: 0.4;
-
-			&:hover {
-				opacity: 1;
+			&.sticky-end {
+				background-color: white;
+				right: 0;
+				position: sticky;
+				z-index: 9;
 			}
 		}
-	}
 
-	.table {
-		&.table-hover {
-			tr:hover {
-				td {
-					&.sticky-start,
-					&.sticky-end {
-						background-color: inherit;
+		.actions {
+			text-align: center;
+			white-space: nowrap;
+			width: 1%;
+
+			button {
+				opacity: 0.4;
+
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
+
+		.table {
+			&.table-hover {
+				tr:hover {
+					td {
+						&.sticky-start,
+						&.sticky-end {
+							background-color: inherit;
+						}
 					}
 				}
 			}

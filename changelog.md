@@ -1,4 +1,9 @@
 # Changelog
+
+## [1.19.0] - 2021-06-18
+### Added
+- Nuevos campos de filtrado
+
 ## [1.18.5] - 2021-06-16
 ### Fixed
 - Corrección de maquetación y formato de evento de filtros avanzados

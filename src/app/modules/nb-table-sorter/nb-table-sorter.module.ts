@@ -22,6 +22,7 @@ import { ResizableDirective } from './directives/resizable.directive';
 import { ResizableComponent } from './components/resizable/resizable.component';
 import { NbTableSorterLoadingDirective } from './directives/nb-table-sorter-loading.directive';
 import { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.directive';
+import { NgTableSorterRangeInputComponent } from './components/ng-table-sorter-range-input/ng-table-sorter-range-input.component';
 
 @NgModule({
 	declarations: [
@@ -40,7 +41,8 @@ import { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.
 		NbTableSorterDropdownComponent,
 		ResizableComponent,
 		ResizableDirective,
-		NbTableSorterErrorDirective
+		NbTableSorterErrorDirective,
+		NgTableSorterRangeInputComponent
 	],
 	imports: [
 		CommonModule,
@@ -63,7 +65,9 @@ import { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.
 		IsObjectPipe,
 		UcfirstPipe,
 		IsStringPipe,
-		ResizableComponent
+		ResizableComponent,
+		NbTableSorterErrorDirective,
+		NgTableSorterRangeInputComponent
 	],
 	entryComponents: [
 		TableSorterComponent

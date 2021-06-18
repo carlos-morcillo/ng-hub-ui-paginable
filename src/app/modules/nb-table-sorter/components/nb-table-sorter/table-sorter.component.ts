@@ -2,8 +2,8 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'lodash';
-import { defer, isObservable, Observable, of, Subscription } from 'rxjs';
-import { catchError, debounceTime, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { catchError, debounceTime, finalize, map, startWith, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
 import { BREAKPOINTS } from '../../constants/breakpoints';
@@ -82,6 +82,14 @@ export class TableSorterComponent implements OnDestroy {
 	set headers(v: NbTableSorterHeader[] | string[]) {
 		this._headers = v;
 		this._initializeFilterForm();
+	}
+
+	get lastColumnOnlyHasButtons() {
+		const lastHeader = this._headers[this._headers.length - 1];
+		if (lastHeader && lastHeader.constructor.name === 'Object' && Object.keys(lastHeader).length === 1 && (lastHeader as NbTableSorterHeader).buttons) {
+			return true;
+		}
+		return false;
 	}
 
 	data: NbTableSorterPagination;
@@ -332,6 +340,8 @@ export class TableSorterComponent implements OnDestroy {
 	@Output() filterChange = new EventEmitter<any>();
 
 	filterFGSct: Subscription;
+
+	filterLoading: boolean = false;
 
 	/**
 	 * Time to ouput the filter form value
@@ -639,27 +649,21 @@ export class TableSorterComponent implements OnDestroy {
 		});
 
 		this.filterFGSct = this.filterFG.valueChanges.pipe(
+			tap(() => this.filterLoading = true),
 			debounceTime(this.debounce),
 			tap(o => {
-				const value: FilterChangeEvent = {
-					searchText: this.filterFG.get('searchText').value,
-					specificSearch: this.parseValueToConditions(this.filterFG.get('specificSearch').value)
-				};
-				console.log(value);
-				this.filterChange.emit(value);
-			})
+				this.filterChange.emit(this.filterFG.value);
+				this.filterLoading = false;
+			}),
 		).subscribe();
 	}
 
-	parseValueToConditions(value: any) {
-		return Object.keys(value).map(k => {
-			const header = this.filterHeaders.find(h => h.filter.key === k || h.property === k);
-			switch (header.filter.type) {
-				case 'dropdown':
-					return [k, 'EQUAL', value[k]];
-				default:
-					return [k, 'LIKE', value[k]];
-			}
-		});
+	/**
+	 * Clean the advanced filter form
+	 *
+	 * @memberof TableSorterComponent
+	 */
+	clearAdvancedFilters(): void {
+		this.filterFG.reset();
 	}
 }

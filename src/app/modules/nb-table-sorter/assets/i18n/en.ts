@@ -8,6 +8,8 @@ export const locale = {
 		NO_RESULTS_FOUND: 'No results found',
 		BATCH_ACTIONS: 'Batch actions',
 		APPLY: 'Apply',
-		ERROR_OCURRED: 'Ha ocurrido un error al obtener los datos.'
+		ERROR_OCURRED: 'Ha ocurrido un error al obtener los datos.',
+		FROM: 'from',
+		TO: 'to'
 	}
 }
