@@ -1,15 +1,15 @@
 <div class="mb-5">
-  <h2 class="d-inline">Responsive</h2>
-  <a class="btn btn-outline-primary float-right" href="#"><i class="fa fa-fw fa-github"></i>View code in Github</a>
+	<h2 class="d-inline">Responsive</h2>
+	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
 <div class="d-flex">
-  <div class="form-group">
-    <label for="">Break at</label>
-    <select class="form-control" [(ngModel)]="breakAt">
-      <option *ngFor="let item of breakpoints" [value]="item">{{ item }}</option>
-    </select>
-  </div>
+	<div class="form-group">
+		<label for="">Break at</label>
+		<select class="form-control" [(ngModel)]="breakAt">
+			<option *ngFor="let item of breakpoints" [value]="item">{{ item }}</option>
+		</select>
+	</div>
 </div>
 <table-sorter (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination" [paginationInfo]="true"
-  [searchKeys]="searchKeys" [responsive]="breakAt">
+	[searchKeys]="searchKeys" [responsive]="breakAt">
 </table-sorter>

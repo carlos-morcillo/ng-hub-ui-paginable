@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.19.3] - 2021-06-21
+### Fixed
+- Corrección de maquetación
+
+## [1.19.2] - 2021-06-18
+### Fixed
+- Corrección de loading de filtros
+
+## [1.19.1] - 2021-06-18
+### Fixed
+- Exportación de componentes
+
 ## [1.19.0] - 2021-06-18
 ### Added
 - Nuevos campos de filtrado

@@ -6,6 +6,7 @@ export { TableSorterComponent } from './components/nb-table-sorter/table-sorter.
 export { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
 export { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
 export { ResizableComponent } from './components/resizable/resizable.component';
+export { NgTableSorterRangeInputComponent } from './components/ng-table-sorter-range-input/ng-table-sorter-range-input.component';
 
 // Directives
 export { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';
