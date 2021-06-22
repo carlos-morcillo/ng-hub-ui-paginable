@@ -2,7 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'lodash';
-import { Observable, of, Subscription } from 'rxjs';
+import { merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, finalize, map, startWith, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
@@ -343,6 +343,8 @@ export class TableSorterComponent implements OnDestroy {
 
 	filterLoading: boolean = false;
 
+	filterTrigger$: Subject<void> = new Subject();
+
 	/**
 	 * Time to ouput the filter form value
 	 *
@@ -648,8 +650,15 @@ export class TableSorterComponent implements OnDestroy {
 			specificSearch: specificSearchFG
 		});
 
-		this.filterFGSct = this.filterFG.valueChanges.pipe(
-			tap(() => this.filterLoading = true),
+		this.filterFGSct = merge(
+			this.filterTrigger$.pipe(
+				tap(() => this.filterLoading = true)
+			),
+			this.filterFG.valueChanges.pipe(
+				tap(() => this.filterLoading = true),
+				debounceTime(this.debounce)
+			)
+		).pipe(
 			debounceTime(this.debounce),
 			tap(o => {
 				this.filterChange.emit(this.filterFG.value);

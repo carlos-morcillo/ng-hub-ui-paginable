@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.19.4] - 2021-06-22
+### Fixed
+- Corrección de eventos de formulario
+
 ## [1.19.3] - 2021-06-21
 ### Fixed
 - Corrección de maquetación

@@ -10,7 +10,7 @@
 					</ng-container>
 					<ng-template #buttonTpt>
 						<a class="btn" role="button" [class.ml-2]="!first"
-							[ngClass]="button.color ? 'btn-outline-' + button.color : 'btn-outline-dark'"
+							[ngClass]="button.color ? 'btn-' + button.color : 'btn-light'"
 							(click)="handleBatchAction(button)">
 							<i *ngIf="button.icon" class="mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
 						</a>
@@ -20,11 +20,11 @@
 
 			<div class="ml-auto col-auto px-2">
 				<div *ngIf="showSearchInput" class="input-group search_input-group">
-					<input type="text" class="form-control border border-dark search_input"
+					<input type="text" class="form-control border border-light search_input"
 						[formControl]="filterFG.get('searchText')" [placeholder]="'SEARCH' | translate | ucfirst"
 						aria-label="Search" (keyup.enter)="filter()">
 					<div class="input-group-append">
-						<button class="btn btn-outline-dark search_button" type="button" (click)="filter()">
+						<button class="btn btn-light search_button" type="button" (click)="filterTrigger$.next()">
 							<i class="fa fa-search" aria-hidden="true"></i>
 						</button>
 					</div>
@@ -134,7 +134,8 @@
 										<span class="sr-only">Loading...</span>
 									</ng-container>
 									<ng-template #trashButtonTpt>
-										<button class="btn btn-link text-muted px-2" (click)="clearAdvancedFilters()">
+										<button type="button" class="btn btn-link text-muted px-2"
+											(click)="clearAdvancedFilters()">
 											<i class="fa fa-trash"></i>
 										</button>
 									</ng-template>
@@ -147,7 +148,8 @@
 									<span class="sr-only">Loading...</span>
 								</ng-container>
 								<ng-template #trashButtonTpt>
-									<button class="btn btn-link text-muted px-1" (click)="clearAdvancedFilters()">
+									<button type="button" class="btn btn-link text-muted px-1"
+										(click)="clearAdvancedFilters()">
 										<i class="fa fa-trash"></i>
 									</button>
 								</ng-template>
@@ -207,13 +209,13 @@
 			<td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end"
 				[class.sticky-end]="stickyActions">
 				<ng-container *ngFor="let action of actions">
-					<button *ngIf="action.hidden !== false" class="btn btn-link px-2"
+					<button *ngIf="action.hidden !== false" type="button" class="btn btn-link px-2"
 						[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
 						(click)="handleAction($event, action.handler, item)">
 						<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 					</button>
 				</ng-container>
-				<button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)"
+				<button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" type="button"
 					class="btn btn-link px-2">
 					<i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
 				</button>
@@ -238,7 +240,7 @@
 						</nb-table-sorter-dropdown>
 					</ng-container>
 					<ng-template #buttonTpt>
-						<button *ngIf="!button.hidden" class="btn btn-link px-2"
+						<button *ngIf="!button.hidden" type="button" class="btn btn-link px-2"
 							[ngClass]="button.color ? 'text-' + button.color : 'text-dark'" [title]="button.title"
 							(click)="handleAction($event, button.handler, item)">
 							<i *ngIf="button.icon" [ngClass]="button.icon"></i>

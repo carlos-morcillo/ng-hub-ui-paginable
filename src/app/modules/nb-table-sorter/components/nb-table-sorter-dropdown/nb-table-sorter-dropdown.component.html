@@ -1,6 +1,6 @@
 <div class="dropdown" [class.show]="shown">
-	<button class="btn btn-outline-dark px-2 toggle" type="button"
-		[ngClass]="options.color ? 'btn-outline-' + options.color : 'btn-outline-dark'" [title]="options.title || null"
+	<button class="btn btn-light px-2 toggle" type="button"
+		[ngClass]="options.color ? 'btn-' + options.color : 'btn-light'" [title]="options.title || null"
 		data-toggle="dropdown" [attr.aria-expanded]="shown" (click)="shown = !shown">
 		<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
 	</button>

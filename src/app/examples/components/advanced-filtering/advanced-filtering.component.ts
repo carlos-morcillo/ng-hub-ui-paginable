@@ -55,21 +55,21 @@ export class AdvancedFilteringComponent implements OnInit {
 			}
 		},
 		'name',
-		// {
-		// 	buttons: [
-		// 		{
-		// 			title: 'edit',
-		// 			icon: 'fa fa-edit',
-		// 			handler: (item) => console.log('edit', item)
-		// 		},
-		// 		{
-		// 			title: 'delete',
-		// 			color: 'danger',
-		// 			icon: 'fa fa-trash',
-		// 			handler: (item) => console.log('delete', item),
-		// 		}
-		// 	]
-		// }
+		{
+			buttons: [
+				{
+					title: 'edit',
+					icon: 'fa fa-edit',
+					handler: (item) => console.log('edit', item)
+				},
+				{
+					title: 'delete',
+					color: 'danger',
+					icon: 'fa fa-trash',
+					handler: (item) => console.log('delete', item),
+				}
+			]
+		}
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];
 
