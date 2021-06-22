@@ -1,0 +1,15 @@
+<div class="mb-5">
+	<h2 class="d-inline">Custom filters</h2>
+	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
+</div>
+<table-sorter (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)" [selectable]="true"
+	[headers]="headers" [pagination]="pagination" [searchKeys]="searchKeys">
+	<ng-template nbTableSorterFilter header="email" let-header="header" let-formControl="formControl">
+		<div class="form-check" *ngFor="let option of header.filter.options | async">
+			<input class="form-check-input" type="checkbox" [value]="option.value" [formControl]="formControl">
+			<label class="form-check-label">
+				{{ option.text }}
+			</label>
+		</div>
+	</ng-template>
+</table-sorter>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { NbTableSorterModule } from '../modules/nb-table-sorter';
 import { BatchActionsComponent } from './components/batch-actions/batch-actions.component';
@@ -28,6 +28,7 @@ import { AdvancedFilteringComponent } from './components/advanced-filtering/adva
 import { CustomLoadingComponent } from './components/custom-loading/custom-loading.component';
 import { ErrorComponent } from './components/error/error.component';
 import { CustomErrorComponent } from './components/custom-error/custom-error.component';
+import { CustomFiltersComponent } from './components/custom-filters/custom-filters.component';
 
 
 const routes: Routes = [
@@ -54,6 +55,7 @@ const routes: Routes = [
 	{ path: 'batch-actions', component: BatchActionsComponent },
 	{ path: 'hoverable-rows', component: HoverableRowsComponent },
 	{ path: 'advanced-filtering', component: AdvancedFilteringComponent },
+	{ path: 'custom-filters', component: CustomFiltersComponent },
 	{ path: 'custom-loading', component: CustomLoadingComponent },
 	{ path: 'error', component: ErrorComponent },
 	{ path: 'custom-error', component: CustomErrorComponent }
@@ -85,11 +87,13 @@ const routes: Routes = [
 		AdvancedFilteringComponent,
 		CustomLoadingComponent,
 		ErrorComponent,
-		CustomErrorComponent
+		CustomErrorComponent,
+		CustomFiltersComponent
 	],
 	imports: [
 		CommonModule,
 		FormsModule,
+		ReactiveFormsModule,
 		RouterModule.forChild(routes),
 		NbTableSorterModule
 	]

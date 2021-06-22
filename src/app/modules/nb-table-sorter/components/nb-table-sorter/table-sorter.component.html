@@ -93,39 +93,11 @@
 							[formGroup]="filterFG.get('specificSearch')">
 							<td *ngIf="selectable || batchActions?.length" class="filter_cell sticky-start">
 							</td>
-							<td *ngFor="let item of headers; let last = last;" class="filter_cell"
-								[ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons, 'text-right filter_cell_clear': (last && lastColumnOnlyHasButtons)}">
-								<ng-container *ngIf="item.filter">
-									<ng-container [ngSwitch]="item.filter.type">
-										<select *ngSwitchCase="'dropdown'"
-											[formControlName]="item.filter.key || item.property" class="form-control">
-											<option *ngIf="item.filter.placeholder" [ngValue]="null">
-												{{ item.filter.placeholder }}
-											</option>
-											<ng-container [ngSwitch]="item.filter.options.constructor.name">
-												<ng-container *ngSwitchCase="'Observable'">
-													<option *ngFor="let option of item.filter.options | async"
-														[value]="option[item.filter.bindValue || 'id']">
-														{{ option[item.filter.bindLabel || 'name'] }}
-													</option>
-												</ng-container>
-												<ng-container *ngSwitchDefault>
-													<option *ngFor="let option of item.filter.options"
-														[value]="option[item.filter.bindValue || 'id']">
-														{{ option[item.filter.bindLabel || 'name'] }}
-													</option>
-												</ng-container>
-											</ng-container>
-										</select>
-										<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number"
-											[formControlName]="item.filter.key || item.property">
-										</ng-table-sorter-range-input>
-										<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date"
-											[formControlName]="item.filter.key || item.property">
-										</ng-table-sorter-range-input>
-										<input *ngSwitchDefault [type]="item.filter.type"
-											[formControlName]="item.filter.key || item.property" class="form-control"
-											[placeholder]="item.filter.placeholder || ''">
+							<td *ngFor="let header of headers; let last = last;" class="filter_cell"
+								[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-right filter_cell_clear': (last && lastColumnOnlyHasButtons)}">
+								<ng-container *ngIf="header.filter">
+									<ng-container [ngTemplateOutlet]="getFilterTemplate(header) || defaultFilterTpt"
+										[ngTemplateOutletContext]="{header: header, formControl: filterFG.get('specificSearch').get(header.filter.key || header.property)}">
 									</ng-container>
 								</ng-container>
 								<ng-container *ngIf="last && lastColumnOnlyHasButtons">
@@ -227,6 +199,36 @@
 				<ng-container [ngTemplateOutlet]="template.template" [ngTemplateOutletContext]="{item: item}">
 				</ng-container>
 			</ng-container>
+		</ng-container>
+	</ng-template>
+
+	<ng-template #defaultFilterTpt let-header="header" let-formControl="formControl">
+		<ng-container [ngSwitch]="header.filter.type">
+			<select *ngSwitchCase="'dropdown'" [formControl]="formControl" class="form-control">
+				<option *ngIf="header.filter.placeholder" [ngValue]="null">
+					{{ header.filter.placeholder }}
+				</option>
+				<ng-container [ngSwitch]="header.filter.options.constructor.name">
+					<ng-container *ngSwitchCase="'Observable'">
+						<option *ngFor="let option of header.filter.options | async"
+							[value]="option[header.filter.bindValue || 'id']">
+							{{ option[header.filter.bindLabel || 'name'] }}
+						</option>
+					</ng-container>
+					<ng-container *ngSwitchDefault>
+						<option *ngFor="let option of header.filter.options"
+							[value]="option[header.filter.bindValue || 'id']">
+							{{ option[header.filter.bindLabel || 'name'] }}
+						</option>
+					</ng-container>
+				</ng-container>
+			</select>
+			<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number" [formControl]="formControl">
+			</ng-table-sorter-range-input>
+			<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date" [formControl]="formControl">
+			</ng-table-sorter-range-input>
+			<input *ngSwitchDefault [type]="header.filter.type" [formControl]="formControl" class="form-control"
+				[placeholder]="header.filter.placeholder || ''">
 		</ng-container>
 	</ng-template>
 

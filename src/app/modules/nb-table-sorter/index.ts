@@ -17,6 +17,7 @@ export { NbTableSorterRowDirective } from './directives/nb-table-sorter-row.dire
 export { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
 export { ResizableDirective } from './directives/resizable.directive';
 export { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.directive';
+export { NbTableSorterFilterDirective } from './directives/nb-table-sorter-filter.directive';
 
 // Pipes
 export { GetPipe } from './pipes/get.pipe';

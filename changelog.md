@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.20.0] - 2021-06-22
+### Added
+- Plantillas para filtros personalizados
+
 ## [1.19.5] - 2021-06-22
 ### Fixed
 - Corrección de nombre de variable ordenación

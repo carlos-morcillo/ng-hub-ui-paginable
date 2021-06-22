@@ -10,6 +10,7 @@ import { BREAKPOINTS } from '../../constants/breakpoints';
 import { NbTableSorterCellDirective } from '../../directives/nb-table-sorter-cell.directive';
 import { NbTableSorterErrorDirective } from '../../directives/nb-table-sorter-error.directive';
 import { NbTableSorterExpandingRowDirective } from '../../directives/nb-table-sorter-expanding-row.directive';
+import { NbTableSorterFilterDirective } from '../../directives/nb-table-sorter-filter.directive';
 import { NbTableSorterLoadingDirective } from '../../directives/nb-table-sorter-loading.directive';
 import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
@@ -369,6 +370,7 @@ export class TableSorterComponent implements OnDestroy {
 	@ContentChild(NbTableSorterLoadingDirective, { read: TemplateRef }) loadingTpt: NbTableSorterLoadingDirective;
 	@ContentChild(NbTableSorterErrorDirective, { read: TemplateRef }) errorTpt: NbTableSorterErrorDirective;
 	@ContentChildren(NbTableSorterExpandingRowDirective) templateExpandingRows !: QueryList<NbTableSorterExpandingRowDirective>;
+	@ContentChildren(NbTableSorterFilterDirective) filterTpts !: QueryList<NbTableSorterFilterDirective>;
 
 	constructor(
 		private _fb: FormBuilder,
@@ -489,7 +491,7 @@ export class TableSorterComponent implements OnDestroy {
 		if (!this.ordination || this.ordination.property !== header.property) {
 			return 'fa-sort';
 		}
-		return this.ordination.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+		return this.ordination.direction.toUpperCase() === 'ASC' ? 'fa-sort-up' : 'fa-sort-down';
 	}
 
 	/**
@@ -505,6 +507,22 @@ export class TableSorterComponent implements OnDestroy {
 			return null;
 		}
 		const directive = this.templateCells.find(o => o.header === property);
+		return directive ? directive.template : null;
+	}
+
+	/**
+	 * If it exists, returns the filter template for the header passed by parameter
+	 *
+	 * @param {(NbTableSorterHeader)} header
+	 * @returns {TemplateRef<NbTableSorterCellDirective>}
+	 * @memberof TableSorterComponent
+	 */
+	getFilterTemplate(header: NbTableSorterHeader): TemplateRef<NbTableSorterFilterDirective> {
+		const property = header instanceof String ? header : header.property;
+		if (!property) {
+			return null;
+		}
+		const directive = this.filterTpts.find(o => o.header === property);
 		return directive ? directive.template : null;
 	}
 
