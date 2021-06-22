@@ -147,7 +147,7 @@ export class TableSorterComponent implements OnDestroy {
 		this._rows = v;
 		const params = {
 			page: 1,
-			ordenation: this.ordenation,
+			ordination: this.ordination,
 			searchText: this.searchText,
 			searchKeys: this.searchKeys,
 			paginate: this.paginate
@@ -211,7 +211,7 @@ export class TableSorterComponent implements OnDestroy {
 	searchText: string = '';
 	@Input() searchKeys: string[] = ['name'];
 
-	ordenation: NbTableSorterOrdination = null;
+	ordination: NbTableSorterOrdination = null;
 
 	/**
 	 * Collection of actions for items
@@ -444,15 +444,15 @@ export class TableSorterComponent implements OnDestroy {
 		if (!header.sortable) {
 			return;
 		}
-		if (!this.ordenation || this.ordenation.property !== header.property) {
-			this.ordenation = {
+		if (!this.ordination || this.ordination.property !== header.property) {
+			this.ordination = {
 				property: header.property,
 				direction: 'ASC'
 			};
 		} else {
-			this.ordenation = {
+			this.ordination = {
 				property: header.property,
-				direction: this.ordenation.direction === 'ASC' ? 'DESC' : 'ASC'
+				direction: this.ordination.direction === 'ASC' ? 'DESC' : 'ASC'
 			};
 		}
 
@@ -463,7 +463,7 @@ export class TableSorterComponent implements OnDestroy {
 		const params = {
 			page: this.data.currentPage,
 			perPage: this.itemsPerPage,
-			ordenation: this.ordenation,
+			ordination: this.ordination,
 			searchText: this.searchText,
 			searchKeys: this.searchKeys,
 			paginate: this.paginate
@@ -486,10 +486,10 @@ export class TableSorterComponent implements OnDestroy {
 	 * @memberof TableSorterComponent
 	 */
 	getOrdenationClass(header: NbTableSorterHeader) {
-		if (!this.ordenation || this.ordenation.property !== header.property) {
+		if (!this.ordination || this.ordination.property !== header.property) {
 			return 'fa-sort';
 		}
-		return this.ordenation.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+		return this.ordination.direction === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
 	}
 
 	/**

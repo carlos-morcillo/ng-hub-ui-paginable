@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.19.5] - 2021-06-22
+### Fixed
+- Corrección de nombre de variable ordenación
+
 ## [1.19.4] - 2021-06-22
 ### Fixed
 - Corrección de eventos de formulario
