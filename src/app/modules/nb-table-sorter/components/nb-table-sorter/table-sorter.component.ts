@@ -3,7 +3,7 @@ import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inp
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'lodash';
 import { merge, Observable, of, Subject, Subscription } from 'rxjs';
-import { catchError, debounceTime, finalize, map, startWith, tap } from 'rxjs/operators';
+import { catchError, debounceTime, map, startWith, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
 import { BREAKPOINTS } from '../../constants/breakpoints';
@@ -14,7 +14,6 @@ import { NbTableSorterFilterDirective } from '../../directives/nb-table-sorter-f
 import { NbTableSorterLoadingDirective } from '../../directives/nb-table-sorter-loading.directive';
 import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
 import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
-import { FilterChangeEvent } from '../../interfaces/filter-change-event';
 import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
 import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown';
 import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
@@ -82,6 +81,13 @@ export class TableSorterComponent implements OnDestroy {
 	}
 	set headers(v: NbTableSorterHeader[] | string[]) {
 		this._headers = v;
+
+		// Parsing headers
+		for (const header of this._headers) {
+			if (header.constructor.name === 'Object' && (header as NbTableSorterHeader).buttons && !(header as NbTableSorterHeader).property) {
+				Object.assign(header, { wrapping: 'nowrap', onlyButtons: true, align: 'end' }, header);
+			}
+		}
 		this._initializeFilterForm();
 	}
 
@@ -234,7 +240,12 @@ export class TableSorterComponent implements OnDestroy {
 		return this._batchActions;
 	}
 	set batchActions(v: Array<NbTableSorterDropdown | NbTableSorterButton>) {
-		this._batchActions = v;
+		this._batchActions = v.map(b => {
+			if ((b as NbTableSorterDropdown).buttons) {
+				b = { fill: null, position: 'left', color: 'light', ...b };
+			}
+			return b;
+		});
 	}
 
 	batchActionsDropdown: NbTableSorterDropdown;
@@ -555,6 +566,13 @@ export class TableSorterComponent implements OnDestroy {
 	 * @memberof TableSorterComponent
 	 */
 	batchActionsShown: boolean = false;
+
+	isHidden(button: NbTableSorterButton, item: any) {
+		if (typeof button.hidden === 'function') {
+			return button.hidden(item);
+		}
+		return button.hidden;
+	}
 
 	/**
 	 * Expand or unexpand an expanding row

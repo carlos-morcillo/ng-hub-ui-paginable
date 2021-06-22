@@ -1,10 +1,9 @@
 <div class="dropdown" [class.show]="shown">
-	<button class="btn btn-light px-2 toggle" type="button"
-		[ngClass]="options.color ? 'btn-' + options.color : 'btn-light'" [title]="options.title || null"
+	<button class="px-2 toggle" type="button" [ngClass]="buttonClass" [title]="options.title || null"
 		data-toggle="dropdown" [attr.aria-expanded]="shown" (click)="shown = !shown">
 		<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
 	</button>
-	<div class="dropdown-menu dropdown-menu-{{position}}" [class.show]="shown">
+	<div class="dropdown-menu dropdown-menu-{{options.position}}" [class.show]="shown">
 		<ng-container *ngFor="let dropdownItem of options.buttons">
 			<button class="dropdown-item" type="button" *ngIf="!dropdownItem.hidden"
 				[ngClass]="dropdownItem.color ? 'text-' + dropdownItem.color : 'text-dark'"

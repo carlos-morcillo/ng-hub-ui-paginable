@@ -9,10 +9,23 @@ import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown
 })
 export class NbTableSorterDropdownComponent {
 
-	@Input() options: NbTableSorterDropdown;
 	@Input() item: any;
-	@Input() position: 'left' | 'right' = 'left';
 
+	private _options: NbTableSorterDropdown = { buttons: [] };
+	@Input()
+	get options(): NbTableSorterDropdown {
+		return this._options;
+	}
+	set options(v: NbTableSorterDropdown) {
+		this._options = { position: 'right', fill: 'clear', color: 'muted', ...v };
+		if (this._options.fill === 'clear') {
+			this.buttonClass = 'btn btn-link text-' + (this._options.color ?? 'muted');
+		} else {
+			this.buttonClass = 'btn ' + ['btn', this._options.fill, this._options.color].filter(o => o).join('-');
+		}
+	}
+
+	buttonClass: string;
 	shown: boolean = false;
 
 	constructor(

@@ -10,8 +10,9 @@ export interface NbTableSorterHeader {
 	sortable?: boolean;
 	wrapping?: 'wrap' | 'nowrap';
 	sticky?: 'start' | 'end';
-	buttons?: Array<NbTableSorterButton | NbTableSorterDropdown>
-	filter?: InputFilter | DropdownFilter
+	buttons?: Array<NbTableSorterButton | NbTableSorterDropdown>;
+	filter?: InputFilter | DropdownFilter;
+	onlyButtons?: boolean;
 }
 
 interface InputFilter {

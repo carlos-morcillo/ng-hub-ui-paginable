@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.21.0] - 2021-06-22
+### Added
+- Ahora es posible una función para mostrar/ocultar un botón dentro de una celda
+
 ## [1.20.0] - 2021-06-22
 ### Added
 - Plantillas para filtros personalizados

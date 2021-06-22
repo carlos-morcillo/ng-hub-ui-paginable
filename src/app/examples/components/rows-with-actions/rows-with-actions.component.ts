@@ -25,45 +25,52 @@ export class RowsWithActionsComponent implements OnInit {
 		'email',
 		'name',
 		{
-			property: 'actions',
 			buttons: [
+				{
+					title: 'hidden_edit',
+					icon: 'fa fa-edit',
+					handler: (item) => console.log('hidden_edit', item),
+					hidden: true
+				},
+				{
+					title: 'view',
+					icon: 'fa fa-eye',
+					handler: (item) => console.log('view', item),
+				},
 				{
 					title: 'edit',
 					icon: 'fa fa-edit',
 					handler: (item) => console.log('edit', item),
-					hidden: true
-				},
-				{
+					hidden: (item) => item.id % 2 === 0
+				}, {
 					title: 'delete',
 					color: 'danger',
 					icon: 'fa fa-trash',
 					handler: (item) => console.log('delete', item),
-				},
-				{
-					title: 'delete',
-					color: 'info',
+					hidden: (item) => item.id % 3 === 0
+				}, {
 					icon: 'fa fa-ellipsis-v',
 					buttons: [
 						{
+							title: 'view',
+							icon: 'fa fa-eye',
+							handler: (item) => console.log('view', item),
+							hidden: (item) => {
+								return item.id % 2 === 1
+							}
+						}, {
 							title: 'edit',
 							icon: 'fa fa-edit',
 							handler: (item) => console.log('edit', item),
-						},
-						{
-							title: 'delete',
-							color: 'danger',
-							icon: 'fa fa-trash',
-							handler: (item) => console.log('delete', item),
-						},
-						{
+						}, {
 							title: 'delete',
 							color: 'warning',
 							icon: 'fa fa-trash',
 							handler: (item) => console.log('delete', item),
-							hidden: true,
+							hidden: true
 						}
 					]
-				},
+				}
 			]
 		}
 	];

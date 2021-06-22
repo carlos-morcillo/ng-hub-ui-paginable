@@ -6,4 +6,5 @@ export interface NbTableSorterDropdown {
 	color?: string;
 	buttons: Array<NbTableSorterButton>;
 	position?: 'left' | 'right';
+	fill?: 'clear' | 'outline';
 }

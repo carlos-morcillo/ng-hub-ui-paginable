@@ -5,7 +5,7 @@
 				<ng-container *ngFor="let button of batchActions; let first = first;">
 					<ng-container *ngIf="button['buttons']?.length; else buttonTpt">
 						<nb-table-sorter-dropdown [options]="button" class="d-inline-block"
-							[position]="button['position'] || 'left'" [ngClass]="{'ml-2': !first}">
+							[ngClass]="{'ml-2': !first}">
 						</nb-table-sorter-dropdown>
 					</ng-container>
 					<ng-template #buttonTpt>
@@ -181,7 +181,7 @@
 			<td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end"
 				[class.sticky-end]="stickyActions">
 				<ng-container *ngFor="let action of actions">
-					<button *ngIf="action.hidden !== false" type="button" class="btn btn-link px-2"
+					<button *ngIf="!isHidden(action, item)" type="button" class="btn btn-link px-2"
 						[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
 						(click)="handleAction($event, action.handler, item)">
 						<i *ngIf="action.icon" [ngClass]="action.icon"></i>
@@ -237,12 +237,11 @@
 			<div class="text-nowrap">
 				<ng-container *ngFor="let button of header.buttons">
 					<ng-container *ngIf="button.buttons; else buttonTpt">
-						<nb-table-sorter-dropdown [options]="button" [item]="item"
-							[position]="button.position || 'right'" class="d-inline-block">
+						<nb-table-sorter-dropdown [options]="button" [item]="item" class="d-inline-block">
 						</nb-table-sorter-dropdown>
 					</ng-container>
 					<ng-template #buttonTpt>
-						<button *ngIf="!button.hidden" type="button" class="btn btn-link px-2"
+						<button *ngIf="!isHidden(button, item)" type="button" class="btn btn-link px-2"
 							[ngClass]="button.color ? 'text-' + button.color : 'text-dark'" [title]="button.title"
 							(click)="handleAction($event, button.handler, item)">
 							<i *ngIf="button.icon" [ngClass]="button.icon"></i>
