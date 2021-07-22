@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.22.1] - 2021-06-23
+### Fixed
+- Los botones de accion en lote no se habilitan hasta que hay items seleccionados
+
+## [1.22.0] - 2021-06-23
+### Fixed
+- Nueva pipe isObservable
+
+## [1.21.2] - 2021-06-23
+### Fixed
+- Corrección de errores relacionados con RxJS
+
+## [1.21.1] - 2021-06-23
+### Fixed
+- Detección de tipo de la última columna
+
 ## [1.21.0] - 2021-06-22
 ### Added
 - Ahora es posible una función para mostrar/ocultar un botón dentro de una celda

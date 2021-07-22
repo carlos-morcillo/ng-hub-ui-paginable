@@ -24,6 +24,7 @@ export { GetPipe } from './pipes/get.pipe';
 export { IsObjectPipe } from './pipes/is-object.pipe';
 export { IsStringPipe } from './pipes/is-string.pipe';
 export { UcfirstPipe } from './pipes/ucfirst.pipe';
+export { IsObservablePipe } from './pipes/is-observable.pipe';
 
 // Interfaces
 export { NbTableSorterHeader } from './interfaces/nb-table-sorter-header';

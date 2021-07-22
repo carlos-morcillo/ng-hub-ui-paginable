@@ -2,7 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _ from 'lodash';
-import { merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { isObservable, merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, map, startWith, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
@@ -93,10 +93,7 @@ export class TableSorterComponent implements OnDestroy {
 
 	get lastColumnOnlyHasButtons() {
 		const lastHeader = this._headers[this._headers.length - 1];
-		if (lastHeader && lastHeader.constructor.name === 'Object' && Object.keys(lastHeader).length === 1 && (lastHeader as NbTableSorterHeader).buttons) {
-			return true;
-		}
-		return false;
+		return lastHeader.constructor.name === 'Object' && (lastHeader as NbTableSorterHeader).buttons && !(lastHeader as NbTableSorterHeader).property;
 	}
 
 	data: NbTableSorterPagination;
@@ -116,7 +113,7 @@ export class TableSorterComponent implements OnDestroy {
 	set pagination(v: NbTableSorterPagination | Observable<NbTableSorterPagination>) {
 		if (!v) {
 			this.data = null;
-		} else if (v.constructor.name === 'Observable') {
+		} else if (isObservable(v)) {
 			(v as Observable<NbTableSorterPagination>).pipe(
 				map((value: NbTableSorterPagination) => ({ loading: false, error: false, value: value })),
 				startWith({ loading: true, error: false, value: null }),

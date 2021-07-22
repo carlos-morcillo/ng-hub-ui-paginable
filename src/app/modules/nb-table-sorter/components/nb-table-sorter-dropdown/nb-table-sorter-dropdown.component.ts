@@ -25,6 +25,8 @@ export class NbTableSorterDropdownComponent {
 		}
 	}
 
+	@Input() disabled: boolean = false;
+
 	buttonClass: string;
 	shown: boolean = false;
 

@@ -24,6 +24,7 @@ import { NbTableSorterLoadingDirective } from './directives/nb-table-sorter-load
 import { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.directive';
 import { NgTableSorterRangeInputComponent } from './components/ng-table-sorter-range-input/ng-table-sorter-range-input.component';
 import { NbTableSorterFilterDirective } from './directives/nb-table-sorter-filter.directive';
+import { IsObservablePipe } from './pipes/is-observable.pipe';
 
 @NgModule({
 	declarations: [
@@ -44,7 +45,8 @@ import { NbTableSorterFilterDirective } from './directives/nb-table-sorter-filte
 		ResizableDirective,
 		NbTableSorterErrorDirective,
 		NgTableSorterRangeInputComponent,
-		NbTableSorterFilterDirective
+		NbTableSorterFilterDirective,
+		IsObservablePipe
 	],
 	imports: [
 		CommonModule,
@@ -68,6 +70,7 @@ import { NbTableSorterFilterDirective } from './directives/nb-table-sorter-filte
 		IsObjectPipe,
 		UcfirstPipe,
 		IsStringPipe,
+		IsObservablePipe,
 		ResizableComponent,
 		NbTableSorterErrorDirective,
 		NgTableSorterRangeInputComponent

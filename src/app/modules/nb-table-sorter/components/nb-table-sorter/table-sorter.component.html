@@ -4,16 +4,16 @@
 			<div *ngIf="batchActions?.length" class="col-auto px-2">
 				<ng-container *ngFor="let button of batchActions; let first = first;">
 					<ng-container *ngIf="button['buttons']?.length; else buttonTpt">
-						<nb-table-sorter-dropdown [options]="button" class="d-inline-block"
-							[ngClass]="{'ml-2': !first}">
+						<nb-table-sorter-dropdown [options]="button" class="d-inline-block" [ngClass]="{'ml-2': !first}"
+							[disabled]="!selectedItems?.length">
 						</nb-table-sorter-dropdown>
 					</ng-container>
 					<ng-template #buttonTpt>
-						<a class="btn" role="button" [class.ml-2]="!first"
+						<button class="btn" role="button" [class.ml-2]="!first"
 							[ngClass]="button.color ? 'btn-' + button.color : 'btn-light'"
-							(click)="handleBatchAction(button)">
+							(click)="handleBatchAction(button)" [disabled]="!selectedItems?.length">
 							<i *ngIf="button.icon" class="mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
-						</a>
+						</button>
 					</ng-template>
 				</ng-container>
 			</div>
@@ -105,12 +105,6 @@
 										<i class="fas fa-slash fa-spin"></i>
 										<span class="sr-only">Loading...</span>
 									</ng-container>
-									<ng-template #trashButtonTpt>
-										<button type="button" class="btn btn-link text-muted px-2"
-											(click)="clearAdvancedFilters()">
-											<i class="fa fa-trash"></i>
-										</button>
-									</ng-template>
 								</ng-container>
 							</td>
 
@@ -119,12 +113,6 @@
 									<i class="fas fa-slash fa-spin"></i>
 									<span class="sr-only">Loading...</span>
 								</ng-container>
-								<ng-template #trashButtonTpt>
-									<button type="button" class="btn btn-link text-muted px-1"
-										(click)="clearAdvancedFilters()">
-										<i class="fa fa-trash"></i>
-									</button>
-								</ng-template>
 							</td>
 						</tr>
 					</thead>
@@ -208,20 +196,19 @@
 				<option *ngIf="header.filter.placeholder" [ngValue]="null">
 					{{ header.filter.placeholder }}
 				</option>
-				<ng-container [ngSwitch]="header.filter.options.constructor.name">
-					<ng-container *ngSwitchCase="'Observable'">
-						<option *ngFor="let option of header.filter.options | async"
-							[value]="option[header.filter.bindValue || 'id']">
-							{{ option[header.filter.bindLabel || 'name'] }}
-						</option>
-					</ng-container>
-					<ng-container *ngSwitchDefault>
-						<option *ngFor="let option of header.filter.options"
-							[value]="option[header.filter.bindValue || 'id']">
-							{{ option[header.filter.bindLabel || 'name'] }}
-						</option>
-					</ng-container>
+				<ng-container *ngIf="header.filter.options | isObservable; else elseTemplate">
+					<option *ngFor="let option of header.filter.options | async"
+						[value]="option[header.filter.bindValue || 'id']">
+						{{ option[header.filter.bindLabel || 'name'] }}
+					</option>
 				</ng-container>
+				<ng-template #elseTemplate>
+					<option *ngFor="let option of header.filter.options"
+						[value]="option[header.filter.bindValue || 'id']">
+						{{ option[header.filter.bindLabel || 'name'] }}
+					</option>
+				</ng-template>
+
 			</select>
 			<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number" [formControl]="formControl">
 			</ng-table-sorter-range-input>
@@ -298,6 +285,12 @@
 			</svg>
 			<p>{{ 'ERROR_OCURRED' | translate }}</p>
 		</div>
+	</ng-template>
+
+	<ng-template #trashButtonTpt>
+		<button type="button" class="btn btn-link text-muted px-2" (click)="clearAdvancedFilters()">
+			<i class="fa fa-trash"></i>
+		</button>
 	</ng-template>
 
 </div>
