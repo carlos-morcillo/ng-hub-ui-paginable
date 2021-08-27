@@ -7,6 +7,8 @@ export { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-pa
 export { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
 export { ResizableComponent } from './components/resizable/resizable.component';
 export { NgTableSorterRangeInputComponent } from './components/ng-table-sorter-range-input/ng-table-sorter-range-input.component';
+export { ViewSelectorComponent } from './components/view-selector/view-selector.component';
+export { ModalComponent } from './components/modal/modal.component';
 
 // Directives
 export { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';
@@ -18,6 +20,7 @@ export { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter
 export { ResizableDirective } from './directives/resizable.directive';
 export { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.directive';
 export { NbTableSorterFilterDirective } from './directives/nb-table-sorter-filter.directive';
+export { TooltipDirective } from './directives/tooltip.directive';
 
 // Pipes
 export { GetPipe } from './pipes/get.pipe';

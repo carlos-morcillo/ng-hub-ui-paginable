@@ -1,15 +1,16 @@
-<div class="dropdown" [class.show]="shown">
+<div class="dropdown btn-group" [class.show]="shown">
 	<button class="px-2 toggle" type="button" [ngClass]="buttonClass" [title]="options.title || null"
 		data-toggle="dropdown" [attr.aria-expanded]="shown" (click)="shown = !shown" [disabled]="disabled">
 		<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
 	</button>
-	<div class="dropdown-menu dropdown-menu-{{options.position}}" [class.show]="shown">
+	<div class="dropdown-menu dropdown-menu-{{options.position}}" [class.show]="shown"
+		[ngStyle]="{'right': options.position == 'end' || options.position === 'right' ? 0 : 'initial'}">
 		<ng-container *ngFor="let dropdownItem of options.buttons">
 			<button class="dropdown-item" type="button" *ngIf="!dropdownItem.hidden"
 				[ngClass]="dropdownItem.color ? 'text-' + dropdownItem.color : 'text-dark'"
 				(click)="handle(dropdownItem)">
 				<i *ngIf="dropdownItem.icon"
-					class="mr-2 {{ dropdownItem.icon }}"></i>{{ dropdownItem.title | titlecase }}
+					class="me-2 mr-2 {{ dropdownItem.icon }}"></i>{{ dropdownItem.title | titlecase }}
 			</button>
 		</ng-container>
 	</div>

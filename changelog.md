@@ -1,11 +1,40 @@
 # Changelog
 
+## [1.24.0] - 2021-08-26
+### Added
+- Typahead para selección, edición y eliminación de rutas.
+
+## [1.23.7] - 2021-08-24
+### Changed
+- Cambios entre módulos
+
+## [1.23.5] - 2021-08-24
+### Fixed
+- Exportación de módulo de modal
+
+## [1.23.3] - 2021-08-24
+### Fixed
+- Exportación de directivas
+
+## [1.23.2] - 2021-08-24
+### Fixed
+- Exportación de componentes
+
+## [1.23.1] - 2021-08-24
+### Deleted
+- Directivas innecesarias
+
+## [1.23.0] - 2021-08-23
+### Added
+- Posibilidad de guardar filtros como vistas
+- Soporte para Bootstrap 5
+
 ## [1.22.1] - 2021-06-23
 ### Fixed
 - Los botones de accion en lote no se habilitan hasta que hay items seleccionados
 
 ## [1.22.0] - 2021-06-23
-### Fixed
+### Added
 - Nueva pipe isObservable
 
 ## [1.21.2] - 2021-06-23

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
 import { GetPipe } from './pipes/get.pipe';
@@ -11,7 +11,6 @@ import { NbTableSorterRowDirective } from './directives/nb-table-sorter-row.dire
 import { TableSorterComponent } from './components/nb-table-sorter/table-sorter.component';
 import { UcfirstPipe } from './pipes/ucfirst.pipe';
 import { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';
-import { ModuleWithProviders } from '@angular/compiler/src/core';
 import { NbTableSorterService } from './services/nb-table-sorter.service';
 import { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
 import { NbTableSorterConfigService } from './services/nb-table-sorter-config.service';
@@ -25,6 +24,10 @@ import { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.
 import { NgTableSorterRangeInputComponent } from './components/ng-table-sorter-range-input/ng-table-sorter-range-input.component';
 import { NbTableSorterFilterDirective } from './directives/nb-table-sorter-filter.directive';
 import { IsObservablePipe } from './pipes/is-observable.pipe';
+import { ViewSelectorComponent } from './components/view-selector/view-selector.component';
+import { TooltipDirective } from './directives/tooltip.directive';
+import { ModalComponent } from './components/modal/modal.component';
+import { TypeaheadModule } from './modules/typeahead/typeahead.module';
 
 @NgModule({
 	declarations: [
@@ -46,13 +49,17 @@ import { IsObservablePipe } from './pipes/is-observable.pipe';
 		NbTableSorterErrorDirective,
 		NgTableSorterRangeInputComponent,
 		NbTableSorterFilterDirective,
-		IsObservablePipe
+		IsObservablePipe,
+		ViewSelectorComponent,
+		TooltipDirective,
+		ModalComponent
 	],
 	imports: [
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
-		TranslateModule.forChild()
+		TranslateModule.forChild(),
+		TypeaheadModule
 	],
 	exports: [
 		TableSorterComponent,
@@ -73,14 +80,18 @@ import { IsObservablePipe } from './pipes/is-observable.pipe';
 		IsObservablePipe,
 		ResizableComponent,
 		NbTableSorterErrorDirective,
-		NgTableSorterRangeInputComponent
+		NgTableSorterRangeInputComponent,
+		ViewSelectorComponent,
+		TooltipDirective,
+		ModalComponent
 	],
 	entryComponents: [
 		TableSorterComponent
 	]
 })
 export class NbTableSorterModule {
-	static forRoot(config?: NbTableSorterConfig): ModuleWithProviders {
+
+	static forRoot(config?: NbTableSorterConfig): ModuleWithProviders<NbTableSorterModule> {
 		return {
 			ngModule: NbTableSorterModule,
 			providers: [

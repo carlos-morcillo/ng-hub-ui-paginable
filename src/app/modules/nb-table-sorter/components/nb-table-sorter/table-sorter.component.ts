@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef } from '@angular/core';
+import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as _ from 'lodash';
+import { get } from 'lodash';
 import { isObservable, merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, map, startWith, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
@@ -22,9 +22,11 @@ import { NbTableSorterOptions } from '../../interfaces/nb-table-sorter-options';
 import { NbTableSorterOrdination } from '../../interfaces/nb-table-sorter-ordination';
 import { NbTableSorterPagination } from '../../interfaces/nb-table-sorter-pagination';
 import { NbTableSorterRowAction } from '../../interfaces/nb-table-sorter-row-action';
+import { View } from '../../interfaces/view';
 import { NbTableSorterService } from '../../services/nb-table-sorter.service';
 import { PaginationService } from '../../services/pagination.service';
 import { TranslationService } from '../../services/translation.service';
+import { ViewSelectorComponent } from '../view-selector/view-selector.component';
 
 @Component({
 	selector: 'table-sorter',
@@ -50,6 +52,8 @@ import { TranslationService } from '../../services/translation.service';
 	]
 })
 export class TableSorterComponent implements OnDestroy {
+
+	@Input() id?: string;
 	private _headers: NbTableSorterHeader[] | string[];
 
 	@Input() showSearchInput: boolean = true;
@@ -379,14 +383,40 @@ export class TableSorterComponent implements OnDestroy {
 	@ContentChild(NbTableSorterErrorDirective, { read: TemplateRef }) errorTpt: NbTableSorterErrorDirective;
 	@ContentChildren(NbTableSorterExpandingRowDirective) templateExpandingRows !: QueryList<NbTableSorterExpandingRowDirective>;
 	@ContentChildren(NbTableSorterFilterDirective) filterTpts !: QueryList<NbTableSorterFilterDirective>;
+	@ViewChild(ViewSelectorComponent) viewSelector: ViewSelectorComponent;
+
+	/**
+	 * Set if the view selector must be showed
+	 *
+	 * @type {boolean}
+	 * @memberof TableSorterComponent
+	 */
+	@Input() showViewSelector: boolean = false;
+
+	@Input() viewSaverForm: any;
+
+	@Input() views: View[] = [];
+
+	@Input() viewSaveFn: (key: string, view: View) => Promise<boolean | View>;
+
+
+	@Output() viewAdded = new EventEmitter<View | string>();
+	@Output() viewEdited = new EventEmitter<View | string>();
+	@Output() viewDeleted = new EventEmitter<View | string>();
 
 	constructor(
 		private _fb: FormBuilder,
-		private _paginationSvc: PaginationService,
-		private _configSvc: NbTableSorterService,
 		private _translationSvc: TranslationService,
+		private _configSvc: NbTableSorterService,
+		private _paginationSvc: PaginationService
 	) {
 		this._translationSvc.loadTranslations(enLang, esLang);
+	}
+
+	ngOnInit() {
+		if (!this.id) {
+			this.id = this._configSvc.generateIdFromUrlAndHeaders(this.headers).toString();
+		}
 	}
 
 	ngOnDestroy(): void {
@@ -425,7 +455,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * @memberof TableSorterComponent
 	 */
 	getProperty(item: object, key: string): any {
-		return _.get(item, key);
+		return get(item, key);
 	}
 
 	itemClicked(item: any) {
@@ -678,6 +708,11 @@ export class TableSorterComponent implements OnDestroy {
 			specificSearchFG.addControl(h.filter.key || h.property, new FormControl(null));
 		});
 
+		if (this.id) {
+			const view = JSON.parse(localStorage.getItem('nb-table-sorter_view_' + this.id)) ?? {};
+			specificSearchFG.patchValue(view);
+		}
+
 		this.filterFG = this._fb.group({
 			searchText: [],
 			specificSearch: specificSearchFG
@@ -688,7 +723,10 @@ export class TableSorterComponent implements OnDestroy {
 				tap(() => this.filterLoading = true)
 			),
 			this.filterFG.valueChanges.pipe(
-				tap(() => this.filterLoading = true),
+				tap(() => {
+					this.filterLoading = true;
+					this.viewSelector.value = null;
+				}),
 				debounceTime(this.debounce)
 			)
 		).pipe(

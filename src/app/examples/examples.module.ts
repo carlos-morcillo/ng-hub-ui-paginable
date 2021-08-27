@@ -29,7 +29,9 @@ import { CustomLoadingComponent } from './components/custom-loading/custom-loadi
 import { ErrorComponent } from './components/error/error.component';
 import { CustomErrorComponent } from './components/custom-error/custom-error.component';
 import { CustomFiltersComponent } from './components/custom-filters/custom-filters.component';
-
+import { CustomViewsComponent } from './components/custom-views/custom-views.component';
+import { CustomViewSaverFormComponent } from './components/custom-view-saver-form/custom-view-saver-form.component';
+import { CustomViewSaverComponent } from './components/custom-view-saver/custom-view-saver.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -58,7 +60,9 @@ const routes: Routes = [
 	{ path: 'custom-filters', component: CustomFiltersComponent },
 	{ path: 'custom-loading', component: CustomLoadingComponent },
 	{ path: 'error', component: ErrorComponent },
-	{ path: 'custom-error', component: CustomErrorComponent }
+	{ path: 'custom-error', component: CustomErrorComponent },
+	{ path: 'custom-views', component: CustomViewsComponent },
+	{ path: 'custom-view-saver', component: CustomViewSaverComponent }
 ];
 
 @NgModule({
@@ -88,7 +92,10 @@ const routes: Routes = [
 		CustomLoadingComponent,
 		ErrorComponent,
 		CustomErrorComponent,
-		CustomFiltersComponent
+		CustomFiltersComponent,
+		CustomViewsComponent,
+		CustomViewSaverFormComponent,
+		CustomViewSaverComponent
 	],
 	imports: [
 		CommonModule,

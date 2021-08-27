@@ -17,7 +17,7 @@ export class NbTableSorterDropdownComponent {
 		return this._options;
 	}
 	set options(v: NbTableSorterDropdown) {
-		this._options = { position: 'right', fill: 'clear', color: 'muted', ...v };
+		this._options = { position: 'end', fill: 'clear', color: 'muted', ...v };
 		if (this._options.fill === 'clear') {
 			this.buttonClass = 'btn btn-link text-' + (this._options.color ?? 'muted');
 		} else {

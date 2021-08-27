@@ -1,40 +1,48 @@
 <div class="table_container">
-	<form [formGroup]=" filterFG">
+	<form [formGroup]="filterFG">
 		<div *ngIf="batchActions?.length || showSearchInput" class="row my-2 mx-0 justify-items-end">
-			<div *ngIf="batchActions?.length" class="col-auto px-2">
-				<ng-container *ngFor="let button of batchActions; let first = first;">
-					<ng-container *ngIf="button['buttons']?.length; else buttonTpt">
-						<nb-table-sorter-dropdown [options]="button" class="d-inline-block" [ngClass]="{'ml-2': !first}"
-							[disabled]="!selectedItems?.length">
-						</nb-table-sorter-dropdown>
+			<div class="col mb-md-0" [class.mb-2]="showSearchInput && showViewSelector">
+				<div class="d-flex justify-content-start">
+					<ng-container *ngFor="let button of batchActions; let first = first;">
+						<ng-container *ngIf="button['buttons']?.length; else buttonTpt">
+							<nb-table-sorter-dropdown [options]="button" [disabled]="!selectedItems?.length">
+							</nb-table-sorter-dropdown>
+						</ng-container>
+						<ng-template #buttonTpt>
+							<button class="btn" role="button"
+								class="{{ button.color ? 'btn-' + button.color : 'btn-light' }}"
+								[ngClass]="{'ms-2 ml-2': !first}" (click)="handleBatchAction(button)"
+								[disabled]="!selectedItems?.length">
+								<i *ngIf="button.icon"
+									class="me-2 mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
+							</button>
+						</ng-template>
 					</ng-container>
-					<ng-template #buttonTpt>
-						<button class="btn" role="button" [class.ml-2]="!first"
-							[ngClass]="button.color ? 'btn-' + button.color : 'btn-light'"
-							(click)="handleBatchAction(button)" [disabled]="!selectedItems?.length">
-							<i *ngIf="button.icon" class="mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
-						</button>
-					</ng-template>
-				</ng-container>
+				</div>
 			</div>
 
-			<div class="ml-auto col-auto px-2">
-				<div *ngIf="showSearchInput" class="input-group search_input-group">
-					<input type="text" class="form-control border border-light search_input"
-						[formControl]="filterFG.get('searchText')" [placeholder]="'SEARCH' | translate | ucfirst"
-						aria-label="Search" (keyup.enter)="filter()">
-					<div class="input-group-append">
-						<button class="btn btn-light search_button" type="button" (click)="filterTrigger$.next()">
-							<i class="fa fa-search" aria-hidden="true"></i>
-						</button>
+
+			<div class="col-12 col-md-8">
+				<div class="row justify-items-end">
+					<view-selector *ngIf="showViewSelector" class="col-12 col-md-7 px--md-1 ml-auto ms-auto mb-md-0"
+						[class.mb-2]="showSearchInput" [views]="views">
+					</view-selector>
+					<div class="col-12 col-md-5 ps-md-1 pl-md-1">
+						<div *ngIf="showSearchInput" class="input-group search_input-group">
+							<input type="text" class="form-control border border-light search_input"
+								[formControl]="filterFG.get('searchText')"
+								[placeholder]="'SEARCH' | translate | ucfirst" aria-label="Search"
+								(keyup.enter)="filter()">
+							<div class="input-group-append">
+								<button class="btn btn-light search_button" type="button"
+									(click)="filterTrigger$.next()">
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<!-- <div class="col-auto px-2">
-				<button class="btn btn-link text-muted">
-					<i class="fa fa-eye"></i>
-				</button>
-			</div> -->
 		</div>
 
 		<!-- Pagination -->
@@ -66,17 +74,17 @@
 									[ngModelOptions]="{standalone: true}" (click)="toggleAll()" [disabled]="disabled">
 							</th>
 							<th resizable *ngFor="let item of headers" (click)="sort(item)"
-								[ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons, 'text-left': item.align === 'start', 'text-right': item.align === 'end', 'text-center': item.align === 'center'}">
+								[ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons, 'text-left': item.align === 'start', 'text-right text-end': item.align === 'end', 'text-center': item.align === 'center'}">
 								<ng-container *ngIf="item | isObject">
 									<div class="d-flex flex-nowrap align-items-center justify-content-between">
-										<i class="fa fa-{{ item.icon }}" [ngClass]="{'mr-2': item.title}"
+										<i class="fa fa-{{ item.icon }}" [ngClass]="{'me-2 mr-2': item.title}"
 											*ngIf="item.icon" aria-hidden="true"></i>
 										<div
-											[ngClass]="{'mr-auto': item.align === 'start', 'ml-auto': item.align === 'end', 'mx-auto': item.align === 'center'}">
+											[ngClass]="{'me-auto mr-auto': item.align === 'start', 'ms-auto ml-auto': item.align === 'end', 'mx-auto': item.align === 'center'}">
 											<span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
 										</div>
-										<i class="fa ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)"
-											aria-hidden="true"></i>
+										<i class="fa ms-2 ml-2" *ngIf="item.sortable"
+											[ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
 									</div>
 								</ng-container>
 								<ng-container *ngIf="item | isString">
@@ -94,25 +102,19 @@
 							<td *ngIf="selectable || batchActions?.length" class="filter_cell sticky-start">
 							</td>
 							<td *ngFor="let header of headers; let last = last;" class="filter_cell"
-								[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-right filter_cell_clear': (last && lastColumnOnlyHasButtons)}">
+								[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-right text-end filter_cell_clear': (last && lastColumnOnlyHasButtons)}">
 								<ng-container *ngIf="header.filter">
 									<ng-container [ngTemplateOutlet]="getFilterTemplate(header) || defaultFilterTpt"
 										[ngTemplateOutletContext]="{header: header, formControl: filterFG.get('specificSearch').get(header.filter.key || header.property)}">
 									</ng-container>
 								</ng-container>
 								<ng-container *ngIf="last && lastColumnOnlyHasButtons">
-									<ng-container *ngIf="filterLoading; else trashButtonTpt">
-										<i class="fas fa-slash fa-spin"></i>
-										<span class="sr-only">Loading...</span>
-									</ng-container>
+									<ng-container [ngTemplateOutlet]="filterButtonsTpt"></ng-container>
 								</ng-container>
 							</td>
 
 							<td *ngIf="!lastColumnOnlyHasButtons" class="filter_cell sticky-end">
-								<ng-container *ngIf="filterLoading; else trashButtonTpt">
-									<i class="fas fa-slash fa-spin"></i>
-									<span class="sr-only">Loading...</span>
-								</ng-container>
+								<ng-container [ngTemplateOutlet]="filterButtonsTpt"></ng-container>
 							</td>
 						</tr>
 					</thead>
@@ -135,7 +137,7 @@
 						*ngIf="paginationPosition == 'bottom' || paginationPosition === 'both'" [pagination]="data">
 					</nb-table-sorter-paginator>
 				</div>
-				<div class="form-group form-group-sm row col-6 col-md-auto mb-0 ml-auto align-items-center">
+				<div class="form-group form-group-sm row col-6 col-md-auto mb-0 ms-auto ml-auto align-items-center">
 					<label
 						class="col col-form-label text-nowrap"><small>{{ 'ROWS_PER_PAGE' | translate | ucfirst}}:</small></label>
 					<div class="col pl-0">
@@ -161,7 +163,7 @@
 					(click)="$event.stopPropagation(); toggle(item);">
 			</td>
 			<td *ngFor="let header of headers"
-				[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-left': header.align === 'start', 'text-right': header.align === 'end', 'text-center': header.align === 'center'}">
+				[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-left': header.align === 'start', 'text-right text-end': header.align === 'end', 'text-center': header.align === 'center'}">
 				<ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTpt"
 					[ngTemplateOutletContext]="{header: header, item: item, property: getProperty(item, header?.property || header)}">
 				</ng-container>
@@ -221,7 +223,7 @@
 
 	<ng-template #defaultCellTpt let-property="property" let-item="item" let-header="header">
 		<ng-container *ngIf="header.buttons; else propertyCellTpt">
-			<div class="text-nowrap">
+			<div class="text-nowrap d-flex flex-nowrap justify-content-end">
 				<ng-container *ngFor="let button of header.buttons">
 					<ng-container *ngIf="button.buttons; else buttonTpt">
 						<nb-table-sorter-dropdown [options]="button" [item]="item" class="d-inline-block">
@@ -246,7 +248,7 @@
 
 	<ng-template #defaultNoDataTpt>
 		<div class="alert alert-info d-flex align-items-center m-4" role="alert">
-			<i class="fa fa-info fa-2x mr-4" aria-hidden="true"></i> {{ 'NO_RESULTS_FOUND' | translate | ucfirst}}
+			<i class="fa fa-info fa-2x me-4 mr-4" aria-hidden="true"></i> {{ 'NO_RESULTS_FOUND' | translate | ucfirst}}
 		</div>
 	</ng-template>
 
@@ -287,10 +289,20 @@
 		</div>
 	</ng-template>
 
-	<ng-template #trashButtonTpt>
-		<button type="button" class="btn btn-link text-muted px-2" (click)="clearAdvancedFilters()">
-			<i class="fa fa-trash"></i>
-		</button>
-	</ng-template>
+	<ng-template #filterButtonsTpt>
+		<div class="d-flex text-nowrap justify-content-end align-items-center">
+			<button type="button" class="btn btn-link text-muted px-2"
+				(click)="viewSelector.editView({ conditions: filterFG.get('specificSearch').value})"
+				[disabled]="filterFG.get('specificSearch').pristine" [tooltip]="'SAVE_FILTERS' | translate | ucfirst"
+				placement="left" delay="500">
+				<i class="fa fa-save"></i>
+			</button>
 
+			<button type="button" class="btn btn-link text-muted px-2" (click)="clearAdvancedFilters()"
+				[disabled]="filterLoading" [tooltip]="'CLEAN_FILTERS' | translate | ucfirst" placement="left"
+				delay="500">
+				<i class="fa" [ngClass]="filterLoading ? 'fas fa-circle-notch fa-spin' : 'fa-eraser'"></i>
+			</button>
+		</div>
+	</ng-template>
 </div>
