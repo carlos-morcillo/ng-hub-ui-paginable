@@ -1,6 +1,6 @@
 <div class="table_container">
 	<form [formGroup]="filterFG">
-		<div *ngIf="batchActions?.length || showSearchInput" class="row my-2 mx-0 justify-items-end">
+		<div *ngIf="batchActions?.length || showSearchInput" class="row my-2 mx-0 justify-content-end">
 			<div class="col mb-md-0" [class.mb-2]="showSearchInput && showViewSelector">
 				<div class="d-flex justify-content-start">
 					<ng-container *ngFor="let button of batchActions; let first = first;">
@@ -23,7 +23,7 @@
 
 
 			<div class="col-12 col-md-8">
-				<div class="row justify-items-end">
+				<div class="row justify-content-end">
 					<view-selector *ngIf="showViewSelector" class="col-12 col-md-7 px--md-1 ml-auto ms-auto mb-md-0"
 						[class.mb-2]="showSearchInput" [views]="views">
 					</view-selector>
@@ -291,7 +291,7 @@
 
 	<ng-template #filterButtonsTpt>
 		<div class="d-flex text-nowrap justify-content-end align-items-center">
-			<button type="button" class="btn btn-link text-muted px-2"
+			<button *ngIf="showViewSelector" type="button" class="btn btn-link text-muted px-2"
 				(click)="viewSelector.editView({ conditions: filterFG.get('specificSearch').value})"
 				[disabled]="filterFG.get('specificSearch').pristine" [tooltip]="'SAVE_FILTERS' | translate | ucfirst"
 				placement="left" delay="500">

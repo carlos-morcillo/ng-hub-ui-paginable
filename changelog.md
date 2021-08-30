@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.24.1] - 2021-08-30
+### Fixed
+- Maquetación de buscador y selector de vistas.
 ## [1.24.0] - 2021-08-26
 ### Added
 - Typahead para selección, edición y eliminación de rutas.

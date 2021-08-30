@@ -14,6 +14,8 @@ export class AppComponent implements OnInit {
 	items: any[];
 	version: string = packageJson.version;
 
+	opened: boolean = false;
+
 	constructor(
 		private _mockedUsersSvc: MockedUsersService,
 		private _translationSvc: TranslateService
