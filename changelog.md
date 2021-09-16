@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.24.4] - 2021-09-16
+### Fixed
+- Error al cambiar los filtros si no se muestra el selector de vistas.
+
 ## [1.24.3] - 2021-09-03
 ### Fixed
 - Traducciones y corrección de plantillas del typeahead.

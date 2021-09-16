@@ -730,7 +730,9 @@ export class TableSorterComponent implements OnDestroy {
 			this.filterFG.valueChanges.pipe(
 				tap(() => {
 					this.filterLoading = true;
-					this.viewSelector.value = null;
+					if (this.viewSelector) {
+						this.viewSelector.value = null;
+					}
 				}),
 				debounceTime(this.debounce)
 			)
