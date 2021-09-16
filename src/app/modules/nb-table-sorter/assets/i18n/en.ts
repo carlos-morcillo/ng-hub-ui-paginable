@@ -33,5 +33,7 @@ export const locale = {
 		LAST_MONTH: 'last_month',
 		CURRENT_YEAR: 'current_year',
 		LAST_YEAR: 'last_year',
+		NO_ELEMENTS_FOUND: 'no elements found',
+		STAR_TYPING: 'start typing to begin your search'
 	}
 }

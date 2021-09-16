@@ -112,7 +112,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 			)
 		).pipe(
 			map((o) => {
-				return this.filterItems(this.items, this.query);
+				return this.items ? this.filterItems(this.items, this.query) : null;
 			}),
 			tap((o) => {
 				this.results = o;

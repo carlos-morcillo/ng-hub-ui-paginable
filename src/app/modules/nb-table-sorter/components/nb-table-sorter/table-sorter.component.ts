@@ -395,10 +395,15 @@ export class TableSorterComponent implements OnDestroy {
 
 	@Input() viewSaverForm: any;
 
-	@Input() views: View[] = [];
 
-	@Input() viewSaveFn: (key: string, view: View) => Promise<boolean | View>;
-
+	private _views: View[];
+	@Input()
+	get views(): View[] {
+		return this._views;
+	}
+	set views(v: View[]) {
+		this._views = v;
+	}
 
 	@Output() viewAdded = new EventEmitter<View | string>();
 	@Output() viewEdited = new EventEmitter<View | string>();

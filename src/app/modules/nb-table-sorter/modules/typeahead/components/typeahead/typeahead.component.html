@@ -41,9 +41,9 @@
 </ng-template>
 
 <ng-template #defaultNoItemsTpt>
-	<li class="list-group-item ta-item">No se han encontrado elementos</li>
+	<li class="list-group-item ta-item">{{ 'NO_ELEMENTS_FOUND' |  translate | titlecase }}</li>
 </ng-template>
 
-<ng-template #defaultPlaceholderTpt>
-	<li class="list-group-item ta-item">Debe introducir cosas</li>
-</ng-template>
+< #defaultPlaceholderTpt>
+	<li class="list-group-item ta-item">{{ 'STAR_TYPING' | translate | titlecase }}</li>
+	</ng-template>

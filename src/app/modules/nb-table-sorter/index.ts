@@ -40,6 +40,7 @@ export { NbTableSorterPagination } from './interfaces/nb-table-sorter-pagination
 export { NbTableSorterItem } from './interfaces/nb-table-sorter-item';
 export { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
 export { FilterChangeEvent } from './interfaces/filter-change-event';
+export { View } from './interfaces/view';
 
 // Constants
 export { BREAKPOINTS } from './constants/breakpoints';

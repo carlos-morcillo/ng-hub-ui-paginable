@@ -7,6 +7,7 @@ import { TypeaheadFooterDirective } from './directives/typeahead-footer.directiv
 import { TypeaheadHeaderDirective } from './directives/typeahead-header.directive';
 import { TypeaheadNoItemsDirective } from './directives/typeahead-no-items.directive';
 import { TypeaheadPlaceholderDirective } from './directives/typeahead-placeholder.directive';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -21,7 +22,8 @@ import { TypeaheadPlaceholderDirective } from './directives/typeahead-placeholde
 	],
 	imports: [
 		CommonModule,
-		FormsModule
+		FormsModule,
+		TranslateModule.forChild()
 	],
 	exports: [
 		TypeaheadComponent,

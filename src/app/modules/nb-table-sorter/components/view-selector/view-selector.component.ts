@@ -100,7 +100,7 @@ export class ViewSelectorComponent implements OnInit {
 				this._viewsSvc.push(this.tableId, view);
 				this.parent.viewEdited.emit(this.form.value);
 
-				this.views = [...this.views];
+				// this.views = [...this.views];
 				this._modalSvc.close('filter-save-form');
 				this.switchView(view.key);
 				this.value = view;
@@ -108,13 +108,15 @@ export class ViewSelectorComponent implements OnInit {
 		}
 	];
 
-	@Input() views: View[];
-
 	@Input() saveViewFn: () => Promise<boolean>;
 
 	value: View;
 
 	filterableHeaders: NbTableSorterHeader[];
+
+	get views() {
+		return this.parent.views;
+	}
 
 	constructor(
 		private _fb: FormBuilder,
@@ -125,11 +127,7 @@ export class ViewSelectorComponent implements OnInit {
 		public parent: TableSorterComponent,
 	) { }
 
-	ngOnInit(): void {
-		if (!this.views) {
-			this.views = this._viewsSvc.getViews(this.tableId);
-		}
-	}
+	ngOnInit(): void { }
 
 	async switchView(key: string) {
 		const view = this.views.find(o => o.key === key);
@@ -152,7 +150,7 @@ export class ViewSelectorComponent implements OnInit {
 	deleteView(view: View) {
 		this._viewsSvc.delete(this.tableId, view.key);
 		this.parent.viewDeleted.emit(view);
-		this.views = [...this.views];
+		// this.views = [...this.views];
 	}
 
 	_createForm() {

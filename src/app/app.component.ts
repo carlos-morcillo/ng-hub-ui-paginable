@@ -25,6 +25,6 @@ export class AppComponent implements OnInit {
 		setTimeout(() => {
 			this.items = this._mockedUsersSvc.items;
 		}, 2048);
-		this._translationSvc.setDefaultLang('en');
+		this._translationSvc.setDefaultLang('es');
 	}
 }

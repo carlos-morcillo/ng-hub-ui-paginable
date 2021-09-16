@@ -13,6 +13,7 @@ export const locale = {
 		TO: 'hasta',
 		SAVE: 'guardar',
 		NEW_VIEW: 'nueva vista',
+		ADD_VIEW: 'añadir vista',
 		EDIT_VIEW: 'editar vista',
 		DELETE_VIEW: 'eliminar vista',
 		SAVE_FILTERS: 'guardar filtros',
@@ -32,5 +33,7 @@ export const locale = {
 		LAST_MONTH: 'mes pasado',
 		CURRENT_YEAR: 'año actual',
 		LAST_YEAR: 'año pasado',
+		NO_ELEMENTS_FOUND: 'no se han encontrado elementos',
+		STAR_TYPING: 'comienza a escribir para iniciar la búsqueda'
 	}
 }
