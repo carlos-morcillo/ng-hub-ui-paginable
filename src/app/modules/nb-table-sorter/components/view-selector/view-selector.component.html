@@ -2,19 +2,16 @@
 	<span class="input-group-text bg-white">
 		<i class="fa fa-filter" aria-hidden="true"></i>
 	</span>
-	<ng-typeahead [placeholder]="'SELECT_VIEW' | translate | ucfirst" class="form-select" [items]="views"
-		(change)="switchView($event?.key)" bindValue="key" bindText="name" [searchKeys]="['name']" [(ngModel)]="value">
+	<ng-typeahead [placeholder]="'SELECT_VIEW' | translate | ucfirst" class="form-select" [items]="views" (change)="switchView($event?.key)" bindValue="key" bindText="name" [searchKeys]="['name']" [(ngModel)]="value">
 		<ng-template typeaheadOption let-item="item">
 			<div class="d-flex align-items-center" style="margin-left: -10px; margin-right: -10px;">
 				<div class="col">{{ item.name }}</div>
 				<div class="col-auto ms-2 ml-2">
 					<div class="d-flex text-nowrap">
-						<button class="btn px-2" (click)="$event.stopPropagation(); editView(item);"
-							[tooltip]="'EDIT_VIEW' | translate | ucfirst">
+						<button class="btn px-2" (click)="$event.stopPropagation(); editView(item);" [tooltip]="'EDIT_VIEW' | translate | ucfirst">
 							<i class="fas fa-pencil-alt"></i>
 						</button>
-						<button class="btn px-2 text-danger" (click)="$event.stopPropagation(); deleteView(item);"
-							[tooltip]="'REMOVE_VIEW' | translate | ucfirst">
+						<button class="btn px-2 text-danger" (click)="$event.stopPropagation(); deleteView(item);" [tooltip]="'REMOVE_VIEW' | translate | ucfirst">
 							<i class="fa fa-times"></i>
 						</button>
 					</div>
@@ -23,8 +20,7 @@
 		</ng-template>
 		<ng-template typeaheadFooter>
 			<div class="d-flex justify-content-end">
-				<button class="btn" (click)="editView()"><i
-						class="fas fa-plus me-2 mr-2"></i>{{ 'ADD_VIEW' | translate | ucfirst }}</button>
+				<button class="btn" (click)="editView()"><i class="fas fa-plus me-2 mr-2"></i>{{ 'ADD_VIEW' | translate | ucfirst }}</button>
 			</div>
 		</ng-template>
 		<ng-template typeaheadPlaceholder>
@@ -64,18 +60,15 @@
 									<ng-container *ngSwitchCase="'variable'">
 
 										<ng-container [ngSwitch]="header.filter.type">
-											<select *ngSwitchCase="'date-range'" formControlName="value"
-												class="form-select">
-												<option *ngFor="let variable of variables.daterange"
-													[value]="variable.value">
+											<select *ngSwitchCase="'date-range'" formControlName="value" class="form-select">
+												<option *ngFor="let variable of variables.daterange" [value]="variable.value">
 													{{ variable.text | translate | ucfirst }}
 												</option>
 											</select>
 										</ng-container>
 										<ng-container [ngSwitch]="header.filter.type">
 											<select *ngSwitchCase="'date'" formControlName="value" class="form-select">
-												<option *ngFor="let variable of variables.date"
-													[value]="variable.value">
+												<option *ngFor="let variable of variables.date" [value]="variable.value">
 													{{ variable.text | translate | ucfirst }}
 												</option>
 											</select>
@@ -85,33 +78,26 @@
 									<ng-container *ngSwitchCase="'equal'">
 
 										<ng-container [ngSwitch]="header.filter.type">
-											<select *ngSwitchCase="'dropdown'" formControlName="value"
-												class="form-select">
+											<select *ngSwitchCase="'dropdown'" formControlName="value" class="form-select">
 												<option *ngIf="header.filter.placeholder" [ngValue]="null">
 													{{ header.filter.placeholder }}
 												</option>
-												<ng-container
-													*ngIf="header.filter.options | isObservable; else elseTemplate">
-													<option *ngFor="let option of header.filter.options | async"
-														[value]="option[header.filter.bindValue || 'id']">
+												<ng-container *ngIf="header.filter.options | isObservable; else elseTemplate">
+													<option *ngFor="let option of header.filter.options | async" [value]="option[header.filter.bindValue || 'id']">
 														{{ option[header.filter.bindLabel || 'name'] }}
 													</option>
 												</ng-container>
 												<ng-template #elseTemplate>
-													<option *ngFor="let option of header.filter.options"
-														[value]="option[header.filter.bindValue || 'id']">
+													<option *ngFor="let option of header.filter.options" [value]="option[header.filter.bindValue || 'id']">
 														{{ option[header.filter.bindLabel || 'name'] }}
 													</option>
 												</ng-template>
 											</select>
-											<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number"
-												formControlName="value">
+											<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number" formControlName="value">
 											</ng-table-sorter-range-input>
-											<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date"
-												formControlName="value">
+											<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date" formControlName="value">
 											</ng-table-sorter-range-input>
-											<input *ngSwitchDefault [type]="header.filter.type" formControlName="value"
-												class="form-control" [placeholder]="header.filter.placeholder || ''">
+											<input *ngSwitchDefault [type]="header.filter.type" formControlName="value" class="form-control" [placeholder]="header.filter.placeholder || ''">
 										</ng-container>
 
 									</ng-container>

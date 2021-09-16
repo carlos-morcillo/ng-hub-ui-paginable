@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.24.2] - 2021-09-16
+### Fixed
+- Error al cambiar los filtros si no se muestra el selector de vistas.
 ## [1.24.1] - 2021-08-30
 ### Fixed
 - Maquetación de buscador y selector de vistas.

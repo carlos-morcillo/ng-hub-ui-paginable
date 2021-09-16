@@ -2,8 +2,7 @@
 	<h2 class="d-inline">Advanced filtering</h2>
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
-<table-sorter (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)" [selectable]="true"
-	[headers]="headers" [pagination]="pagination" [searchKeys]="searchKeys">
+<table-sorter (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)" [selectable]="true" [headers]="headers" [pagination]="pagination" [searchKeys]="searchKeys">
 	<ng-template nbTableSorterCell header="email" let-property="property">
 		<a href="mailto:{{ property }}">{{ property }}</a>
 	</ng-template>

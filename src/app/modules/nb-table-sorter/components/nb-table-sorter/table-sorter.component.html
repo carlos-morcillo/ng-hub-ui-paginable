@@ -9,12 +9,8 @@
 							</nb-table-sorter-dropdown>
 						</ng-container>
 						<ng-template #buttonTpt>
-							<button class="btn" role="button"
-								class="{{ button.color ? 'btn-' + button.color : 'btn-light' }}"
-								[ngClass]="{'ms-2 ml-2': !first}" (click)="handleBatchAction(button)"
-								[disabled]="!selectedItems?.length">
-								<i *ngIf="button.icon"
-									class="me-2 mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
+							<button class="btn" role="button" class="{{ button.color ? 'btn-' + button.color : 'btn-light' }}" [ngClass]="{'ms-2 ml-2': !first}" (click)="handleBatchAction(button)" [disabled]="!selectedItems?.length">
+								<i *ngIf="button.icon" class="me-2 mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
 							</button>
 						</ng-template>
 					</ng-container>
@@ -24,18 +20,12 @@
 
 			<div class="col-12 col-md-8">
 				<div class="row justify-content-end">
-					<view-selector *ngIf="showViewSelector" class="col-12 col-md-7 px--md-1 ml-auto ms-auto mb-md-0"
-						[class.mb-2]="showSearchInput" [views]="views">
-					</view-selector>
+					<view-selector *ngIf="showViewSelector" class="col-12 col-md-7 px--md-1 ml-auto ms-auto mb-md-0" [class.mb-2]="showSearchInput" [views]="views"></view-selector>
 					<div class="col-12 col-md-5 ps-md-1 pl-md-1">
 						<div *ngIf="showSearchInput" class="input-group search_input-group">
-							<input type="text" class="form-control border border-light search_input"
-								[formControl]="filterFG.get('searchText')"
-								[placeholder]="'SEARCH' | translate | ucfirst" aria-label="Search"
-								(keyup.enter)="filter()">
+							<input type="text" class="form-control border border-light search_input" [formControl]="filterFG.get('searchText')" [placeholder]="'SEARCH' | translate | ucfirst" aria-label="Search" (keyup.enter)="filter()">
 							<div class="input-group-append">
-								<button class="btn btn-light search_button" type="button"
-									(click)="filterTrigger$.next()">
+								<button class="btn btn-light search_button" type="button" (click)="filterTrigger$.next()">
 									<i class="fa fa-search" aria-hidden="true"></i>
 								</button>
 							</div>
@@ -46,9 +36,7 @@
 		</div>
 
 		<!-- Pagination -->
-		<nb-table-sorter-paginator
-			*ngIf="paginate && data?.data?.length && (paginationPosition == 'top' || paginationPosition === 'both')"
-			[pagination]="data" class="d-block mb-4">
+		<nb-table-sorter-paginator *ngIf="paginate && data?.data?.length && (paginationPosition == 'top' || paginationPosition === 'both')" [pagination]="data" class="d-block mb-4">
 		</nb-table-sorter-paginator>
 
 		<!-- Error -->
@@ -70,42 +58,33 @@
 					<thead>
 						<tr>
 							<th *ngIf="selectable || batchActions?.length" class="sticky-start actions">
-								<input type="checkbox" [(ngModel)]="allRowsSelected"
-									[ngModelOptions]="{standalone: true}" (click)="toggleAll()" [disabled]="disabled">
+								<input type="checkbox" [(ngModel)]="allRowsSelected" [ngModelOptions]="{standalone: true}" (click)="toggleAll()" [disabled]="disabled">
 							</th>
-							<th resizable *ngFor="let item of headers" (click)="sort(item)"
-								[ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons, 'text-left': item.align === 'start', 'text-right text-end': item.align === 'end', 'text-center': item.align === 'center'}">
+							<th resizable *ngFor="let item of headers" (click)="sort(item)" [ngClass]="{'sticky-start': item.sticky === 'start', 'sticky-end': item.sticky === 'end', 'actions': item.buttons, 'text-left': item.align === 'start', 'text-right text-end': item.align === 'end', 'text-center': item.align === 'center'}">
 								<ng-container *ngIf="item | isObject">
 									<div class="d-flex flex-nowrap align-items-center justify-content-between">
-										<i class="fa fa-{{ item.icon }}" [ngClass]="{'me-2 mr-2': item.title}"
-											*ngIf="item.icon" aria-hidden="true"></i>
-										<div
-											[ngClass]="{'me-auto mr-auto': item.align === 'start', 'ms-auto ml-auto': item.align === 'end', 'mx-auto': item.align === 'center'}">
+										<i class="fa fa-{{ item.icon }}" [ngClass]="{'me-2 mr-2': item.title}" *ngIf="item.icon" aria-hidden="true"></i>
+										<div [ngClass]="{'me-auto mr-auto': item.align === 'start', 'ms-auto ml-auto': item.align === 'end', 'mx-auto': item.align === 'center'}">
 											<span *ngIf="item.title" class="text-wrap">{{ item.title | ucfirst }}</span>
 										</div>
-										<i class="fa ms-2 ml-2" *ngIf="item.sortable"
-											[ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
+										<i class="fa ms-2 ml-2" *ngIf="item.sortable" [ngClass]="getOrdenationClass(item)" aria-hidden="true"></i>
 									</div>
 								</ng-container>
 								<ng-container *ngIf="item | isString">
 									{{ item | ucfirst }}
 								</ng-container>
 							</th>
-							<th *ngIf="(actions?.length || templateExpandingRows.length || filterHeaders?.length) && !this.lastColumnOnlyHasButtons"
-								class="sticky-end">
+							<th *ngIf="(actions?.length || templateExpandingRows.length || filterHeaders?.length) && !this.lastColumnOnlyHasButtons" class="sticky-end">
 							</th>
 						</tr>
 
 						<!-- Filtering -->
-						<tr *ngIf="filterHeaders?.length" class="filter_row"
-							[formGroup]="filterFG.get('specificSearch')">
+						<tr *ngIf="filterHeaders?.length" class="filter_row" [formGroup]="filterFG.get('specificSearch')">
 							<td *ngIf="selectable || batchActions?.length" class="filter_cell sticky-start">
 							</td>
-							<td *ngFor="let header of headers; let last = last;" class="filter_cell"
-								[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-right text-end filter_cell_clear': (last && lastColumnOnlyHasButtons)}">
+							<td *ngFor="let header of headers; let last = last;" class="filter_cell" [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-right text-end filter_cell_clear': (last && lastColumnOnlyHasButtons)}">
 								<ng-container *ngIf="header.filter">
-									<ng-container [ngTemplateOutlet]="getFilterTemplate(header) || defaultFilterTpt"
-										[ngTemplateOutletContext]="{header: header, formControl: filterFG.get('specificSearch').get(header.filter.key || header.property)}">
+									<ng-container [ngTemplateOutlet]="getFilterTemplate(header) || defaultFilterTpt" [ngTemplateOutletContext]="{header: header, formControl: filterFG.get('specificSearch').get(header.filter.key || header.property)}">
 									</ng-container>
 								</ng-container>
 								<ng-container *ngIf="last && lastColumnOnlyHasButtons">
@@ -119,9 +98,7 @@
 						</tr>
 					</thead>
 					<tbody *ngIf="data[mapping.data]?.length">
-						<ng-container *ngFor="let item of data[mapping.data]"
-							[ngTemplateOutlet]="templateRow || defaultRowTemplate"
-							[ngTemplateOutletContext]="{$implicit: item}">
+						<ng-container *ngFor="let item of data[mapping.data]" [ngTemplateOutlet]="templateRow || defaultRowTemplate" [ngTemplateOutletContext]="{$implicit: item}">
 						</ng-container>
 					</tbody>
 				</table>
@@ -133,16 +110,13 @@
 			<!-- Pagination -->
 			<div *ngIf="paginate && data?.data?.length" class="row align-items-center mx-0 mb-4">
 				<div class="col-12 col-md-auto">
-					<nb-table-sorter-paginator (onPageClick)="pageClicked($event)"
-						*ngIf="paginationPosition == 'bottom' || paginationPosition === 'both'" [pagination]="data">
+					<nb-table-sorter-paginator (onPageClick)="pageClicked($event)" *ngIf="paginationPosition == 'bottom' || paginationPosition === 'both'" [pagination]="data">
 					</nb-table-sorter-paginator>
 				</div>
 				<div class="form-group form-group-sm row col-6 col-md-auto mb-0 ms-auto ml-auto align-items-center">
-					<label
-						class="col col-form-label text-nowrap"><small>{{ 'ROWS_PER_PAGE' | translate | ucfirst}}:</small></label>
+					<label class="col col-form-label text-nowrap"><small>{{ 'ROWS_PER_PAGE' | translate | ucfirst}}:</small></label>
 					<div class="col pl-0">
-						<select class="form-control form-control-sm" id="RowsPerPageInput" [(ngModel)]="itemsPerPage"
-							[ngModelOptions]="{standalone: true}">
+						<select class="form-control form-control-sm" id="RowsPerPageInput" [(ngModel)]="itemsPerPage" [ngModelOptions]="{standalone: true}">
 							<option *ngFor="let option of perPageOptions" [value]="option">{{ option }}</option>
 						</select>
 					</div>
@@ -159,26 +133,19 @@
 	<ng-template #defaultRowTemplate let-item>
 		<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
 			<td *ngIf="selectable || batchActions?.length">
-				<input type="checkbox" [(ngModel)]="item.selected" [ngModelOptions]="{standalone: true}"
-					(click)="$event.stopPropagation(); toggle(item);">
+				<input type="checkbox" [(ngModel)]="item.selected" [ngModelOptions]="{standalone: true}" (click)="$event.stopPropagation(); toggle(item);">
 			</td>
-			<td *ngFor="let header of headers"
-				[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-left': header.align === 'start', 'text-right text-end': header.align === 'end', 'text-center': header.align === 'center'}">
-				<ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTpt"
-					[ngTemplateOutletContext]="{header: header, item: item, property: getProperty(item, header?.property || header)}">
+			<td *ngFor="let header of headers" [ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-left': header.align === 'start', 'text-right text-end': header.align === 'end', 'text-center': header.align === 'center'}">
+				<ng-container [ngTemplateOutlet]="getCellTemplate(header) || defaultCellTpt" [ngTemplateOutletContext]="{header: header, item: item, property: getProperty(item, header?.property || header)}">
 				</ng-container>
 			</td>
-			<td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end"
-				[class.sticky-end]="stickyActions">
+			<td *ngIf="actions?.length || templateExpandingRows?.length" class="actions sticky-end" [class.sticky-end]="stickyActions">
 				<ng-container *ngFor="let action of actions">
-					<button *ngIf="!isHidden(action, item)" type="button" class="btn btn-link px-2"
-						[ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title"
-						(click)="handleAction($event, action.handler, item)">
+					<button *ngIf="!isHidden(action, item)" type="button" class="btn btn-link px-2" [ngClass]="action.color ? 'text-' + action.color : 'text-dark'" [title]="action.title" (click)="handleAction($event, action.handler, item)">
 						<i *ngIf="action.icon" [ngClass]="action.icon"></i>
 					</button>
 				</ng-container>
-				<button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" type="button"
-					class="btn btn-link px-2">
+				<button *ngIf="templateExpandingRows?.length" (click)="toggleExpandedRow(item)" type="button" class="btn btn-link px-2">
 					<i class="fa" [ngClass]="item.unfold ? 'fa-caret-up' : 'fa-caret-down'"></i>
 				</button>
 			</td>
@@ -199,14 +166,12 @@
 					{{ header.filter.placeholder }}
 				</option>
 				<ng-container *ngIf="header.filter.options | isObservable; else elseTemplate">
-					<option *ngFor="let option of header.filter.options | async"
-						[value]="option[header.filter.bindValue || 'id']">
+					<option *ngFor="let option of header.filter.options | async" [value]="option[header.filter.bindValue || 'id']">
 						{{ option[header.filter.bindLabel || 'name'] }}
 					</option>
 				</ng-container>
 				<ng-template #elseTemplate>
-					<option *ngFor="let option of header.filter.options"
-						[value]="option[header.filter.bindValue || 'id']">
+					<option *ngFor="let option of header.filter.options" [value]="option[header.filter.bindValue || 'id']">
 						{{ option[header.filter.bindLabel || 'name'] }}
 					</option>
 				</ng-template>
@@ -216,8 +181,7 @@
 			</ng-table-sorter-range-input>
 			<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date" [formControl]="formControl">
 			</ng-table-sorter-range-input>
-			<input *ngSwitchDefault [type]="header.filter.type" [formControl]="formControl" class="form-control"
-				[placeholder]="header.filter.placeholder || ''">
+			<input *ngSwitchDefault [type]="header.filter.type" [formControl]="formControl" class="form-control" [placeholder]="header.filter.placeholder || ''">
 		</ng-container>
 	</ng-template>
 
@@ -230,9 +194,7 @@
 						</nb-table-sorter-dropdown>
 					</ng-container>
 					<ng-template #buttonTpt>
-						<button *ngIf="!isHidden(button, item)" type="button" class="btn btn-link px-2"
-							[ngClass]="button.color ? 'text-' + button.color : 'text-dark'" [title]="button.title"
-							(click)="handleAction($event, button.handler, item)">
+						<button *ngIf="!isHidden(button, item)" type="button" class="btn btn-link px-2" [ngClass]="button.color ? 'text-' + button.color : 'text-dark'" [title]="button.title" (click)="handleAction($event, button.handler, item)">
 							<i *ngIf="button.icon" [ngClass]="button.icon"></i>
 						</button>
 					</ng-template>
@@ -254,22 +216,16 @@
 
 	<ng-template #defaultLoadingTpt>
 		<div @fadeInOut>
-			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-				style="margin:auto;background:#fff;display:block;" width="200px" height="200px" viewBox="0 0 100 100"
-				preserveAspectRatio="xMidYMid">
+			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
 				<circle cx="50" cy="50" r="0" fill="none" stroke="#cccccc" stroke-width="1">
-					<animate attributeName="r" repeatCount="indefinite" dur="1.6666666666666667s" values="0;40"
-						keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="0s"></animate>
-					<animate attributeName="opacity" repeatCount="indefinite" dur="1.6666666666666667s" values="1;0"
-						keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="0s">
+					<animate attributeName="r" repeatCount="indefinite" dur="1.6666666666666667s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="0s"></animate>
+					<animate attributeName="opacity" repeatCount="indefinite" dur="1.6666666666666667s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="0s">
 					</animate>
 				</circle>
 				<circle cx="50" cy="50" r="0" fill="none" stroke="#333333" stroke-width="1">
-					<animate attributeName="r" repeatCount="indefinite" dur="1.6666666666666667s" values="0;40"
-						keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.8333333333333334s">
+					<animate attributeName="r" repeatCount="indefinite" dur="1.6666666666666667s" values="0;40" keyTimes="0;1" keySplines="0 0.2 0.8 1" calcMode="spline" begin="-0.8333333333333334s">
 					</animate>
-					<animate attributeName="opacity" repeatCount="indefinite" dur="1.6666666666666667s" values="1;0"
-						keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.8333333333333334s">
+					<animate attributeName="opacity" repeatCount="indefinite" dur="1.6666666666666667s" values="1;0" keyTimes="0;1" keySplines="0.2 0 0.8 1" calcMode="spline" begin="-0.8333333333333334s">
 					</animate>
 				</circle>
 			</svg>
@@ -278,12 +234,8 @@
 
 	<ng-template #defaultErrorTpt>
 		<div class="m-4 p-4 text-center text-danger">
-			<svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="sad-tear" role="img"
-				xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"
-				class="svg-inline--fa fa-sad-tear fa-w-16 fa-7x" style="height: 64px;">
-				<path fill="#dc3545"
-					d="M168 240c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zM248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 464c-119.1 0-216-96.9-216-216S128.9 40 248 40s216 96.9 216 216-96.9 216-216 216zm0-152c-11.2 0-22 1.7-32.7 4.1-7.2-12.6-16.1-26.5-28.1-42.4-9-12.1-29.4-12-38.4 0-29.7 39.6-44.8 69-44.8 87.3 0 34.7 28.7 63 64 63s64-28.3 64-63c0-4.4-1-9.5-2.7-15.1 6.1-1.2 12.3-1.9 18.7-1.9 34.9 0 67.8 15.4 90.2 42.2 5.3 6.4 15.4 8 22.5 2 6.8-5.7 7.7-15.8 2-22.5C334.2 339.6 292.4 320 248 320zm-80 80c-17.7 0-32-13.9-32-31 0-7.7 10-28.8 32-59.5 22 30.7 32 51.8 32 59.5 0 17.1-14.3 31-32 31z"
-					class=""></path>
+			<svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="sad-tear" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="svg-inline--fa fa-sad-tear fa-w-16 fa-7x" style="height: 64px;">
+				<path fill="#dc3545" d="M168 240c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160 0c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zM248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 464c-119.1 0-216-96.9-216-216S128.9 40 248 40s216 96.9 216 216-96.9 216-216 216zm0-152c-11.2 0-22 1.7-32.7 4.1-7.2-12.6-16.1-26.5-28.1-42.4-9-12.1-29.4-12-38.4 0-29.7 39.6-44.8 69-44.8 87.3 0 34.7 28.7 63 64 63s64-28.3 64-63c0-4.4-1-9.5-2.7-15.1 6.1-1.2 12.3-1.9 18.7-1.9 34.9 0 67.8 15.4 90.2 42.2 5.3 6.4 15.4 8 22.5 2 6.8-5.7 7.7-15.8 2-22.5C334.2 339.6 292.4 320 248 320zm-80 80c-17.7 0-32-13.9-32-31 0-7.7 10-28.8 32-59.5 22 30.7 32 51.8 32 59.5 0 17.1-14.3 31-32 31z" class=""></path>
 			</svg>
 			<p>{{ 'ERROR_OCURRED' | translate }}</p>
 		</div>
@@ -291,16 +243,11 @@
 
 	<ng-template #filterButtonsTpt>
 		<div class="d-flex text-nowrap justify-content-end align-items-center">
-			<button *ngIf="showViewSelector" type="button" class="btn btn-link text-muted px-2"
-				(click)="viewSelector.editView({ conditions: filterFG.get('specificSearch').value})"
-				[disabled]="filterFG.get('specificSearch').pristine" [tooltip]="'SAVE_FILTERS' | translate | ucfirst"
-				placement="left" delay="500">
+			<button *ngIf="showViewSelector" type="button" class="btn btn-link text-muted px-2" (click)="viewSelector.editView({ conditions: filterFG.get('specificSearch').value})" [disabled]="filterFG.get('specificSearch').pristine" [tooltip]="'SAVE_FILTERS' | translate | ucfirst" placement="left" delay="500">
 				<i class="fa fa-save"></i>
 			</button>
 
-			<button type="button" class="btn btn-link text-muted px-2" (click)="clearAdvancedFilters()"
-				[disabled]="filterLoading" [tooltip]="'CLEAN_FILTERS' | translate | ucfirst" placement="left"
-				delay="500">
+			<button type="button" class="btn btn-link text-muted px-2" (click)="clearAdvancedFilters()" [disabled]="filterLoading" [tooltip]="'CLEAN_FILTERS' | translate | ucfirst" placement="left" delay="500">
 				<i class="fa" [ngClass]="filterLoading ? 'fas fa-circle-notch fa-spin' : 'fa-eraser'"></i>
 			</button>
 		</div>
