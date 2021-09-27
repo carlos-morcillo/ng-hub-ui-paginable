@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [1.24.7] - 2021-09-27
+### Fixed
+- Actualización de traducciones.
+
 ## [1.24.6] - 2021-09-22
 ### Fixed
 - Error al cambiar los guardar vistas cuando los valores son null.

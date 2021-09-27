@@ -78,11 +78,11 @@ export class ViewSelectorComponent implements OnInit {
 
 	viewSaveButtons: any[] = [
 		{
-			title: 'close',
+			title: this._translateSvc.instant('CANCEL'),
 			class: 'btn-outline-light',
 			handler: () => this._modalSvc.close('filter-save-form')
 		}, {
-			title: 'save',
+			title: this._translateSvc.instant('SAVE'),
 			class: 'btn-primary',
 			handler: async () => {
 				const view: View = this.form.value;
@@ -138,11 +138,18 @@ export class ViewSelectorComponent implements OnInit {
 		}
 	}
 
+	/**
+	 * Open the view editing mode
+	 * 
+	 * @param view 
+	 */
 	editView(view?: Partial<View>) {
 		this._createForm();
 		if (view) {
 			const conditions = Array.isArray(view.conditions) ? view.conditions : this._conditionsObjectToArray(view.conditions);
 			this.form.patchValue({ ...view, conditions });
+		} else {
+			this.form.reset();
 		}
 		this._modalSvc.open('filter-save-form');
 	}

@@ -33,7 +33,7 @@ export const locale = {
 		LAST_MONTH: 'mes pasado',
 		CURRENT_YEAR: 'año actual',
 		LAST_YEAR: 'año pasado',
-		NO_ELEMENTS_FOUND: 'no se han encontrado elementos',
-		STAR_TYPING: 'comienza a escribir para iniciar la búsqueda'
+		NO_ELEMENTS_FOUND: 'No se han encontrado elementos',
+		STAR_TYPING: 'Comienza a escribir para iniciar la búsqueda'
 	}
 }

@@ -10,7 +10,7 @@
 				[ngClass]="dropdownItem.color ? 'text-' + dropdownItem.color : 'text-dark'"
 				(click)="handle(dropdownItem)">
 				<i *ngIf="dropdownItem.icon"
-					class="me-2 mr-2 {{ dropdownItem.icon }}"></i>{{ dropdownItem.title | titlecase }}
+					class="me-2 mr-2 {{ dropdownItem.icon }}"></i>{{ dropdownItem.title | ucfirst }}
 			</button>
 		</ng-container>
 	</div>

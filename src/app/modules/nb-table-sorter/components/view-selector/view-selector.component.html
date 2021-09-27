@@ -37,7 +37,7 @@
 	</ng-typeahead>
 </div>
 
-<jw-modal id="filter-save-form" [title]="'EDIT_VIEW' | translate | titlecase" [buttons]="viewSaveButtons">
+<jw-modal id="filter-save-form" [title]="'EDIT_VIEW' | translate | ucfirst" [buttons]="viewSaveButtons">
 	<ng-container *ngIf="parent.viewSaverForm; else defaultViewSaverTpt">
 		<ng-template #viewSaverFormTpt></ng-template>
 	</ng-container>

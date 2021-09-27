@@ -14,7 +14,7 @@
 								[ngClass]="{'ms-2 ml-2': !first}" (click)="handleBatchAction(button)"
 								[disabled]="!selectedItems?.length">
 								<i *ngIf="button.icon"
-									class="me-2 mr-2 {{ button.icon }}"></i>{{ button.title | titlecase }}
+									class="me-2 mr-2 {{ button.icon }}"></i>{{ button.title | ucfirst }}
 							</button>
 						</ng-template>
 					</ng-container>

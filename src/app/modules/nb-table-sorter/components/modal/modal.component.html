@@ -10,7 +10,7 @@
 		</div>
 		<div class="modal-footer" *ngIf="buttons?.length">
 			<button type="button" class="btn" *ngFor="let button of buttons" (click)="button.handler()"
-				[ngClass]="button.class">{{ button.title | translate | titlecase }}</button>
+				[ngClass]="button.class">{{ button.title | translate | ucfirst }}</button>
 		</div>
 	</div>
 </div>
