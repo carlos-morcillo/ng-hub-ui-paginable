@@ -1,24 +1,25 @@
 <div class="input_container">
-	<div *ngIf="!query" class="input_placeholder">{{ value }}</div>
+	<div *ngIf="!query" class="input_placeholder">{{ text }}</div>
 	<input type="text" class="input" [placeholder]="!value ? placeholder : ''" [(ngModel)]="query" #searchInput>
 </div>
 <ul class="ta-results list-group" *ngIf="showSuggestions">
 	<!-- <div class="ta-backdrop" (click)="hideSuggestions()"></div> -->
-	<li class="list-group-item ta-item" *ngIf="headerTpt">
+	<li class="list-group-item" *ngIf="headerTpt">
 		<ng-container [ngTemplateOutlet]="headerTpt">
 		</ng-container>
 	</li>
 	<ng-container *ngIf="results; else withoutItemsTpt">
 		<ng-container *ngIf="results.length; else emptyListTpt">
-			<li role="button" type="button" class="ta-item list-group-item" *ngFor="let item of results; let i = index"
-				[class.active]="markIsActive(i, item)" (click)="handleSelectionClick(item, i)">
+			<li role="button" type="button" class="ta-item list-group-item p-1"
+				*ngFor="let item of results; let i = index" [class.active]="markIsActive(i, item)"
+				(click)="handleSelectionClick(item, i)">
 				<ng-container [ngTemplateOutlet]="optionTpt || defaultOptionTpt"
 					[ngTemplateOutletContext]="{ item: item, index: i }">
 				</ng-container>
 			</li>
 		</ng-container>
 		<ng-template #emptyListTpt>
-			<li class="list-group-item ta-item" *ngIf="noItemsTpt; else defaultNoItemsTpt">
+			<li class="list-group-item ta-item p-1" *ngIf="noItemsTpt; else defaultNoItemsTpt">
 				<ng-container [ngTemplateOutlet]="noItemsTpt">
 				</ng-container>
 			</li>
@@ -30,7 +31,7 @@
 			</ng-container>
 		</li>
 	</ng-template>
-	<li class="list-group-item ta-item" *ngIf="footerTpt">
+	<li class="list-group-item" *ngIf="footerTpt">
 		<ng-container [ngTemplateOutlet]="footerTpt">
 		</ng-container>
 	</li>
@@ -44,6 +45,6 @@
 	<li class="list-group-item ta-item">{{ 'NO_ELEMENTS_FOUND' |  translate | titlecase }}</li>
 </ng-template>
 
-< #defaultPlaceholderTpt>
+<ng-template #defaultPlaceholderTpt>
 	<li class="list-group-item ta-item">{{ 'STAR_TYPING' | translate | titlecase }}</li>
-	</ng-template>
+</ng-template>

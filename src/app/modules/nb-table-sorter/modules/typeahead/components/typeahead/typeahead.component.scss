@@ -22,6 +22,9 @@
 	position: relative;
 	z-index: 2;
 	display: block;
+	&:hover {
+		background-color: var(--bs-light);
+	}
 }
 
 :host {

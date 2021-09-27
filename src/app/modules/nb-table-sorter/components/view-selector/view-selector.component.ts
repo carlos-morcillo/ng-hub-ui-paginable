@@ -180,7 +180,7 @@ export class ViewSelectorComponent implements OnInit {
 
 	private _conditionsObjectToArray(conditions: Object) {
 		return Object.keys(conditions).map(k => ({
-			key: k, operation: ((conditions[k] ?? '').indexOf('{{') === 0 ? 'variable' : 'equal'), value: conditions[k]
+			key: k, operation: ((conditions[k]?.toString() ?? '').indexOf('{{') === 0 ? 'variable' : 'equal'), value: conditions[k]
 		}));
 	}
 }

@@ -5,15 +5,15 @@
 	<ng-typeahead [placeholder]="'SELECT_VIEW' | translate | ucfirst" class="form-select" [items]="views"
 		(change)="switchView($event?.key)" bindValue="key" bindText="name" [searchKeys]="['name']" [(ngModel)]="value">
 		<ng-template typeaheadOption let-item="item">
-			<div class="d-flex align-items-center" style="margin-left: -10px; margin-right: -10px;">
+			<div class="d-flex align-items-center">
 				<div class="col">{{ item.name }}</div>
 				<div class="col-auto ms-2 ml-2">
 					<div class="d-flex text-nowrap">
-						<button class="btn px-2" (click)="$event.stopPropagation(); editView(item);"
+						<button class="btn p-1" (click)="$event.stopPropagation(); editView(item);"
 							[tooltip]="'EDIT_VIEW' | translate | ucfirst">
 							<i class="fas fa-pencil-alt"></i>
 						</button>
-						<button class="btn px-2 text-danger" (click)="$event.stopPropagation(); deleteView(item);"
+						<button class="btn p-1 text-danger" (click)="$event.stopPropagation(); deleteView(item);"
 							[tooltip]="'REMOVE_VIEW' | translate | ucfirst">
 							<i class="fa fa-times"></i>
 						</button>

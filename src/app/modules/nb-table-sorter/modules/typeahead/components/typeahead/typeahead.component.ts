@@ -1,14 +1,14 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, merge, Observable, Subject, Subscription, timer } from 'rxjs';
-import { concat, debounceTime, distinctUntilChanged, filter, finalize, map, takeWhile, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, tap } from 'rxjs/operators';
 import { TypeaheadFooterDirective } from '../../directives/typeahead-footer.directive';
 import { TypeaheadHeaderDirective } from '../../directives/typeahead-header.directive';
 import { TypeaheadNoItemsDirective } from '../../directives/typeahead-no-items.directive';
 import { TypeaheadOptionDirective } from '../../directives/typeahead-option.directive';
 import { TypeaheadPlaceholderDirective } from '../../directives/typeahead-placeholder.directive';
 import { Key } from '../../models';
-import { hasCharacters, isEnterKey, isIndexActive, NO_INDEX, resolveNextIndex, toFormControlValue, validateArrowKeys, validateNonCharKeyCode } from '../../typeahead.utils';
+import { isEnterKey, isIndexActive, NO_INDEX, resolveNextIndex, toFormControlValue, validateArrowKeys, validateNonCharKeyCode } from '../../typeahead.utils';
 
 @Component({
 	selector: 'ng-typeahead, [ngTypeahead]',
@@ -77,6 +77,17 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 
 	results: any[];
 	results$: Subscription;
+
+	get text(): string {
+		if (!this.value) {
+			return null;
+		}
+		if (this.results && this.bindText) {
+			const value = this.results.find(o => o[this.bindValue] === this.value);
+			return (value && value[this.bindText]) ?? this.value;
+		}
+		return this.value;
+	}
 
 	constructor(
 		private _cdr: ChangeDetectorRef,

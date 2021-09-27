@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.24.6] - 2021-09-22
+### Fixed
+- Error al cambiar los guardar vistas cuando los valores son null.
+
+## [1.24.5] - 2021-09-22
+### Fixed
+- Error al cambiar los guardar vistas cuando los valores son números.
 ## [1.24.4] - 2021-09-16
 ### Fixed
 - Error al cambiar los filtros si no se muestra el selector de vistas.
