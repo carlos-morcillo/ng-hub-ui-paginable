@@ -34,6 +34,10 @@ export const locale = {
 		CURRENT_YEAR: 'current_year',
 		LAST_YEAR: 'last_year',
 		NO_ELEMENTS_FOUND: 'No elements found',
-		STAR_TYPING: 'Start typing to begin your search'
+		STAR_TYPING: 'Start typing to begin your search',
+		OPERATIONS: {
+			EQUAL_TO: 'Equal to',
+			VARIABLE: 'Variable'
+		}
 	}
 }

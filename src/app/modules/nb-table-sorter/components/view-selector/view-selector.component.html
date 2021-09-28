@@ -42,6 +42,7 @@
 		<ng-template #viewSaverFormTpt></ng-template>
 	</ng-container>
 	<ng-template #defaultViewSaverTpt>
+		<pre>{{form.value | json}}</pre>
 		<form [formGroup]="form">
 			<fieldset class="mb-4">
 				<label class="form-label">{{ 'NAME' | translate | ucfirst }} <span class="text-danger">*</span></label>
@@ -57,8 +58,9 @@
 								<label class="col-md-2">{{ header.title | translate | ucfirst }}</label>
 								<div class="col-md-5">
 									<select class="form-select" formControlName="operation">
-										<option value="equal">Equal to</option>
-										<option value="variable">Variable</option>
+										<option value="equal">{{ 'OPERATIONS.EQUAL_TO' | translate | ucfirst}}</option>
+										<option value="variable">{{ 'OPERATIONS.VARIABLE' | translate | ucfirst}}
+										</option>
 									</select>
 								</div>
 								<div class="col-md-5" [ngSwitch]="form.get('conditions.' + i + '.operation')?.value">

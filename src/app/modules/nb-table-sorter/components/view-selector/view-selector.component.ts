@@ -148,8 +148,6 @@ export class ViewSelectorComponent implements OnInit {
 		if (view) {
 			const conditions = Array.isArray(view.conditions) ? view.conditions : this._conditionsObjectToArray(view.conditions);
 			this.form.patchValue({ ...view, conditions });
-		} else {
-			this.form.reset();
 		}
 		this._modalSvc.open('filter-save-form');
 	}
