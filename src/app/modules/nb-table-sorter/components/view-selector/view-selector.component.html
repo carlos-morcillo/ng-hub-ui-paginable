@@ -42,7 +42,6 @@
 		<ng-template #viewSaverFormTpt></ng-template>
 	</ng-container>
 	<ng-template #defaultViewSaverTpt>
-		<pre>{{form.value | json}}</pre>
 		<form [formGroup]="form">
 			<fieldset class="mb-4">
 				<label class="form-label">{{ 'NAME' | translate | ucfirst }} <span class="text-danger">*</span></label>
@@ -50,6 +49,7 @@
 			</fieldset>
 			<fieldset *ngIf="conditionsFA.length" formArrayName="conditions">
 				<legend>{{ 'A_VIEW_WILL_BE_CREATED' | translate | ucfirst }}</legend>
+
 				<ul class="list-group list-group-flush">
 					<ng-container *ngFor="let header of filterableHeaders; let i=index;">
 
@@ -64,8 +64,8 @@
 									</select>
 								</div>
 								<div class="col-md-5" [ngSwitch]="form.get('conditions.' + i + '.operation')?.value">
-									<ng-container *ngSwitchCase="'variable'">
 
+									<ng-container *ngSwitchCase="'variable'">
 										<ng-container [ngSwitch]="header.filter.type">
 											<select *ngSwitchCase="'date-range'" formControlName="value"
 												class="form-select">
@@ -74,8 +74,6 @@
 													{{ variable.text | translate | ucfirst }}
 												</option>
 											</select>
-										</ng-container>
-										<ng-container [ngSwitch]="header.filter.type">
 											<select *ngSwitchCase="'date'" formControlName="value" class="form-select">
 												<option *ngFor="let variable of variables.date"
 													[value]="variable.value">
@@ -83,10 +81,9 @@
 												</option>
 											</select>
 										</ng-container>
-
 									</ng-container>
-									<ng-container *ngSwitchCase="'equal'">
 
+									<ng-container *ngSwitchCase="'equal'">
 										<ng-container [ngSwitch]="header.filter.type">
 											<select *ngSwitchCase="'dropdown'" formControlName="value"
 												class="form-select">
@@ -116,8 +113,8 @@
 											<input *ngSwitchDefault [type]="header.filter.type" formControlName="value"
 												class="form-control" [placeholder]="header.filter.placeholder || ''">
 										</ng-container>
-
 									</ng-container>
+
 									<ng-container *ngSwitchDefault>
 										Not developed
 									</ng-container>
@@ -129,5 +126,4 @@
 			</fieldset>
 		</form>
 	</ng-template>
-
 </jw-modal>

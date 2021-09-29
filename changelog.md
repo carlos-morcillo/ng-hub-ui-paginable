@@ -1,6 +1,12 @@
 # Changelog
 
 
+## [1.24.8] - 2021-09-29
+### Added
+- Traducciones en el formulario de vistas.
+### Fixed
+- Corrección del rellenado de condiciones en el formulario de edición de vistas.
+
 ## [1.24.7] - 2021-09-27
 ### Fixed
 - Actualización de traducciones.

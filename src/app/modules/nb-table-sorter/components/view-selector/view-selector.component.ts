@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { snakeCase } from 'lodash';
 import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
@@ -147,7 +147,17 @@ export class ViewSelectorComponent implements OnInit {
 		this._createForm();
 		if (view) {
 			const conditions = Array.isArray(view.conditions) ? view.conditions : this._conditionsObjectToArray(view.conditions);
-			this.form.patchValue({ ...view, conditions });
+
+			this.form.get('name').patchValue(view.name);
+
+			// Filling condition values
+			const conditionsFA = this.form.get('conditions') as FormArray;
+			for (const condition of conditions) {
+				const conditionFG: FormGroup = conditionsFA.controls.find((c: FormGroup) => c.get('key').value === condition.key) as FormGroup;
+				if (conditionFG) {
+					conditionFG.patchValue(condition);
+				}
+			}
 		}
 		this._modalSvc.open('filter-save-form');
 	}
