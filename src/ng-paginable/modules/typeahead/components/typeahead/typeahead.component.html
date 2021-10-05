@@ -1,6 +1,12 @@
 <div class="input_container">
 	<div *ngIf="!query" class="input_placeholder">{{ text }}</div>
-	<input type="text" class="input" [placeholder]="!value ? placeholder : ''" [(ngModel)]="query" #searchInput>
+	<div class="d-flex flex-nowrap">
+		<input type="text" class="input flex-grow-1" [placeholder]="!value ? placeholder : ''" [(ngModel)]="query"
+			#searchInput>
+		<button class="btn" (click)="$event.stopPropagation(); toggleResultsPanel();">
+			<i class="fas" [class.fa-chevron-up]="showSuggestions" [class.fa-chevron-down]="!showSuggestions"></i>
+		</button>
+	</div>
 </div>
 <ul class="ta-results list-group" *ngIf="showSuggestions">
 	<!-- <div class="ta-backdrop" (click)="hideSuggestions()"></div> -->

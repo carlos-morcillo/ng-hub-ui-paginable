@@ -1,9 +1,9 @@
 import { InjectionToken } from '@angular/core';
-import { NbTableSorterConfig } from '../interfaces/nb-table-sorter-config';
+import { PaginableTableConfig } from '../interfaces/paginable-table-config';
 
 /**
  * This is not a real service, but it looks like it from the outside.
  * It's just an InjectionTToken used to import the config object, provided from the outside
  */
 // tslint:disable-next-line: variable-name
-export const NbTableSorterConfigService = new InjectionToken<NbTableSorterConfig>('NbTableSorterConfig');
+export const PaginateTableConfigService = new InjectionToken<PaginableTableConfig>('NbTableSorterConfig');

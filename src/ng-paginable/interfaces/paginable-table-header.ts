@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { NbTableSorterButton } from './nb-table-sorter-button';
 import { NbTableSorterDropdown } from './nb-table-sorter-dropdown';
 
-export interface NbTableSorterHeader {
+export interface PaginableTableHeader {
 	title?: string;
 	property?: string;
 	icon?: string;

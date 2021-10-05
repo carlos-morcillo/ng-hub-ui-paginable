@@ -1,16 +1,16 @@
 import { Injectable, Inject } from '@angular/core';
-import { NbTableSorterConfigService } from './nb-table-sorter-config.service';
-import { NbTableSorterConfig } from '../interfaces/nb-table-sorter-config';
+import { PaginateTableConfigService } from './paginate-table-config.service';
+import { PaginableTableConfig } from '../interfaces/paginable-table-config';
 import * as _ from 'lodash';
-import { NbTableSorterHeader } from '../interfaces/nb-table-sorter-header';
+import { PaginableTableHeader } from '../interfaces/paginable-table-header';
 
 @Injectable()
-export class NbTableSorterService {
+export class PaginateTableService {
 
 
-	config: NbTableSorterConfig = {};
+	config: PaginableTableConfig = {};
 
-	default: NbTableSorterConfig = {
+	default: PaginableTableConfig = {
 		theme: null,
 		mapping: {
 			currentPage: 'currentPage',
@@ -19,7 +19,7 @@ export class NbTableSorterService {
 			total: 'total'
 		},
 		views: {
-			key: 'nb-table-sorter_view_'
+			key: 'paginable-table_view_'
 		}
 	};
 
@@ -28,7 +28,7 @@ export class NbTableSorterService {
 	}
 
 
-	constructor(@Inject(NbTableSorterConfigService) private _config) {
+	constructor(@Inject(PaginateTableConfigService) private _config) {
 		this.initialize();
 	}
 
@@ -36,7 +36,7 @@ export class NbTableSorterService {
 		_.defaultsDeep(this.config, this._config, this.default);
 	}
 
-	generateIdFromUrlAndHeaders(headers: NbTableSorterHeader[] | string[]): number {
+	generateIdFromUrlAndHeaders(headers: PaginableTableHeader[] | string[]): number {
 		const hashcode = function (text: string) {
 			var hash = 0, i, chr, len;
 			if (text.length === 0) return hash;

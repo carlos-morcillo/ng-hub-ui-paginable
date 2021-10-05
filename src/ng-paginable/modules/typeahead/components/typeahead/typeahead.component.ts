@@ -238,4 +238,13 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 			this.displaySuggestions();
 		}
 	}
+
+	/**
+	 * Alterna la visibilidad del panel de resultados
+	 *
+	 * @memberof TypeaheadComponent
+	 */
+	toggleResultsPanel() {
+		this.showSuggestions = !this.showSuggestions;
+	}
 }

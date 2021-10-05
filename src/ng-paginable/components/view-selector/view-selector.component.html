@@ -2,7 +2,7 @@
 	<span class="input-group-text bg-white">
 		<i class="fa fa-filter" aria-hidden="true"></i>
 	</span>
-	<ng-typeahead [placeholder]="'SELECT_VIEW' | translate | ucfirst" class="form-select" [items]="views"
+	<ng-typeahead [placeholder]="'SELECT_VIEW' | translate | ucfirst" class="form-control" [items]="views"
 		(change)="switchView($event?.key)" bindValue="key" bindText="name" [searchKeys]="['name']" [(ngModel)]="value">
 		<ng-template typeaheadOption let-item="item">
 			<div class="d-flex align-items-center">
@@ -28,12 +28,6 @@
 				</button>
 			</div>
 		</ng-template>
-		<!-- <ng-template typeaheadPlaceholder>
-			You must enter at least 3 characters
-		</ng-template>
-		<ng-template typeaheadNoItems>
-			No shit has been found <i class="fas fa-poo ms-2"></i>
-		</ng-template> -->
 	</ng-typeahead>
 </div>
 

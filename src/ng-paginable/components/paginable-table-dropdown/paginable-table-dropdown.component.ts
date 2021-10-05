@@ -1,22 +1,22 @@
 import { Component, ElementRef, HostListener, Input } from '@angular/core';
-import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
-import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown';
+import { PaginableTableButton } from '../../interfaces/paginable-table-button';
+import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 
 @Component({
-	selector: 'nb-table-sorter-dropdown',
-	templateUrl: './nb-table-sorter-dropdown.component.html',
-	styleUrls: ['./nb-table-sorter-dropdown.component.scss']
+	selector: 'paginable-table-dropdown',
+	templateUrl: './paginable-table-dropdown.component.html',
+	styleUrls: ['./paginable-table-dropdown.component.scss']
 })
 export class NbTableSorterDropdownComponent {
 
 	@Input() item: any;
 
-	private _options: NbTableSorterDropdown = { buttons: [] };
+	private _options: PaginableTableDropdown = { buttons: [] };
 	@Input()
-	get options(): NbTableSorterDropdown {
+	get options(): PaginableTableDropdown {
 		return this._options;
 	}
-	set options(v: NbTableSorterDropdown) {
+	set options(v: PaginableTableDropdown) {
 		this._options = { position: 'end', fill: 'clear', color: 'muted', ...v };
 		if (this._options.fill === 'clear') {
 			this.buttonClass = 'btn btn-link text-' + (this._options.color ?? 'muted');
@@ -42,7 +42,7 @@ export class NbTableSorterDropdownComponent {
 		}
 	}
 
-	handle(button: NbTableSorterButton) {
+	handle(button: PaginableTableButton) {
 		button.handler(...[this.item]);
 		this.close();
 	}
