@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../../modules/nb-table-sorter';
+import { PaginableTableHeader } from '../../../../ng-paginable';
 import { MockedUsersService } from '../../../mocked-users.service';
 
 
@@ -11,7 +11,7 @@ import { MockedUsersService } from '../../../mocked-users.service';
 export class CustomHeadersComponent implements OnInit {
 
 	items: any[];
-	headers: (NbTableSorterHeader | string)[] = [
+	headers: (PaginableTableHeader | string)[] = [
 		{
 			property: 'id',
 			title: 'Id'

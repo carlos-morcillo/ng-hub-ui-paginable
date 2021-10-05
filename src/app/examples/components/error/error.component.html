@@ -2,8 +2,8 @@
 	<h2 class="d-inline">Error</h2>
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
-<table-sorter (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination">
-	<ng-template nbTableSorterCell header="email" let-property="property">
+<paginable-table (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination">
+	<ng-template paginableTableCell header="email" let-property="property">
 		<a href="mailto:{{ property }}">{{ property }}</a>
 	</ng-template>
-</table-sorter>
+</paginable-table>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterPagination, NbTableSorterHeader, NbTableSorterOptions } from '../../../modules/nb-table-sorter';
+import { PaginableTablePagination, PaginableTableHeader, PaginableTableOptions } from '../../../../ng-paginable';
 
 @Component({
 	selector: 'app-hoverable-rows',
@@ -9,8 +9,8 @@ import { NbTableSorterPagination, NbTableSorterHeader, NbTableSorterOptions } fr
 })
 export class HoverableRowsComponent implements OnInit {
 
-	pagination: NbTableSorterPagination;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: PaginableTablePagination;
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		{
@@ -27,7 +27,7 @@ export class HoverableRowsComponent implements OnInit {
 			handler: (items) => this._export(items)
 		}
 	];
-	options: NbTableSorterOptions = {
+	options: PaginableTableOptions = {
 		hoverableRows: true
 	};
 

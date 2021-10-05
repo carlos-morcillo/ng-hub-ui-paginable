@@ -1,54 +1,54 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbTableSorterPaginatorComponent } from './components/nb-table-sorter-paginator/nb-table-sorter-paginator.component';
+import { PaginatorComponent } from './components/paginator/paginator.component';
 import { GetPipe } from './pipes/get.pipe';
 import { IsObjectPipe } from './pipes/is-object.pipe';
 import { IsStringPipe } from './pipes/is-string.pipe';
-import { NbTableSorterHeaderDirective } from './directives/nb-table-sorter-header.directive';
-import { NbTableSorterNotFoundDirective } from './directives/nb-table-sorter-not-found.directive';
-import { NbTableSorterRowDirective } from './directives/nb-table-sorter-row.directive';
-import { TableSorterComponent } from './components/nb-table-sorter/table-sorter.component';
+import { PaginableTableHeaderDirective } from './directives/paginable-table-header.directive';
+import { PaginableTableNotFoundDirective } from './directives/paginable-table-not-found.directive';
+import { PaginableTableRowDirective } from './directives/paginable-table-row.directive';
+import { PaginableTableComponent } from './components/paginable-table/paginable-table.component';
 import { UcfirstPipe } from './pipes/ucfirst.pipe';
-import { NbTableSorterCellDirective } from './directives/nb-table-sorter-cell.directive';
-import { NbTableSorterService } from './services/nb-table-sorter.service';
-import { NbTableSorterConfig } from './interfaces/nb-table-sorter-config';
-import { NbTableSorterConfigService } from './services/nb-table-sorter-config.service';
-import { NbTableSorterExpandingRowDirective } from './directives/nb-table-sorter-expanding-row.directive';
+import { PaginableTableCellDirective } from './directives/paginable-table-cell.directive';
+import { PaginateService } from './services/paginate.service';
+import { PaginableTableConfig } from './interfaces/paginable-table-config';
+import { PaginateConfigService } from './services/paginate-config.service';
+import { PaginableTableExpandingRowDirective } from './directives/paginable-table-expanding-row.directive';
 import { TranslateModule } from '@ngx-translate/core';
-import { NbTableSorterDropdownComponent } from './components/nb-table-sorter-dropdown/nb-table-sorter-dropdown.component';
 import { ResizableDirective } from './directives/resizable.directive';
 import { ResizableComponent } from './components/resizable/resizable.component';
-import { NbTableSorterLoadingDirective } from './directives/nb-table-sorter-loading.directive';
-import { NbTableSorterErrorDirective } from './directives/nb-table-sorter-error.directive';
-import { NgTableSorterRangeInputComponent } from './components/ng-table-sorter-range-input/ng-table-sorter-range-input.component';
-import { NbTableSorterFilterDirective } from './directives/nb-table-sorter-filter.directive';
+import { PaginableTableLoadingDirective } from './directives/paginable-table-loading.directive';
+import { PaginableTableErrorDirective } from './directives/paginable-table-error.directive';
+import { PaginableTableRangeInputComponent } from './components/paginable-table-range-input/paginable-table-range-input.component';
+import { PaginableTableFilterDirective } from './directives/paginable-table-filter.directive';
 import { IsObservablePipe } from './pipes/is-observable.pipe';
 import { ViewSelectorComponent } from './components/view-selector/view-selector.component';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { ModalComponent } from './components/modal/modal.component';
 import { TypeaheadModule } from './modules/typeahead/typeahead.module';
+import { PaginableTableDropdownComponent } from './components/paginable-table-dropdown/paginable-table-dropdown.component';
 
 @NgModule({
 	declarations: [
-		TableSorterComponent,
-		NbTableSorterPaginatorComponent,
-		NbTableSorterHeaderDirective,
-		NbTableSorterRowDirective,
-		NbTableSorterCellDirective,
-		NbTableSorterNotFoundDirective,
-		NbTableSorterLoadingDirective,
-		NbTableSorterExpandingRowDirective,
+		PaginableTableComponent,
+		PaginatorComponent,
+		PaginableTableHeaderDirective,
+		PaginableTableRowDirective,
+		PaginableTableCellDirective,
+		PaginableTableNotFoundDirective,
+		PaginableTableLoadingDirective,
+		PaginableTableExpandingRowDirective,
 		GetPipe,
 		IsObjectPipe,
 		UcfirstPipe,
 		IsStringPipe,
-		NbTableSorterDropdownComponent,
+		PaginableTableDropdownComponent,
 		ResizableComponent,
 		ResizableDirective,
-		NbTableSorterErrorDirective,
-		NgTableSorterRangeInputComponent,
-		NbTableSorterFilterDirective,
+		PaginableTableErrorDirective,
+		PaginableTableRangeInputComponent,
+		PaginableTableFilterDirective,
 		IsObservablePipe,
 		ViewSelectorComponent,
 		TooltipDirective,
@@ -62,16 +62,16 @@ import { TypeaheadModule } from './modules/typeahead/typeahead.module';
 		TypeaheadModule
 	],
 	exports: [
-		TableSorterComponent,
-		NbTableSorterPaginatorComponent,
-		NbTableSorterHeaderDirective,
-		NbTableSorterRowDirective,
-		NbTableSorterCellDirective,
-		NbTableSorterNotFoundDirective,
-		NbTableSorterLoadingDirective,
-		NbTableSorterErrorDirective,
-		NbTableSorterExpandingRowDirective,
-		NbTableSorterFilterDirective,
+		PaginableTableComponent,
+		PaginatorComponent,
+		PaginableTableHeaderDirective,
+		PaginableTableRowDirective,
+		PaginableTableCellDirective,
+		PaginableTableNotFoundDirective,
+		PaginableTableLoadingDirective,
+		PaginableTableErrorDirective,
+		PaginableTableExpandingRowDirective,
+		PaginableTableFilterDirective,
 		ResizableDirective,
 		GetPipe,
 		IsObjectPipe,
@@ -79,25 +79,25 @@ import { TypeaheadModule } from './modules/typeahead/typeahead.module';
 		IsStringPipe,
 		IsObservablePipe,
 		ResizableComponent,
-		NbTableSorterErrorDirective,
-		NgTableSorterRangeInputComponent,
+		PaginableTableErrorDirective,
+		PaginableTableRangeInputComponent,
 		ViewSelectorComponent,
 		TooltipDirective,
 		ModalComponent
 	],
 	entryComponents: [
-		TableSorterComponent
+		PaginableTableComponent
 	]
 })
-export class NbTableSorterModule {
+export class NgPaginableModule {
 
-	static forRoot(config?: NbTableSorterConfig): ModuleWithProviders<NbTableSorterModule> {
+	static forRoot(config?: PaginableTableConfig): ModuleWithProviders<NgPaginableModule> {
 		return {
-			ngModule: NbTableSorterModule,
+			ngModule: NgPaginableModule,
 			providers: [
-				NbTableSorterService,
+				PaginateService,
 				{
-					provide: NbTableSorterConfigService,
+					provide: PaginateConfigService,
 					useValue: config
 				}
 			]

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { View } from '../interfaces/view';
-import { NbTableSorterService } from '../services/nb-table-sorter.service';
+import { PaginateService } from '../services/paginate.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,7 +10,7 @@ export class ViewsService {
 
 	private _viewListKey: string;
 	get viewListKey(): string {
-		return this._viewListKey ?? this._configSvc.config.views?.key ?? 'nb-table-sorter_view_';
+		return this._viewListKey ?? this._configSvc.config.views?.key ?? 'paginable-table_view_';
 	}
 	set viewListKey(v: string) {
 		this._viewListKey = v;
@@ -22,7 +22,7 @@ export class ViewsService {
 
 
 	constructor(
-		private _configSvc: NbTableSorterService,
+		private _configSvc: PaginateService,
 	) { }
 
 	async push(tableId: string, view: View) {

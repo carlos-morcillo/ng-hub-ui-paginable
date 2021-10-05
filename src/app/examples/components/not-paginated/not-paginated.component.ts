@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader, NbTableSorterRowAction } from '../../../../../public_api';
 import { MockedUsersService } from '../../../mocked-users.service';
+import { PaginableTableHeader } from '../../../../ng-paginable';
 
 @Component({
-	selector: 'nb-not-paginated',
+	selector: 'not-paginated',
 	templateUrl: './not-paginated.component.html',
 	styleUrls: ['./not-paginated.component.scss']
 })
 export class NotPaginatedComponent implements OnInit {
 
 	items: any[];
-	headers: (NbTableSorterHeader | string)[] = [
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		'email',

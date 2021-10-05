@@ -1,8 +1,8 @@
-import { NbTableSorterCellDirective } from './nb-table-sorter-cell.directive';
+import { PaginableTableCellDirective } from './paginable-table-cell.directive';
 
 describe('NbTableSorterCellDirective', () => {
 	it('should create an instance', () => {
-		const directive = new NbTableSorterCellDirective();
+		const directive = new PaginableTableCellDirective();
 		expect(directive).toBeTruthy();
 	});
 });

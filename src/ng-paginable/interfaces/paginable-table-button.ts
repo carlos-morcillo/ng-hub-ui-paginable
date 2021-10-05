@@ -1,4 +1,4 @@
-export interface NbTableSorterButton {
+export interface PaginableTableButton {
 	title?: string;
 	tooltip?: string;
 	icon?: string;

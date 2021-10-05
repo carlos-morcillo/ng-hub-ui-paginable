@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { NbTableSorterButton } from './nb-table-sorter-button';
-import { NbTableSorterDropdown } from './nb-table-sorter-dropdown';
+import { PaginableTableButton } from './paginable-table-button';
+import { PaginableTableDropdown } from './paginable-table-dropdown';
 
 export interface PaginableTableHeader {
 	title?: string;
@@ -10,7 +10,7 @@ export interface PaginableTableHeader {
 	sortable?: boolean;
 	wrapping?: 'wrap' | 'nowrap';
 	sticky?: 'start' | 'end';
-	buttons?: Array<NbTableSorterButton | NbTableSorterDropdown>;
+	buttons?: Array<PaginableTableButton | PaginableTableDropdown>;
 	filter?: InputFilter | DropdownFilter;
 	onlyButtons?: boolean;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterPagination, NbTableSorterHeader } from '../../../modules/nb-table-sorter';
+import { PaginableTablePagination, PaginableTableHeader } from '../../../../ng-paginable';
 
 @Component({
 	selector: 'app-server-pagination',
@@ -11,8 +11,8 @@ import { NbTableSorterPagination, NbTableSorterHeader } from '../../../modules/n
 })
 export class ServerPaginationComponent implements OnInit {
 
-	pagination: Observable<NbTableSorterPagination>;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: Observable<PaginableTablePagination>;
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		{

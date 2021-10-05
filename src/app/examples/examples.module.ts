@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { NbTableSorterModule } from '../modules/nb-table-sorter';
+import { NgPaginableModule } from '../../ng-paginable';
 import { BatchActionsComponent } from './components/batch-actions/batch-actions.component';
 import { ClientPaginationComponent } from './components/client-pagination/client-pagination.component';
 import { CustomCellsComponent } from './components/custom-cells/custom-cells.component';
@@ -102,7 +102,7 @@ const routes: Routes = [
 		FormsModule,
 		ReactiveFormsModule,
 		RouterModule.forChild(routes),
-		NbTableSorterModule
+		NgPaginableModule
 	]
 })
 export class ExamplesModule { }

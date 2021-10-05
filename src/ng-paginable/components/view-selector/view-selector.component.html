@@ -98,12 +98,12 @@
 													</option>
 												</ng-template>
 											</select>
-											<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number"
+											<paginable-table-range-input *ngSwitchCase="'number-range'" type="number"
 												formControlName="value">
-											</ng-table-sorter-range-input>
-											<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date"
+											</paginable-table-range-input>
+											<paginable-table-range-input *ngSwitchCase="'date-range'" type="date"
 												formControlName="value">
-											</ng-table-sorter-range-input>
+											</paginable-table-range-input>
 											<input *ngSwitchDefault [type]="header.filter.type" formControlName="value"
 												class="form-control" [placeholder]="header.filter.placeholder || ''">
 										</ng-container>

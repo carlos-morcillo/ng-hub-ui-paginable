@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterButton, NbTableSorterDropdown, NbTableSorterHeader } from '../../../../../public_api';
+import { PaginableTableButton, PaginableTableDropdown, PaginableTableHeader } from '../../../../ng-paginable';
 import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'nb-batch-actions',
+	selector: 'batch-actions',
 	templateUrl: './batch-actions.component.html',
 	styleUrls: ['./batch-actions.component.scss']
 })
@@ -11,7 +11,7 @@ export class BatchActionsComponent implements OnInit {
 
 	items: any[];
 	selected = [];
-	headers: (NbTableSorterHeader | string)[] = [
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		'email',
@@ -19,7 +19,7 @@ export class BatchActionsComponent implements OnInit {
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];
 
-	batchActions: Array<NbTableSorterButton | NbTableSorterDropdown> = [
+	batchActions: Array<PaginableTableButton | PaginableTableDropdown> = [
 		{
 			buttons: [
 				{

@@ -7,7 +7,7 @@ import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdow
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })
-export class NbTableSorterDropdownComponent {
+export class PaginableTableDropdownComponent {
 
 	@Input() item: any;
 

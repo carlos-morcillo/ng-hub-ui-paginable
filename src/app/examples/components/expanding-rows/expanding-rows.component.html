@@ -2,8 +2,8 @@
 	<h2 class="d-inline">Expanding rows</h2>
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
-<table-sorter [headers]="headers" [rows]="items" [showSearchInput]="false">
-	<ng-template nbTableSorterExpandingRow let-item="item">
+<paginable-table [headers]="headers" [rows]="items" [showSearchInput]="false">
+	<ng-template paginableTableExpandingRow let-item="item">
 		<tr class="bg-warning">
 			<td [attr.colspan]="headers.length + 1">
 				<div class="d-flex">
@@ -18,7 +18,7 @@
 			</td>
 		</tr>
 	</ng-template>
-	<ng-template nbTableSorterExpandingRow let-item="item">
+	<ng-template paginableTableExpandingRow let-item="item">
 		<tr class="bg-warning">
 			<td [attr.colspan]="headers.length + 1" class="bg-success">
 				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla commodo leo eget elementum
@@ -34,7 +34,7 @@
 			</td>
 		</tr>
 	</ng-template>
-	<ng-template nbTableSorterExpandingRow let-item="item">
+	<ng-template paginableTableExpandingRow let-item="item">
 		<tr>
 			<td [attr.colspan]="3">
 				Mauris aliquam, felis vel fermentum mattis, nulla metus porttitor libero, ut ultrices elit leo eu nulla.
@@ -44,4 +44,4 @@
 			</td>
 		</tr>
 	</ng-template>
-</table-sorter>
+</paginable-table>

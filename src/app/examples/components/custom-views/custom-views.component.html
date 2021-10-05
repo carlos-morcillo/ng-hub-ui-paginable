@@ -3,7 +3,7 @@
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
 
-<table-sorter id="customViewExample" (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)"
+<paginable-table id="customViewExample" (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)"
 	[selectable]="true" [headers]="headers" [pagination]="pagination" [searchKeys]="searchKeys"
 	[showViewSelector]="true" (viewEdited)="saveView($event)" (viewDeleted)="deleteView($event)" [views]="views">
-</table-sorter>
+</paginable-table>

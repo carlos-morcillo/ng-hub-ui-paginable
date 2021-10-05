@@ -1,9 +1,9 @@
 import { Directive, TemplateRef } from '@angular/core';
 
 @Directive({
-	selector: '[nbTableSorterNotFound]'
+	selector: '[paginableTableNotFound]'
 })
-export class NbTableSorterNotFoundDirective {
+export class PaginableTableNotFoundDirective {
 
 	constructor(
 		public template: TemplateRef<any>

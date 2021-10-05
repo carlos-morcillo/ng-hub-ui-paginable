@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
-import { PaginateTableConfigService } from './paginate-table-config.service';
+import { PaginateConfigService } from './paginate-config.service';
 import { PaginableTableConfig } from '../interfaces/paginable-table-config';
 import * as _ from 'lodash';
 import { PaginableTableHeader } from '../interfaces/paginable-table-header';
 
 @Injectable()
-export class PaginateTableService {
+export class PaginateService {
 
 
 	config: PaginableTableConfig = {};
@@ -28,7 +28,7 @@ export class PaginateTableService {
 	}
 
 
-	constructor(@Inject(PaginateTableConfigService) private _config) {
+	constructor(@Inject(PaginateConfigService) private _config) {
 		this.initialize();
 	}
 

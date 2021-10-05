@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { PaginationService } from './modules/nb-table-sorter/services/pagination.service';
-import { NbTableSorterPagination } from './modules/nb-table-sorter';
+import { PaginationService } from '../ng-paginable/services/pagination.service';
+import { PaginableTablePagination } from '../ng-paginable';
 
 @Injectable({
 	providedIn: 'root'
@@ -133,7 +133,7 @@ export class MockedUsersService {
 
 	}
 
-	get(params: any): NbTableSorterPagination {
+	get(params: any): PaginableTablePagination {
 		return this._pagination.generate(this.items, params);
 	}
 }

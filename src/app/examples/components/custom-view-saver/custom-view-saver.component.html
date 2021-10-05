@@ -3,7 +3,7 @@
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
 
-<table-sorter (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)" [selectable]="true"
+<paginable-table (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)" [selectable]="true"
 	[headers]="headers" [pagination]="pagination" [searchKeys]="searchKeys" [viewSaverForm]="viewSaverFormCpn"
 	[showViewSelector]="true">
-</table-sorter>
+</paginable-table>

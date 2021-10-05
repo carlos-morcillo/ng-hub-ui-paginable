@@ -1,12 +1,12 @@
 import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { snakeCase } from 'lodash';
-import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
+import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { View } from '../../interfaces/view';
 import { ModalService } from '../../service/modal.service';
 import { ViewsService } from '../../service/views.service';
-import { TableSorterComponent } from '../nb-table-sorter/table-sorter.component';
+import { PaginableTableComponent } from '../paginable-table/paginable-table.component';
 
 @Component({
 	selector: 'view-selector',
@@ -112,7 +112,7 @@ export class ViewSelectorComponent implements OnInit {
 
 	value: View;
 
-	filterableHeaders: NbTableSorterHeader[];
+	filterableHeaders: PaginableTableHeader[];
 
 	get views() {
 		return this.parent.views;
@@ -124,7 +124,7 @@ export class ViewSelectorComponent implements OnInit {
 		private _viewsSvc: ViewsService,
 		private _modalSvc: ModalService,
 		private _componentFactoryResolver: ComponentFactoryResolver,
-		public parent: TableSorterComponent,
+		public parent: PaginableTableComponent,
 	) { }
 
 	ngOnInit(): void { }
@@ -140,8 +140,8 @@ export class ViewSelectorComponent implements OnInit {
 
 	/**
 	 * Open the view editing mode
-	 * 
-	 * @param view 
+	 *
+	 * @param view
 	 */
 	editView(view?: Partial<View>) {
 		this._createForm();
@@ -169,8 +169,8 @@ export class ViewSelectorComponent implements OnInit {
 	}
 
 	_createForm() {
-		const headers: NbTableSorterHeader[] | string[] = this.parent.headers ?? []
-		this.filterableHeaders = (headers as NbTableSorterHeader[]).filter(h => typeof h === 'object' && h.filter);
+		const headers: PaginableTableHeader[] | string[] = this.parent.headers ?? []
+		this.filterableHeaders = (headers as PaginableTableHeader[]).filter(h => typeof h === 'object' && h.filter);
 
 		const conditionsFA = this._fb.array([]);
 		conditionsFA.clear();

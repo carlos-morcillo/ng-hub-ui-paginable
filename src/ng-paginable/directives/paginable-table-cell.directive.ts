@@ -1,9 +1,9 @@
 import { Directive, TemplateRef, Input } from '@angular/core';
 
 @Directive({
-	selector: '[nbTableSorterCell]'
+	selector: '[paginableTableCell]'
 })
-export class NbTableSorterCellDirective {
+export class PaginableTableCellDirective {
 
 	@Input() header!: string;
 

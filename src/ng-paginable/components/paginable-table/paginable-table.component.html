@@ -5,8 +5,8 @@
 				<div class="d-flex justify-content-start">
 					<ng-container *ngFor="let button of batchActions; let first = first;">
 						<ng-container *ngIf="button['buttons']?.length; else buttonTpt">
-							<nb-table-sorter-dropdown [options]="button" [disabled]="!selectedItems?.length">
-							</nb-table-sorter-dropdown>
+							<paginable-table-dropdown [options]="button" [disabled]="!selectedItems?.length">
+							</paginable-table-dropdown>
 						</ng-container>
 						<ng-template #buttonTpt>
 							<button class="btn" role="button"
@@ -46,10 +46,10 @@
 		</div>
 
 		<!-- Pagination -->
-		<nb-table-sorter-paginator
+		<paginable-table-paginator
 			*ngIf="paginate && data?.data?.length && (paginationPosition == 'top' || paginationPosition === 'both')"
 			[pagination]="data" class="d-block mb-4">
-		</nb-table-sorter-paginator>
+		</paginable-table-paginator>
 
 		<!-- Error -->
 		<ng-container *ngIf="errorOcurred">
@@ -133,9 +133,9 @@
 			<!-- Pagination -->
 			<div *ngIf="paginate && data?.data?.length" class="row align-items-center mx-0 mb-4">
 				<div class="col-12 col-md-auto">
-					<nb-table-sorter-paginator (onPageClick)="pageClicked($event)"
+					<paginable-table-paginator (onPageClick)="pageClicked($event)"
 						*ngIf="paginationPosition == 'bottom' || paginationPosition === 'both'" [pagination]="data">
-					</nb-table-sorter-paginator>
+					</paginable-table-paginator>
 				</div>
 				<div class="form-group form-group-sm row col-6 col-md-auto mb-0 ms-auto ml-auto align-items-center">
 					<label
@@ -212,10 +212,10 @@
 				</ng-template>
 
 			</select>
-			<ng-table-sorter-range-input *ngSwitchCase="'number-range'" type="number" [formControl]="formControl">
-			</ng-table-sorter-range-input>
-			<ng-table-sorter-range-input *ngSwitchCase="'date-range'" type="date" [formControl]="formControl">
-			</ng-table-sorter-range-input>
+			<paginable-table-range-input *ngSwitchCase="'number-range'" type="number" [formControl]="formControl">
+			</paginable-table-range-input>
+			<paginable-table-range-input *ngSwitchCase="'date-range'" type="date" [formControl]="formControl">
+			</paginable-table-range-input>
 			<input *ngSwitchDefault [type]="header.filter.type" [formControl]="formControl" class="form-control"
 				[placeholder]="header.filter.placeholder || ''">
 		</ng-container>
@@ -226,8 +226,8 @@
 			<div class="text-nowrap d-flex flex-nowrap justify-content-end">
 				<ng-container *ngFor="let button of header.buttons">
 					<ng-container *ngIf="button.buttons; else buttonTpt">
-						<nb-table-sorter-dropdown [options]="button" [item]="item" class="d-inline-block">
-						</nb-table-sorter-dropdown>
+						<paginable-table-dropdown [options]="button" [item]="item" class="d-inline-block">
+						</paginable-table-dropdown>
 					</ng-container>
 					<ng-template #buttonTpt>
 						<button *ngIf="!isHidden(button, item)" type="button" class="btn btn-link px-2"

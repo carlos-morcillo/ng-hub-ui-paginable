@@ -2,18 +2,18 @@ import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-	selector: 'ng-table-sorter-range-input',
-	templateUrl: './ng-table-sorter-range-input.component.html',
-	styleUrls: ['./ng-table-sorter-range-input.component.scss'],
+	selector: 'paginable-table-range-input',
+	templateUrl: './paginable-table-range-input.component.html',
+	styleUrls: ['./paginable-table-range-input.component.scss'],
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => NgTableSorterRangeInputComponent),
+			useExisting: forwardRef(() => PaginableTableRangeInputComponent),
 			multi: true
 		}
 	]
 })
-export class NgTableSorterRangeInputComponent implements ControlValueAccessor {
+export class PaginableTableRangeInputComponent implements ControlValueAccessor {
 
 	@Input() disabled = false;
 	@Input() type: 'number' | 'date' = 'number';

@@ -1,9 +1,9 @@
 import { Directive, TemplateRef } from '@angular/core';
 
 @Directive({
-	selector: '[nbTableSorterRow]'
+	selector: '[paginableTableRow]'
 })
-export class NbTableSorterRowDirective {
+export class PaginableTableRowDirective {
 
 	constructor(public template: TemplateRef<any>) { }
 

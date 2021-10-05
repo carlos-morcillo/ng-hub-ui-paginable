@@ -2,8 +2,8 @@
 	<h2 class="d-inline">Custom rows</h2>
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
-<table-sorter [headers]="headers" [rows]="items">
-	<ng-template nbTableSorterRow let-item>
+<paginable-table [headers]="headers" [rows]="items">
+	<ng-template paginableTableRow let-item>
 		<tr>
 			<td>
 				<img [src]="'assets/avatars/64_' + (item.id % 16 + 1) + '.png'" [alt]="item.name">
@@ -37,4 +37,4 @@
 			</tr>
 		</ng-container>
 	</ng-template>
-</table-sorter>
+</paginable-table>

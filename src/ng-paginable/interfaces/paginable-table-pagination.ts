@@ -1,5 +1,5 @@
 
-export interface NbTableSorterPagination {
+export interface PaginableTablePagination {
 	currentPage: number;
 	firstPageUrl?: string;
 	from: number;

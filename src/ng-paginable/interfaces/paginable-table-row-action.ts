@@ -1,4 +1,4 @@
-export interface NbTableSorterRowAction {
+export interface PaginableTableRowAction {
 	title?: string;
 	icon?: string;
 	handler?: any;

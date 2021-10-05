@@ -10,6 +10,6 @@
 		</select>
 	</div>
 </div>
-<table-sorter (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination" [paginationInfo]="true"
+<paginable-table (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination" [paginationInfo]="true"
 	[searchKeys]="searchKeys" [responsive]="breakAt">
-</table-sorter>
+</paginable-table>

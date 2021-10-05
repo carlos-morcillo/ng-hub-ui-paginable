@@ -1,4 +1,4 @@
-export interface NbTableSorterOrdination {
+export interface PaginableTableOrdination {
 	property: string;
 	direction: string;
 }

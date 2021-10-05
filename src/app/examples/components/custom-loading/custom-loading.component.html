@@ -2,12 +2,12 @@
 	<h2 class="d-inline">Custom loading</h2>
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
-<table-sorter (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination">
-	<ng-template nbTableSorterCell header="email" let-property="property">
+<paginable-table (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination">
+	<ng-template paginableTableCell header="email" let-property="property">
 		<a href="mailto:{{ property }}">{{ property }}</a>
 	</ng-template>
 
-	<ng-template nbTableSorterLoading>
+	<ng-template paginableTableLoading>
 		<div class="text-center">
 			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 				style="margin:auto;background:#fff;display:block;" width="200px" height="200px" viewBox="0 0 100 100"
@@ -81,4 +81,4 @@
 			</svg>
 		</div>
 	</ng-template>
-</table-sorter>
+</paginable-table>

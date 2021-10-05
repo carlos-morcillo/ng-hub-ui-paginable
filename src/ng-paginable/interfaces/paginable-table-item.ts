@@ -1,4 +1,4 @@
-export interface NbTableSorterItem {
+export interface PaginableTableItem {
 	unfold?: boolean;
 	[key: string]: any;
 }

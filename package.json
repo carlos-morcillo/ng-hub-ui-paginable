@@ -1,6 +1,6 @@
 {
-  "name": "nb-table-sorter",
-  "version": "1.24.8",
+  "name": "ng-paginable",
+  "version": "1.24.9",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,16 +8,21 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "packagr": "ng-packagr -p ng-package.json"
+    "packagr": "ng-packagr -p ng-package.json",
+	"build:lib": "rimraf dist && ng-packagr -p src/ng-paginable/package.json && npm run build:pack && npm run copy:readme",
+    "build:pack": "cd dist && npm pack",
+    "build:publish": "cd dist && npm publish",
+    "copy:readme": "copyfiles README.md dist",
+	"publish": "rimraf dist && ng-packagr -p src/ng-paginable/package.json && npm run build:pack && npm run copy:readme && cd dist && npm publish"
+
   },
   "private": false,
   "description": "Netberry table sorter",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/inphinito/nb-table-sorter.git"
+    "url": "git+https://github.com/inphinito/ng-paginable.git"
   },
   "keywords": [
-    "netberry",
     "table",
     "sorter",
     "list"
@@ -25,9 +30,9 @@
   "author": "Carlos Morcillo <carlos.morcillo@me.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/inphinito/nb-table-sorter/issues"
+    "url": "https://github.com/inphinito/ng-paginable/issues"
   },
-  "homepage": "https://github.com/inphinito/nb-table-sorter#readme",
+  "homepage": "https://github.com/inphinito/ng-paginable#readme",
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.1",
     "@angular/animations": "~12.2.1",

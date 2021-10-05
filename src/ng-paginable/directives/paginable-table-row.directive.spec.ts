@@ -1,7 +1,7 @@
 
-// describe('NbTableSorterRowDirective', () => {
+// describe('PaginableTableRowDirective', () => {
 //   it('should create an instance', () => {
-//     const directive = new NbTableSorterRowDirective();
+//     const directive = new PaginableTableRowDirective();
 //     expect(directive).toBeTruthy();
 //   });
 // });

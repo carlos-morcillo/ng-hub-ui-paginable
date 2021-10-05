@@ -1,6 +1,10 @@
 # Changelog
 
 
+## [1.24.9] - 2021-10-05
+### Fixed
+- Corrección del botón de abrir/cerra el typeahead cuando los resultados se están mostrando.
+
 ## [1.24.8] - 2021-09-29
 ### Added
 - Traducciones en el formulario de vistas.
@@ -300,14 +304,14 @@ ks## [1.24.1] - 2021-08-30
 ### Added
 - Posibilidad de personalizar la plantilla de una columna especificada por parámetro.
 ### Fixed
-- Renombrado la propiedad de la interfaz NbTableSorterRowAction de handle a handler.
+- Renombrado la propiedad de la interfaz PaginableTableRowAction de handle a handler.
 
 ## [1.4.0] - 2019-12-15
 
 ### Added
 - Posibilidad de personalizar la plantilla de una columna especificada por parámetro.
 ### Fixed
-- Renombrado la propiedad de la interfaz NbTableSorterRowAction de handle a handler.
+- Renombrado la propiedad de la interfaz PaginableTableRowAction de handle a handler.
 
 ## [1.3.0] - 2019-12-12
 

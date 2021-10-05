@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NbTableSorterPagination } from '../interfaces/nb-table-sorter-pagination';
+import { PaginableTablePagination } from '../interfaces/paginable-table-pagination';
 
 @Injectable({
 	providedIn: 'root'
@@ -33,7 +33,7 @@ export class PaginationService {
 		}
 		const perPage = params.paginate ? (params.perPage || 20) : filtered.length;
 
-		const pagination: NbTableSorterPagination = {
+		const pagination: PaginableTablePagination = {
 			currentPage: page,
 			lastPage: Math.ceil(filtered.length / perPage),
 			perPage,

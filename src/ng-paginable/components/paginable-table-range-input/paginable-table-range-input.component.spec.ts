@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgTableSorterRangeInputComponent } from './ng-table-sorter-range-input.component';
+import { PaginableTableRangeInputComponent } from './paginable-table-range-input.component';
 
 describe('NgTableSorterRangeInputComponent', () => {
-  let component: NgTableSorterRangeInputComponent;
-  let fixture: ComponentFixture<NgTableSorterRangeInputComponent>;
+  let component: PaginableTableRangeInputComponent;
+  let fixture: ComponentFixture<PaginableTableRangeInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NgTableSorterRangeInputComponent ]
+      declarations: [ PaginableTableRangeInputComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NgTableSorterRangeInputComponent);
+    fixture = TestBed.createComponent(PaginableTableRangeInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

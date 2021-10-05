@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { TableSorterComponent } from './table-sorter.component';
+import { PaginableTableComponent } from './paginable-table.component';
 
 
 describe('TableSorterComponent', () => {
-	let component: TableSorterComponent;
-	let fixture: ComponentFixture<TableSorterComponent>;
+	let component: PaginableTableComponent;
+	let fixture: ComponentFixture<PaginableTableComponent>;
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [TableSorterComponent]
+			declarations: [PaginableTableComponent]
 		}).compileComponents();
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(TableSorterComponent);
+		fixture = TestBed.createComponent(PaginableTableComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

@@ -1,0 +1,52 @@
+{
+  "name": "ng-paginable",
+  "version": "1.24.9",
+  "description": "Paginable table",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inphinito/ng-paginable.git"
+  },
+  "keywords": [
+    "angular",
+    "angular 8",
+    "angular 9",
+    "angular 10",
+    "angular 11",
+    "angular 12",
+    "table",
+    "table sorter",
+    "sorter",
+    "filter",
+	"paginable",
+    "paginable",
+    "ng-paginable",
+    "bootstrap"
+  ],
+  "author": "Carlos Morcillo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inphinito/ng-paginable/issues"
+  },
+  "homepage": "https://github.com/inphinito/ng-paginable#readme",
+  "$schema": "./node_modules/ng-packagr/package.schema.json",
+  "peerDependencies": {
+    "@angular/core": ">=10.0.0"
+  },
+  "ngPackage": {
+    "lib": {
+      "entryFile": "public_api.ts"
+    },
+    "dest": "../../dist",
+    "whitelistedNonPeerDependencies": [
+		"bootstrap"
+	 ]
+  },
+  "dependencies": { 
+	  "bootstrap": ">=4.0.0"
+   },
+  "devDependencies": {  }
+}

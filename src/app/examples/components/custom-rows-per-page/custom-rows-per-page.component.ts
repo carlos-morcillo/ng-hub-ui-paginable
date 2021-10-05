@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../../../../public_api';
+import { PaginableTableHeader } from '../../../../ng-paginable';
 import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'nb-custom-rows-per-page',
+	selector: 'custom-rows-per-page',
 	templateUrl: './custom-rows-per-page.component.html',
 	styleUrls: ['./custom-rows-per-page.component.scss']
 })
 export class CustomRowsPerPageComponent implements OnInit {
 
 	items: any[];
-	headers: (NbTableSorterHeader | string)[] = [
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		'email',

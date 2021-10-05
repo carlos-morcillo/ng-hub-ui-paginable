@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-header';
-import { NbTableSorterRowAction } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-row-action';
+import { PaginableTableHeader } from '../../../../ng-paginable/interfaces/paginable-table-header';
 import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'nb-expanding-rows',
+	selector: 'expanding-rows',
 	templateUrl: './expanding-rows.component.html',
 	styleUrls: ['./expanding-rows.component.scss']
 })
 export class ExpandingRowsComponent implements OnInit {
 
 	items: any[];
-	headers: (NbTableSorterHeader | string)[] = [
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		'email',

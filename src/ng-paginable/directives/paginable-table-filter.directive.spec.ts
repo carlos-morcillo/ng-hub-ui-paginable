@@ -1,8 +1,8 @@
-import { NbTableSorterFilterDirective } from './nb-table-sorter-filter.directive';
+import { PaginableTableFilterDirective } from './paginable-table-filter.directive';
 
 describe('NbTableSorterFilterDirective', () => {
   it('should create an instance', () => {
-    const directive = new NbTableSorterFilterDirective();
+    const directive = new PaginableTableFilterDirective();
     expect(directive).toBeTruthy();
   });
 });

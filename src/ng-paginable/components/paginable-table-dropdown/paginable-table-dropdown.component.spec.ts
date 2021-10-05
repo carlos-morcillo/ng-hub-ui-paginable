@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NbTableSorterDropdownComponent } from './paginable-table-dropdown.component';
 
-describe('NbTableSorterDropdownComponent', () => {
+describe('PaginableTableDropdownComponent', () => {
 	let component: NbTableSorterDropdownComponent;
 	let fixture: ComponentFixture<NbTableSorterDropdownComponent>;
 

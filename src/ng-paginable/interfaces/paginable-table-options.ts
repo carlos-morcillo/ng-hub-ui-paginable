@@ -1,4 +1,4 @@
-export interface NbTableSorterOptions {
+export interface PaginableTableOptions {
 	serverSidePagination?: boolean;
 	cursor?: 'pointer' | 'default';
 	hoverableRows?: boolean;

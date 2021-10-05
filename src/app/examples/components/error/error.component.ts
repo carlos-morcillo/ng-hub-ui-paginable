@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of, throwError, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterPagination, NbTableSorterHeader, NbTableSorterButton, NbTableSorterDropdown } from '../../../modules/nb-table-sorter';
+import { PaginableTablePagination, PaginableTableHeader, PaginableTableButton, PaginableTableDropdown } from '../../../../ng-paginable';
 
 @Component({
 	selector: 'app-error',
@@ -11,8 +11,8 @@ import { NbTableSorterPagination, NbTableSorterHeader, NbTableSorterButton, NbTa
 })
 export class ErrorComponent implements OnInit {
 
-	pagination: Observable<NbTableSorterPagination>;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: Observable<PaginableTablePagination>;
+	headers: (PaginableTableHeader | string)[] = [
 		{
 			title: 'id',
 			property: 'id',
@@ -49,7 +49,7 @@ export class ErrorComponent implements OnInit {
 		'name'
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];
-	batchActions: Array<NbTableSorterButton | NbTableSorterDropdown> = [
+	batchActions: Array<PaginableTableButton | PaginableTableDropdown> = [
 		{
 			buttons: [
 				{

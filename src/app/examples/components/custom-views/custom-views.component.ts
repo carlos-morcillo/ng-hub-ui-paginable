@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, timer, map, of } from 'rxjs';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterPagination, NbTableSorterHeader, FilterChangeEvent } from '../../../modules/nb-table-sorter';
-import { View } from '../../../modules/nb-table-sorter/interfaces/view';
+import { PaginableTablePagination, PaginableTableHeader, FilterChangeEvent } from '../../../../ng-paginable';
+import { View } from '../../../../ng-paginable/interfaces/view';
 
 @Component({
 	selector: 'app-custom-views',
@@ -11,8 +11,8 @@ import { View } from '../../../modules/nb-table-sorter/interfaces/view';
 })
 export class CustomViewsComponent implements OnInit {
 
-	pagination: Observable<NbTableSorterPagination>;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: Observable<PaginableTablePagination>;
+	headers: (PaginableTableHeader | string)[] = [
 		{
 			title: 'id',
 			property: 'id'

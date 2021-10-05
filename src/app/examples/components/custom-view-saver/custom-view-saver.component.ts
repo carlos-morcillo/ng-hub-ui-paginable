@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, timer, map } from 'rxjs';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterPagination, NbTableSorterHeader, FilterChangeEvent } from '../../../modules/nb-table-sorter';
+import { PaginableTablePagination, PaginableTableHeader, FilterChangeEvent } from '../../../../ng-paginable';
 import { CustomViewSaverFormComponent } from '../custom-view-saver-form/custom-view-saver-form.component';
 
 @Component({
@@ -13,8 +13,8 @@ export class CustomViewSaverComponent implements OnInit {
 
 	viewSaverFormCpn = CustomViewSaverFormComponent;
 
-	pagination: Observable<NbTableSorterPagination>;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: Observable<PaginableTablePagination>;
+	headers: (PaginableTableHeader | string)[] = [
 		{
 			title: 'id',
 			property: 'id'

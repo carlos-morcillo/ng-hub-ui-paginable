@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of, timer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { NbTableSorterPagination, NbTableSorterHeader, FilterChangeEvent } from '../../../modules/nb-table-sorter';
+import { PaginableTablePagination, PaginableTableHeader, FilterChangeEvent } from '../../../../ng-paginable';
 
 @Component({
 	selector: 'app-custom-filters',
@@ -11,8 +11,8 @@ import { NbTableSorterPagination, NbTableSorterHeader, FilterChangeEvent } from 
 })
 export class CustomFiltersComponent implements OnInit {
 
-	pagination: Observable<NbTableSorterPagination>;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: Observable<PaginableTablePagination>;
+	headers: (PaginableTableHeader | string)[] = [
 		{
 			title: 'id',
 			property: 'id',

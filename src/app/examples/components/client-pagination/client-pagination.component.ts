@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../../modules/nb-table-sorter/interfaces/nb-table-sorter-header';
+import { PaginableTableHeader } from '../../../../ng-paginable/interfaces/paginable-table-header';
 import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { MockedUsersService } from '../../../mocked-users.service';
 export class ClientPaginationComponent implements OnInit {
 
 	items: any[];
-	headers: (NbTableSorterHeader | string)[] = [
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		'email',

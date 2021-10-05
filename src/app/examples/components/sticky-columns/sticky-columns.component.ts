@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterPagination, NbTableSorterHeader } from '../../../../../public_api';
 import { MockedUsersService } from '../../../mocked-users.service';
+import { PaginableTableHeader, PaginableTablePagination } from '../../../../ng-paginable';
 
 @Component({
-	selector: 'nb-sticky-columns',
+	selector: 'sticky-columns',
 	templateUrl: './sticky-columns.component.html',
 	styleUrls: ['./sticky-columns.component.scss']
 })
 export class StickyColumnsComponent implements OnInit {
 
-	pagination: NbTableSorterPagination;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: PaginableTablePagination;
+	headers: (PaginableTableHeader | string)[] = [
 		{
 			property: 'id',
 			sticky: 'start'

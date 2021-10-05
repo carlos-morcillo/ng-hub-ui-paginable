@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MockedUsersService } from '../../../mocked-users.service';
-import { BREAKPOINTS, NbTableSorterHeader, NbTableSorterPagination, NbTableSorterRowAction } from '../../../modules/nb-table-sorter';
+import { BREAKPOINTS, PaginableTableHeader, PaginableTablePagination } from '../../../../ng-paginable';
 
 @Component({
-	selector: 'nb-responsive',
+	selector: 'responsive',
 	templateUrl: './responsive.component.html',
 	styleUrls: ['./responsive.component.scss']
 })
@@ -12,8 +12,8 @@ export class ResponsiveComponent implements OnInit {
 	breakpoints = BREAKPOINTS;
 	breakAt = 'xs';
 
-	pagination: NbTableSorterPagination;
-	headers: (NbTableSorterHeader | string)[] = [
+	pagination: PaginableTablePagination;
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		'email',

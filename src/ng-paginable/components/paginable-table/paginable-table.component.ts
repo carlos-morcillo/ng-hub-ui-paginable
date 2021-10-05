@@ -7,31 +7,31 @@ import { catchError, debounceTime, map, startWith, tap } from 'rxjs/operators';
 import { locale as enLang } from '../../assets/i18n/en';
 import { locale as esLang } from '../../assets/i18n/es';
 import { BREAKPOINTS } from '../../constants/breakpoints';
-import { NbTableSorterCellDirective } from '../../directives/nb-table-sorter-cell.directive';
-import { NbTableSorterErrorDirective } from '../../directives/nb-table-sorter-error.directive';
-import { NbTableSorterExpandingRowDirective } from '../../directives/nb-table-sorter-expanding-row.directive';
-import { NbTableSorterFilterDirective } from '../../directives/nb-table-sorter-filter.directive';
-import { NbTableSorterLoadingDirective } from '../../directives/nb-table-sorter-loading.directive';
-import { NbTableSorterNotFoundDirective } from '../../directives/nb-table-sorter-not-found.directive';
-import { NbTableSorterRowDirective } from '../../directives/nb-table-sorter-row.directive';
-import { NbTableSorterButton } from '../../interfaces/nb-table-sorter-button';
-import { NbTableSorterDropdown } from '../../interfaces/nb-table-sorter-dropdown';
-import { NbTableSorterHeader } from '../../interfaces/nb-table-sorter-header';
-import { NbTableSorterItem } from '../../interfaces/nb-table-sorter-item';
-import { NbTableSorterOptions } from '../../interfaces/nb-table-sorter-options';
-import { NbTableSorterOrdination } from '../../interfaces/nb-table-sorter-ordination';
-import { NbTableSorterPagination } from '../../interfaces/nb-table-sorter-pagination';
-import { NbTableSorterRowAction } from '../../interfaces/nb-table-sorter-row-action';
+import { PaginableTableCellDirective } from '../../directives/paginable-table-cell.directive';
+import { PaginableTableErrorDirective } from '../../directives/paginable-table-error.directive';
+import { PaginableTableExpandingRowDirective } from '../../directives/paginable-table-expanding-row.directive';
+import { PaginableTableFilterDirective } from '../../directives/paginable-table-filter.directive';
+import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
+import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
+import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
+import { PaginableTableButton } from '../../interfaces/paginable-table-button';
+import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
+import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
+import { PaginableTableItem } from '../../interfaces/paginable-table-item';
+import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
+import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
+import { PaginableTablePagination } from '../../interfaces/paginable-table-pagination';
+import { PaginableTableRowAction } from '../../interfaces/paginable-table-row-action';
 import { View } from '../../interfaces/view';
-import { NbTableSorterService } from '../../services/nb-table-sorter.service';
+import { PaginateService } from '../../services/paginate.service';
 import { PaginationService } from '../../services/pagination.service';
 import { TranslationService } from '../../services/translation.service';
 import { ViewSelectorComponent } from '../view-selector/view-selector.component';
 
 @Component({
-	selector: 'table-sorter',
-	templateUrl: './table-sorter.component.html',
-	styleUrls: ['./table-sorter.component.scss'],
+	selector: 'paginable-table',
+	templateUrl: './paginable-table.component.html',
+	styleUrls: ['./paginable-table.component.scss'],
 	animations: [
 		trigger('fadeInOut', [
 			transition(':enter', [
@@ -46,18 +46,18 @@ import { ViewSelectorComponent } from '../view-selector/view-selector.component'
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => TableSorterComponent),
+			useExisting: forwardRef(() => PaginableTableComponent),
 			multi: true
 		}
 	]
 })
-export class TableSorterComponent implements OnDestroy {
+export class PaginableTableComponent implements OnDestroy {
 
 	@Input() id?: string;
-	private _headers: NbTableSorterHeader[] | string[];
+	private _headers: PaginableTableHeader[] | string[];
 
 	@Input() showSearchInput: boolean = true;
-	@Input() options: NbTableSorterOptions = {
+	@Input() options: PaginableTableOptions = {
 		cursor: 'default',
 		hoverableRows: false
 	};
@@ -69,11 +69,11 @@ export class TableSorterComponent implements OnDestroy {
 	 * Table headers
 	 *
 	 * @readonly
-	 * @type {(NbTableSorterHeader[] | string[])}
-	 * @memberof TableSorterComponent
+	 * @type {(PaginableTableHeader[] | string[])}
+	 * @memberof PaginableTableComponent
 	 */
 	@Input()
-	get headers(): NbTableSorterHeader[] | string[] {
+	get headers(): PaginableTableHeader[] | string[] {
 		if (!this._headers) {
 			if (this._rows.length) {
 				this._headers = Object.keys(this._rows[0]);
@@ -83,12 +83,12 @@ export class TableSorterComponent implements OnDestroy {
 		}
 		return this._headers;
 	}
-	set headers(v: NbTableSorterHeader[] | string[]) {
+	set headers(v: PaginableTableHeader[] | string[]) {
 		this._headers = v;
 
 		// Parsing headers
 		for (const header of this._headers) {
-			if (header.constructor.name === 'Object' && (header as NbTableSorterHeader).buttons && !(header as NbTableSorterHeader).property) {
+			if (header.constructor.name === 'Object' && (header as PaginableTableHeader).buttons && !(header as PaginableTableHeader).property) {
 				Object.assign(header, { wrapping: 'nowrap', onlyButtons: true, align: 'end' }, header);
 			}
 		}
@@ -97,29 +97,29 @@ export class TableSorterComponent implements OnDestroy {
 
 	get lastColumnOnlyHasButtons() {
 		const lastHeader = this._headers[this._headers.length - 1];
-		return lastHeader.constructor.name === 'Object' && (lastHeader as NbTableSorterHeader).buttons && !(lastHeader as NbTableSorterHeader).property;
+		return lastHeader.constructor.name === 'Object' && (lastHeader as PaginableTableHeader).buttons && !(lastHeader as PaginableTableHeader).property;
 	}
 
-	data: NbTableSorterPagination;
+	data: PaginableTablePagination;
 
 	/**
 	 * Items paginated
 	 *
 	 * @private
-	 * @type {NbTableSorterPagination}
-	 * @memberof TableSorterComponent
+	 * @type {PaginableTablePagination}
+	 * @memberof PaginableTableComponent
 	 */
-	private _pagination: NbTableSorterPagination;
+	private _pagination: PaginableTablePagination;
 	@Input()
-	get pagination(): NbTableSorterPagination | Observable<NbTableSorterPagination> {
+	get pagination(): PaginableTablePagination | Observable<PaginableTablePagination> {
 		return this._pagination;
 	}
-	set pagination(v: NbTableSorterPagination | Observable<NbTableSorterPagination>) {
+	set pagination(v: PaginableTablePagination | Observable<PaginableTablePagination>) {
 		if (!v) {
 			this.data = null;
 		} else if (isObservable(v)) {
-			(v as Observable<NbTableSorterPagination>).pipe(
-				map((value: NbTableSorterPagination) => ({ loading: false, error: false, value: value })),
+			(v as Observable<PaginableTablePagination>).pipe(
+				map((value: PaginableTablePagination) => ({ loading: false, error: false, value: value })),
 				startWith({ loading: true, error: false, value: null }),
 				catchError(error => of({ loading: false, error, value: null })),
 				map(o => {
@@ -127,11 +127,11 @@ export class TableSorterComponent implements OnDestroy {
 					this.errorOcurred = o.error;
 					return o.value;
 				})
-			).subscribe((result: NbTableSorterPagination) => {
+			).subscribe((result: PaginableTablePagination) => {
 				this.data = result;
 			});
 		} else {
-			this.data = v as NbTableSorterPagination;
+			this.data = v as PaginableTablePagination;
 		}
 		this.allRowsSelected = false;
 		if (this.selectable || this.batchActions?.length) {
@@ -144,7 +144,7 @@ export class TableSorterComponent implements OnDestroy {
 	 *
 	 * @private
 	 * @type {any[]}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	private _rows: any[];
 	@Input()
@@ -171,7 +171,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * Collection of selected rows
 	 *
 	 * @type {any[]}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	selectedItems: any[] = [];
 
@@ -179,7 +179,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * Set whether all page rows are selecteds
 	 *
 	 * @type {boolean}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	allRowsSelected: boolean = false;
 
@@ -187,7 +187,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * Set whether the rows are selectable
 	 *
 	 * @type {boolean}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Input() selectable: boolean = false;
 
@@ -195,14 +195,14 @@ export class TableSorterComponent implements OnDestroy {
 	 * If set, it will be the property returned in the onSelected event
 	 *
 	 * @type {string}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Input() selectableProperty: string;
 
 	/**
 	 * Event triggered when a row or multiples rows are selected or unselected
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Output() onSelected = new EventEmitter<any>();
 
@@ -210,7 +210,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * Pagination position
 	 *
 	 * @type {('bottom' | 'top' | 'both')}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Input() paginationPosition: 'bottom' | 'top' | 'both' = 'bottom';
 
@@ -219,66 +219,66 @@ export class TableSorterComponent implements OnDestroy {
 	searchText: string = '';
 	@Input() searchKeys: string[] = ['name'];
 
-	ordination: NbTableSorterOrdination = null;
+	ordination: PaginableTableOrdination = null;
 
 	/**
 	 * Collection of actions for items
 	 *
-	 * @type {NbTableSorterRowAction[]}
-	 * @memberof TableSorterComponent
+	 * @type {PaginableTableRowAction[]}
+	 * @memberof PaginableTableComponent
 	 */
-	@Input() actions: NbTableSorterRowAction[] = [];
+	@Input() actions: PaginableTableRowAction[] = [];
 
 	/**
 	 * Collection of actions for items
 	 *
-	 * @type {NbTableSorterRowAction[]}
-	 * @memberof TableSorterComponent
+	 * @type {PaginableTableRowAction[]}
+	 * @memberof PaginableTableComponent
 	 */
-	private _batchActions: Array<NbTableSorterDropdown | NbTableSorterButton> = [];
+	private _batchActions: Array<PaginableTableDropdown | PaginableTableButton> = [];
 	@Input()
-	get batchActions(): Array<NbTableSorterDropdown | NbTableSorterButton> {
+	get batchActions(): Array<PaginableTableDropdown | PaginableTableButton> {
 		return this._batchActions;
 	}
-	set batchActions(v: Array<NbTableSorterDropdown | NbTableSorterButton>) {
+	set batchActions(v: Array<PaginableTableDropdown | PaginableTableButton>) {
 		this._batchActions = v.map(b => {
-			if ((b as NbTableSorterDropdown).buttons) {
+			if ((b as PaginableTableDropdown).buttons) {
 				b = { fill: null, position: 'left', color: 'light', ...b };
 			}
 			return b;
 		});
 	}
 
-	batchActionsDropdown: NbTableSorterDropdown;
+	batchActionsDropdown: PaginableTableDropdown;
 
-	batchAction: NbTableSorterButton = null;
+	batchAction: PaginableTableButton = null;
 
 	/**
 	 * Sets the action column to sticky
 	 *
-	 * @type {NbTableSorterRowAction[]}
-	 * @memberof TableSorterComponent
+	 * @type {PaginableTableRowAction[]}
+	 * @memberof PaginableTableComponent
 	 */
 	@Input() stickyActions: boolean = true;
 
 	/**
 	 * On item click event emitter
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Output() itemClick = new EventEmitter<any>();
 
 	/**
 	 * On page click event emitter
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Output() onPageClick = new EventEmitter<number>();
 
 	/**
 	 * On params change event emitter
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Output() onParamsChange = new EventEmitter<any>();
 
@@ -290,7 +290,7 @@ export class TableSorterComponent implements OnDestroy {
 	 *
 	 * @private
 	 * @type {number[]}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	private _perPageOptions: number[] = [10, 20, 50, 100];
 	@Input()
@@ -307,7 +307,7 @@ export class TableSorterComponent implements OnDestroy {
 	 *
 	 * @private
 	 * @type {number}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	private _itemsPerPage: number = 20;
 	@Input()
@@ -335,20 +335,20 @@ export class TableSorterComponent implements OnDestroy {
 		}
 	}
 
-	filterHeaders: NbTableSorterHeader[];
+	filterHeaders: PaginableTableHeader[];
 
 	/**
 	 * Filter form
 	 *
 	 * @type {FormGroup}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	filterFG: FormGroup = new FormGroup({});
 
 	/**
 	 * Event triggered when a filter value changes
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Output() filterChange = new EventEmitter<any>();
 
@@ -362,7 +362,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * Time to ouput the filter form value
 	 *
 	 * @type {number}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Input() debounce: number = 1024;
 
@@ -372,24 +372,24 @@ export class TableSorterComponent implements OnDestroy {
 	 * Set if the data must be paginated
 	 *
 	 * @type {boolean}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Input() paginate: boolean = true;
 
-	@ContentChild(NbTableSorterRowDirective, { read: TemplateRef }) templateRow: NbTableSorterRowDirective;
-	@ContentChildren(NbTableSorterCellDirective) templateCells !: QueryList<NbTableSorterCellDirective>;
-	@ContentChild(NbTableSorterNotFoundDirective, { read: TemplateRef }) noDataTpt: NbTableSorterNotFoundDirective;
-	@ContentChild(NbTableSorterLoadingDirective, { read: TemplateRef }) loadingTpt: NbTableSorterLoadingDirective;
-	@ContentChild(NbTableSorterErrorDirective, { read: TemplateRef }) errorTpt: NbTableSorterErrorDirective;
-	@ContentChildren(NbTableSorterExpandingRowDirective) templateExpandingRows !: QueryList<NbTableSorterExpandingRowDirective>;
-	@ContentChildren(NbTableSorterFilterDirective) filterTpts !: QueryList<NbTableSorterFilterDirective>;
+	@ContentChild(PaginableTableRowDirective, { read: TemplateRef }) templateRow: PaginableTableRowDirective;
+	@ContentChildren(PaginableTableCellDirective) templateCells !: QueryList<PaginableTableCellDirective>;
+	@ContentChild(PaginableTableNotFoundDirective, { read: TemplateRef }) noDataTpt: PaginableTableNotFoundDirective;
+	@ContentChild(PaginableTableLoadingDirective, { read: TemplateRef }) loadingTpt: PaginableTableLoadingDirective;
+	@ContentChild(PaginableTableErrorDirective, { read: TemplateRef }) errorTpt: PaginableTableErrorDirective;
+	@ContentChildren(PaginableTableExpandingRowDirective) templateExpandingRows !: QueryList<PaginableTableExpandingRowDirective>;
+	@ContentChildren(PaginableTableFilterDirective) filterTpts !: QueryList<PaginableTableFilterDirective>;
 	@ViewChild(ViewSelectorComponent) viewSelector: ViewSelectorComponent;
 
 	/**
 	 * Set if the view selector must be showed
 	 *
 	 * @type {boolean}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	@Input() showViewSelector: boolean = false;
 
@@ -412,7 +412,7 @@ export class TableSorterComponent implements OnDestroy {
 	constructor(
 		private _fb: FormBuilder,
 		private _translationSvc: TranslationService,
-		private _configSvc: NbTableSorterService,
+		private _configSvc: PaginateService,
 		private _paginationSvc: PaginationService
 	) {
 		this._translationSvc.loadTranslations(enLang, esLang);
@@ -457,7 +457,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * @param {object} item
 	 * @param {string} key
 	 * @returns {*}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	getProperty(item: object, key: string): any {
 		return get(item, key);
@@ -481,11 +481,11 @@ export class TableSorterComponent implements OnDestroy {
 	 * If paging is done on the server, a parameter change subscription is launched. Otherwise,
 	 * get the data sorted according to the header passed by parameter.
 	 *
-	 * @param {NbTableSorterHeader} header
+	 * @param {PaginableTableHeader} header
 	 * @returns {void}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
-	sort(header: NbTableSorterHeader): void {
+	sort(header: PaginableTableHeader): void {
 		if (!header.sortable) {
 			return;
 		}
@@ -526,11 +526,11 @@ export class TableSorterComponent implements OnDestroy {
 	/**
 	 * Get the ordination class
 	 *
-	 * @param {NbTableSorterHeader} header
+	 * @param {PaginableTableHeader} header
 	 * @returns
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
-	getOrdenationClass(header: NbTableSorterHeader) {
+	getOrdenationClass(header: PaginableTableHeader) {
 		if (!this.ordination || this.ordination.property !== header.property) {
 			return 'fa-sort';
 		}
@@ -540,11 +540,11 @@ export class TableSorterComponent implements OnDestroy {
 	/**
 	 * If it exists, returns the cell template for the header passed by parameter
 	 *
-	 * @param {(NbTableSorterHeader)} header
-	 * @returns {TemplateRef<NbTableSorterCellDirective>}
-	 * @memberof TableSorterComponent
+	 * @param {(PaginableTableHeader)} header
+	 * @returns {TemplateRef<PaginableTableCellDirective>}
+	 * @memberof PaginableTableComponent
 	 */
-	getCellTemplate(header: NbTableSorterHeader): TemplateRef<NbTableSorterCellDirective> {
+	getCellTemplate(header: PaginableTableHeader): TemplateRef<PaginableTableCellDirective> {
 		const property = header instanceof String ? header : header.property;
 		if (!property) {
 			return null;
@@ -556,11 +556,11 @@ export class TableSorterComponent implements OnDestroy {
 	/**
 	 * If it exists, returns the filter template for the header passed by parameter
 	 *
-	 * @param {(NbTableSorterHeader)} header
-	 * @returns {TemplateRef<NbTableSorterCellDirective>}
-	 * @memberof TableSorterComponent
+	 * @param {(PaginableTableHeader)} header
+	 * @returns {TemplateRef<PaginableTableCellDirective>}
+	 * @memberof PaginableTableComponent
 	 */
-	getFilterTemplate(header: NbTableSorterHeader): TemplateRef<NbTableSorterFilterDirective> {
+	getFilterTemplate(header: PaginableTableHeader): TemplateRef<PaginableTableFilterDirective> {
 		const property = header instanceof String ? header : header.property;
 		if (!property) {
 			return null;
@@ -574,7 +574,7 @@ export class TableSorterComponent implements OnDestroy {
 	 *
 	 * @param {Function} handler
 	 * @param {*} item
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	handleAction(event: Event, handler: (...args: any) => void, item: any) {
 		event.stopPropagation();
@@ -585,7 +585,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * Handles the action to be executed in a batch
 	 *
 	 * @param {Event} event
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	handleBatchAction(event: any) {
 		event.handler(this.selectedItems);
@@ -595,11 +595,11 @@ export class TableSorterComponent implements OnDestroy {
 	 * Determines whether to display the batch actions menu
 	 *
 	 * @type {boolean}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	batchActionsShown: boolean = false;
 
-	isHidden(button: NbTableSorterButton, item: any) {
+	isHidden(button: PaginableTableButton, item: any) {
 		if (typeof button.hidden === 'function') {
 			return button.hidden(item);
 		}
@@ -609,17 +609,17 @@ export class TableSorterComponent implements OnDestroy {
 	/**
 	 * Expand or unexpand an expanding row
 	 *
-	 * @param {NbTableSorterItem} item
-	 * @memberof TableSorterComponent
+	 * @param {PaginableTableItem} item
+	 * @memberof PaginableTableComponent
 	 */
-	toggleExpandedRow(item: NbTableSorterItem) {
+	toggleExpandedRow(item: PaginableTableItem) {
 		item.unfold = !item.unfold;
 	}
 
 	/**
 	 * Select or unselect all page items
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	toggleAll() {
 		this.allRowsSelected = !this.allRowsSelected;
@@ -641,7 +641,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * Select or unselect a row
 	 *
 	 * @param {*} item
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	toggle(item: any) {
 		const needle = this.selectableProperty ? item[this.selectableProperty] : item;
@@ -662,7 +662,7 @@ export class TableSorterComponent implements OnDestroy {
 	/**
 	 * Select or deselect a row if it exists in the collection of selected items
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	markSelected() {
 		if (!this.data?.[this.mapping.data]?.length) {
@@ -682,7 +682,7 @@ export class TableSorterComponent implements OnDestroy {
 	 * @param {any[]} list
 	 * @param {*} needle
 	 * @return {*}  {boolean}
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	private _contains(list: any[], needle: any): boolean {
 
@@ -702,19 +702,19 @@ export class TableSorterComponent implements OnDestroy {
 	/**
 	 * Initializes the filtering form and its subscription
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	_initializeFilterForm(): void {
 		this.filterFGSct?.unsubscribe();
 		const specificSearchFG = this._fb.group({});
 
-		this.filterHeaders = (this._headers as NbTableSorterHeader[]).filter(h => typeof h === 'object' && h.filter);
+		this.filterHeaders = (this._headers as PaginableTableHeader[]).filter(h => typeof h === 'object' && h.filter);
 		this.filterHeaders.forEach(h => {
 			specificSearchFG.addControl(h.filter.key || h.property, new FormControl(null));
 		});
 
 		if (this.id) {
-			const view = JSON.parse(localStorage.getItem('nb-table-sorter_view_' + this.id)) ?? {};
+			const view = JSON.parse(localStorage.getItem('paginable-table_view_' + this.id)) ?? {};
 			specificSearchFG.patchValue(view);
 		}
 
@@ -748,7 +748,7 @@ export class TableSorterComponent implements OnDestroy {
 	/**
 	 * Clean the advanced filter form
 	 *
-	 * @memberof TableSorterComponent
+	 * @memberof PaginableTableComponent
 	 */
 	clearAdvancedFilters(): void {
 		this.filterFG.reset();

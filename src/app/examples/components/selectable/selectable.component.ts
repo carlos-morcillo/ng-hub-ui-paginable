@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { NbTableSorterHeader } from '../../../../../public_api';
 import { MockedUsersService } from '../../../mocked-users.service';
+import { PaginableTableHeader } from '../../../../ng-paginable';
 
 @Component({
-	selector: 'nb-selectable',
+	selector: 'selectable',
 	templateUrl: './selectable.component.html',
 	styleUrls: ['./selectable.component.scss']
 })
 export class SelectableComponent implements OnInit {
 
 	items: any[];
-	headers: (NbTableSorterHeader | string)[] = [
+	headers: (PaginableTableHeader | string)[] = [
 		'id',
 		'username',
 		'email',

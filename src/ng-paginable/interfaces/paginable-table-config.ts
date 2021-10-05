@@ -1,4 +1,4 @@
-export interface NbTableSorterConfig {
+export interface PaginableTableConfig {
 	theme?: string;
 	mapping?: {
 		currentPage?: string;

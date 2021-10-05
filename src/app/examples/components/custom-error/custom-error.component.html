@@ -2,11 +2,11 @@
 	<h2 class="d-inline">Custom error</h2>
 	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
 </div>
-<table-sorter (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination">
-	<ng-template nbTableSorterError>
+<paginable-table (onParamsChange)="fetch($event)" [headers]="headers" [pagination]="pagination">
+	<ng-template paginableTableError>
 		<div class="text-center">
 			<img src="https://media2.giphy.com/media/mq5y2jHRCAqMo/giphy.gif?cid=ecf05e47bcmab37y3cdfyk4ymdwu9sy0b9kvyp195fp4or5e&rid=giphy.gif&ct=g"
 				alt="Error">
 		</div>
 	</ng-template>
-</table-sorter>
+</paginable-table>
