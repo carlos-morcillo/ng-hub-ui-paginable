@@ -1,6 +1,6 @@
 {
   "name": "ng-paginable",
-  "version": "1.24.9",
+  "version": "1.24.10",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

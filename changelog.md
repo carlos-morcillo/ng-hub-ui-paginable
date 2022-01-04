@@ -1,6 +1,9 @@
 # Changelog
 
 
+## [1.24.10] - 2021-12-16
+### Fixed
+- Visualización del selector de items por página.
 ## [1.24.9] - 2021-10-05
 ### Fixed
 - Corrección del botón de abrir/cerra el typeahead cuando los resultados se están mostrando.
