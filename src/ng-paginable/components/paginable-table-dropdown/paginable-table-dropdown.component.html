@@ -1,5 +1,5 @@
-<div class="dropdown btn-group" [class.show]="shown">
-	<button class="px-2 toggle" type="button" [ngClass]="buttonClass" [title]="options.title || null"
+<div class="btn-group" [class.show]="shown">
+	<button class="px-2 dropdown-toggle" type="button" [ngClass]="buttonClass" [title]="options.title || null"
 		data-toggle="dropdown" [attr.aria-expanded]="shown" (click)="shown = !shown" [disabled]="disabled">
 		<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
 	</button>

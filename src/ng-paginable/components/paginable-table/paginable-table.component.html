@@ -141,8 +141,8 @@
 					<label
 						class="col col-form-label text-nowrap"><small>{{ 'ROWS_PER_PAGE' | translate | ucfirst}}:</small></label>
 					<div class="col pl-0">
-						<select class="form-control form-control-sm" id="RowsPerPageInput" [(ngModel)]="itemsPerPage"
-							[ngModelOptions]="{standalone: true}">
+						<select class="form-select form-select-sm form-control form-control-sm" id="RowsPerPageInput"
+							[(ngModel)]="itemsPerPage" [ngModelOptions]="{standalone: true}">
 							<option *ngFor="let option of perPageOptions" [value]="option">{{ option }}</option>
 						</select>
 					</div>
@@ -194,7 +194,7 @@
 
 	<ng-template #defaultFilterTpt let-header="header" let-formControl="formControl">
 		<ng-container [ngSwitch]="header.filter.type">
-			<select *ngSwitchCase="'dropdown'" [formControl]="formControl" class="form-control">
+			<select *ngSwitchCase="'dropdown'" [formControl]="formControl" class="form-select form-control">
 				<option *ngIf="header.filter.placeholder" [ngValue]="null">
 					{{ header.filter.placeholder }}
 				</option>

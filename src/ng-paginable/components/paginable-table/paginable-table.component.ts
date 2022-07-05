@@ -129,6 +129,7 @@ export class PaginableTableComponent implements OnDestroy {
 				})
 			).subscribe((result: PaginableTablePagination) => {
 				this.data = result;
+				this.markSelected();
 			});
 		} else {
 			this.data = v as PaginableTablePagination;
@@ -162,9 +163,7 @@ export class PaginableTableComponent implements OnDestroy {
 		};
 		this.data = this.rows ? this._paginationSvc.generate(this.rows, params) : null;
 		this.allRowsSelected = false;
-		if (this.selectable || this.batchActions?.length) {
-			this.markSelected();
-		}
+		this.markSelected();
 	}
 
 	/**
@@ -243,7 +242,7 @@ export class PaginableTableComponent implements OnDestroy {
 	set batchActions(v: Array<PaginableTableDropdown | PaginableTableButton>) {
 		this._batchActions = v.map(b => {
 			if ((b as PaginableTableDropdown).buttons) {
-				b = { fill: null, position: 'left', color: 'light', ...b };
+				b = { fill: null, position: 'start', color: 'light', ...b };
 			}
 			return b;
 		});
@@ -434,6 +433,7 @@ export class PaginableTableComponent implements OnDestroy {
 		} else {
 			this.selectedItems = [];
 		}
+		this.markSelected();
 	}
 
 	onChange = (_: any) => { }

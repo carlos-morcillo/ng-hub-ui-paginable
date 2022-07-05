@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.25.7] - 2022-07-05
+### Fixed
+- Formularios reactivos
+
+## [1.25.6] - 2022-07-05
+### Fixed
+- Formularios reactivos
+
+## [1.25.5] - 2022-07-01
+### Fixed
+- Estilo de Bootstrap 5
+
+## [1.25.4] - 2022-06-09
+### Fixed
+- Estilo de filtros para Bootstrap 5
+
+## [1.25.4] - 2022-03-31
+### Fixed
+- Estilo del selector de filas por página para Bootstrap 5
 
 ## [1.24.9] - 2021-10-05
 ### Fixed

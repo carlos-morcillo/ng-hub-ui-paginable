@@ -32,6 +32,7 @@ import { CustomFiltersComponent } from './components/custom-filters/custom-filte
 import { CustomViewsComponent } from './components/custom-views/custom-views.component';
 import { CustomViewSaverFormComponent } from './components/custom-view-saver-form/custom-view-saver-form.component';
 import { CustomViewSaverComponent } from './components/custom-view-saver/custom-view-saver.component';
+import { ReactiveFormComponent } from './components/reactive-form/reactive-form.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
@@ -62,7 +63,8 @@ const routes: Routes = [
 	{ path: 'error', component: ErrorComponent },
 	{ path: 'custom-error', component: CustomErrorComponent },
 	{ path: 'custom-views', component: CustomViewsComponent },
-	{ path: 'custom-view-saver', component: CustomViewSaverComponent }
+	{ path: 'custom-view-saver', component: CustomViewSaverComponent },
+	{ path: 'reactive-form', component: ReactiveFormComponent }
 ];
 
 @NgModule({
@@ -95,7 +97,8 @@ const routes: Routes = [
 		CustomFiltersComponent,
 		CustomViewsComponent,
 		CustomViewSaverFormComponent,
-		CustomViewSaverComponent
+		CustomViewSaverComponent,
+		ReactiveFormComponent
 	],
 	imports: [
 		CommonModule,

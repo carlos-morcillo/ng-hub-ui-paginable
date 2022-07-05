@@ -3,7 +3,7 @@
 	"version": 1,
 	"newProjectRoot": "projects",
 	"projects": {
-		"nb-table-sorter": {
+		"ng-paginable": {
 			"projectType": "application",
 			"schematics": {
 				"@schematics/angular:component": {
@@ -17,7 +17,7 @@
 				"build": {
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
-						"outputPath": "dist/nb-table-sorter",
+						"outputPath": "dist/ng-paginable",
 						"index": "src/index.html",
 						"main": "src/main.ts",
 						"polyfills": "src/polyfills.ts",
@@ -72,18 +72,18 @@
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"options": {
-						"browserTarget": "nb-table-sorter:build"
+						"browserTarget": "ng-paginable:build"
 					},
 					"configurations": {
 						"production": {
-							"browserTarget": "nb-table-sorter:build:production"
+							"browserTarget": "ng-paginable:build:production"
 						}
 					}
 				},
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n",
 					"options": {
-						"browserTarget": "nb-table-sorter:build"
+						"browserTarget": "ng-paginable:build"
 					}
 				},
 				"test": {
@@ -120,16 +120,16 @@
 					"builder": "@angular-devkit/build-angular:protractor",
 					"options": {
 						"protractorConfig": "e2e/protractor.conf.js",
-						"devServerTarget": "nb-table-sorter:serve"
+						"devServerTarget": "ng-paginable:serve"
 					},
 					"configurations": {
 						"production": {
-							"devServerTarget": "nb-table-sorter:serve:production"
+							"devServerTarget": "ng-paginable:serve:production"
 						}
 					}
 				}
 			}
 		}
 	},
-	"defaultProject": "nb-table-sorter"
+	"defaultProject": "ng-paginable"
 }
