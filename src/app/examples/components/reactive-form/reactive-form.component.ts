@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { map, Observable, of, timer } from 'rxjs';
 import { PaginableTableHeader, PaginableTablePagination } from '../../../../ng-paginable';
 import { MockedUsersService } from '../../../mocked-users.service';
@@ -22,12 +22,12 @@ export class ReactiveFormComponent implements OnInit {
 
 	selectedItems: any[];
 
-	form: FormGroup = this._fb.group({
+	form: UntypedFormGroup = this._fb.group({
 		userIds: [[1, 2, 3]]
 	});
 
 	constructor(
-		private _fb: FormBuilder,
+		private _fb: UntypedFormBuilder,
 		private _mockedUsersSvc: MockedUsersService
 	) { }
 

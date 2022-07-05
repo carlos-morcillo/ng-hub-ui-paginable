@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Input, OnDestroy, Output, QueryList, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { get } from 'lodash';
 import { isObservable, merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, map, startWith, tap } from 'rxjs/operators';
@@ -342,7 +342,7 @@ export class PaginableTableComponent implements OnDestroy {
 	 * @type {FormGroup}
 	 * @memberof PaginableTableComponent
 	 */
-	filterFG: FormGroup = new FormGroup({});
+	filterFG: UntypedFormGroup = new UntypedFormGroup({});
 
 	/**
 	 * Event triggered when a filter value changes
@@ -409,7 +409,7 @@ export class PaginableTableComponent implements OnDestroy {
 	@Output() viewDeleted = new EventEmitter<View | string>();
 
 	constructor(
-		private _fb: FormBuilder,
+		private _fb: UntypedFormBuilder,
 		private _translationSvc: TranslationService,
 		private _configSvc: PaginateService,
 		private _paginationSvc: PaginationService
@@ -710,7 +710,7 @@ export class PaginableTableComponent implements OnDestroy {
 
 		this.filterHeaders = (this._headers as PaginableTableHeader[]).filter(h => typeof h === 'object' && h.filter);
 		this.filterHeaders.forEach(h => {
-			specificSearchFG.addControl(h.filter.key || h.property, new FormControl(null));
+			specificSearchFG.addControl(h.filter.key || h.property, new UntypedFormControl(null));
 		});
 
 		if (this.id) {

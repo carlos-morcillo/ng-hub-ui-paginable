@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { snakeCase } from 'lodash';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
@@ -32,13 +32,13 @@ export class ViewSelectorComponent implements OnInit {
 
 	@ViewChild('viewSaverFormTpt', { read: ViewContainerRef }) viewSaverFormTpt: ViewContainerRef;
 
-	form: FormGroup = this._fb.group({
+	form: UntypedFormGroup = this._fb.group({
 		name: [null, Validators.required],
 		conditions: this._fb.array([])
 	});
 
-	get conditionsFA(): FormArray {
-		return this.form.get('conditions') as FormArray;
+	get conditionsFA(): UntypedFormArray {
+		return this.form.get('conditions') as UntypedFormArray;
 	}
 
 	variables = {
@@ -119,7 +119,7 @@ export class ViewSelectorComponent implements OnInit {
 	}
 
 	constructor(
-		private _fb: FormBuilder,
+		private _fb: UntypedFormBuilder,
 		private _translateSvc: TranslateService,
 		private _viewsSvc: ViewsService,
 		private _modalSvc: ModalService,
@@ -151,9 +151,9 @@ export class ViewSelectorComponent implements OnInit {
 			this.form.get('name').patchValue(view.name);
 
 			// Filling condition values
-			const conditionsFA = this.form.get('conditions') as FormArray;
+			const conditionsFA = this.form.get('conditions') as UntypedFormArray;
 			for (const condition of conditions) {
-				const conditionFG: FormGroup = conditionsFA.controls.find((c: FormGroup) => c.get('key').value === condition.key) as FormGroup;
+				const conditionFG: UntypedFormGroup = conditionsFA.controls.find((c: UntypedFormGroup) => c.get('key').value === condition.key) as UntypedFormGroup;
 				if (conditionFG) {
 					conditionFG.patchValue(condition);
 				}
