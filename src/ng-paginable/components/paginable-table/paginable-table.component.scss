@@ -14,6 +14,16 @@
 
 	table {
 		position: relative;
+
+		&.table.table-selectable {
+			tbody > tr {
+				cursor: pointer;
+
+				&.row-selected {
+					background-color: #ccc;
+				}
+			}
+		}
 	}
 
 	thead {

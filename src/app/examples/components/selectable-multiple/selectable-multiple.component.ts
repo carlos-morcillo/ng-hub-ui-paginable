@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { MockedUsersService } from '../../../mocked-users.service';
 import { PaginableTableHeader } from '../../../../ng-paginable';
+import { MockedUsersService } from '../../../mocked-users.service';
 
 @Component({
-	selector: 'selectable',
-	templateUrl: './selectable.component.html',
-	styleUrls: ['./selectable.component.scss']
+	selector: 'app-selectable-multiple',
+	templateUrl: './selectable-multiple.component.html',
+	styleUrls: ['./selectable-multiple.component.scss']
 })
-export class SelectableComponent implements OnInit {
+export class SelectableMultipleComponent implements OnInit {
 
 	items: any[];
 	headers: (PaginableTableHeader | string)[] = [
@@ -20,7 +20,7 @@ export class SelectableComponent implements OnInit {
 
 	selectedItems: any[];
 
-	value: number = 3
+	value: any[] = [1, 2, 3];
 
 	constructor(
 		private _mockedUsersSvc: MockedUsersService

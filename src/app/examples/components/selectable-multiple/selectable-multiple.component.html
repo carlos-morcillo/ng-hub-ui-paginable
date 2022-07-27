@@ -1,0 +1,11 @@
+<div class="mb-5 d-flex justify-content-between align-items-center">
+	<h2 class="d-inline">Selectable multiple rows</h2>
+	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
+</div>
+<paginable-table [headers]="headers" [selectable]="true" [multiple]="true" [rows]="items" selectableProperty="id"
+	(onSelected)="selectedItems = $event;" [(ngModel)]="value">
+</paginable-table>
+<div class="alert alert-info mt-4" role="alert">
+	<strong>Result: </strong>
+	<pre>{{ value | json }} </pre>
+</div>

@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.27.0] - 2022-07-27
+### Added
+- Selección única y múltiple
+
+## [1.26.0] - 2022-07-05
+### Changed
+- Angular 14
+
 ## [1.25.7] - 2022-07-05
 ### Fixed
 - Formularios reactivos

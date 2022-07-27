@@ -191,6 +191,14 @@ export class PaginableTableComponent implements OnDestroy {
 	@Input() selectable: boolean = false;
 
 	/**
+	 * Set whether the selectable can be multiple
+	 *
+	 * @type {boolean}
+	 * @memberof PaginableTableComponent
+	 */
+	@Input() multiple: boolean = false;
+
+	/**
 	 * If set, it will be the property returned in the onSelected event
 	 *
 	 * @type {string}
@@ -429,7 +437,7 @@ export class PaginableTableComponent implements OnDestroy {
 
 	writeValue(value: any): void {
 		if (value) {
-			this.selectedItems = value || [];
+			this.selectedItems = Array.isArray(value) ? value : [value];
 		} else {
 			this.selectedItems = [];
 		}
@@ -464,7 +472,11 @@ export class PaginableTableComponent implements OnDestroy {
 	}
 
 	itemClicked(item: any) {
-		this.itemClick.next(item);
+		if (this.selectable) {
+			this.toggle(item);
+		} else {
+			this.itemClick.next(item);
+		}
 	}
 
 	filter() {
@@ -634,7 +646,7 @@ export class PaginableTableComponent implements OnDestroy {
 			o.selected = this.allRowsSelected;
 		});
 		this.onSelected.emit(this.selectedItems);
-		this.onChange(this.selectedItems);
+		this.emitValue();
 	}
 
 	/**
@@ -654,9 +666,18 @@ export class PaginableTableComponent implements OnDestroy {
 			item.selected = true;
 		}
 
-		this.allRowsSelected = this.data[this.mapping.data].every(o => o.selected);
+		if (!this.multiple) {
+			this.selectedItems = item.selected ? [needle] : [];
+			this.data[this.mapping.data].forEach(o => {
+				const needle = this.selectableProperty ? o[this.selectableProperty] : o;
+				o.selected = this.selectedItems.indexOf(needle) > -1;
+			});
+		} else {
+			this.allRowsSelected = this.data[this.mapping.data].every(o => o.selected);
+		}
+
 		this.onSelected.emit(this.selectedItems);
-		this.onChange(this.selectedItems);
+		this.emitValue();
 	}
 
 	/**
@@ -752,5 +773,13 @@ export class PaginableTableComponent implements OnDestroy {
 	 */
 	clearAdvancedFilters(): void {
 		this.filterFG.reset();
+	}
+
+	/**
+	 * Emite el valor de los items seleccionados
+	 *
+	 */
+	emitValue() {
+		this.onChange(this.multiple ? this.selectedItems : this.selectedItems[0]);
 	}
 }

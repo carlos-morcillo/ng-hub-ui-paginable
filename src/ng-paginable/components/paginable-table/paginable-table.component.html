@@ -66,10 +66,11 @@
 		<!-- Table -->
 		<ng-container *ngIf="data">
 			<div class="{{ responsiveCSSClass }} table-responsive mb-4">
-				<table *ngIf="data" @fadeInOut class="table mb-0" [class.table-hover]="options.hoverableRows">
+				<table *ngIf="data" @fadeInOut class="table mb-0"
+					[class.table-hover]="options.hoverableRows || selectable" [class.table-selectable]="selectable">
 					<thead>
 						<tr>
-							<th *ngIf="selectable || batchActions?.length" class="sticky-start actions">
+							<th *ngIf="(selectable && multiple) || batchActions?.length" class="sticky-start actions">
 								<input type="checkbox" [(ngModel)]="allRowsSelected"
 									[ngModelOptions]="{standalone: true}" (click)="toggleAll()" [disabled]="disabled">
 							</th>
@@ -99,7 +100,8 @@
 						<!-- Filtering -->
 						<tr *ngIf="filterHeaders?.length" class="filter_row"
 							[formGroup]="filterFG.get('specificSearch')">
-							<td *ngIf="selectable || batchActions?.length" class="filter_cell sticky-start">
+							<td *ngIf="(selectable && multiple) || batchActions?.length"
+								class="filter_cell sticky-start">
 							</td>
 							<td *ngFor="let header of headers; let last = last;" class="filter_cell"
 								[ngClass]="{'sticky-start': header.sticky === 'start', 'sticky-end': header.sticky === 'end', 'actions': header.buttons, 'text-right text-end filter_cell_clear': (last && lastColumnOnlyHasButtons)}">
@@ -157,8 +159,8 @@
 	</form>
 
 	<ng-template #defaultRowTemplate let-item>
-		<tr (click)="itemClicked(item)" [style.cursor]="options.cursor || 'default'">
-			<td *ngIf="selectable || batchActions?.length">
+		<tr (click)="itemClicked(item)" [class.row-selected]="selectable && item.selected" [role.button]="selectable">
+			<td *ngIf="(selectable && multiple) || batchActions?.length">
 				<input type="checkbox" [(ngModel)]="item.selected" [ngModelOptions]="{standalone: true}"
 					(click)="$event.stopPropagation(); toggle(item);">
 			</td>

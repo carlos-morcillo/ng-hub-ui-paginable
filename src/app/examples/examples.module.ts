@@ -33,11 +33,15 @@ import { CustomViewsComponent } from './components/custom-views/custom-views.com
 import { CustomViewSaverFormComponent } from './components/custom-view-saver-form/custom-view-saver-form.component';
 import { CustomViewSaverComponent } from './components/custom-view-saver/custom-view-saver.component';
 import { ReactiveFormComponent } from './components/reactive-form/reactive-form.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { SelectableMultipleComponent } from './components/selectable-multiple/selectable-multiple.component';
+import { RoutablesRowsComponent } from './components/routables-rows/routables-rows.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'server-pagination' },
 	{ path: 'server-pagination', component: ServerPaginationComponent },
 	{ path: 'client-pagination', component: ClientPaginationComponent },
+	{ path: 'routable-rows', component: RoutablesRowsComponent },
 	{ path: 'rows-with-actions', component: RowsWithActionsComponent },
 	{ path: 'custom-headers', component: CustomHeadersComponent },
 	{ path: 'sortable', component: SortableComponent },
@@ -51,6 +55,7 @@ const routes: Routes = [
 	{ path: 'custom-cells', component: CustomCellsComponent },
 	{ path: 'expanding-rows', component: ExpandingRowsComponent },
 	{ path: 'selectable', component: SelectableComponent },
+	{ path: 'selectable-multiple', component: SelectableMultipleComponent },
 	{ path: 'custom-rows-per-page', component: CustomRowsPerPageComponent },
 	{ path: 'not-paginated', component: NotPaginatedComponent },
 	{ path: 'sticky-columns', component: StickyColumnsComponent },
@@ -98,14 +103,17 @@ const routes: Routes = [
 		CustomViewsComponent,
 		CustomViewSaverFormComponent,
 		CustomViewSaverComponent,
-		ReactiveFormComponent
+		ReactiveFormComponent,
+		SelectableMultipleComponent,
+		RoutablesRowsComponent
 	],
 	imports: [
 		CommonModule,
 		FormsModule,
 		ReactiveFormsModule,
 		RouterModule.forChild(routes),
-		NgPaginableModule
+		NgPaginableModule,
+		NgSelectModule
 	]
 })
 export class ExamplesModule { }

@@ -1,6 +1,6 @@
 {
 	"name": "ng-paginable",
-	"version": "1.25.7",
+	"version": "1.27.0",
 	"description": "Paginable table",
 	"main": "index.js",
 	"scripts": {

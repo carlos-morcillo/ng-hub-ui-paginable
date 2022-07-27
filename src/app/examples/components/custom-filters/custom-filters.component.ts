@@ -73,6 +73,8 @@ export class CustomFiltersComponent implements OnInit {
 	];
 	searchKeys: string[] = ['id', 'username', 'email', 'name'];
 
+	people$ = of(this._mockedUsersSvc.items.map(o => ({ id: o.id, username: o.username })));
+
 	constructor(
 		private _mockedUsersSvc: MockedUsersService
 	) { }

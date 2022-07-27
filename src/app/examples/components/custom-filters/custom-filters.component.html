@@ -12,4 +12,10 @@
 			</label>
 		</div>
 	</ng-template>
+	<ng-template paginableTableFilter header="username" let-header="header" let-formControl="formControl">
+		<ng-select [items]="people$ | async" bindLabel="username" autofocus bindValue="id" [formControl]="formControl">
+		</ng-select>
+	</ng-template>
 </paginable-table>
+
+<pre>{{people$ | async | json}}</pre>
