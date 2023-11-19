@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { locale as enLang } from '../assets/i18n/en';
 import { locale as esLang } from '../assets/i18n/es';
 import { PaginableService } from './paginable.service';
+import { getValue } from '../utils';
 
 @Injectable()
 export class PaginableTranslationService {
@@ -15,7 +16,6 @@ export class PaginableTranslationService {
 	translationObserver = this.translationSource.asObservable();
 
 	constructor() {
-		console.log('PaginableTranslationService');
 		this.initialize();
 	}
 
@@ -31,7 +31,7 @@ export class PaginableTranslationService {
 	}
 
 	getTranslation(key: string): any {
-		return this.translations[key as keyof typeof this.translations];
+		return getValue(this.translations, key);
 	}
 
 	setTranslation(value: Record<string, string>) {

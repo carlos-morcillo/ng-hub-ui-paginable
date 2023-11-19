@@ -25,7 +25,8 @@ export const locale = {
 		A_VIEW_WILL_BE_CREATED:
 			'A view will be created with the following configuration',
 		MUST_PROVIDE_A_VIEW_NAME: 'Must provide a view name.',
-		MUST_PROVIDE_VIEW_CONDITIONS: 'Must provide the conditions of the view.',
+		MUST_PROVIDE_VIEW_CONDITIONS:
+			'Must provide the conditions of the view.',
 		TODAY: 'today',
 		YESTERDAY: 'yesterday',
 		CURRENT_WEEK: 'current_week',
@@ -44,11 +45,23 @@ export const locale = {
 		ADD_RULE: 'Añadir condición',
 		MATCH_ALL: 'Coincidir todo',
 		MATCH_ANY: 'Coincidir algo',
-		CONTAINS: 'Contiene',
-		NOTCONTAINS: 'No contiene',
-		STARTSWITH: 'empieza con',
-		ENDSWITH: 'termina con',
-		EQUALS: 'es igual a',
-		NOTEQUALS: 'es diferente a'
+		MATCH_MODES: {
+			GREATERTHAN: 'Greater than',
+			GREATERTHANOREQUAL: 'Greater than or equal to',
+			LESSTHAN: 'Less than',
+			LESSTHANOREQUAL: 'Less than or equal to',
+			EQUALS: 'Equals',
+			NOTEQUALS: 'Not equal to',
+			EQUAL: 'Equal to',
+			NOTEQUAL: 'Not equal to',
+			BEFORE: 'Before',
+			BEFOREOREQUAL: 'Before or equal to',
+			AFTER: 'After',
+			AFTEROREQUAL: 'After or equal to',
+			STARTSWITH: 'Starts with',
+			CONTAINS: 'Contains',
+			NOTCONTAINS: 'Does not contain',
+			ENDSWITH: 'Ends with'
+		}
 	}
 };

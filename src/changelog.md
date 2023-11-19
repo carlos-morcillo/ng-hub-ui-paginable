@@ -1,4 +1,8 @@
 # Changelog
+
+# [1.42.0] - 2023-11-20
+- Removed library ngx-translate
+
 # [1.40.5] - 2023-11-09
 - Fixed some translation issues
 

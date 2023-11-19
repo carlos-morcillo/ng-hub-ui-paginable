@@ -44,11 +44,23 @@ export const locale = {
 		ADD_RULE: 'Añadir condición',
 		MATCH_ALL: 'Coincidir todo',
 		MATCH_ANY: 'Coincidir algo',
-		CONTAINS: 'Contiene',
-		NOTCONTAINS: 'No contiene',
-		STARTSWITH: 'empieza con',
-		ENDSWITH: 'termina con',
-		EQUALS: 'es igual a',
-		NOTEQUALS: 'es diferente a'
+		MATCH_MODES: {
+			GREATERTHAN: 'Mayor que',
+			GREATERTHANOREQUAL: 'Mayor o igual que',
+			LESSTHAN: 'Menor que',
+			LESSTHANOREQUAL: 'Menor o igual que',
+			EQUALS: 'Igual a',
+			NOTEQUALS: 'No igual a',
+			EQUAL: 'Igual a',
+			NOTEQUAL: 'No igual a',
+			BEFORE: 'Antes de',
+			BEFOREOREQUAL: 'Antes o igual a',
+			AFTER: 'Después de',
+			AFTEROREQUAL: 'Después o igual a',
+			STARTSWITH: 'Comienza con',
+			CONTAINS: 'Contiene',
+			NOTCONTAINS: 'No contiene',
+			ENDSWITH: 'Termina con'
+		}
 	}
 };

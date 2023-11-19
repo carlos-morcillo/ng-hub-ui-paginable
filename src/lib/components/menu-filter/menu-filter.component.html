@@ -24,14 +24,37 @@
 					formControlName="matchMode"
 				>
 					<option *ngFor="let mode of matchModes" [value]="mode">
-						{{ $any(mode) | uppercase | translate | ucfirst }}
+						{{
+							'MATCH_MODES.' + $any(mode)
+								| uppercase
+								| translate
+								| ucfirst
+						}}
 					</option>
 				</select>
-				<input
-					type="text"
-					class="form-control"
-					formControlName="value"
-				/>
+				<div [ngSwitch]="header.filter?.type">
+					<div *ngSwitchCase="'number'">
+						<input
+							type="number"
+							class="form-control"
+							formControlName="value"
+						/>
+					</div>
+					<div *ngSwitchCase="'date'">
+						<input
+							type="date"
+							class="form-control"
+							formControlName="value"
+						/>
+					</div>
+					<div *ngSwitchDefault>
+						<input
+							type="text"
+							class="form-control"
+							formControlName="value"
+						/>
+					</div>
+				</div>
 			</div>
 		</li>
 	</ng-container>

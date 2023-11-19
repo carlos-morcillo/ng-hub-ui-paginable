@@ -17,7 +17,6 @@ export class PaginableService {
 		@Inject(PaginateConfigService)
 		private _config = DEFAULT_PAGINABLE_CONFIG
 	) {
-		console.log('PaginableService');
 		this.initialize();
 	}
 

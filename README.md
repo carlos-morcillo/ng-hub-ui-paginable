@@ -324,9 +324,6 @@ This allows performing bulk actions on the currently selected rows in the table.
 | focus  | Focuses the select element |
 | blur  | Blurs the select element |
 
-
-
-
 ## Templates
 
 Each of the following templates can be used for different purposes:
@@ -475,7 +472,7 @@ The expandable row template can be used to define the content that appears when 
 		</tr>
 	</ng-template>
 </paginable-table>
-````
+```
 
 ### Filters
 The filters template can be used to customize the appearance and behavior of filters for each column.
@@ -514,7 +511,88 @@ The filters template can be used to customize the appearance and behavior of fil
 ```
 
 ## Other
-...
+
+### Translating Labels
+
+ng-paginable includes predefined labels in English and Spanish that are used in the component's UI.
+
+These labels can easily be replaced to support other languages or custom translations.
+
+### Default Translations
+
+By default, ng-paginable uses the browser's language to select between English and Spanish. This displays the default labels without needing additional configuration.
+
+### Customizing Translations
+
+You can provide custom translations to the `PaginableTranslationService`:
+
+```typescript 
+@Component({
+  // ..
+})
+export class AppComponent {
+
+  constructor(private translationService: PaginableTranslationService) {
+
+    this.translationService.setTranslation({
+      first: 'First',
+      prev: 'Previous', 
+      next: 'Next',
+      last: 'Last'
+      // ...
+    });
+
+  }
+
+}
+```
+
+This overrides the default labels.
+
+### Integration with Translation Libraries 
+
+To integrate ng-paginable with translation libraries like ngx-translate, you can subscribe to language changes:
+
+```typescript
+@Component({
+  // ...  
+})
+export class AppComponent {
+
+  constructor(
+    private translate: TranslateService,
+    private translationService: PaginableTranslationService
+  ) {
+
+    this.translate.onLangChange.subscribe((event) => {
+
+      this.translate.get('PAGINATION').subscribe((translations) => {
+        this.translationService.setTranslation(translations);
+      })
+
+    });
+
+  }
+
+}
+```
+
+This way, when the language changes in the app, the pagination labels are updated.
+
+This allows for complete, integrated translation across the UI.
+
+### Translation API
+
+The `PaginableTranslationService` exposes the following methods:
+
+```typescript
+setTranslation(translations: PaginableTranslations) // sets translations
+getTranslation(key: string) // gets a specific label
+```
+
+This provides full control over the labels and language used by the component.
+
+With this flexible API it's straightforward to integrate ng-paginable with any translation strategy.
 
 ## Configuration (Optional)
 You can also set global configuration and localization messages by passing a config to forRoot method of NgPaginableModule, typically in your root component, and customize the values of its properties in order to provide default values.
@@ -538,8 +616,6 @@ You can also set global configuration and localization messages by passing a con
 })
 export class UserListModule {}
 ```
-
-
 
 ## Change Detection
 Ng-paginable component implements `OnPush` change detection which means the dirty checking checks for immutable 

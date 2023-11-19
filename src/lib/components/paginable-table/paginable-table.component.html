@@ -136,7 +136,6 @@
 							<th
 								resizable
 								*ngFor="let item of headers"
-								(click)="sort(item)"
 								[ngClass]="{
 									'sticky-start': item.sticky === 'start',
 									'sticky-end': item.sticky === 'end',
@@ -169,12 +168,20 @@
 										"
 										class="d-flex gap-2 ms-auto align-items-center"
 									>
-										<i
-											class="fa"
-											*ngIf="item.sortable"
-											[ngClass]="getOrdenationClass(item)"
-											aria-hidden="true"
-										></i>
+										<button
+											class="btn"
+											(click)="sort(item)"
+										>
+											<i
+												class="fa"
+												*ngIf="item.sortable"
+												[ngClass]="
+													getOrdenationClass(item)
+												"
+												aria-hidden="true"
+											></i>
+										</button>
+
 										<ng80-dropdown
 											*ngIf="item.filter?.mode === 'menu'"
 											(open)="
