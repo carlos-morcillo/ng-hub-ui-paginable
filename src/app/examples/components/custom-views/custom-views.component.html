@@ -1,9 +1,0 @@
-<div class="mb-5 d-flex justify-content-between align-items-center">
-	<h2 class="d-inline">Custom views</h2>
-	<a class="btn btn-outline-primary float-right" href="#"><i class="fab fa-fw fa-github"></i>View code in Github</a>
-</div>
-
-<paginable-table id="customViewExample" (filterChange)="onFilterChange($event)" (onParamsChange)="fetch($event)"
-	[selectable]="true" [headers]="headers" [pagination]="pagination" [searchKeys]="searchKeys"
-	[showViewSelector]="true" (viewEdited)="saveView($event)" (viewDeleted)="deleteView($event)" [views]="views">
-</paginable-table>
