@@ -36,6 +36,7 @@ import { UcfirstPipe } from './pipes/ucfirst.pipe';
 import { PaginateConfigService } from './services/paginate-config.service';
 import { PaginableService } from './services/paginable.service';
 import { TranslatePipe } from './translate.pipe';
+import { PaginableTranslationService } from './services/paginable-translation.service';
 
 @NgModule({
 	declarations: [
@@ -110,11 +111,12 @@ export class NgPaginableModule {
 		return {
 			ngModule: NgPaginableModule,
 			providers: [
-				PaginableService,
 				{
 					provide: PaginateConfigService,
 					useValue: config
-				}
+				},
+				PaginableService,
+				PaginableTranslationService
 			]
 		};
 	}

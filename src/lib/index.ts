@@ -46,6 +46,7 @@ export { View } from './interfaces/view';
 // Services
 export { PaginationService } from './services/pagination.service';
 export { PaginableService } from './services/paginable.service';
+export { PaginableTranslationService } from './services/paginable-translation.service';
 
 // Constants
 export { BREAKPOINTS } from './constants/breakpoints';

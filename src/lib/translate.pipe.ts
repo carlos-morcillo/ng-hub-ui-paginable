@@ -6,7 +6,7 @@ import {
 	inject
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PaginableService } from './services/paginable.service';
+import { PaginableTranslationService } from './services/paginable-translation.service';
 import { equals, isDefined } from './utis';
 
 @Pipe({
@@ -16,7 +16,8 @@ import { equals, isDefined } from './utis';
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
 	private _ref = inject(ChangeDetectorRef);
-	private _configSvc = inject(PaginableService);
+	private _configSvc = inject(PaginableTranslationService);
+
 	templateMatcher: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
 
 	value: string = '';
@@ -25,39 +26,15 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
 	translationSubscription: Subscription | undefined;
 
-	updateValue(
-		key: string,
-		interpolateParams?: Object,
-		translations?: any
-	): void {
-		/* console.log(key, interpolateParams, translations);
-
-		const value = this._configSvc.getTranslation(key);
-		return value; */
-
-		let onTranslation = (res: string) => {
-			this.value = res !== undefined ? res : key;
-			this.lastKey = key;
-			this._ref.markForCheck();
-		};
-		/* 		if (translations) {
-			let res = this.translate.getParsedResult(
-				translations,
-				key,
-				interpolateParams
-			);
-			if (isObservable(res.subscribe)) {
-				res.subscribe(onTranslation);
-			} else {
-				onTranslation(res);
-			}
-		} */
+	updateValue(key: string, interpolateParams?: Object): void {
 		const value = this.interpolateString(
 			this._configSvc.getTranslation(key),
 			interpolateParams
 		);
-		onTranslation(value);
-		// this.translate.get(key, interpolateParams).subscribe(onTranslation);
+
+		this.value = value !== undefined ? value : key;
+		this.lastKey = key;
+		this._ref.markForCheck();
 	}
 
 	transform(query: string, ...args: any[]): any {
