@@ -50,7 +50,7 @@ import { PaginationParamsChangeEvent } from '../../interfaces/params-change-even
 import { View } from '../../interfaces/view';
 import { PaginableService } from '../../services/paginable.service';
 import { PaginationService } from '../../services/pagination.service';
-import { generateUniqueId } from '../../utis';
+import { generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 
 @Component({

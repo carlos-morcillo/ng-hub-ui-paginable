@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PaginableTranslationService } from './services/paginable-translation.service';
-import { equals, isDefined } from './utis';
+import { equals, interpolateString, isDefined } from './utils';
 
 @Pipe({
 	name: 'translate',
@@ -16,9 +16,7 @@ import { equals, isDefined } from './utis';
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
 	private _ref = inject(ChangeDetectorRef);
-	private _configSvc = inject(PaginableTranslationService);
-
-	templateMatcher: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
+	private _paginableTranslationSvc = inject(PaginableTranslationService);
 
 	value: string = '';
 	lastKey: string | null = null;
@@ -26,17 +24,35 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
 	translationSubscription: Subscription | undefined;
 
+	/**
+	 * Updates the value of a key by interpolating the translation and marking for change detection.
+	 *
+	 * @param {string} key - a string representing the translation key. This key is used to retrieve the translation value from the
+	 * translation service.
+	 * @param {Object} [interpolateParams] - an optional object that contains key-value pairs used for interpolating dynamic values
+	 * into the translated string. These values can be placeholders in the translation string that are replaced with actual values at runtime.
+	 */
 	updateValue(key: string, interpolateParams?: Object): void {
-		const value = this.interpolateString(
-			this._configSvc.getTranslation(key),
+		const value = interpolateString(
+			this._paginableTranslationSvc.getTranslation(key),
 			interpolateParams
 		);
-
 		this.value = value !== undefined ? value : key;
 		this.lastKey = key;
 		this._ref.markForCheck();
 	}
 
+	/**
+	 * Takes a query string and optional arguments, checks if the query and arguments have changed since the last call, parses the
+	 * arguments if they are in string format, updates the value based on the query and arguments, and returns the value.
+	 *
+	 * @param {string} query - a string that represents the translation key or query that needs to be transformed.
+	 * @param {any[]} args - a rest parameter, which means it can accept any number of arguments. In this case, it is used to pass
+	 * additional parameters to the `transform` function. The `...args` syntax allows you to pass multiple arguments separated by
+	 * commas, and they will be collected into
+	 *
+	 * @returns the value of the translation for the given query and arguments.
+	 */
 	transform(query: string, ...args: any[]): any {
 		if (!query || !query.length) {
 			return query;
@@ -81,62 +97,16 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
 		if (!this.translationSubscription) {
 			this.translationSubscription =
-				this._configSvc.translationObserver.subscribe(() => {
-					if (this.lastKey) {
-						this.lastKey = null;
-						this.updateValue(query, interpolateParams);
+				this._paginableTranslationSvc.translationObserver.subscribe(
+					() => {
+						if (this.lastKey) {
+							this.lastKey = null;
+							this.updateValue(query, interpolateParams);
+						}
 					}
-					/* console.log(query);
-					this.setValue(query, interpolateParams);
-					return this.value ?? query; */
-				});
+				);
 		}
-
 		return this.value;
-	}
-
-	setValue(query, interpolateParams) {
-		this.value = this.interpolateString(
-			this._configSvc.getTranslation(query),
-			interpolateParams
-		);
-		//this._ref.markForCheck();
-	}
-
-	private interpolateString(expr: string, params?: any) {
-		if (!params) {
-			return expr;
-		}
-
-		return expr.replace(
-			this.templateMatcher,
-			(substring: string, b: string) => {
-				let r = this.getValue(params, b);
-				return isDefined(r) ? r : substring;
-			}
-		);
-	}
-
-	getValue(target: any, key: string): any {
-		let keys = typeof key === 'string' ? key.split('.') : [key];
-		key = '';
-		do {
-			key += keys.shift();
-			if (
-				isDefined(target) &&
-				isDefined(target[key]) &&
-				(typeof target[key] === 'object' || !keys.length)
-			) {
-				target = target[key];
-				key = '';
-			} else if (!keys.length) {
-				target = undefined;
-			} else {
-				key += '.';
-			}
-		} while (keys.length);
-
-		return target;
 	}
 
 	/**

@@ -308,7 +308,6 @@ This allows performing bulk actions on the currently selected rows in the table.
 
 
 ## Outputs
-
 | Output  | Type | Description |
 | ------------- | ------------- | ------------- |
 | (itemClick)  | T | Fired when item is added while `[multiple]="true"`. Outputs added item |

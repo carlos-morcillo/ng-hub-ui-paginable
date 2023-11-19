@@ -16,6 +16,7 @@ export class PaginableTranslationService {
 
 	constructor() {
 		console.log('PaginableTranslationService');
+		this.initialize();
 	}
 
 	initialize() {
@@ -25,8 +26,7 @@ export class PaginableTranslationService {
 		}, {});
 
 		this.setTranslation(
-			languages[this._paginableSvc.config.language as string] ??
-				languages['en']
+			languages[this._paginableSvc.config.language] ?? languages['en']
 		);
 	}
 

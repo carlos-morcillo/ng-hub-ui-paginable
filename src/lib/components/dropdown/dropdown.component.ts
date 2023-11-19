@@ -10,7 +10,7 @@ import {
 	Output,
 	inject
 } from '@angular/core';
-import { generateUniqueId } from '../../utis';
+import { generateUniqueId } from '../../utils';
 
 @Component({
 	selector: 'ng80-dropdown',
