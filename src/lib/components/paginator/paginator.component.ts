@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { PaginateService } from '../../services/paginate.service';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { PaginableTablePagination } from '../../interfaces/paginable-table-pagination';
+import { PaginableService } from '../../services/paginable.service';
 
 @Component({
 	selector: 'paginable-table-paginator',
@@ -8,7 +8,7 @@ import { PaginableTablePagination } from '../../interfaces/paginable-table-pagin
 	styleUrls: ['./paginator.component.scss']
 })
 export class PaginatorComponent {
-	private _configSvc = inject(PaginateService);
+	private _configSvc = inject(PaginableService);
 
 	@Input() pagination!: PaginableTablePagination | null;
 	@Output() onPageClick = new EventEmitter<number>();

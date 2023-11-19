@@ -9,7 +9,6 @@ import {
 	Output,
 	QueryList,
 	TemplateRef,
-	ViewChild,
 	ViewChildren,
 	forwardRef
 } from '@angular/core';
@@ -49,8 +48,9 @@ import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordin
 import { PaginableTablePagination } from '../../interfaces/paginable-table-pagination';
 import { PaginationParamsChangeEvent } from '../../interfaces/params-change-event';
 import { View } from '../../interfaces/view';
-import { PaginateService } from '../../services/paginate.service';
+import { PaginableService } from '../../services/paginable.service';
 import { PaginationService } from '../../services/pagination.service';
+import { generateUniqueId } from '../../utis';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 
 @Component({
@@ -494,17 +494,14 @@ export class PaginableTableComponent implements OnDestroy {
 
 	constructor(
 		private _fb: UntypedFormBuilder,
-		private _configSvc: PaginateService,
+		private _configSvc: PaginableService,
 		private _paginationSvc: PaginationService
 	) {}
 
 	ngOnInit() {
 		if (!this.id) {
-			this.id = this._configSvc
-				.generateIdFromUrlAndHeaders(this.headers)
-				.toString();
+			this.id = generateUniqueId(16);
 		}
-		console.log(this.dropdownComponents?.toArray());
 	}
 
 	ngOnDestroy(): void {

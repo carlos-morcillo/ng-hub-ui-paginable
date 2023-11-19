@@ -34,7 +34,7 @@ import { IsObservablePipe } from './pipes/is-observable.pipe';
 import { IsStringPipe } from './pipes/is-string.pipe';
 import { UcfirstPipe } from './pipes/ucfirst.pipe';
 import { PaginateConfigService } from './services/paginate-config.service';
-import { PaginateService } from './services/paginate.service';
+import { PaginableService } from './services/paginable.service';
 import { TranslatePipe } from './translate.pipe';
 
 @NgModule({
@@ -110,7 +110,7 @@ export class NgPaginableModule {
 		return {
 			ngModule: NgPaginableModule,
 			providers: [
-				PaginateService,
+				PaginableService,
 				{
 					provide: PaginateConfigService,
 					useValue: config

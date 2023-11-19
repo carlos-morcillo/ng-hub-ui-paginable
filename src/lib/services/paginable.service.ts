@@ -7,7 +7,7 @@ import { mergeDeep } from '../utis';
 import { PaginateConfigService } from './paginate-config.service';
 
 @Injectable()
-export class PaginateService {
+export class PaginableService {
 	config!: Required<PaginableTableConfig>;
 
 	default: PaginableTableConfig = {
@@ -35,7 +35,7 @@ export class PaginateService {
 	}
 
 	constructor(@Inject(PaginateConfigService) private _config) {
-		console.log('PaginateService');
+		console.log('PaginableService');
 		this.initialize();
 	}
 

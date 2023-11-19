@@ -5,9 +5,9 @@ import {
 	PipeTransform,
 	inject
 } from '@angular/core';
-import { PaginateService } from './services/paginate.service';
-import { equals, isDefined } from './utis';
 import { Subscription } from 'rxjs';
+import { PaginableService } from './services/paginable.service';
+import { equals, isDefined } from './utis';
 
 @Pipe({
 	name: 'translate',
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
 	private _ref = inject(ChangeDetectorRef);
-	private _configSvc = inject(PaginateService);
+	private _configSvc = inject(PaginableService);
 	templateMatcher: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
 
 	value: string = '';
@@ -97,39 +97,10 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 		this.lastParams = args;
 
 		// set the value
-		// this.updateValue(query, interpolateParams);
+		this.updateValue(query, interpolateParams);
 
 		// if there is a subscription to onLangChange, clean it
 		this._dispose();
-
-		// // subscribe to onTranslationChange event, in case the translations change
-		// if (!this.onTranslationChange) {
-		//   this.onTranslationChange = this.translate.onTranslationChange.subscribe((event: TranslationChangeEvent) => {
-		// 	if (this.lastKey && event.lang === this.translate.currentLang) {
-		// 	  this.lastKey = null;
-		// 	  this.updateValue(query, interpolateParams, event.translations);
-		// 	}
-		//   });
-		// }
-
-		// // subscribe to onLangChange event, in case the language changes
-		// if (!this.onLangChange) {
-		//   this.onLangChange = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-		// 	if (this.lastKey) {
-		// 	  this.lastKey = null; // we want to make sure it doesn't return the same value until it's been updated
-		// 	  this.updateValue(query, interpolateParams, event.translations);
-		// 	}
-		//   });
-		// }
-
-		// // subscribe to onDefaultLangChange event, in case the default language changes
-		// if (!this.onDefaultLangChange) {
-		//   this.onDefaultLangChange = this.translate.onDefaultLangChange.subscribe(() => {
-		// 	if (this.lastKey) {
-		// 	  this.lastKey = null; // we want to make sure it doesn't return the same value until it's been updated
-		// 	  this.updateValue(query, interpolateParams);
-		// 	}
-		//   });
 
 		if (!this.translationSubscription) {
 			this.translationSubscription =
