@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.43.0] - 2023-11-20
+- Refactored and documented paginable list
+
 # [1.42.0] - 2023-11-20
 - Removed library ngx-translate
 

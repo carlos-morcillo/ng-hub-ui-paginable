@@ -512,17 +512,93 @@ The filters template can be used to customize the appearance and behavior of fil
 
 ## Other
 
+Here is the documentation for ng-paginable-list in English:
+
+### ng-paginable-list
+
+The `ng-paginable-list` component allows rendering data in a nested, hierarchical list.
+
+#### Basic Usage
+
+To use it, simply pass the data structure to the `tree` input:
+
+```html
+<ng80-paginable-list [tree]="data"></ng80-paginable-list>
+```
+
+```ts
+data = [
+  {
+    label: 'Item 1', 
+    children: [
+      {label: 'Subitem 1'},
+      {label: 'Subitem 2'},
+    ]
+  },
+  {
+   label: 'Item 2'
+  }
+];
+```
+
+This will generate a list with the items and subitems.
+
+#### Options
+
+The available options are:
+
+- `bindLabel` - Property of the item object to use as label
+- `selectable` - Enables single or multiple selection. Values: `'single' | 'multiple'` 
+
+#### Outputs
+
+Emits the following events:
+
+- `itemClick` - When clicking an item. Returns the item and its collapsed state.
+
+#### Customization
+
+You can use a template to customize the markup for each item:
+
+```html
+<ng80-paginable-list
+  [tree]="data"
+  [selectable]="'multiple'"
+  (itemClick)="onSelect($event)">
+
+  <ng-template paginableListItem let-item>
+    <div class="custom">  
+      {{item.label}}
+    </div>
+  </ng-template>
+  
+</ng80-paginable-list>
+```
+
+This allows fully customizing the rendered item.
+
+#### Integration with Forms
+
+The component implements `ControlValueAccessor` to integrate with reactive forms. 
+
+The selected value will be available in the `formControl`.
+
+#### Accessibility
+
+The component properly manages focus and keyboard navigation for good accessibility.
+
+
 ### Translating Labels
 
 ng-paginable includes predefined labels in English and Spanish that are used in the component's UI.
 
 These labels can easily be replaced to support other languages or custom translations.
 
-### Default Translations
+#### Default Translations
 
 By default, ng-paginable uses the browser's language to select between English and Spanish. This displays the default labels without needing additional configuration.
 
-### Customizing Translations
+#### Customizing Translations
 
 You can provide custom translations to the `PaginableTranslationService`:
 
@@ -549,7 +625,7 @@ export class AppComponent {
 
 This overrides the default labels.
 
-### Integration with Translation Libraries 
+#### Integration with Translation Libraries 
 
 To integrate ng-paginable with translation libraries like ngx-translate, you can subscribe to language changes:
 
@@ -581,7 +657,7 @@ This way, when the language changes in the app, the pagination labels are update
 
 This allows for complete, integrated translation across the UI.
 
-### Translation API
+#### Translation API
 
 The `PaginableTranslationService` exposes the following methods:
 
