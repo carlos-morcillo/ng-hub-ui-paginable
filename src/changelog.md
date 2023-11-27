@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.43.1] - 2023-11-27
+- Fixed checkbox click event
+
 # [1.43.0] - 2023-11-20
 - Refactored and documented paginable list
 

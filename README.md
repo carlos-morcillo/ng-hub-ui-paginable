@@ -566,7 +566,7 @@ You can use a template to customize the markup for each item:
   [selectable]="'multiple'"
   (itemClick)="onSelect($event)">
 
-  <ng-template paginableListItem let-item>
+  <ng-template listItemTpt let-item>
     <div class="custom">  
       {{item.label}}
     </div>

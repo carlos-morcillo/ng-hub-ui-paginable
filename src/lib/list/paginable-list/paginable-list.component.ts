@@ -15,11 +15,6 @@ import {
 } from '@angular/forms';
 import { PaginableListItemDirective } from '../../directives/paginable-list-item.directive';
 
-export enum SelectionTypes {
-	Single = 'single',
-	Multiple = 'multiple'
-}
-
 export interface TreeListItem {
 	label: string;
 	children?: Array<TreeListItem>;
@@ -45,7 +40,7 @@ export class PaginableListComponent {
 	private _fb = inject(FormBuilder);
 
 	@Input() bindLabel?: string;
-	@Input() selectable: SelectionTypes | null = null;
+	@Input() selectable!: string | null;
 
 	private _tree!: TreeListItem[];
 	@Input()

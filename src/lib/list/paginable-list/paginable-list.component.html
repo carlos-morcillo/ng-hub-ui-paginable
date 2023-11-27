@@ -57,14 +57,15 @@
 						class="form-check-input tree-list__node-checkbox"
 						type="checkbox"
 						formControlName="selected"
+						(click)="$event.stopPropagation()"
 					/>
-					<span class="tree-list__node-label me-auto">
+					<div class="tree-list__node-label">
 						<ng-container
 							[ngTemplateOutlet]="itemTpt || defaultItemtTpt"
 							[ngTemplateOutletContext]="{ $implicit: item }"
 						>
 						</ng-container>
-					</span>
+					</div>
 					<div
 						class="tree-list__node-buttons d-flex align-items-center gap-2"
 					>

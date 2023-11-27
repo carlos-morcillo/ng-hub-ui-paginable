@@ -51,3 +51,6 @@ export { PaginableTranslationService } from './services/paginable-translation.se
 
 // Constants
 export { BREAKPOINTS } from './constants/breakpoints';
+
+// Enums
+export { SelectionTypes } from './enums/selection-types';
