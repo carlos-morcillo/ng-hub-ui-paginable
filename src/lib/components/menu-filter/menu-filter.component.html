@@ -1,0 +1,80 @@
+<ng-container [formGroup]="form">
+	<li class="dropdown-item">
+		<select
+			class="form-select form-select-lg"
+			formControlName="operator"
+			(click)="$event.stopPropagation()"
+		>
+			<option value="and">{{ 'MATCH_ALL' | translate | ucfirst }}</option>
+			<option value="or">{{ 'MATCH_ANY' | translate | ucfirst }}</option>
+		</select>
+	</li>
+	<ng-container formArrayName="rules">
+		<li
+			class="dropdown-item"
+			*ngFor="
+				let control of $any(form.get('rules')).controls;
+				let i = index
+			"
+			[formGroupName]="i"
+		>
+			<div class="d-flex flex-column gap-2">
+				<select
+					class="form-select form-select-lg"
+					formControlName="matchMode"
+				>
+					<option *ngFor="let mode of matchModes" [value]="mode">
+						{{
+							'MATCH_MODES.' + $any(mode)
+								| uppercase
+								| translate
+								| ucfirst
+						}}
+					</option>
+				</select>
+				<div [ngSwitch]="header.filter?.type">
+					<div *ngSwitchCase="'number'">
+						<input
+							type="number"
+							class="form-control"
+							formControlName="value"
+						/>
+					</div>
+					<div *ngSwitchCase="'date'">
+						<input
+							type="date"
+							class="form-control"
+							formControlName="value"
+						/>
+					</div>
+					<div *ngSwitchDefault>
+						<input
+							type="text"
+							class="form-control"
+							formControlName="value"
+						/>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ng-container>
+	<li class="dropdown-item">
+		<div class="d-flex flex-column gap-3">
+			<button class="btn btn-link text-center w-100" (click)="add()">
+				{{ 'ADD_RULE' | translate | ucfirst }}
+			</button>
+			<div>
+				<div
+					class="d-flex justify-content-between align-items-center gap-3"
+				>
+					<button class="btn btn-outline-primary" (click)="clear()">
+						{{ 'CLEAR' | translate | ucfirst }}
+					</button>
+					<button class="btn btn-primary" (click)="apply()">
+						{{ 'APPLY' | translate | ucfirst }}
+					</button>
+				</div>
+			</div>
+		</div>
+	</li>
+</ng-container>
