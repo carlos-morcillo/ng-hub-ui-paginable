@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-	name: 'ucfirst'
+	name: 'ucfirst',
+	standalone: true
 })
 export class UcfirstPipe implements PipeTransform {
 	transform(value: string = ''): string {

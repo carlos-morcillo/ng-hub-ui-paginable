@@ -11,15 +11,19 @@ import {
 	FormArray,
 	FormBuilder,
 	FormControl,
-	NG_VALUE_ACCESSOR
+	NG_VALUE_ACCESSOR,
+	ReactiveFormsModule
 } from '@angular/forms';
 import { PaginableListItemDirective } from '../../directives/paginable-list-item.directive';
-
-export interface TreeListItem {
-	label: string;
-	children?: Array<TreeListItem>;
-	[key: string]: any;
-}
+import { CommonModule } from '@angular/common';
+import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
+import { TranslatePipe } from '../../translate.pipe';
+import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import { PaginatorComponent } from '../../components/paginator/paginator.component';
+import { PaginableTableButton } from '../../interfaces/paginable-table-button';
+import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
+import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
+import { getValue } from '../../utils';
 
 @Component({
 	selector: 'ng80-paginable-list',
@@ -34,40 +38,95 @@ export interface TreeListItem {
 			useExisting: PaginableListComponent,
 			multi: true
 		}
-	]
+	],
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		PaginatorComponent,
+		PaginableTableNotFoundDirective,
+		TranslatePipe,
+		UcfirstPipe
+	],
+	standalone: true
 })
-export class PaginableListComponent {
+export class PaginableListComponent<T = any> {
 	private _fb = inject(FormBuilder);
 
-	@Input() bindLabel?: string;
+	@Input() bindValue?: string;
+	@Input() bindLabel: string = 'label';
+	@Input() bindChildren: string = 'children';
+
 	@Input() selectable!: string | null;
 
-	private _tree!: TreeListItem[];
+	@Input() options: PaginableTableOptions = {
+		cursor: 'default',
+		hoverableRows: false,
+		striped: null,
+		variant: null,
+		searchable: false
+	};
+
+	private _items!: Array<T>;
 	@Input()
-	get tree(): TreeListItem[] {
-		return this._tree;
+	get items(): Array<T> {
+		return this._items;
 	}
-	set tree(v: TreeListItem[]) {
-		this._tree = v ?? [];
+	set items(v: Array<T>) {
+		this._items = v ?? [];
 		this.form.clear();
-		this.buildForm(this.form, this._tree);
+		this.buildForm(this.form, this._items);
 	}
 
-	@Output() itemClick = new EventEmitter<any>();
+	@Output() itemClick = new EventEmitter<ListItemClickEvent>();
 
 	form: FormArray = this._fb.array([]);
 
-	value: Array<TreeListItem & { collapsed: boolean }> = [];
+	value: Array<T & { collapsed: boolean }> = [];
+
+	// NOTE: Templates
 
 	@ContentChild(PaginableListItemDirective, { read: TemplateRef })
 	itemTpt?: TemplateRef<any>;
+	@ContentChild(PaginableTableNotFoundDirective, { read: TemplateRef })
+	noDataTpt?: TemplateRef<any>;
 
+	// NOTE: Otros
 	isDisabled: boolean = false;
 
 	onChange: any = () => {};
 	onTouch: any = () => {};
 
-	writeValue(value: Array<TreeListItem> = []): void {
+	// NOTE: Filters
+
+	searchFG = this._fb.control({});
+
+	// NOTE: Batch actions
+
+	/**
+	 * Collection of actions for items
+	 *
+	 * @type {PaginableTableRowAction[]}
+	 * @memberof PaginableTableComponent
+	 */
+	private _batchActions: Array<
+		PaginableTableDropdown | PaginableTableButton
+	> = [];
+	@Input()
+	get batchActions(): Array<PaginableTableDropdown | PaginableTableButton> {
+		return this._batchActions;
+	}
+	set batchActions(v: Array<PaginableTableDropdown | PaginableTableButton>) {
+		this._batchActions = v.map((b) => {
+			if ((b as PaginableTableDropdown).buttons) {
+				b = { fill: null, position: 'start', color: 'light', ...b };
+			}
+			return b;
+		});
+	}
+
+	// NOTE: Control access value
+
+	writeValue(value: Array<T> = []): void {
 		// this.value = this.buildValue(value);
 	}
 
@@ -83,35 +142,46 @@ export class PaginableListComponent {
 		this.isDisabled = isDisabled;
 	}
 
-	buildForm(form: FormArray, items: Array<TreeListItem>) {
-		for (const item of items) {
-			const { children, ...newItem } = item;
+	/**
+	 * Handles the action to be executed in a batch
+	 *
+	 * @param {Event} event
+	 * @memberof PaginableTableComponent
+	 */
+	handleBatchAction(event: any) {
+		event.handler(this.value);
+	}
 
-			const group = this._fb.group({
-				id: [null],
-				label: [''],
-				// data: [null],
-				children: this._fb.array([]),
-				collapsed: [true],
-				selected: [true]
-			});
+	buildForm(form: FormArray, items: Array<any>) {
+		for (const index in items) {
+			if (Object.prototype.hasOwnProperty.call(items, index)) {
+				const item = items[index];
 
-			group.patchValue(newItem);
+				const group = this._fb.group({
+					selected: [true],
+					collapsed: [true],
+					data: [item],
+					children: this._fb.array([])
+				});
 
-			if (children?.length) {
-				this.buildForm(group.get('children') as FormArray, children);
-				newItem['children'] = this.buildValue(children);
+				group.patchValue(item);
+
+				if (item[this.bindChildren]?.length) {
+					this.buildForm(
+						group.get('children') as FormArray,
+						item[this.bindChildren]
+					);
+					// newItem['children'] = this.buildValue(children);
+				}
+				form.push(group);
 			}
-			form.push(group);
 		}
 	}
 
-	buildValue(
-		items: Array<TreeListItem>
-	): Array<TreeListItem & { collapsed: boolean }> {
-		const value: Array<TreeListItem & { collapsed: boolean }> = [];
+	buildValue(items: Array<T>): Array<T & { collapsed: boolean }> {
+		const value: Array<T & { collapsed: boolean }> = [];
 		for (const item of items) {
-			const { children, ...newItem } = item;
+			const { children, ...newItem } = item as any;
 			if (children?.length) {
 				newItem['children'] = this.buildValue(children);
 			}
@@ -127,7 +197,56 @@ export class PaginableListComponent {
 		control.patchValue(!control.value);
 	}
 
-	onItemClick(value: TreeListItem, { collapsed }) {
-		this.itemClick.next({ data: value, collapsed });
+	/**
+	 * Takes in an object with properties collapsed, selected, and value, as well as the depth and index parameters, and emits an
+	 * event with the depth, index, selected, collapsed, value, and data properties.
+	 *
+	 * @param  - - `collapsed`: a boolean indicating whether the item is collapsed or not
+	 * @param {number} depth - The depth parameter represents the level of nesting or hierarchy of the item. It indicates how deep the
+	 * item is within a nested structure or tree-like data structure.
+	 * @param {number} index - The index parameter represents the position of the clicked item in the list or array. It is a number
+	 * that starts from 0 for the first item and increments by 1 for each subsequent item.
+	 */
+	onItemClick(
+		{ collapsed, selected, ...value },
+		depth: number,
+		index: number
+	) {
+		this.itemClick.next({
+			depth,
+			index,
+			selected,
+			collapsed,
+			value: this.bindLabel ? getValue(value, this.bindLabel) : value,
+			data: value
+		});
 	}
+
+	onPageClicked(page: number) {
+		// if (!this.data) {
+		// 	return;
+		// }
+		// this.data.currentPage = page;
+		// this.triggerTheParamChanges();
+	}
+
+	filter() {
+		// if (!this.data) {
+		// 	return;
+		// }
+		// this.data.currentPage = 1;
+		// this.filterChange.emit({
+		// 	searchText: this.searchFG?.value ?? null,
+		// 	specificSearch: this.specificSearchFG?.value ?? null
+		// });
+	}
+}
+
+export interface ListItemClickEvent<T = any> {
+	collapsed: boolean;
+	selected: boolean;
+	data: T;
+	value: any;
+	depth: number;
+	index: number;
 }

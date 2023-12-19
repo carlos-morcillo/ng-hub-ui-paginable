@@ -9,4 +9,5 @@ export interface PaginableTableOptions {
 	`string`, meaning it can accept any string value. This allows for customization and flexibility in styling the table 
 	component based on different variants or themes. */
 	variant?: string | null;
+	searchable?: boolean;
 }

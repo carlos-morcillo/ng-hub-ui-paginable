@@ -42,7 +42,6 @@ export { PaginableTablePagination } from './interfaces/paginable-table-paginatio
 export { PaginableTableRowAction } from './interfaces/paginable-table-row-action';
 export { PaginationParamsChangeEvent } from './interfaces/params-change-event';
 export { View } from './interfaces/view';
-export { TreeListItem } from './list/paginable-list/paginable-list.component';
 
 // Services
 export { PaginationService } from './services/pagination.service';

@@ -27,30 +27,26 @@ import { PaginableTableRowDirective } from './directives/paginable-table-row.dir
 import { ResizableDirective } from './directives/resizable.directive';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { PaginableTableConfig } from './interfaces/paginable-table-config';
-import { PaginableListComponent } from './list/paginable-list/paginable-list.component';
 import { GetPipe } from './pipes/get.pipe';
 import { IsObjectPipe } from './pipes/is-object.pipe';
 import { IsObservablePipe } from './pipes/is-observable.pipe';
 import { IsStringPipe } from './pipes/is-string.pipe';
 import { UcfirstPipe } from './pipes/ucfirst.pipe';
-import { PaginateConfigService } from './services/paginate-config.service';
-import { PaginableService } from './services/paginable.service';
-import { TranslatePipe } from './translate.pipe';
 import { PaginableTranslationService } from './services/paginable-translation.service';
+import { PaginableService } from './services/paginable.service';
+import { PaginateConfigService } from './services/paginate-config.service';
+import { TranslatePipe } from './translate.pipe';
 
 @NgModule({
 	declarations: [
 		PaginableTableComponent,
-		PaginatorComponent,
 		PaginableTableHeaderDirective,
 		PaginableTableRowDirective,
 		PaginableTableCellDirective,
-		PaginableTableNotFoundDirective,
 		PaginableTableLoadingDirective,
 		PaginableTableExpandingRowDirective,
 		GetPipe,
 		IsObjectPipe,
-		UcfirstPipe,
 		IsStringPipe,
 		PaginableTableDropdownComponent,
 		ResizableComponent,
@@ -62,7 +58,6 @@ import { PaginableTranslationService } from './services/paginable-translation.se
 		TooltipDirective,
 		ModalComponent,
 		MenuFilterComponent,
-		PaginableListComponent,
 		PaginableListItemDirective
 	],
 	imports: [
@@ -70,15 +65,16 @@ import { PaginableTranslationService } from './services/paginable-translation.se
 		FormsModule,
 		TranslatePipe,
 		ReactiveFormsModule,
-		DropdownComponent
+		DropdownComponent,
+		PaginatorComponent,
+		PaginableTableNotFoundDirective,
+		UcfirstPipe
 	],
 	exports: [
 		PaginableTableComponent,
-		PaginatorComponent,
 		PaginableTableHeaderDirective,
 		PaginableTableRowDirective,
 		PaginableTableCellDirective,
-		PaginableTableNotFoundDirective,
 		PaginableTableLoadingDirective,
 		PaginableTableErrorDirective,
 		PaginableTableExpandingRowDirective,
@@ -93,7 +89,6 @@ import { PaginableTranslationService } from './services/paginable-translation.se
 		PaginableTableRangeInputComponent,
 		TooltipDirective,
 		ModalComponent,
-		PaginableListComponent,
 		PaginableListItemDirective
 	],
 	providers: [TranslateService]

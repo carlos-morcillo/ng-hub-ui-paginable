@@ -1,5 +1,9 @@
 # Changelog
 
+# [1.44.0] - 2023-12-19
+- New bindValue, bindLabel, and bindChildren inputs allow more control over item properties mapping
+- Item template now exposes data, depth, index, collapsed, and selected properties for greater customization
+
 # [1.43.1] - 2023-11-27
 - Fixed checkbox click event
 

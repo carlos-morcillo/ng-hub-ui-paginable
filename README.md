@@ -548,6 +548,8 @@ This will generate a list with the items and subitems.
 The available options are:
 
 - `bindLabel` - Property of the item object to use as label
+- `bindValue` - Property for the unique value of each item
+- `bindChildren` - Property with child items
 - `selectable` - Enables single or multiple selection. Values: `'single' | 'multiple'` 
 
 #### Outputs
@@ -558,20 +560,42 @@ Emits the following events:
 
 #### Customization
 
-You can use a template to customize the markup for each item:
+You can use a template to customize the markup for each item. The `listItemTpt` template now receives the next parameters:
+
+```html
+<ng-template listItemTpt let-data="data" let-depth="depth" let-index="index" let-collapsed="collapsed" let-selected="selected">
+
+</ng-template>  
+```
+
+Where:
+
+- `data` - Item
+- `depth` - Item depth
+- `index` - Item index
+- `collapsed` - Whether it is collapsed
+- `selected` - Whether it is selected
 
 ```html
 <ng80-paginable-list
-  [tree]="data"
-  [selectable]="'multiple'"
-  (itemClick)="onSelect($event)">
+  [items]="data"
+  bindValue="id"
+  bindChildren="subItems"
+  selectable="multiple" 
+  (itemClick)="onClick($event)">
 
-  <ng-template listItemTpt let-item>
-    <div class="custom">  
-      {{item.label}}
+  <ng-template
+    listItemTpt
+    let-data="data"
+    let-depth="depth"
+    let-selected="selected">
+    
+    <div>
+     {{ data.name }} (depth: {{depth}}, selected: {{selected}})
     </div>
-  </ng-template>
   
+  </ng-template>
+
 </ng80-paginable-list>
 ```
 
