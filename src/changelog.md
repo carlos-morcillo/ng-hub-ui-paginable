@@ -1,4 +1,6 @@
 # Changelog
+# [1.44.1] - 2024-02-06
+- Fixed dropdown buttons handlers.
 
 # [1.44.0] - 2023-12-19
 - New bindValue, bindLabel, and bindChildren inputs allow more control over item properties mapping

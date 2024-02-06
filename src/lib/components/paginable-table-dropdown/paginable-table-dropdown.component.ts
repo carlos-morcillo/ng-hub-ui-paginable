@@ -1,5 +1,10 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
-import { PaginableTableButton } from '../../interfaces/paginable-table-button';
+import {
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	inject
+} from '@angular/core';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 
 @Component({
@@ -7,8 +12,10 @@ import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdow
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })
-export class PaginableTableDropdownComponent {
-	@Input() item: any;
+export class PaginableTableDropdownComponent<T = any> {
+	private _elementRef = inject(ElementRef);
+
+	@Input() item: T | undefined;
 
 	private _options: PaginableTableDropdown = { buttons: [] };
 	@Input()
@@ -39,8 +46,6 @@ export class PaginableTableDropdownComponent {
 	buttonClass: string | null = null;
 	shown: boolean = false;
 
-	constructor(private _elementRef: ElementRef) {}
-
 	@HostListener('document:click', ['$event'])
 	clickOut(event) {
 		if (
@@ -49,11 +54,6 @@ export class PaginableTableDropdownComponent {
 		) {
 			this.close();
 		}
-	}
-
-	handle(button: PaginableTableButton) {
-		// button.handler(...[this.item]);
-		this.close();
 	}
 
 	close() {

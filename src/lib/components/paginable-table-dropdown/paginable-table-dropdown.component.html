@@ -31,7 +31,9 @@
 						? 'text-' + dropdownItem.color
 						: 'text-dark'
 				"
-				(click)="handle(dropdownItem)"
+				(click)="
+					item && dropdownItem.handler && dropdownItem.handler(item)
+				"
 			>
 				<i
 					*ngIf="dropdownItem.icon"
