@@ -41,10 +41,10 @@ export const locale = {
 			EQUAL_TO: 'Equal to',
 			VARIABLE: 'Variable'
 		},
-		CLEAR: 'Limpiar',
-		ADD_RULE: 'Añadir condición',
-		MATCH_ALL: 'Coincidir todo',
-		MATCH_ANY: 'Coincidir algo',
+		CLEAR: 'clean',
+		ADD_RULE: 'add condition',
+		MATCH_ALL: 'match all',
+		MATCH_ANY: 'match any',
 		MATCH_MODES: {
 			GREATERTHAN: 'Greater than',
 			GREATERTHANOREQUAL: 'Greater than or equal to',

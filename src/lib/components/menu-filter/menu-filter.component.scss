@@ -1,0 +1,84 @@
+/* Filter Operator */
+.filter__operator {
+	--bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+	--bs-form-select-bg-size: 16px 12px;
+}
+
+/* Filter Rules */
+.filter__rule {
+	--bs-dropdown-bg: #fabada;
+}
+
+.filter__rule__mode {
+	--bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+	--bs-form-select-bg-size: 16px 12px;
+}
+
+.filter__rule__value {
+	--bs-form-control-bg: var(--bs-body-bg);
+	--bs-form-control-border-color: var(--bs-border-color);
+	--bs-form-control-border-width: var(--bs-border-width);
+	--bs-form-control-border-radius: var(--bs-border-radius);
+}
+
+.filter__rule__divider .dropdown-divider {
+	--bs-dropdown-divider-bg: var(--bs-border-color);
+}
+
+/* Add Rule Button */
+.filter__add-rule .btn-link {
+	--bs-btn-font-weight: var(--bs-btn-link-font-weight);
+	--bs-btn-color: var(--bs-link-color);
+	--bs-btn-bg: transparent;
+	--bs-btn-border-color: transparent;
+	--bs-btn-hover-color: var(--bs-link-hover-color);
+	--bs-btn-hover-border-color: transparent;
+	--bs-btn-active-color: var(--bs-link-hover-color);
+	--bs-btn-active-bg: transparent;
+	--bs-btn-active-border-color: transparent;
+	--bs-btn-disabled-color: var(--bs-btn-link-disabled-color);
+	--bs-btn-disabled-border-color: transparent;
+}
+
+.filter_actions {
+	padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+}
+
+/* Action Buttons */
+.filter__actions__clear {
+	--bs-btn-color: var(--bs-btn-outline-primary-color);
+	--bs-btn-border-color: var(--bs-btn-outline-primary-border-color);
+	--bs-btn-hover-color: var(--bs-btn-outline-primary-hover-color);
+	--bs-btn-hover-bg: var(--bs-btn-outline-primary-hover-bg);
+	--bs-btn-hover-border-color: var(
+		--bs-btn-outline-primary-hover-border-color
+	);
+	--bs-btn-focus-shadow-rgb: var(--bs-btn-outline-primary-focus-ring-rgb);
+	--bs-btn-active-color: var(--bs-btn-outline-primary-active-color);
+	--bs-btn-active-bg: var(--bs-btn-outline-primary-active-bg);
+	--bs-btn-active-border-color: var(
+		--bs-btn-outline-primary-active-border-color
+	);
+	--bs-btn-active-shadow: var(--bs-btn-outline-primary-active-shadow);
+	--bs-btn-disabled-color: var(--bs-btn-outline-primary-disabled-color);
+	--bs-btn-disabled-border-color: var(
+		--bs-btn-outline-primary-disabled-border-color
+	);
+}
+
+.filter__actions__apply {
+	--bs-btn-color: var(--bs-btn-primary-color);
+	--bs-btn-bg: var(--bs-btn-primary-bg);
+	--bs-btn-border-color: var(--bs-btn-primary-border-color);
+	--bs-btn-hover-color: var(--bs-btn-primary-hover-color);
+	--bs-btn-hover-bg: var(--bs-btn-primary-hover-bg);
+	--bs-btn-hover-border-color: var(--bs-btn-primary-hover-border-color);
+	--bs-btn-focus-shadow-rgb: var(--bs-btn-primary-focus-ring-rgb);
+	--bs-btn-active-color: var(--bs-btn-primary-active-color);
+	--bs-btn-active-bg: var(--bs-btn-primary-active-bg);
+	--bs-btn-active-border-color: var(--bs-btn-primary-active-border-color);
+	--bs-btn-active-shadow: var(--bs-btn-primary-active-shadow);
+	--bs-btn-disabled-color: var(--bs-btn-primary-disabled-color);
+	--bs-btn-disabled-bg: var(--bs-btn-primary-disabled-bg);
+	--bs-btn-disabled-border-color: var(--bs-btn-primary-disabled-border-color);
+}

@@ -10,7 +10,8 @@ import {
 	QueryList,
 	TemplateRef,
 	ViewChildren,
-	forwardRef
+	forwardRef,
+	inject
 } from '@angular/core';
 import {
 	FormControl,
@@ -74,9 +75,16 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 			useExisting: forwardRef(() => PaginableTableComponent),
 			multi: true
 		}
-	]
+	],
+	host: {
+		class: 'd-block paginable-table'
+	}
 })
 export class PaginableTableComponent implements OnDestroy {
+	#fb = inject(UntypedFormBuilder);
+	private _configSvc = inject(PaginableService);
+	private _paginationSvc = inject(PaginationService);
+
 	@Input() id!: string;
 	private _headers?: PaginableTableHeader[];
 
@@ -413,6 +421,8 @@ export class PaginableTableComponent implements OnDestroy {
 
 	filterHeaders?: PaginableTableHeader[];
 
+	hasColumnFilters: boolean = false;
+
 	/**
 	 * Filter form
 	 *
@@ -491,12 +501,6 @@ export class PaginableTableComponent implements OnDestroy {
 	get specificSearchFG(): FormGroup {
 		return this.filterFG.get('specificSearch') as FormGroup;
 	}
-
-	constructor(
-		private _fb: UntypedFormBuilder,
-		private _configSvc: PaginableService,
-		private _paginationSvc: PaginationService
-	) {}
 
 	ngOnInit() {
 		if (!this.id) {
@@ -858,12 +862,12 @@ export class PaginableTableComponent implements OnDestroy {
 	_initializeFilterForm(): void {
 		this.filterFGSct?.unsubscribe();
 
-		this.filterFG = this._fb.group({
+		this.filterFG = this.#fb.group({
 			searchText: []
 		});
 
 		if (this.headers?.length) {
-			const specificSearchFG = this._fb.group({});
+			const specificSearchFG = this.#fb.group({});
 
 			this.filterHeaders = (
 				this._headers as PaginableTableHeader[]
@@ -874,13 +878,23 @@ export class PaginableTableComponent implements OnDestroy {
 					new UntypedFormControl(null)
 				);
 			});
-			if (this.id) {
-				const view = JSON.parse(
-					localStorage.getItem('paginable-table_view_' + this.id) ??
-						'{}'
-				);
-				specificSearchFG.patchValue(view);
-			}
+
+			this.hasColumnFilters = this.filterHeaders.some(
+				(filter) => filter.filter && filter.filter?.mode !== 'menu'
+			);
+			if (
+				this.filterHeaders?.length &&
+				!this.hasColumnFilters &&
+				this.lastColumnOnlyHasButtons
+			)
+				if (this.id) {
+					const view = JSON.parse(
+						localStorage.getItem(
+							'paginable-table_view_' + this.id
+						) ?? '{}'
+					);
+					specificSearchFG.patchValue(view);
+				}
 
 			this.filterFG.addControl('specificSearch', specificSearchFG);
 		}

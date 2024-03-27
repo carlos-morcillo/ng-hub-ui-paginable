@@ -2,6 +2,7 @@ import { Component, Input, forwardRef, inject } from '@angular/core';
 import {
 	ControlValueAccessor,
 	FormArray,
+	FormArrayName,
 	FormBuilder,
 	NG_VALUE_ACCESSOR
 } from '@angular/forms';
@@ -49,6 +50,10 @@ export class MenuFilterComponent implements ControlValueAccessor {
 		rules: this._fb.array([])
 	});
 
+	get rulesFA(): FormArray {
+		return this.form.get('rules') as FormArray;
+	}
+
 	onChange = (value: MenuFilterValue) => {};
 	onTouched = () => {};
 
@@ -57,6 +62,7 @@ export class MenuFilterComponent implements ControlValueAccessor {
 	defaultValue!: MenuFilterValue;
 
 	writeValue(value: MenuFilterValue): void {
+		this.rulesFA.clear();
 		if (!value) {
 			value = this.defaultValue;
 		}

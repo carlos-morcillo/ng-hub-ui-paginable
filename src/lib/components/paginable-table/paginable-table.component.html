@@ -1,4 +1,4 @@
-<div class="table_container">
+<div class="table_container paginable-table__container">
 	<form [formGroup]="filterFG">
 		<div
 			*ngIf="batchActions?.length || showSearchInput"
@@ -100,12 +100,14 @@
 		<!-- Table -->
 		<ng-container *ngIf="data">
 			<div
-				class="{{ responsiveCSSClass }} mb-4"
+				class="{{
+					responsiveCSSClass
+				}} paginable-table__table-container mb-4"
 				[class.table-responsive]="responsiveCSSClass"
 			>
 				<table
 					*ngIf="data"
-					class="table mb-0"
+					class="table mb-0 paginable-table__table"
 					[class.table-hover]="options.hoverableRows || selectable"
 					[class.table-striped]="options.striped === 'rows'"
 					[class.table-striped-columns]="
@@ -327,9 +329,10 @@
 			<!-- Pagination -->
 			<div
 				*ngIf="paginate && data?.data?.length"
-				class="d-flex flex-wrap align-items-center justify-content-center gap-4 mb-4"
+				class="d-flex flex-wrap align-items-center justify-content-center gap-4"
 			>
 				<paginable-table-paginator
+					class="flex-grow-1"
 					(onPageClick)="pageClicked($event)"
 					*ngIf="
 						paginationPosition == 'bottom' ||
@@ -338,15 +341,14 @@
 					[pagination]="data"
 				>
 				</paginable-table-paginator>
-				<div
-					class="form-group form-group-sm row col-6 col-md-auto mb-0 ms-auto ml-auto align-items-center"
-				>
-					<label class="col col-form-label text-nowrap"
-						><small
-							>{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:</small
-						></label
-					>
-					<div>
+				<div class="d-flex gap-3 flex-nowrap align-items-center">
+					<div class="col-auto">
+						<label
+							class="col-form-label text-nowrap fs-6 text-muted"
+							>{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:</label
+						>
+					</div>
+					<div class="col-auto">
 						<select
 							class="form-select form-select-sm form-control form-control-sm"
 							id="RowsPerPageInput"
@@ -362,18 +364,16 @@
 						</select>
 					</div>
 				</div>
-				<p class="col-6 col-md-auto mb-0" *ngIf="paginationInfo">
-					<small class="text-muted">
-						{{
-							'SHOWING_X_OF_Y_ROWS'
-								| translate
-									: {
-											amount: data[mapping.data].length,
-											total: data[mapping.total]
-									  }
-								| ucfirst
-						}}
-					</small>
+				<p class="mb-0 fs-6 text-muted" *ngIf="paginationInfo">
+					{{
+						'SHOWING_X_OF_Y_ROWS'
+							| translate
+								: {
+										amount: data[mapping.data].length,
+										total: data[mapping.total]
+								  }
+							| ucfirst
+					}}
 				</p>
 			</div>
 		</ng-container>

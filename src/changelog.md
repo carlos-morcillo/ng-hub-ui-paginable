@@ -1,4 +1,7 @@
 # Changelog
+# [1.44.3] - 2024-03-27
+- Fixed some filter issues.
+- 
 # [1.44.1] - 2024-02-06
 - Fixed dropdown buttons handlers.
 

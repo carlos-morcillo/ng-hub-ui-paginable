@@ -46,6 +46,13 @@ export class PaginableTableDropdownComponent<T = any> {
 	buttonClass: string | null = null;
 	shown: boolean = false;
 
+	/**
+	 * Checks if the clicked element is outside the component's native element and if the component is currently shown, and if so,
+	 * it closes the component.
+	 *
+	 * @param event - Represents the event that triggered the clickOut function. It contains information about the event, such as
+	 * the target element that was clicked.
+	 */
 	@HostListener('document:click', ['$event'])
 	clickOut(event) {
 		if (
@@ -56,6 +63,9 @@ export class PaginableTableDropdownComponent<T = any> {
 		}
 	}
 
+	/**
+	 * Sets the "shown" property to false.
+	 */
 	close() {
 		this.shown = false;
 	}
