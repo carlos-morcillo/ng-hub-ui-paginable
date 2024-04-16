@@ -9,6 +9,14 @@ import { getValue } from '../utils';
 export class PaginableTranslationService {
 	private _paginableSvc = inject(PaginableService);
 
+	defaultTranslations: Record<string, string | any> = [enLang, esLang].reduce(
+		(acc, c) => {
+			acc[c.lang] = c.data;
+			return acc;
+		},
+		{}
+	);
+
 	translations!: Record<string, string>;
 
 	private translationSource = new Subject<any>();
@@ -20,22 +28,34 @@ export class PaginableTranslationService {
 	}
 
 	initialize() {
-		const languages = [enLang, esLang].reduce((a, c) => {
-			a[c.lang] = c.data;
-			return a;
-		}, {});
-
-		this.setTranslation(
-			languages[this._paginableSvc.config.language] ?? languages['en']
+		this.setTranslations(
+			this.defaultTranslations[this._paginableSvc.config.language] ??
+				this.defaultTranslations['en']
 		);
 	}
 
+	/**
+	 * Retrieves a value from a translations object based on a given key.
+	 *
+	 * @param {string} key - The `key` parameter in the `getTranslation` function is a string that represents the unique identifier or
+	 * key for the translation you want to retrieve from the translations object. This key is used to look up the corresponding
+	 * translation value in the translations object.
+	 *
+	 * @returns The value associated with the provided `key` from the `translations` object.
+	 */
 	getTranslation(key: string): any {
 		return getValue(this.translations, key);
 	}
 
-	setTranslation(value: Record<string, string>) {
-		this.translations = { ...this.translations, ...value };
+	/**
+	 * Merges the default English translations with the provided translations and updates the translation source.
+	 *
+	 * @param {Record<string, string> | any} translations - The `translations` parameter in the `setTranslation` method is a parameter that accepts
+	 * either an object of type `Record<string, string>` or any other type. If no value is provided, it defaults to an empty object
+	 * `{}`.
+	 */
+	setTranslations(translations: Record<string, string> | any = {}) {
+		this.translations = { ...enLang, ...translations };
 		this.translationSource.next(this.translations);
 	}
 }

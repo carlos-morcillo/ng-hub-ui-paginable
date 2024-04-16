@@ -247,14 +247,14 @@
 
 						<!-- Filtering -->
 						<tr *ngIf="filterHeaders?.length" class="filter_row">
-							<td
+							<th
 								*ngIf="
 									(selectable && multiple) ||
 									batchActions?.length
 								"
 								class="filter_cell sticky-start"
-							></td>
-							<td
+							></th>
+							<th
 								*ngFor="let header of headers; let last = last"
 								class="filter_cell"
 								[ngClass]="{
@@ -294,16 +294,16 @@
 										[ngTemplateOutlet]="filterButtonsTpt"
 									></ng-container>
 								</ng-container>
-							</td>
+							</th>
 
-							<td
+							<th
 								*ngIf="!lastColumnOnlyHasButtons"
 								class="filter_cell sticky-end"
 							>
 								<ng-container
 									[ngTemplateOutlet]="filterButtonsTpt"
 								></ng-container>
-							</td>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
