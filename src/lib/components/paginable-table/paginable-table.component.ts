@@ -110,8 +110,8 @@ export class PaginableTableComponent implements OnDestroy {
 	get headers(): Array<PaginableTableHeader> {
 		return this._headers ?? [];
 	}
-	set headers(v: Array<PaginableTableHeader | string>) {
-		this._headers = v.map((header) => {
+	set headers(value: Array<PaginableTableHeader | string>) {
+		this._headers = value.map((header) => {
 			if (typeof header === 'string') {
 				return {
 					title: header,
@@ -867,13 +867,13 @@ export class PaginableTableComponent implements OnDestroy {
 		});
 
 		if (this.headers?.length) {
-			const specificSearchFG = this.#fb.group({});
+			const filtersFG = this.#fb.group({});
 
 			this.filterHeaders = (
-				this._headers as PaginableTableHeader[]
-			).filter((h) => typeof h === 'object' && h.filter);
+				this._headers as Array<PaginableTableHeader>
+			).filter((header) => typeof header === 'object' && header.filter);
 			this.filterHeaders.forEach((h) => {
-				specificSearchFG.addControl(
+				filtersFG.addControl(
 					(h.filter?.key || h.property) as string,
 					new UntypedFormControl(null)
 				);
@@ -882,21 +882,16 @@ export class PaginableTableComponent implements OnDestroy {
 			this.hasColumnFilters = this.filterHeaders.some(
 				(filter) => filter.filter && filter.filter?.mode !== 'menu'
 			);
-			if (
-				this.filterHeaders?.length &&
-				!this.hasColumnFilters &&
-				this.lastColumnOnlyHasButtons
-			)
-				if (this.id) {
-					const view = JSON.parse(
-						localStorage.getItem(
-							'paginable-table_view_' + this.id
-						) ?? '{}'
-					);
-					specificSearchFG.patchValue(view);
-				}
 
-			this.filterFG.addControl('specificSearch', specificSearchFG);
+			if (this.id) {
+				const view = JSON.parse(
+					localStorage.getItem('paginable-table_view_' + this.id) ??
+						'{}'
+				);
+				filtersFG.patchValue(view);
+			}
+
+			this.filterFG.addControl('specificSearch', filtersFG);
 		}
 
 		this.filterFGSct = merge(

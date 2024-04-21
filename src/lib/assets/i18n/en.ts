@@ -43,6 +43,7 @@ export const locale = {
 		},
 		CLEAR: 'clean',
 		ADD_RULE: 'add condition',
+		REMOVE_RULE: 'remove condition',
 		MATCH_ALL: 'match all',
 		MATCH_ANY: 'match any',
 		MATCH_MODES: {

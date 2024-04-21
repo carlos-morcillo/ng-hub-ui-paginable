@@ -1,7 +1,7 @@
 <ng-container [formGroup]="form">
-	<li class="dropdown-item">
+	<li class="dropdown-item filter__operator">
 		<select
-			class="form-select filter__operator"
+			class="form-select filter__operator__control"
 			formControlName="operator"
 			(click)="$event.stopPropagation()"
 		>
@@ -12,14 +12,14 @@
 	<ng-container formArrayName="rules">
 		<ng-container
 			*ngFor="
-				let control of $any(form.get('rules')).controls;
-				let i = index;
+				let control of rulesFA.controls;
+				let index = index;
 				let last = last
 			"
-			[formGroupName]="i"
+			[formGroupName]="index"
 		>
 			<li class="dropdown-item filter__rule">
-				<div class="d-flex flex-column gap-2">
+				<div class="d-flex flex-column gap-2 mb-2">
 					<select
 						class="form-select filter__rule__mode"
 						formControlName="matchMode"
@@ -57,24 +57,40 @@
 						</div>
 					</div>
 				</div>
+				<div
+					*ngIf="rulesFA.controls.length > 1"
+					class="d-flex justify-content-end"
+				>
+					<button
+						class="btn btn-sm text-danger text-center w-100"
+						(click)="rulesFA.removeAt(index)"
+					>
+						<i class="fa-solid fa-trash me-2 mr-2"></i
+						>{{ 'REMOVE_RULE' | translate | ucfirst }}
+					</button>
+				</div>
 			</li>
-			<li *ngIf="!last" class="filter__rule__divider">
+			<li
+				*ngIf="rulesFA.controls.length > 1"
+				class="filter__rule__divider"
+			>
 				<hr class="dropdown-divider" />
 			</li>
 		</ng-container>
 	</ng-container>
 	<li class="dropdown-item filter__add-rule">
 		<button
-			class="btn btn-link text-center w-100"
+			class="btn btn-sm text-primary text-center w-100"
 			(click)="add(); $event.stopPropagation()"
 		>
-			{{ 'ADD_RULE' | translate | ucfirst }}
+			<i class="fa-solid fa-plus me-2 mr-2"></i
+			>{{ 'ADD_RULE' | translate | ucfirst }}
 		</button>
 	</li>
 	<li class="dropdown-item filter__actions">
 		<div class="d-flex justify-content-between align-items-center gap-3">
 			<button
-				class="btn btn-outline-primary filter__actions__clear"
+				class="btn btn-outline-danger filter__actions__clear"
 				(click)="clear()"
 			>
 				{{ 'CLEAR' | translate | ucfirst }}

@@ -1,7 +1,10 @@
 # Changelog
+# [1.45.0] - 2024-04-21
+- Added filter rule removing.
+  
 # [1.44.3] - 2024-03-27
 - Fixed some filter issues.
-- 
+  
 # [1.44.1] - 2024-02-06
 - Fixed dropdown buttons handlers.
 

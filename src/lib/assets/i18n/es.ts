@@ -42,6 +42,7 @@ export const locale = {
 		},
 		CLEAR: 'Limpiar',
 		ADD_RULE: 'Añadir condición',
+		REMOVE_RULE: 'eliminar condición',
 		MATCH_ALL: 'Coincidir todo',
 		MATCH_ANY: 'Coincidir algo',
 		MATCH_MODES: {

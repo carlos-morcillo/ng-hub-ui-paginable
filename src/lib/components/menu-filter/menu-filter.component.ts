@@ -2,7 +2,6 @@ import { Component, Input, forwardRef, inject } from '@angular/core';
 import {
 	ControlValueAccessor,
 	FormArray,
-	FormArrayName,
 	FormBuilder,
 	NG_VALUE_ACCESSOR
 } from '@angular/forms';
