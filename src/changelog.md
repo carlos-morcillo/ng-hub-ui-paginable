@@ -1,4 +1,7 @@
 # Changelog
+# [1.45.1] - 2024-04-25
+- Fixed clear filter button
+
 # [1.45.0] - 2024-04-21
 - Added filter rule removing.
   

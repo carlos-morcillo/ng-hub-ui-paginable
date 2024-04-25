@@ -1,7 +1,9 @@
 <div class="table_container paginable-table__container">
 	<form [formGroup]="filterFG">
 		<div
-			*ngIf="batchActions?.length || showSearchInput"
+			*ngIf="
+				batchActions?.length || showSearchInput || filterHeaders?.length
+			"
 			class="d-flex flex-wrap justify-content-between mb-4 gap-2"
 		>
 			<!-- Batch actions -->
@@ -267,7 +269,7 @@
 								class="filter_cell"
 								[ngClass]="{
 									'sticky-start': header.sticky === 'start',
-									'sticky-end': header.sticky === 'end',
+									'sticky-end': header.sticky === 'end'
 								}"
 							>
 								<ng-container
