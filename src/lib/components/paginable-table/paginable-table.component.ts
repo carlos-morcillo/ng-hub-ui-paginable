@@ -925,8 +925,7 @@ export class PaginableTableComponent implements OnDestroy {
 			count++;
 		}
 		if (
-			(this.templateExpandingRows?.length ||
-				this.filterHeaders?.length) &&
+			this.templateExpandingRows?.length &&
 			!this.lastColumnOnlyHasButtons
 		) {
 			count++;

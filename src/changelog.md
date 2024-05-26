@@ -1,4 +1,7 @@
 # Changelog
+# [1.45.2] - 2024-05-13
+- Fixed position style of table
+- 
 # [1.45.1] - 2024-04-25
 - Fixed clear filter button
 
