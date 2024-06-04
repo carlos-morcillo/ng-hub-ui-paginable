@@ -18,8 +18,8 @@ export enum StringMatchModes {
 	Contains = 'Contains',
 	NotContains = 'NotContains',
 	EndsWith = 'EndsWith',
-	Equals = 'Equals',
-	NotEquals = 'NotEquals'
+	Equal = 'Equal',
+	NotEqual = 'NotEqual'
 }
 
 export enum NumberMatchModes {
@@ -27,8 +27,8 @@ export enum NumberMatchModes {
 	GreaterThanOrEqual = 'GreaterThanOrEqual',
 	LessThan = 'LessThan',
 	LessThanOrEqual = 'LessThanOrEqual',
-	Equals = 'Equals',
-	NotEquals = 'NotEquals'
+	Equal = 'Equal',
+	NotEqual = 'NotEqual'
 }
 
 export enum DateMatchModes {
