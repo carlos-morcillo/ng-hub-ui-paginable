@@ -1,4 +1,7 @@
 # Changelog
+# [1.45.3] - 2024-05-13
+- Replaced Equals and NotEquals to Equal and NotEqual
+
 # [1.45.2] - 2024-05-13
 - Fixed position style of table
 - 
