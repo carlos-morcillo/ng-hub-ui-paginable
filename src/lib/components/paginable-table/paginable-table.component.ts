@@ -135,8 +135,11 @@ export class PaginableTableComponent implements OnDestroy {
 				);
 			}
 		}
+
 		this._initializeFilterForm();
-		this._countColumns();
+
+		// We need to wait for all other inputs to be ready before initializing the column count
+		setTimeout(() => this._countColumns());
 	}
 
 	/**

@@ -63,5 +63,7 @@ export const locale = {
 			NOTCONTAINS: 'No contiene',
 			ENDSWITH: 'Termina con'
 		}
-	}
+	},
+	TRUE: 'verdadero',
+	FALSE: 'falso'
 };

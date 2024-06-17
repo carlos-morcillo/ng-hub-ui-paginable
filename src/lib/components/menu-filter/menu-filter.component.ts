@@ -6,6 +6,7 @@ import {
 	NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import {
+	BooleanMatchModes,
 	DateMatchModes,
 	MatchMode,
 	MenuFilterOperators,
@@ -109,7 +110,11 @@ export class MenuFilterComponent implements ControlValueAccessor {
 				this.matchModes = Object.keys(NumberMatchModes) as any;
 				break;
 			case 'date':
+			case 'date-range':
 				this.matchModes = Object.keys(DateMatchModes) as any;
+				break;
+			case 'boolean':
+				this.matchModes = Object.keys(BooleanMatchModes) as any;
 				break;
 			default:
 				console.warn('Unknown filter type');

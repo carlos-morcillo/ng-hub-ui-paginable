@@ -11,7 +11,7 @@ export interface PaginableTableHeader {
 	wrapping?: 'wrap' | 'nowrap';
 	sticky?: 'start' | 'end';
 	buttons?: Array<PaginableTableButton | PaginableTableDropdown>;
-	filter?: InputFilter | DropdownFilter;
+	filter?: InputFilter | DropdownFilter | BooleanFilter;
 	onlyButtons?: boolean;
 }
 
@@ -30,4 +30,13 @@ interface DropdownFilter {
 	placeholder?: string;
 	bindLabel?: string;
 	bindValue?: string;
+}
+
+interface BooleanFilter {
+	type: 'boolean';
+	mode?: 'row' | 'menu';
+	key?: string;
+	placeholder?: string;
+	trueLabel?: string;
+	falseLabel?: string;
 }

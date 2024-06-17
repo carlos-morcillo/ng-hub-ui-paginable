@@ -41,12 +41,48 @@
 								formControlName="value"
 							/>
 						</div>
+						<div *ngSwitchCase="'number-range'">
+							<input
+								type="number"
+								class="form-control filter__rule__value"
+								formControlName="value"
+							/>
+						</div>
 						<div *ngSwitchCase="'date'">
 							<input
 								type="date"
 								class="form-control filter__rule__value"
 								formControlName="value"
 							/>
+						</div>
+						<div *ngSwitchCase="'date-range'">
+							<input
+								type="date"
+								class="form-control filter__rule__value"
+								formControlName="value"
+							/>
+						</div>
+						<div *ngSwitchCase="'boolean'">
+							<select
+								class="form-select form-control filter__rule__value"
+								formControlName="value"
+							>
+								<option [value]="null">
+									{{ header.filter.placeholder }}
+								</option>
+								<option [value]="true">
+									{{
+										header.filter.trueLabel ??
+											('TRUE' | translate | ucfirst)
+									}}
+								</option>
+								<option [value]="false">
+									{{
+										header.filter.falseLabel ??
+											('FALSE' | translate | ucfirst)
+									}}
+								</option>
+							</select>
 						</div>
 						<div *ngSwitchDefault>
 							<input
@@ -78,7 +114,10 @@
 			</li>
 		</ng-container>
 	</ng-container>
-	<li class="dropdown-item filter__add-rule">
+	<li
+		class="dropdown-item filter__add-rule"
+		*ngIf="header.filter?.type !== 'boolean'"
+	>
 		<button
 			class="btn btn-sm text-primary text-center w-100"
 			(click)="add(); $event.stopPropagation()"

@@ -51,7 +51,7 @@ export const locale = {
 			GREATERTHANOREQUAL: 'Greater than or equal to',
 			LESSTHAN: 'Less than',
 			LESSTHANOREQUAL: 'Less than or equal to',
-			EQUALS: 'Equals',
+			EQUALS: 's',
 			NOTEQUALS: 'Not equal to',
 			EQUAL: 'Equal to',
 			NOTEQUAL: 'Not equal to',
@@ -64,5 +64,7 @@ export const locale = {
 			NOTCONTAINS: 'Does not contain',
 			ENDSWITH: 'Ends with'
 		}
-	}
+	},
+	TRUE: 'true',
+	FALSE: 'false'
 };

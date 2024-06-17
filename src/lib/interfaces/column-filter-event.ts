@@ -40,7 +40,13 @@ export enum DateMatchModes {
 	AfterOrEqual = 'AfterOrEqual'
 }
 
+export enum BooleanMatchModes {
+	Equal = 'Equal',
+	NotEqual = 'NotEqual'
+}
+
 export type MatchMode =
 	| keyof StringMatchModes
 	| NumberMatchModes
-	| DateMatchModes;
+	| DateMatchModes
+	| BooleanMatchModes;

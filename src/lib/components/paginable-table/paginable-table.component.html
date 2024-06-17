@@ -214,23 +214,24 @@
 														specificSearchFG.get(
 															item.filter?.key ||
 																item.property
-														)!.value
+														)!.value?.rules?.length
 													"
 												></i>
-												<span
-													class="badge rounded-pill text-bg-primary"
+												<ng-container
 													*ngIf="
 														specificSearchFG.get(
 															item.filter?.key ||
 																item.property
-														)!.value as filterValue
+														)!.value?.rules as rules
 													"
 												>
-													{{
-														filterValue.rules
-															?.length
-													}}
-												</span>
+													<span
+														class="badge rounded-pill text-bg-primary"
+														*ngIf="rules.length"
+													>
+														{{ rules.length }}
+													</span>
+												</ng-container>
 											</div>
 											<menu-filter
 												class="content filter-dropdown__content"
@@ -622,6 +623,23 @@
 			[formControl]="formControl"
 		>
 		</paginable-table-range-input>
+		<select
+			*ngSwitchCase="'boolean'"
+			[formControl]="formControl"
+			class="form-select form-control"
+		>
+			<option [value]="null">
+				{{ header.filter.placeholder }}
+			</option>
+			<option [value]="true">
+				{{ header.filter.trueLabel ?? ('TRUE' | translate | ucfirst) }}
+			</option>
+			<option [value]="false">
+				{{
+					header.filter.falseLabel ?? ('FALSE' | translate | ucfirst)
+				}}
+			</option>
+		</select>
 		<input
 			*ngSwitchDefault
 			[type]="header.filter.type"
