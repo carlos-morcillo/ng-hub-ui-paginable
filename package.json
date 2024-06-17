@@ -1,6 +1,6 @@
 {
 	"name": "ng-paginable",
-	"version": "1.46.1",
+	"version": "1.46.2",
 	"peerDependencies": {
 		"@angular/common": ">=16.0.0",
 		"@angular/core": ">=16.0.0"

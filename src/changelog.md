@@ -1,4 +1,7 @@
 # Changelog
+# [1.46.2] - 2024-06-17
+- Fixed boolean filter values
+
 # [1.46.1] - 2024-06-17
 - Fixed column counts call
 

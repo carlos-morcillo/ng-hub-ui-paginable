@@ -628,13 +628,17 @@
 			[formControl]="formControl"
 			class="form-select form-control"
 		>
-			<option [value]="null">
-				{{ header.filter.placeholder }}
+			<option [ngValue]="null">
+				{{
+					header.filter.placeholder ?? 'SELECT_ONE'
+						| translate
+						| ucfirst
+				}}
 			</option>
-			<option [value]="true">
+			<option [ngValue]="true">
 				{{ header.filter.trueLabel ?? ('TRUE' | translate | ucfirst) }}
 			</option>
-			<option [value]="false">
+			<option [ngValue]="false">
 				{{
 					header.filter.falseLabel ?? ('FALSE' | translate | ucfirst)
 				}}
