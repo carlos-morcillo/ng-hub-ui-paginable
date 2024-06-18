@@ -1,9 +1,12 @@
 # Changelog
+# [1.47.0] - 2024-06-18
+- Added null match modes.
+
 # [1.46.2] - 2024-06-17
-- Fixed boolean filter values
+- Fixed boolean filter values.
 
 # [1.46.1] - 2024-06-17
-- Fixed column counts call
+- Fixed column counts call.
 
 # [1.46.0] - 2024-06-17
 - Added boolean filters.

@@ -5,7 +5,7 @@ export interface MenuFilterValue {
 
 export interface MenuFilterRule {
 	value: string | null;
-	matchMode: MatchMode;
+	matchMode: MatchModes;
 }
 
 export enum MenuFilterOperators {
@@ -45,8 +45,14 @@ export enum BooleanMatchModes {
 	NotEqual = 'NotEqual'
 }
 
-export type MatchMode =
-	| keyof StringMatchModes
+export enum NullMatchModes {
+	IsNull = 'IsNull',
+	IsNotNull = 'IsNotNull'
+}
+
+export type MatchModes =
+	| NullMatchModes
+	| StringMatchModes
 	| NumberMatchModes
 	| DateMatchModes
 	| BooleanMatchModes;

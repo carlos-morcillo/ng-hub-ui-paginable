@@ -8,10 +8,11 @@ import {
 import {
 	BooleanMatchModes,
 	DateMatchModes,
-	MatchMode,
+	MatchModes,
 	MenuFilterOperators,
 	MenuFilterRule,
 	MenuFilterValue,
+	NullMatchModes,
 	NumberMatchModes,
 	StringMatchModes
 } from '../../interfaces/column-filter-event';
@@ -31,7 +32,7 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 	]
 })
 export class MenuFilterComponent implements ControlValueAccessor {
-	private _fb = inject(FormBuilder);
+	#fb = inject(FormBuilder);
 	private _parent = inject(DropdownComponent);
 
 	private _header!: PaginableTableHeader;
@@ -45,19 +46,20 @@ export class MenuFilterComponent implements ControlValueAccessor {
 		this.setDefaultValue();
 	}
 
-	form = this._fb.group({
+	form = this.#fb.group({
 		operator: [MenuFilterOperators.And],
-		rules: this._fb.array([])
+		rules: this.#fb.array([])
 	});
 
 	get rulesFA(): FormArray {
 		return this.form.get('rules') as FormArray;
 	}
 
-	onChange = (value: MenuFilterValue) => {};
+	onChange = (value: MenuFilterValue | null) => {};
 	onTouched = () => {};
 
-	matchModes: Array<MatchMode> = [];
+	matchModes: Array<MatchModes> = [];
+	nullMatchModes = NullMatchModes;
 
 	defaultValue!: MenuFilterValue;
 
@@ -78,9 +80,16 @@ export class MenuFilterComponent implements ControlValueAccessor {
 		this.onTouched = fn;
 	}
 
+	/**
+	 * Adds a new form group to a FormArray with default values or values provided as input.
+	 *
+	 * @param {MenuFilterRule} [value] - The `value` parameter in the `add` method is an optional parameter of type `MenuFilterRule`.
+	 * It is used to provide a value that will be patched into the form group created within the method. If a `value` is provided, it
+	 * will be used to patch the form group's
+	 */
 	add(value?: MenuFilterRule) {
 		const rulesFA = this.form.get('rules') as FormArray;
-		const ruleFG = this._fb.group({
+		const ruleFG = this.#fb.group({
 			value: [null],
 			matchMode: [this.matchModes[0]]
 		});
@@ -90,45 +99,72 @@ export class MenuFilterComponent implements ControlValueAccessor {
 		rulesFA.push(ruleFG);
 	}
 
+	/**
+	 * Clears all rules in a FormArray, adds a new rule, and applies the changes.
+	 */
 	clear() {
 		const rulesFA = this.form.get('rules') as FormArray;
 		rulesFA.clear();
+		this.add();
 		this.apply();
 	}
 
+	/**
+	 * Filters rules based on certain conditions and closes the dropdown.
+	 */
 	apply() {
-		this.onChange(this.form.value as any);
+		let { operator, rules } = this.form.value as MenuFilterValue;
+		rules = rules?.filter(
+			(rule) =>
+				[NullMatchModes.IsNotNull, NullMatchModes.IsNull].includes(
+					rule.matchMode as any
+				) || rule.value
+		);
+		this.onChange(
+			rules.length
+				? {
+						operator,
+						rules
+				  }
+				: null
+		);
 		this._parent.closeDropdown();
 	}
 
+	/**
+	 * Determines the appropriate match modes based on the filter type and assigns them to the `matchModes` property.
+	 */
 	setMatchMode() {
+		let matchModes;
 		switch (this.header.filter?.type) {
-			case 'text':
-				this.matchModes = Object.keys(StringMatchModes) as any;
-				break;
 			case 'number':
-				this.matchModes = Object.keys(NumberMatchModes) as any;
+				matchModes = NumberMatchModes;
 				break;
 			case 'date':
 			case 'date-range':
-				this.matchModes = Object.keys(DateMatchModes) as any;
+				matchModes = DateMatchModes;
 				break;
 			case 'boolean':
-				this.matchModes = Object.keys(BooleanMatchModes) as any;
+				matchModes = BooleanMatchModes;
 				break;
 			default:
-				console.warn('Unknown filter type');
+				matchModes = StringMatchModes;
 				break;
 		}
+		this.matchModes = { ...matchModes, ...NullMatchModes };
 	}
 
+	/**
+	 * Initializes a default value for a menu filter with an operator and a rule containing a null value and a match mode.
+	 */
 	setDefaultValue() {
+		const matchMode = Object.values(this.matchModes)[0];
 		this.defaultValue = {
 			operator: MenuFilterOperators.And,
 			rules: [
 				{
 					value: null,
-					matchMode: this.matchModes[0]
+					matchMode
 				}
 			]
 		};

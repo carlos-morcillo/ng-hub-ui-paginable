@@ -1,5 +1,8 @@
 <ng-container [formGroup]="form">
-	<li class="dropdown-item filter__operator">
+	<li
+		*ngIf="header.filter?.type !== 'boolean'"
+		class="dropdown-item filter__operator"
+	>
 		<select
 			class="form-select filter__operator__control"
 			formControlName="operator"
@@ -12,7 +15,7 @@
 	<ng-container formArrayName="rules">
 		<ng-container
 			*ngFor="
-				let control of rulesFA.controls;
+				let group of rulesFA.controls;
 				let index = index;
 				let last = last
 			"
@@ -24,9 +27,19 @@
 						class="form-select filter__rule__mode"
 						formControlName="matchMode"
 					>
-						<option *ngFor="let mode of matchModes" [value]="mode">
+						<option [ngValue]="null">
 							{{
-								'MATCH_MODES.' + $any(mode)
+								header.filter.placeholder ?? 'SELECT_ONE'
+									| translate
+									| ucfirst
+							}}
+						</option>
+						<option
+							*ngFor="let mode of matchModes | keyvalue"
+							[value]="mode.key"
+						>
+							{{
+								'MATCH_MODES.' + mode.key
 									| uppercase
 									| translate
 									| ucfirst
@@ -91,6 +104,12 @@
 						</div>
 						<div *ngSwitchDefault>
 							<input
+								[readOnly]="
+									[
+										nullMatchModes.IsNull,
+										nullMatchModes.IsNotNull
+									].includes(group.get('matchMode').value)
+								"
 								type="text"
 								class="form-control filter__rule__value"
 								formControlName="value"
