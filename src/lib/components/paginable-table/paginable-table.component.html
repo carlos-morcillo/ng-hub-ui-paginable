@@ -88,7 +88,7 @@
 
 		<!-- Pagination -->
 		<paginable-table-paginator
-			(onPageClick)="pageClicked($event)"
+			(pageClick)="pageClicked($event)"
 			*ngIf="
 				paginate &&
 				data?.data?.length &&
@@ -326,7 +326,7 @@
 			>
 				<paginable-table-paginator
 					class="flex-grow-1"
-					(onPageClick)="pageClicked($event)"
+					(pageClick)="pageClicked($event)"
 					*ngIf="
 						paginationPosition == 'bottom' ||
 						paginationPosition === 'both'

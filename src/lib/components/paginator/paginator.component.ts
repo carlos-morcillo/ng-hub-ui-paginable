@@ -14,8 +14,8 @@ export class PaginatorComponent {
 	#configSvc = inject(PaginableService);
 	tableHeader: any;
 
-	@Input() pagination!: PaginableTablePagination | null;
-	@Output() onPageClick = new EventEmitter<number>();
+	@Input({ required: true }) pagination: PaginableTablePagination | null;
+	@Output() pageClick = new EventEmitter<number>();
 
 	mapping: any = this.#configSvc.mapping;
 
@@ -35,11 +35,12 @@ export class PaginatorComponent {
 
 	/**
 	 * Triggers an event with the page number when a page is clicked.
+	 *
 	 * @param {number} page - Takes a `page` parameter, which is a number representing the page that was clicked. This function emits
 	 * the `page` value using a `Subject` called `onPageClick`.
 	 */
-	pageClick(page: number) {
-		this.onPageClick.next(page);
+	onPageClick(page: number) {
+		this.pageClick.next(page);
 	}
 
 	// scrollToTableHeader() {

@@ -111,7 +111,7 @@ export class MenuFilterComponent implements ControlValueAccessor {
 	}
 
 	/**
-	 * Filters rules based on certain conditions and closes the dropdown.
+	 * Filters rules based on certain conditions and then calls onChange with the filtered rules or null.
 	 */
 	apply() {
 		let { operator, rules } = this.form.value as MenuFilterValue;
@@ -119,7 +119,8 @@ export class MenuFilterComponent implements ControlValueAccessor {
 			(rule) =>
 				[NullMatchModes.IsNotNull, NullMatchModes.IsNull].includes(
 					rule.matchMode as any
-				) || rule.value
+				) ||
+				(rule.value !== undefined && rule.value !== null)
 		);
 		this.onChange(
 			rules.length
