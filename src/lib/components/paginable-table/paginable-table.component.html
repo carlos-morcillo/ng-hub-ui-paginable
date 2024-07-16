@@ -678,7 +678,7 @@
 						*ngIf="!(isHidden(button, item) | async)"
 						type="button"
 						class="btn px-1"
-						[title]="button.title"
+						[attr.title]="button.tooltip"
 						(click)="handleAction($event, button.handler, item)"
 						[ngClass]="button.classlist ?? []"
 					>
@@ -689,8 +689,11 @@
 							"
 						>
 							<i *ngIf="button.icon" [ngClass]="button.icon"></i>
-							<span class="button-label" *ngIf="button.label">
-								{{ button.label }}</span
+							<ng-conainer
+								class="button-label"
+								*ngIf="button.title"
+							>
+								{{ button.title }}</ng-conainer
 							>
 						</div>
 					</button>

@@ -1,4 +1,7 @@
 # Changelog
+# [1.48.0] - 2024-07-09
+- Fixed some tooltip issues.
+
 # [1.47.0] - 2024-06-18
 - Added null match modes.
 

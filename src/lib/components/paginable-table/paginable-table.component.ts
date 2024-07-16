@@ -6,6 +6,7 @@ import {
 	EventEmitter,
 	Input,
 	OnDestroy,
+	OnInit,
 	Output,
 	QueryList,
 	TemplateRef,
@@ -53,6 +54,7 @@ import { PaginableService } from '../../services/paginable.service';
 import { PaginationService } from '../../services/pagination.service';
 import { generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
+import { PaginatorComponent } from '../paginator/paginator.component';
 
 @Component({
 	selector: 'paginable-table',
@@ -80,7 +82,7 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 		class: 'd-block paginable-table'
 	}
 })
-export class PaginableTableComponent implements OnDestroy {
+export class PaginableTableComponent implements OnInit, OnDestroy {
 	#fb = inject(UntypedFormBuilder);
 	private _configSvc = inject(PaginableService);
 	private _paginationSvc = inject(PaginationService);
@@ -458,6 +460,8 @@ export class PaginableTableComponent implements OnDestroy {
 	 */
 	@Input() paginate: boolean = true;
 
+	@ContentChildren(PaginatorComponent)
+	paginators?: QueryList<DropdownComponent>;
 	@ContentChild(PaginableTableRowDirective, { read: TemplateRef })
 	templateRow?: TemplateRef<any>;
 	@ContentChildren(PaginableTableHeaderDirective)

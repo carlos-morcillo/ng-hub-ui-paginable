@@ -30,8 +30,7 @@ export class PaginableTableDropdownComponent<T = any> {
 			...v
 		};
 		if (this._options.fill === 'clear') {
-			this.buttonClass =
-				'btn btn-link text-' + (this._options.color ?? 'muted');
+			this.buttonClass = 'btn text-' + (this._options.color ?? 'muted');
 		} else {
 			this.buttonClass =
 				'btn ' +

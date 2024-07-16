@@ -26,6 +26,7 @@
 					<select
 						class="form-select filter__rule__mode"
 						formControlName="matchMode"
+						(change)="enableOrDisableValueControl(group)"
 					>
 						<option [ngValue]="null">
 							{{
@@ -46,7 +47,15 @@
 							}}
 						</option>
 					</select>
-					<div [ngSwitch]="header.filter?.type">
+					<div
+						[ngSwitch]="header.filter?.type"
+						*ngIf="
+							![
+								nullMatchModes.IsNull,
+								nullMatchModes.IsNotNull
+							].includes(group.get('matchMode').value)
+						"
+					>
 						<div *ngSwitchCase="'number'">
 							<input
 								type="number"
@@ -75,7 +84,7 @@
 								formControlName="value"
 							/>
 						</div>
-						<div *ngSwitchCase="'boolean'">
+						<ng-container *ngSwitchCase="'boolean'">
 							<select
 								class="form-select form-control filter__rule__value"
 								formControlName="value"
@@ -101,15 +110,9 @@
 									}}
 								</option>
 							</select>
-						</div>
+						</ng-container>
 						<div *ngSwitchDefault>
 							<input
-								[readOnly]="
-									[
-										nullMatchModes.IsNull,
-										nullMatchModes.IsNotNull
-									].includes(group.get('matchMode').value)
-								"
 								type="text"
 								class="form-control filter__rule__value"
 								formControlName="value"

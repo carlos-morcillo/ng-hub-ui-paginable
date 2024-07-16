@@ -3,13 +3,18 @@
 		class="px-2 dropdown-toggle"
 		type="button"
 		[ngClass]="buttonClass"
-		[title]="options.title || null"
+		[attr.title]="options.tooltip"
 		data-toggle="dropdown"
 		[attr.aria-expanded]="shown"
 		(click)="shown = !shown"
 		[disabled]="disabled"
 	>
-		<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
+		<div class="d-flex flex-nowrap align-items-center gap-1">
+			<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
+			<ng-container *ngIf="options.title">{{
+				options.title
+			}}</ng-container>
+		</div>
 	</button>
 	<div
 		class="dropdown-menu dropdown-menu-{{ options.position }}"
@@ -25,6 +30,7 @@
 			<button
 				class="dropdown-item"
 				type="button"
+				[attr.title]="dropdownItem.tooltip"
 				*ngIf="!dropdownItem.hidden"
 				[ngClass]="
 					dropdownItem.color
@@ -40,7 +46,7 @@
 					class="me-2 mr-2 {{ dropdownItem.icon }}"
 				></i>
 				<ng-container *ngIf="dropdownItem.title">
-					{{ dropdownItem.title | ucfirst }}
+					{{ dropdownItem.title }}
 				</ng-container>
 			</button>
 		</ng-container>

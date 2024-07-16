@@ -3,6 +3,7 @@ import {
 	ControlValueAccessor,
 	FormArray,
 	FormBuilder,
+	FormGroup,
 	NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import {
@@ -168,5 +169,20 @@ export class MenuFilterComponent implements ControlValueAccessor {
 				}
 			]
 		};
+	}
+
+	/**
+	 * Disables or enables a form control based on the selected match mode in a FormGroup.
+	 *
+	 * @param {FormGroup} group - The `group` parameter is a FormGroup object in Angular, which represents a collection of FormControl
+	 * instances. It is typically used to manage the form controls within a form.
+	 */
+	enableOrDisableValueControl(group: FormGroup) {
+		const { matchMode } = group.value;
+		if (Object.values(NullMatchModes).includes(matchMode)) {
+			group.get('value')?.disable();
+		} else {
+			group.get('value')?.enable();
+		}
 	}
 }
