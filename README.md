@@ -7,7 +7,7 @@ Out-of-the-box integration with Laravel responses and other frameworks and Boost
 
 | Angular          | ng-pagination |
 |------------------|:---------:|
-| >=14.0.0 <15.0.0 |   v1.x    |
+| >=14.0.0 <18.0.0 |   v1.x    |
 
 ---
 

@@ -1,3 +1,5 @@
+import { Icon } from './paginable-table-header';
+
 /**
  * This interface defines a type of button that can be used in a paginable table. It contains properties for the title, label,
  * tooltip, icon, handler function, color, hidden state and classlist of the button. The title and label properties are strings
@@ -15,7 +17,7 @@ export interface PaginableTableButton {
 	title?: string;
 	label?: string;
 	tooltip?: string;
-	icon?: string;
+	icon?: string | Icon;
 	/**
 	 * Function that will be called when the button is clicked
 	 *

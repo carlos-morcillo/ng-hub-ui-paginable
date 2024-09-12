@@ -1,4 +1,16 @@
 # Changelog
+# [1.50.0] - 2024-09-12
+- String observables are now allowed in the table headers
+
+# [1.49.2] - 2024-07-25
+- Stability
+
+# [1.49.1] - 2024-07-23
+- Stability
+  
+# [1.49.0] - 2024-07-23
+- Added support for material, bootstrap and font awesome buttons.
+
 # [1.48.1] - 2024-07-16
 - Fixed issue with boolean filters.
 

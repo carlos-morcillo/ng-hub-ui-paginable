@@ -622,8 +622,6 @@ export class PaginableTableComponent implements OnInit, OnDestroy {
 			paginate: this.paginate
 		};
 
-		debugger;
-
 		Object.keys(params).forEach(
 			(k) => params[k] == null && delete params[k]
 		);

@@ -5,7 +5,7 @@ import { PaginableTableDropdown } from './paginable-table-dropdown';
 export interface PaginableTableHeader {
 	title?: string;
 	property: string;
-	icon?: string;
+	icon?: string | Icon;
 	align?: 'start' | 'end' | 'center';
 	sortable?: boolean;
 	wrapping?: 'wrap' | 'nowrap';
@@ -39,4 +39,10 @@ interface BooleanFilter {
 	placeholder?: string;
 	trueLabel?: string;
 	falseLabel?: string;
+}
+
+export interface Icon {
+	type: 'font-awesome' | 'material' | 'bootstrap';
+	variant?: string;
+	value: string;
 }

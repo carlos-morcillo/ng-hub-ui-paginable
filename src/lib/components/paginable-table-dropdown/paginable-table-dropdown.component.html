@@ -41,13 +41,14 @@
 					item && dropdownItem.handler && dropdownItem.handler(item)
 				"
 			>
-				<i
-					*ngIf="dropdownItem.icon"
-					class="me-2 mr-2 {{ dropdownItem.icon }}"
-				></i>
-				<ng-container *ngIf="dropdownItem.title">
-					{{ dropdownItem.title }}
-				</ng-container>
+				<div class="d-flex align-items-center gap-2">
+					<ng-hub-ui-icon
+						[config]="dropdownItem.icon"
+					></ng-hub-ui-icon>
+					<ng-container *ngIf="dropdownItem.title">
+						{{ dropdownItem.title }}
+					</ng-container>
+				</div>
 			</button>
 		</ng-container>
 	</div>

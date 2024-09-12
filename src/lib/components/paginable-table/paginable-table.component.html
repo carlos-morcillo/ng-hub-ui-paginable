@@ -573,7 +573,7 @@
 		}"
 	>
 		<span *ngIf="header.title" class="text-wrap">{{
-			header.title ?? header.property | ucfirst
+			header.title ?? header.property | unwrapAsync
 		}}</span>
 	</div>
 </ng-template>
@@ -688,7 +688,9 @@
 								button.color ? 'text-' + button.color : ''
 							"
 						>
-							<i *ngIf="button.icon" [ngClass]="button.icon"></i>
+							<ng-hub-ui-icon
+								[config]="button.icon"
+							></ng-hub-ui-icon>
 							<ng-conainer
 								class="button-label"
 								*ngIf="button.title"

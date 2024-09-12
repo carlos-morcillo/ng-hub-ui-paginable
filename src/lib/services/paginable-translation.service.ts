@@ -7,7 +7,7 @@ import { getValue } from '../utils';
 
 @Injectable()
 export class PaginableTranslationService {
-	private _paginableSvc = inject(PaginableService);
+	#paginableSvc = inject(PaginableService);
 
 	defaultTranslations: Record<string, string | any> = [enLang, esLang].reduce(
 		(acc, c) => {
@@ -29,7 +29,7 @@ export class PaginableTranslationService {
 
 	initialize() {
 		this.setTranslations(
-			this.defaultTranslations[this._paginableSvc.config.language] ??
+			this.defaultTranslations[this.#paginableSvc.config.language] ??
 				this.defaultTranslations['en']
 		);
 	}

@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { HubIconComponent } from '../public-api';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { MenuFilterComponent } from './components/menu-filter/menu-filter.component';
 import { ModalComponent } from './components/modal/modal.component';
@@ -32,6 +33,7 @@ import { IsObjectPipe } from './pipes/is-object.pipe';
 import { IsObservablePipe } from './pipes/is-observable.pipe';
 import { IsStringPipe } from './pipes/is-string.pipe';
 import { UcfirstPipe } from './pipes/ucfirst.pipe';
+import { UnwrapAsyncPipe } from './pipes/unwrap-async.pipe';
 import { PaginableTranslationService } from './services/paginable-translation.service';
 import { PaginableService } from './services/paginable.service';
 import { PaginateConfigService } from './services/paginate-config.service';
@@ -68,7 +70,9 @@ import { TranslatePipe } from './translate.pipe';
 		DropdownComponent,
 		PaginatorComponent,
 		PaginableTableNotFoundDirective,
-		UcfirstPipe
+		UcfirstPipe,
+		HubIconComponent,
+		UnwrapAsyncPipe
 	],
 	exports: [
 		PaginableTableComponent,

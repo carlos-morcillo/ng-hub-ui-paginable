@@ -9,6 +9,7 @@ export { PaginableTableComponent } from './components/paginable-table/paginable-
 export { PaginatorComponent } from './components/paginator/paginator.component';
 export { ResizableComponent } from './components/resizable/resizable.component';
 export { PaginableListComponent } from './list/paginable-list/paginable-list.component';
+export { HubIconComponent } from './components/icon/icon.component';
 
 // Directives
 export { PaginableListItemDirective } from './directives/paginable-list-item.directive';

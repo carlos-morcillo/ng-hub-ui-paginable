@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
 	Component,
 	ContentChild,
@@ -14,15 +15,14 @@ import {
 	NG_VALUE_ACCESSOR,
 	ReactiveFormsModule
 } from '@angular/forms';
-import { PaginableListItemDirective } from '../../directives/paginable-list-item.directive';
-import { CommonModule } from '@angular/common';
-import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
-import { TranslatePipe } from '../../translate.pipe';
-import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
 import { PaginatorComponent } from '../../components/paginator/paginator.component';
+import { PaginableListItemDirective } from '../../directives/paginable-list-item.directive';
+import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
 import { PaginableTableButton } from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
+import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import { TranslatePipe } from '../../translate.pipe';
 import { getValue } from '../../utils';
 
 @Component({
@@ -50,7 +50,7 @@ import { getValue } from '../../utils';
 	standalone: true
 })
 export class PaginableListComponent<T = any> {
-	private _fb = inject(FormBuilder);
+	#fb = inject(FormBuilder);
 
 	@Input() bindValue?: string;
 	@Input() bindLabel: string = 'label';
@@ -79,7 +79,7 @@ export class PaginableListComponent<T = any> {
 
 	@Output() itemClick = new EventEmitter<ListItemClickEvent>();
 
-	form: FormArray = this._fb.array([]);
+	form: FormArray = this.#fb.array([]);
 
 	value: Array<T & { collapsed: boolean }> = [];
 
@@ -98,7 +98,7 @@ export class PaginableListComponent<T = any> {
 
 	// NOTE: Filters
 
-	searchFG = this._fb.control({});
+	searchFG = this.#fb.control({});
 
 	// NOTE: Batch actions
 
@@ -157,11 +157,11 @@ export class PaginableListComponent<T = any> {
 			if (Object.prototype.hasOwnProperty.call(items, index)) {
 				const item = items[index];
 
-				const group = this._fb.group({
+				const group = this.#fb.group({
 					selected: [true],
 					collapsed: [true],
 					data: [item],
-					children: this._fb.array([])
+					children: this.#fb.array([])
 				});
 
 				group.patchValue(item);
