@@ -1,4 +1,8 @@
 # Changelog
+# [1.50.2] - 2024-09-12
+- Stability
+- 
+# Changelog
 # [1.50.1] - 2024-09-12
 - Stability
 - 

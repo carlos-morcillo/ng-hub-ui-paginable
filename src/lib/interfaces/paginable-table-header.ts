@@ -3,7 +3,7 @@ import { PaginableTableButton } from './paginable-table-button';
 import { PaginableTableDropdown } from './paginable-table-dropdown';
 
 export interface PaginableTableHeader {
-	title?: string;
+	title?: string | Observable<string>;
 	property: string;
 	icon?: string | Icon;
 	align?: 'start' | 'end' | 'center';
