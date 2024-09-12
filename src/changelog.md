@@ -1,4 +1,7 @@
 # Changelog
+# [1.50.1] - 2024-09-12
+- Stability
+- 
 # [1.50.0] - 2024-09-12
 - String observables are now allowed in the table headers
 
