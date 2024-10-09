@@ -1,68 +1,105 @@
-<nav aria-label="Page navigation">
-	<ul class="pagination justify-content-center mb-0">
-		<li class="page-item" [class.disabled]="currentPage === 1">
-			<a class="page-link" href="javascript:{}" (click)="onPageClick(1)">
-				<i class="fa fa-angle-double-left"></i>
+<nav class="pager" aria-label="Page navigation">
+	<ul class="pager pagination pager__list">
+		<li
+			class="page-item pager__item"
+			[class.pager__item--disabled]="currentPage === 1"
+		>
+			<a
+				role="button"
+				class="page-link pager__link"
+				href="javascript:{}"
+				(click)="onPageClick(1)"
+			>
+				<i class="pager__icon fa fa-angle-double-left"></i>
 			</a>
 		</li>
-		<li class="page-item" [class.disabled]="currentPage <= 1">
+		<li
+			class="page-item pager__item"
+			[class.pager__item--disabled]="currentPage <= 1"
+		>
 			<a
-				class="page-link"
+				role="button"
+				class="page-link pager__link"
 				href="javascript:{}"
 				aria-label="Previous"
 				(click)="onPageClick(currentPage - 1)"
 			>
-				<span aria-hidden="true">
-					<i class="fa fa-angle-left"></i>
+				<span class="pager__icon-wrapper" aria-hidden="true">
+					<i class="pager__icon fa fa-angle-left"></i>
 				</span>
 			</a>
 		</li>
-		<li class="page-item disabled" *ngIf="currentPage - 1 > 1">
-			<a class="page-link" href="javascript:{}">...</a>
+		<li
+			class="page-item pager__item pager__item--disabled disabled"
+			*ngIf="currentPage - 1 > 1"
+		>
+			<a role="button" class="page-link pager__link" href="javascript:{}"
+				>...</a
+			>
 		</li>
-		<li class="page-item">
+		<li class="page-item pager__item">
 			<a
-				class="page-link"
+				role="button"
+				class="page-link pager__link"
 				href="javascript:{}"
 				*ngIf="currentPage - 1 >= 1"
 				(click)="onPageClick(currentPage - 1)"
 				>{{ currentPage - 1 }}</a
 			>
 		</li>
-		<li class="page-item active">
-			<a class="page-link" href="javascript:{}">{{ currentPage }}</a>
-		</li>
-		<li class="page-item">
+		<li class="page-item pager__item active pager__item--active">
 			<a
-				class="page-link"
+				role="button"
+				class="page-link pager__link"
+				href="javascript:{}"
+				>{{ currentPage }}</a
+			>
+		</li>
+		<li class="page-item pager__item">
+			<a
+				role="button"
+				class="page-link pager__link"
 				href="javascript:{}"
 				*ngIf="currentPage + 1 <= lastPage"
 				(click)="onPageClick(currentPage + 1)"
 				>{{ currentPage + 1 }}</a
 			>
 		</li>
-		<li class="page-item disabled" *ngIf="currentPage + 1 < lastPage">
-			<a class="page-link" href="javascript:{}">...</a>
+		<li
+			class="page-item pager__item disabled pager__item--disabled"
+			*ngIf="currentPage + 1 < lastPage"
+		>
+			<a role="button" class="page-link pager__link" href="javascript:{}"
+				>...</a
+			>
 		</li>
-		<li class="page-item" [class.disabled]="currentPage >= lastPage">
+		<li
+			class="page-item pager__item"
+			[class.pager__item--disabled]="currentPage >= lastPage"
+		>
 			<a
-				class="page-link"
+				role="button"
+				class="page-link pager__link"
 				href="javascript:{}"
 				aria-label="Next"
 				(click)="onPageClick(currentPage + 1)"
 			>
-				<span aria-hidden="true">
-					<i class="fa fa-angle-right"></i>
+				<span class="pager__icon-wrapper" aria-hidden="true">
+					<i class="pager__icon fa fa-angle-right"></i>
 				</span>
 			</a>
 		</li>
-		<li class="page-item" [class.disabled]="currentPage === lastPage">
+		<li
+			class="page-item pager__item"
+			[class.pager__item--disabled]="currentPage === lastPage"
+		>
 			<a
-				class="page-link"
+				role="button"
+				class="page-link pager__link"
 				href="javascript:{}"
 				(click)="onPageClick(lastPage)"
 			>
-				<i class="fa fa-angle-double-right"></i>
+				<i class="pager__icon fa fa-angle-double-right"></i>
 			</a>
 		</li>
 	</ul>

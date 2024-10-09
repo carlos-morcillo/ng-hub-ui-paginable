@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
 	Component,
 	ContentChild,
-	EventEmitter,
 	Input,
 	Output,
 	TemplateRef,
@@ -18,6 +17,7 @@ import {
 import { PaginatorComponent } from '../../components/paginator/paginator.component';
 import { PaginableListItemDirective } from '../../directives/paginable-list-item.directive';
 import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
+import { ItemClickEvent } from '../../interfaces/item-click-event';
 import { PaginableTableButton } from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
@@ -26,7 +26,7 @@ import { TranslatePipe } from '../../translate.pipe';
 import { getValue } from '../../utils';
 
 @Component({
-	selector: 'ng80-paginable-list',
+	selector: 'hub-ui-paginable-list',
 	templateUrl: './paginable-list.component.html',
 	styleUrls: ['./paginable-list.component.scss'],
 	host: {
@@ -77,7 +77,7 @@ export class PaginableListComponent<T = any> {
 		this.buildForm(this.form, this._items);
 	}
 
-	@Output() itemClick = new EventEmitter<ListItemClickEvent>();
+	@Input() clickFn: (event: ItemClickEvent<T>) => void | Promise<void>;
 
 	form: FormArray = this.#fb.array([]);
 
@@ -198,27 +198,33 @@ export class PaginableListComponent<T = any> {
 	}
 
 	/**
-	 * Takes in an object with properties collapsed, selected, and value, as well as the depth and index parameters, and emits an
-	 * event with the depth, index, selected, collapsed, value, and data properties.
+	 * Handles click events by extracting specific properties and passing them to a callback function.
 	 *
-	 * @param  - - `collapsed`: a boolean indicating whether the item is collapsed or not
-	 * @param {number} depth - The depth parameter represents the level of nesting or hierarchy of the item. It indicates how deep the
-	 * item is within a nested structure or tree-like data structure.
-	 * @param {number} index - The index parameter represents the position of the clicked item in the list or array. It is a number
-	 * that starts from 0 for the first item and increments by 1 for each subsequent item.
+	 * @param  - The `onItemClick` function takes in the following parameters: collapsed, selected and item.
+	 * @param {number} depth - The `depth` parameter in the `onItemClick` function represents the depth level of the item being
+	 * clicked. It is a number that indicates how deep the item is nested within a hierarchical structure.
+	 * @param {number} index - The `index` parameter in the `onItemClick` function represents the position of the item that was clicked
+	 * within a list or array. It is a number that indicates the index of the clicked item.
+	 *
+	 * @returns If the `clickFn` property is not defined in the current context, the `onItemClick` function will return without
+	 * executing any further code.
 	 */
 	onItemClick(
-		{ collapsed, selected, ...value },
+		{ collapsed, selected, ...item },
 		depth: number,
 		index: number
 	) {
-		this.itemClick.next({
+		if (!this.clickFn) {
+			return;
+		}
+
+		this.clickFn({
 			depth,
 			index,
 			selected,
 			collapsed,
-			value: this.bindLabel ? getValue(value, this.bindLabel) : value,
-			data: value
+			value: this.bindLabel ? getValue(item, this.bindLabel) : item,
+			item: item as T
 		});
 	}
 
@@ -240,13 +246,4 @@ export class PaginableListComponent<T = any> {
 		// 	specificSearch: this.specificSearchFG?.value ?? null
 		// });
 	}
-}
-
-export interface ListItemClickEvent<T = any> {
-	collapsed: boolean;
-	selected: boolean;
-	data: T;
-	value: any;
-	depth: number;
-	index: number;
 }

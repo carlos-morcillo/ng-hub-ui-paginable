@@ -6,7 +6,6 @@ import {
 	SkipSelf
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 import { HubIconComponent } from '../public-api';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { MenuFilterComponent } from './components/menu-filter/menu-filter.component';
@@ -95,7 +94,7 @@ import { TranslatePipe } from './translate.pipe';
 		ModalComponent,
 		PaginableListItemDirective
 	],
-	providers: [TranslateService]
+	providers: []
 })
 export class NgPaginableModule {
 	constructor(@Optional() @SkipSelf() parentModule?: NgPaginableModule) {

@@ -1,6 +1,28 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	Component,
+	ContentChild,
+	ElementRef,
+	EventEmitter,
+	forwardRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output,
+	TemplateRef,
+	ViewChild
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { fromEvent, merge, Observable, Subject, Subscription, timer } from 'rxjs';
+import {
+	fromEvent,
+	merge,
+	Observable,
+	Subject,
+	Subscription,
+	timer
+} from 'rxjs';
 import { debounceTime, filter, map, tap } from 'rxjs/operators';
 import { TypeaheadFooterDirective } from '../../directives/typeahead-footer.directive';
 import { TypeaheadHeaderDirective } from '../../directives/typeahead-header.directive';
@@ -8,7 +30,15 @@ import { TypeaheadNoItemsDirective } from '../../directives/typeahead-no-items.d
 import { TypeaheadOptionDirective } from '../../directives/typeahead-option.directive';
 import { TypeaheadPlaceholderDirective } from '../../directives/typeahead-placeholder.directive';
 import { Key } from '../../models';
-import { isEnterKey, isIndexActive, NO_INDEX, resolveNextIndex, toFormControlValue, validateArrowKeys, validateNonCharKeyCode } from '../../typeahead.utils';
+import {
+	isEnterKey,
+	isIndexActive,
+	NO_INDEX,
+	resolveNextIndex,
+	toFormControlValue,
+	validateArrowKeys,
+	validateNonCharKeyCode
+} from '../../typeahead.utils';
 
 @Component({
 	selector: 'ng-typeahead, [ngTypeahead]',
@@ -22,10 +52,10 @@ import { isEnterKey, isIndexActive, NO_INDEX, resolveNextIndex, toFormControlVal
 			multi: true
 		}
 	]
-
 })
-export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, ControlValueAccessor {
-
+export class TypeaheadComponent
+	implements OnInit, OnDestroy, AfterViewInit, ControlValueAccessor
+{
 	showSuggestions = false;
 
 	@Input() placeholder: string;
@@ -55,16 +85,21 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 
 	@Output() change = new EventEmitter<string | any>();
 
-	@ContentChild(TypeaheadOptionDirective, { read: TemplateRef }) optionTpt: TypeaheadOptionDirective;
-	@ContentChild(TypeaheadHeaderDirective, { read: TemplateRef }) headerTpt: TypeaheadHeaderDirective;
-	@ContentChild(TypeaheadFooterDirective, { read: TemplateRef }) footerTpt: TypeaheadFooterDirective;
-	@ContentChild(TypeaheadNoItemsDirective, { read: TemplateRef }) noItemsTpt: TypeaheadNoItemsDirective;
-	@ContentChild(TypeaheadPlaceholderDirective, { read: TemplateRef }) placeholderTpt: TypeaheadPlaceholderDirective;
+	@ContentChild(TypeaheadOptionDirective, { read: TemplateRef })
+	optionTpt: TypeaheadOptionDirective;
+	@ContentChild(TypeaheadHeaderDirective, { read: TemplateRef })
+	headerTpt: TypeaheadHeaderDirective;
+	@ContentChild(TypeaheadFooterDirective, { read: TemplateRef })
+	footerTpt: TypeaheadFooterDirective;
+	@ContentChild(TypeaheadNoItemsDirective, { read: TemplateRef })
+	noItemsTpt: TypeaheadNoItemsDirective;
+	@ContentChild(TypeaheadPlaceholderDirective, { read: TemplateRef })
+	placeholderTpt: TypeaheadPlaceholderDirective;
 
 	value: any;
 	isDisabled: boolean;
-	onChange = (_: any) => { }
-	onTouch = () => { }
+	onChange = (_: any) => {};
+	onTouch = () => {};
 
 	private suggestionIndex = 0;
 	private activeResult = '';
@@ -78,12 +113,14 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 	results: any[];
 	results$: Subscription;
 
-	get text(): string {
+	get text(): string | null {
 		if (!this.value) {
 			return null;
 		}
 		if (this.results && this.bindText) {
-			const value = this.results.find(o => o[this.bindValue] === this.value);
+			const value = this.results.find(
+				(o) => o[this.bindValue] === this.value
+			);
 			return (value && value[this.bindText]) ?? this.value;
 		}
 		return this.value;
@@ -92,9 +129,9 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 	constructor(
 		private _cdr: ChangeDetectorRef,
 		private _elementRef: ElementRef
-	) { }
+	) {}
 
-	ngOnInit() { }
+	ngOnInit() {}
 
 	ngAfterViewInit(): void {
 		this.keyDown$ = fromEvent(this.searchInput.nativeElement, 'keydown');
@@ -104,35 +141,48 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 			timer(0),
 			this.itemsChange$,
 			fromEvent(this.searchInput.nativeElement, 'keydown').pipe(
-				tap((e: KeyboardEvent) => e.code === Key.Backspace && !this.query.length ? this.value = null : null),
+				tap((e: KeyboardEvent) =>
+					e.code === Key.Backspace && !this.query.length
+						? (this.value = null)
+						: null
+				),
 				tap((e: KeyboardEvent) => {
 					if (isEnterKey(e)) {
 						this.handleSelectSuggestion(this.activeResult);
 						e.stopImmediatePropagation();
 					}
 				}),
-				tap((e: KeyboardEvent) => e.code === Key.Backspace && !this.query.length ? this.value = null : null),
+				tap((e: KeyboardEvent) =>
+					e.code === Key.Backspace && !this.query.length
+						? (this.value = null)
+						: null
+				),
 				filter((e: KeyboardEvent) => validateNonCharKeyCode(e.code)),
-				filter((_) => this.query.length >= this.minTermLength),
+				filter((_) => this.query.length >= this.minTermLength)
 			),
 			fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
-				tap((e: KeyboardEvent) => validateArrowKeys(e.key) && this.updateIndex(e.key)),
+				tap(
+					(e: KeyboardEvent) =>
+						validateArrowKeys(e.key) && this.updateIndex(e.key)
+				),
 				filter((e: KeyboardEvent) => validateNonCharKeyCode(e.code)),
 				map(toFormControlValue),
-				debounceTime(this.debounce),
+				debounceTime(this.debounce)
 			)
-		).pipe(
-			map((o) => {
-				return this.items ? this.filterItems(this.items, this.query) : null;
-			}),
-			tap((o) => {
-				this.results = o;
-				this._cdr.markForCheck();
-			}),
-		).subscribe();
+		)
+			.pipe(
+				map((o) => {
+					return this.items
+						? this.filterItems(this.items, this.query)
+						: null;
+				}),
+				tap((o) => {
+					this.results = o;
+					this._cdr.markForCheck();
+				})
+			)
+			.subscribe();
 	}
-
-
 
 	ngOnDestroy() {
 		this.results$.unsubscribe();
@@ -140,7 +190,7 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 
 	writeValue(value: any = null): void {
 		if (value) {
-			value = this.bindValue ? (value[this.bindValue] ?? null) : value
+			value = this.bindValue ? value[this.bindValue] ?? null : value;
 		}
 		this.value = value;
 	}
@@ -158,13 +208,15 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 	}
 
 	navigateWithArrows(elementObs: Subject<KeyboardEvent>) {
-		elementObs.pipe(
-			map((e: any) => e.key),
-			filter((key: Key) => validateArrowKeys(key))
-		).subscribe((key: Key) => {
-			this.updateIndex(key);
-			this.displaySuggestions();
-		});
+		elementObs
+			.pipe(
+				map((e: any) => e.key),
+				filter((key: Key) => validateArrowKeys(key))
+			)
+			.subscribe((key: Key) => {
+				this.updateIndex(key);
+				this.displaySuggestions();
+			});
 	}
 
 	updateIndex(keyCode: string) {
@@ -194,11 +246,17 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 	}
 
 	handleSelectSuggestion(suggestion: string) {
-		const result = this.resultsAsItems.length ? this.resultsAsItems[this.suggestionIndex] : suggestion;
+		const result = this.resultsAsItems.length
+			? this.resultsAsItems[this.suggestionIndex]
+			: suggestion;
 		this.hideSuggestions();
-		const resolvedResult = this.suggestionIndex === NO_INDEX ? this.query : result;
+		const resolvedResult =
+			this.suggestionIndex === NO_INDEX ? this.query : result;
 		this.change.emit(resolvedResult);
-		this.value = (this.bindValue && resolvedResult[this.bindValue] || resolvedResult) ?? null;
+		this.value =
+			((this.bindValue && resolvedResult[this.bindValue]) ||
+				resolvedResult) ??
+			null;
 		this.onChange(this.value);
 		this.onTouch();
 		this.query = '';
@@ -215,26 +273,38 @@ export class TypeaheadComponent implements OnInit, OnDestroy, AfterViewInit, Con
 				return item.includes(needle);
 			}
 			if (item !== null && typeof item === 'object') {
-				const keys = this.searchKeys?.length ? this.searchKeys : Object.keys(item);
-				return keys.some(k => item[k]?.toString().toLowerCase().indexOf(needle) > -1 ?? false);
+				const keys = this.searchKeys?.length
+					? this.searchKeys
+					: Object.keys(item);
+				return keys.some(
+					(k) =>
+						item[k]?.toString().toLowerCase().indexOf(needle) >
+							-1 ?? false
+				);
 			}
 			return false;
 		});
 	}
 
 	/**
-	* Evento que muestra/oculta los resultados
-	*
-	* @param {*} event
-	* @memberof NgFabComponent
-	*/
+	 * Evento que muestra/oculta los resultados
+	 *
+	 * @param {*} event
+	 * @memberof NgFabComponent
+	 */
 	@HostListener('document:click', ['$event'])
 	onClick(event: any) {
-		if (this.showSuggestions && !this._elementRef.nativeElement.contains(event.target)) {
+		if (
+			this.showSuggestions &&
+			!this._elementRef.nativeElement.contains(event.target)
+		) {
 			this.hideSuggestions();
 			this.query = '';
 			this.itemsChange$.next();
-		} else if (!this.showSuggestions && this._elementRef.nativeElement.contains(event.target)) {
+		} else if (
+			!this.showSuggestions &&
+			this._elementRef.nativeElement.contains(event.target)
+		) {
 			this.displaySuggestions();
 		}
 	}

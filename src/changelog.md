@@ -1,11 +1,32 @@
 # Changelog
-# [1.50.2] - 2024-09-12
+# [1.52.2] - 2024-09-26
 - Stability
-- 
-# Changelog
+- Removed residues from ngx-translate library
+
+# [1.52.1] - 2024-09-26
+- Stability
+
+# [1.52.0] - 2024-09-26
+- Refactored pagination structure. Added BEM classes to all items to improve customisation.
+  
+# [1.51.4] - 2024-09-26
+- Stability
+
+# [1.51.3] - 2024-09-26
+- Stability
+
+# [1.51.2] - 2024-09-26
+- Stability
+
+# [1.51.1] - 2024-09-26
+- Added cursor pointer to clickable items
+
+# [1.51.0] - 2024-09-26
+- Added clickFn input
+  
 # [1.50.1] - 2024-09-12
 - Stability
-- 
+  
 # [1.50.0] - 2024-09-12
 - String observables are now allowed in the table headers
 

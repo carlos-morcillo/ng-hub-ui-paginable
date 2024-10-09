@@ -41,6 +41,7 @@ import { PaginableTableLoadingDirective } from '../../directives/paginable-table
 import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
 import { FilterChangeEvent } from '../../interfaces/filter-change-event';
+import { ItemClickEvent } from '../../interfaces/item-click-event';
 import { PaginableTableButton } from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
@@ -82,7 +83,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		class: 'd-block paginable-table'
 	}
 })
-export class PaginableTableComponent implements OnInit, OnDestroy {
+export class PaginableTableComponent<T = any> implements OnInit, OnDestroy {
 	#fb = inject(UntypedFormBuilder);
 	private _configSvc = inject(PaginableService);
 	private _paginationSvc = inject(PaginationService);
@@ -347,7 +348,7 @@ export class PaginableTableComponent implements OnInit, OnDestroy {
 	 *
 	 * @memberof PaginableTableComponent
 	 */
-	@Output() itemClick = new EventEmitter<any>();
+	@Input() clickFn: (event: ItemClickEvent<T>) => void | Promise<void>;
 
 	/**
 	 * On page click event emitter
@@ -555,12 +556,35 @@ export class PaginableTableComponent implements OnInit, OnDestroy {
 		return get(item, key);
 	}
 
-	itemClicked(item: any) {
-		if (this.selectable) {
-			this.toggle(item);
-		} else {
-			this.itemClick.next(item);
+	/**
+	 * Handles click events by extracting specific properties and passing them to a callback function.
+	 *
+	 * @param  - The `onItemClick` function takes in the following parameters: collapsed, selected and item.
+	 * @param {number} depth - The `depth` parameter in the `onItemClick` function represents the depth level of the item being
+	 * clicked. It is a number that indicates how deep the item is nested within a hierarchical structure.
+	 * @param {number} index - The `index` parameter in the `onItemClick` function represents the position of the item that was clicked
+	 * within a list or array. It is a number that indicates the index of the clicked item.
+	 *
+	 * @returns If the `clickFn` property is not defined in the current context, the `onItemClick` function will return without
+	 * executing any further code.
+	 */
+	onItemClick(
+		{ collapsed, selected, ...item },
+		depth: number,
+		index: number
+	) {
+		if (!this.clickFn) {
+			return;
 		}
+
+		this.clickFn({
+			depth,
+			index,
+			selected,
+			collapsed,
+			value: item as T,
+			item: item as T
+		});
 	}
 
 	filter() {

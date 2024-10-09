@@ -49,6 +49,7 @@
 	<ul class="list-group list-group-flush tree-list" [class.root]="isRoot">
 		<li
 			class="list-group-item tree-list__node"
+			[class.clickable-item]="clickFn"
 			*ngFor="let formGroup of formArray.controls; let index = index"
 			[formGroup]="formGroup"
 			(click)="

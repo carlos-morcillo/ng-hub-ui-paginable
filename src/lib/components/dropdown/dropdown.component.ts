@@ -13,7 +13,7 @@ import {
 import { generateUniqueId } from '../../utils';
 
 @Component({
-	selector: 'ng80-dropdown',
+	selector: 'hub-ui-dropdown',
 	standalone: true,
 	imports: [CommonModule],
 	templateUrl: './dropdown.component.html',

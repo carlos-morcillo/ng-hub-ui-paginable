@@ -34,15 +34,15 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 })
 export class MenuFilterComponent implements ControlValueAccessor {
 	#fb = inject(FormBuilder);
-	private _parent = inject(DropdownComponent);
+	#parent = inject(DropdownComponent);
 
-	private _header!: PaginableTableHeader;
+	#header!: PaginableTableHeader;
 	@Input()
 	get header(): PaginableTableHeader {
-		return this._header;
+		return this.#header;
 	}
 	set header(v: PaginableTableHeader) {
-		this._header = v;
+		this.#header = v;
 		this.setMatchMode();
 		this.setDefaultValue();
 	}
@@ -64,7 +64,11 @@ export class MenuFilterComponent implements ControlValueAccessor {
 
 	defaultValue!: MenuFilterValue;
 
-	writeValue(value: MenuFilterValue): void {
+	/**
+	 * Clears existing rules, sets a default value if none is provided, adds rules based on the input value, and patches the form with the input value.
+	 * @param {MenuFilterValue} value - MenuFilterValue
+	 */
+	writeValue(value: MenuFilterValue | null): void {
 		this.rulesFA.clear();
 		if (!value) {
 			value = this.defaultValue;
@@ -130,7 +134,7 @@ export class MenuFilterComponent implements ControlValueAccessor {
 				  }
 				: null
 		);
-		this._parent.closeDropdown();
+		this.#parent.closeDropdown();
 	}
 
 	/**

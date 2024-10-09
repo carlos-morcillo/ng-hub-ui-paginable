@@ -198,7 +198,8 @@
 											></i>
 										</button>
 
-										<ng80-dropdown
+										<hub-ui-dropdown
+											#dropdown
 											*ngIf="item.filter?.mode === 'menu'"
 											(open)="
 												onDropdownFilterOpened($event)
@@ -211,6 +212,12 @@
 												<i
 													class="fa-solid fa-filter"
 													[class.text-success]="
+														specificSearchFG.get(
+															item.filter?.key ||
+																item.property
+														)!.value?.rules?.length
+													"
+													[class.filter-dropdown__toggle-content--active]="
 														specificSearchFG.get(
 															item.filter?.key ||
 																item.property
@@ -234,6 +241,7 @@
 												</ng-container>
 											</div>
 											<menu-filter
+												*ngIf="dropdown.isOpened"
 												class="content filter-dropdown__content"
 												[header]="item"
 												[formControlName]="
@@ -242,7 +250,7 @@
 												"
 											>
 											</menu-filter>
-										</ng80-dropdown>
+										</hub-ui-dropdown>
 									</div>
 								</div>
 
@@ -322,10 +330,10 @@
 			<!-- Pagination -->
 			<div
 				*ngIf="paginate && data?.data?.length"
-				class="d-flex flex-wrap align-items-center justify-content-center gap-4"
+				class="pager-container w-100 d-flex flex-wrap align-items-center justify-content-center gap-4"
 			>
 				<paginable-table-paginator
-					class="flex-grow-1"
+					class="pager-container__paginator"
 					(pageClick)="pageClicked($event)"
 					*ngIf="
 						paginationPosition == 'bottom' ||
@@ -334,30 +342,32 @@
 					[pagination]="data"
 				>
 				</paginable-table-paginator>
-				<div class="d-flex gap-3 flex-nowrap align-items-center">
-					<div class="col-auto">
-						<label
-							class="col-form-label text-nowrap fs-6 text-muted"
-							>{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:</label
+				<div
+					class="pager-container__settings d-flex align-items-center gap-2 flex-nowrap"
+				>
+					<label
+						class="pager-container__label text-nowrap fs-6 text-muted"
+					>
+						{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:
+					</label>
+					<select
+						class="pager-container__select form-select form-select-sm"
+						[(ngModel)]="itemsPerPage"
+						[ngModelOptions]="{ standalone: true }"
+					>
+						<option
+							*ngFor="let option of perPageOptions"
+							[value]="option"
+							class="pager-container__select-option"
 						>
-					</div>
-					<div class="col-auto">
-						<select
-							class="form-select form-select-sm form-control form-control-sm"
-							id="RowsPerPageInput"
-							[(ngModel)]="itemsPerPage"
-							[ngModelOptions]="{ standalone: true }"
-						>
-							<option
-								*ngFor="let option of perPageOptions"
-								[value]="option"
-							>
-								{{ option }}
-							</option>
-						</select>
-					</div>
+							{{ option }}
+						</option>
+					</select>
 				</div>
-				<p class="mb-0 fs-6 text-muted" *ngIf="paginationInfo">
+				<p
+					class="pager-container__info mb-0 fs-6 text-muted"
+					*ngIf="paginationInfo"
+				>
 					{{
 						'SHOWING_X_OF_Y_ROWS'
 							| translate
@@ -374,8 +384,9 @@
 
 	<ng-template #defaultRowTemplate let-item>
 		<tr
-			(click)="itemClicked(item)"
+			(click)="onItemClick(item)"
 			[class.row-selected]="selectable && item.selected"
+			[class.clickable-item]="clickFn"
 		>
 			<td *ngIf="(selectable && multiple) || batchActions?.length">
 				<input

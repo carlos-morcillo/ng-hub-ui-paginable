@@ -18,6 +18,10 @@
 		width: 100%;
 		overflow: auto;
 	}
+
+	.clickable-item {
+		cursor: pointer;
+	}
 }
 
 ::ng-deep {
