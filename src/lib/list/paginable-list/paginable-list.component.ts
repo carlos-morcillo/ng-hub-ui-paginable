@@ -3,7 +3,6 @@ import {
 	Component,
 	ContentChild,
 	Input,
-	Output,
 	TemplateRef,
 	inject
 } from '@angular/core';
@@ -26,7 +25,7 @@ import { TranslatePipe } from '../../translate.pipe';
 import { getValue } from '../../utils';
 
 @Component({
-	selector: 'hub-ui-paginable-list',
+	selector: 'hub-ui-paginable-list, ng80-paginable-list',
 	templateUrl: './paginable-list.component.html',
 	styleUrls: ['./paginable-list.component.scss'],
 	host: {

@@ -1,4 +1,7 @@
 # Changelog
+# [1.52.3] - 2024-09-26
+- Stability
+
 # [1.52.2] - 2024-09-26
 - Stability
 - Removed residues from ngx-translate library
