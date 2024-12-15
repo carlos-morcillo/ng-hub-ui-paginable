@@ -4,7 +4,7 @@ import { PaginableTablePagination } from '../../interfaces/paginable-table-pagin
 import { PaginableService } from '../../services/paginable.service';
 
 @Component({
-	selector: 'paginable-table-paginator',
+	selector: 'hub-paginator, paginable-table-paginator',
 	templateUrl: './paginator.component.html',
 	styleUrls: ['./paginator.component.scss'],
 	standalone: true,

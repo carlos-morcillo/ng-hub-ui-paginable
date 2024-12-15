@@ -16,14 +16,14 @@ export type IconType = 'font-awesome' | 'material' | 'bootstrap';
 
 /**
  * @component HubIconComponent
- * @selector ng-hub-ui-icon
+ * @selector hub-icon
  * @description A versatile icon component that supports multiple icon libraries.
  *
  * @example
- * <ng-hub-ui-icon [config]="iconConfig"></ng-hub-ui-icon>
+ * <hub-icon [config]="iconConfig"></hub-icon>
  */
 @Component({
-	selector: 'ng-hub-ui-icon',
+	selector: 'hub-icon, ng-hub-ui-icon',
 	standalone: true,
 	imports: [NgIf, NgClass],
 	templateUrl: './icon.component.html',

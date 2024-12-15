@@ -6,9 +6,12 @@ import {
 	inject
 } from '@angular/core';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
+import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 
 @Component({
-	selector: 'paginable-table-dropdown',
+	selector: 'hub-table-dropdown, paginable-table-dropdown',
+	standalone: true,
+	imports: [NgIf, NgFor, NgClass, NgStyle],
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })

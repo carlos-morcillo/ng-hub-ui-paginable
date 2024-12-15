@@ -1,4 +1,4 @@
-.paginable-table__table {
+.hub-table__table {
 	position: relative;
 	.sticky-start {
 		background-color: white;
@@ -14,7 +14,7 @@
 		z-index: 9;
 	}
 
-	.paginable-table__table-container {
+	.hub-table__table-container {
 		width: 100%;
 		overflow: auto;
 	}

@@ -1,5 +1,14 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
+	AsyncPipe,
+	NgFor,
+	NgIf,
+	NgSwitch,
+	NgSwitchCase,
+	NgSwitchDefault,
+	NgTemplateOutlet
+} from '@angular/common';
+import {
 	Component,
 	ContentChild,
 	ContentChildren,
@@ -17,7 +26,9 @@ import {
 import {
 	FormControl,
 	FormGroup,
+	FormsModule,
 	NG_VALUE_ACCESSOR,
+	ReactiveFormsModule,
 	UntypedFormBuilder,
 	UntypedFormControl
 } from '@angular/forms';
@@ -50,17 +61,41 @@ import { PaginableTableOptions } from '../../interfaces/paginable-table-options'
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
 import { PaginableTablePagination } from '../../interfaces/paginable-table-pagination';
 import { PaginationParamsChangeEvent } from '../../interfaces/params-change-event';
-import { View } from '../../interfaces/view';
+import { IsObservablePipe } from '../../pipes/is-observable.pipe';
+import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import { UnwrapAsyncPipe } from '../../pipes/unwrap-async.pipe';
 import { PaginableService } from '../../services/paginable.service';
 import { PaginationService } from '../../services/pagination.service';
+import { TranslatePipe } from '../../translate.pipe';
 import { generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
+import { PaginableTableDropdownComponent } from '../paginable-table-dropdown/paginable-table-dropdown.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
 
 @Component({
-	selector: 'paginable-table',
+	selector: 'hub-table, paginable-table',
 	templateUrl: './paginable-table.component.html',
 	styleUrls: ['./paginable-table.component.scss'],
+	standalone: true,
+	imports: [
+		NgIf,
+		NgFor,
+		NgSwitch,
+		NgSwitchCase,
+		NgSwitchDefault,
+		NgTemplateOutlet,
+		AsyncPipe,
+		ReactiveFormsModule,
+		FormsModule,
+		TranslatePipe,
+		UcfirstPipe,
+		UnwrapAsyncPipe,
+		IsObservablePipe,
+		PaginableTableDropdownComponent,
+		DropdownComponent,
+		MenuFilterComponent
+	],
 	animations: [
 		trigger('fadeInOut', [
 			transition(':enter', [
@@ -492,15 +527,6 @@ export class PaginableTableComponent<T = any> implements OnInit, OnDestroy {
 	@Input() showViewSelector: boolean = false;
 
 	@Input() viewSaverForm: any;
-
-	private _views?: View[];
-	@Input()
-	get views(): View[] | null {
-		return this._views ?? null;
-	}
-	set views(v: View[]) {
-		this._views = v;
-	}
 
 	get searchFG(): FormControl {
 		return this.filterFG.get('searchText') as FormControl;

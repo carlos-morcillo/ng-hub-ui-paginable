@@ -4,7 +4,8 @@ import {
 	FormArray,
 	FormBuilder,
 	FormGroup,
-	NG_VALUE_ACCESSOR
+	NG_VALUE_ACCESSOR,
+	ReactiveFormsModule
 } from '@angular/forms';
 import {
 	BooleanMatchModes,
@@ -19,9 +20,33 @@ import {
 } from '../../interfaces/column-filter-event';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { DropdownComponent } from '../dropdown/dropdown.component';
+import { TranslatePipe } from '../../translate.pipe';
+import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import {
+	KeyValuePipe,
+	NgFor,
+	NgIf,
+	NgSwitch,
+	NgSwitchCase,
+	NgSwitchDefault,
+	UpperCasePipe
+} from '@angular/common';
 
 @Component({
 	selector: 'menu-filter',
+	standalone: true,
+	imports: [
+		NgIf,
+		NgFor,
+		NgSwitch,
+		NgSwitchCase,
+		NgSwitchDefault,
+		ReactiveFormsModule,
+		KeyValuePipe,
+		UpperCasePipe,
+		TranslatePipe,
+		UcfirstPipe
+	],
 	templateUrl: './menu-filter.component.html',
 	styleUrls: ['./menu-filter.component.scss'],
 	providers: [

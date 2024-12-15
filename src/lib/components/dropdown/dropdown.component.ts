@@ -6,14 +6,13 @@ import {
 	EventEmitter,
 	HostBinding,
 	Input,
-	OnInit,
 	Output,
 	inject
 } from '@angular/core';
 import { generateUniqueId } from '../../utils';
 
 @Component({
-	selector: 'hub-ui-dropdown',
+	selector: 'hub-dropdown, hub-ui-dropdown',
 	standalone: true,
 	imports: [CommonModule],
 	templateUrl: './dropdown.component.html',

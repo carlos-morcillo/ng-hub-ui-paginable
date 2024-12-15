@@ -2,14 +2,13 @@
 export { NgPaginableModule } from './ng-paginable.module';
 
 // Components
-export { ModalComponent } from './components/modal/modal.component';
+export { HubIconComponent } from './components/icon/icon.component';
 export { PaginableTableDropdownComponent } from './components/paginable-table-dropdown/paginable-table-dropdown.component';
 export { PaginableTableRangeInputComponent } from './components/paginable-table-range-input/paginable-table-range-input.component';
 export { PaginableTableComponent } from './components/paginable-table/paginable-table.component';
 export { PaginatorComponent } from './components/paginator/paginator.component';
 export { ResizableComponent } from './components/resizable/resizable.component';
 export { PaginableListComponent } from './list/paginable-list/paginable-list.component';
-export { HubIconComponent } from './components/icon/icon.component';
 
 // Directives
 export { PaginableListItemDirective } from './directives/paginable-list-item.directive';
@@ -24,12 +23,6 @@ export { PaginableTableRowDirective } from './directives/paginable-table-row.dir
 export { ResizableDirective } from './directives/resizable.directive';
 export { TooltipDirective } from './directives/tooltip.directive';
 
-// Pipes
-export { GetPipe } from './pipes/get.pipe';
-export { IsObjectPipe } from './pipes/is-object.pipe';
-export { IsObservablePipe } from './pipes/is-observable.pipe';
-export { IsStringPipe } from './pipes/is-string.pipe';
-
 // Interfaces
 export { FilterChangeEvent } from './interfaces/filter-change-event';
 export { PaginableTableButton } from './interfaces/paginable-table-button';
@@ -42,12 +35,11 @@ export { PaginableTableOrdination } from './interfaces/paginable-table-ordinatio
 export { PaginableTablePagination } from './interfaces/paginable-table-pagination';
 export { PaginableTableRowAction } from './interfaces/paginable-table-row-action';
 export { PaginationParamsChangeEvent } from './interfaces/params-change-event';
-export { View } from './interfaces/view';
 
 // Services
-export { PaginationService } from './services/pagination.service';
-export { PaginableService } from './services/paginable.service';
 export { PaginableTranslationService } from './services/paginable-translation.service';
+export { PaginableService } from './services/paginable.service';
+export { PaginationService } from './services/pagination.service';
 
 // Constants
 export { BREAKPOINTS } from './constants/breakpoints';

@@ -3,6 +3,7 @@
 		<li
 			class="page-item pager__item"
 			[class.pager__item--disabled]="currentPage === 1"
+			[class.disabled]="currentPage === 1"
 		>
 			<a
 				role="button"
@@ -16,6 +17,7 @@
 		<li
 			class="page-item pager__item"
 			[class.pager__item--disabled]="currentPage <= 1"
+			[class.disabled]="currentPage <= 1"
 		>
 			<a
 				role="button"
@@ -47,7 +49,7 @@
 				>{{ currentPage - 1 }}</a
 			>
 		</li>
-		<li class="page-item pager__item active pager__item--active">
+		<li class="page-item pager__item pager__item--active active">
 			<a
 				role="button"
 				class="page-link pager__link"
@@ -66,7 +68,7 @@
 			>
 		</li>
 		<li
-			class="page-item pager__item disabled pager__item--disabled"
+			class="page-item pager__item pager__item--disabled disabled"
 			*ngIf="currentPage + 1 < lastPage"
 		>
 			<a role="button" class="page-link pager__link" href="javascript:{}"
@@ -76,6 +78,7 @@
 		<li
 			class="page-item pager__item"
 			[class.pager__item--disabled]="currentPage >= lastPage"
+			[class.disabled]="currentPage >= lastPage"
 		>
 			<a
 				role="button"
@@ -92,6 +95,7 @@
 		<li
 			class="page-item pager__item"
 			[class.pager__item--disabled]="currentPage === lastPage"
+			[class.disabled]="currentPage === lastPage"
 		>
 			<a
 				role="button"

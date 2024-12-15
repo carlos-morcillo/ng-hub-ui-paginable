@@ -119,18 +119,6 @@
 	</ul>
 </ng-template>
 
-<!-- <paginable-table-paginator
-	(onPageClick)="onPageClicked($event)"
-	class="d-block mb-4"
-/> -->
-
-<!-- <paginable-table-paginator
-	(onPageClick)="pageClicked($event)"
-	*ngIf="paginate && data && data[mapping.data]?.length"
-	[pagination]="data"
-	class="d-block mb-4"
-/> -->
-
 <ng-template #noDataRowTpt>
 	<li class="list-group-item">
 		<ng-container [ngTemplateOutlet]="noDataTpt || defaultNoDataTpt">

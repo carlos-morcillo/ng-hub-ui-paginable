@@ -1,4 +1,4 @@
-<div class="table_container paginable-table__container">
+<div class="table_container hub-table__container">
 	<form [formGroup]="filterFG">
 		<div
 			*ngIf="
@@ -15,11 +15,11 @@
 						<ng-container
 							*ngIf="button['buttons']?.length; else buttonTpt"
 						>
-							<paginable-table-dropdown
+							<hub-table-dropdown
 								[options]="$any(button)"
 								[disabled]="!selectedItems?.length"
 							>
-							</paginable-table-dropdown>
+							</hub-table-dropdown>
 						</ng-container>
 						<ng-template #buttonTpt>
 							<button
@@ -87,7 +87,7 @@
 		</div>
 
 		<!-- Pagination -->
-		<paginable-table-paginator
+		<hub-paginator
 			(pageClick)="pageClicked($event)"
 			*ngIf="
 				paginate &&
@@ -97,7 +97,7 @@
 			[pagination]="data"
 			class="d-block mb-4"
 		>
-		</paginable-table-paginator>
+		</hub-paginator>
 
 		<!-- Error -->
 		<ng-container *ngIf="errorOcurred">
@@ -114,14 +114,12 @@
 		<!-- Table -->
 		<ng-container *ngIf="data">
 			<div
-				class="{{
-					responsiveCSSClass
-				}} paginable-table__table-container mb-4"
+				class="{{ responsiveCSSClass }} hub-table__table-container mb-4"
 				[class.table-responsive]="responsiveCSSClass"
 			>
 				<table
 					*ngIf="data"
-					class="table mb-0 paginable-table__table"
+					class="table mb-0 hub-table__table"
 					[class.table-hover]="options.hoverableRows || selectable"
 					[class.table-striped]="options.striped === 'rows'"
 					[class.table-striped-columns]="
@@ -198,7 +196,7 @@
 											></i>
 										</button>
 
-										<hub-ui-dropdown
+										<hub-dropdown
 											#dropdown
 											*ngIf="item.filter?.mode === 'menu'"
 											(open)="
@@ -250,7 +248,7 @@
 												"
 											>
 											</menu-filter>
-										</hub-ui-dropdown>
+										</hub-dropdown>
 									</div>
 								</div>
 
@@ -332,7 +330,7 @@
 				*ngIf="paginate && data?.data?.length"
 				class="pager-container w-100 d-flex flex-wrap align-items-center justify-content-center gap-4"
 			>
-				<paginable-table-paginator
+				<hub-paginator
 					class="pager-container__paginator"
 					(pageClick)="pageClicked($event)"
 					*ngIf="
@@ -341,7 +339,7 @@
 					"
 					[pagination]="data"
 				>
-				</paginable-table-paginator>
+				</hub-paginator>
 				<div
 					class="pager-container__settings d-flex align-items-center gap-2 flex-nowrap"
 				>
@@ -622,18 +620,18 @@
 				</option>
 			</ng-template>
 		</select>
-		<paginable-table-range-input
+		<hub-table-range-input
 			*ngSwitchCase="'number-range'"
 			type="number"
 			[formControl]="formControl"
 		>
-		</paginable-table-range-input>
-		<paginable-table-range-input
+		</hub-table-range-input>
+		<hub-table-range-input
 			*ngSwitchCase="'date-range'"
 			type="date"
 			[formControl]="formControl"
 		>
-		</paginable-table-range-input>
+		</hub-table-range-input>
 		<select
 			*ngSwitchCase="'boolean'"
 			[formControl]="formControl"
@@ -677,12 +675,12 @@
 		>
 			<ng-container *ngFor="let button of header.buttons">
 				<ng-container *ngIf="button.buttons; else buttonTpt">
-					<paginable-table-dropdown
+					<hub-table-dropdown
 						[options]="button"
 						[item]="item"
 						class="d-inline-block"
 					>
-					</paginable-table-dropdown>
+					</hub-table-dropdown>
 				</ng-container>
 				<ng-template #buttonTpt>
 					<button
