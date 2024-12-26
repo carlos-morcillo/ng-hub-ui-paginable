@@ -11,9 +11,9 @@
 	>
 		<div class="d-flex flex-nowrap align-items-center gap-1">
 			<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
-			<ng-container *ngIf="options.title">{{
-				options.title
-			}}</ng-container>
+			@if (options.title) {
+			{{ options.title }}
+			}
 		</div>
 	</button>
 	<div
@@ -26,30 +26,24 @@
 					: 'initial'
 		}"
 	>
-		<ng-container *ngFor="let dropdownItem of options.buttons">
-			<button
-				class="dropdown-item"
-				type="button"
-				[attr.title]="dropdownItem.tooltip"
-				*ngIf="!dropdownItem.hidden"
-				[ngClass]="
-					dropdownItem.color
-						? 'text-' + dropdownItem.color
-						: 'text-dark'
-				"
-				(click)="
-					item && dropdownItem.handler && dropdownItem.handler(item)
-				"
-			>
-				<div class="d-flex align-items-center gap-2">
-					<ng-hub-ui-icon
-						[config]="dropdownItem.icon"
-					></ng-hub-ui-icon>
-					<ng-container *ngIf="dropdownItem.title">
-						{{ dropdownItem.title }}
-					</ng-container>
-				</div>
-			</button>
-		</ng-container>
+		@for (dropdownItem of options.buttons; track dropdownItem) { @if
+		(!dropdownItem.hidden) {
+		<button
+			class="dropdown-item"
+			type="button"
+			[attr.title]="dropdownItem.tooltip"
+			[ngClass]="
+				dropdownItem.color ? 'text-' + dropdownItem.color : 'text-dark'
+			"
+			(click)="item && dropdownItem.handler && dropdownItem.handler(item)"
+		>
+			<div class="d-flex align-items-center gap-2">
+				<ng-hub-ui-icon [config]="dropdownItem.icon"></ng-hub-ui-icon>
+				@if (dropdownItem.title) {
+				{{ dropdownItem.title }}
+				}
+			</div>
+		</button>
+		} }
 	</div>
 </div>

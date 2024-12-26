@@ -12,7 +12,7 @@ import {
 	NumberMatchModes,
 	StringMatchModes
 } from '../../interfaces/column-filter-event';
-import { TranslatePipe } from '../../translate.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { PaginableTranslationService } from '../../services/paginable-translation.service';
 import { PaginableService } from '../../services/paginable.service';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';

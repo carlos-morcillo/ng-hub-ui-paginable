@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -14,7 +13,7 @@ import { generateUniqueId } from '../../utils';
 @Component({
 	selector: 'hub-dropdown, hub-ui-dropdown',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [],
 	templateUrl: './dropdown.component.html',
 	styleUrls: ['./dropdown.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,

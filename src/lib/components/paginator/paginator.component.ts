@@ -1,14 +1,13 @@
-import { NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { PaginableTablePagination } from '../../interfaces/paginable-table-pagination';
 import { PaginableService } from '../../services/paginable.service';
 
 @Component({
 	selector: 'hub-paginator, paginable-table-paginator',
+	standalone: true,
 	templateUrl: './paginator.component.html',
 	styleUrls: ['./paginator.component.scss'],
-	standalone: true,
-	imports: [NgIf]
+	imports: []
 })
 export class PaginatorComponent {
 	#configSvc = inject(PaginableService);

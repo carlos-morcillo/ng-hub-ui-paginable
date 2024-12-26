@@ -20,27 +20,14 @@ import {
 } from '../../interfaces/column-filter-event';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { DropdownComponent } from '../dropdown/dropdown.component';
-import { TranslatePipe } from '../../translate.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
-import {
-	KeyValuePipe,
-	NgFor,
-	NgIf,
-	NgSwitch,
-	NgSwitchCase,
-	NgSwitchDefault,
-	UpperCasePipe
-} from '@angular/common';
+import { KeyValuePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
 	selector: 'menu-filter',
 	standalone: true,
 	imports: [
-		NgIf,
-		NgFor,
-		NgSwitch,
-		NgSwitchCase,
-		NgSwitchDefault,
 		ReactiveFormsModule,
 		KeyValuePipe,
 		UpperCasePipe,

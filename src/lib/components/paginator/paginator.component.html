@@ -31,23 +31,23 @@
 				</span>
 			</a>
 		</li>
-		<li
-			class="page-item pager__item pager__item--disabled disabled"
-			*ngIf="currentPage - 1 > 1"
-		>
+		@if (currentPage - 1 > 1) {
+		<li class="page-item pager__item pager__item--disabled disabled">
 			<a role="button" class="page-link pager__link" href="javascript:{}"
 				>...</a
 			>
 		</li>
+		}
 		<li class="page-item pager__item">
+			@if (currentPage - 1 >= 1) {
 			<a
 				role="button"
 				class="page-link pager__link"
 				href="javascript:{}"
-				*ngIf="currentPage - 1 >= 1"
 				(click)="onPageClick(currentPage - 1)"
 				>{{ currentPage - 1 }}</a
 			>
+			}
 		</li>
 		<li class="page-item pager__item pager__item--active active">
 			<a
@@ -58,23 +58,23 @@
 			>
 		</li>
 		<li class="page-item pager__item">
+			@if (currentPage + 1 <= lastPage) {
 			<a
 				role="button"
 				class="page-link pager__link"
 				href="javascript:{}"
-				*ngIf="currentPage + 1 <= lastPage"
 				(click)="onPageClick(currentPage + 1)"
 				>{{ currentPage + 1 }}</a
 			>
+			}
 		</li>
-		<li
-			class="page-item pager__item pager__item--disabled disabled"
-			*ngIf="currentPage + 1 < lastPage"
-		>
+		@if (currentPage + 1 < lastPage) {
+		<li class="page-item pager__item pager__item--disabled disabled">
 			<a role="button" class="page-link pager__link" href="javascript:{}"
 				>...</a
 			>
 		</li>
+		}
 		<li
 			class="page-item pager__item"
 			[class.pager__item--disabled]="currentPage >= lastPage"

@@ -21,7 +21,7 @@ import { PaginableTableButton } from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
-import { TranslatePipe } from '../../translate.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { getValue } from '../../utils';
 
 @Component({
@@ -57,13 +57,22 @@ export class PaginableListComponent<T = any> {
 
 	@Input() selectable!: string | null;
 
-	@Input() options: PaginableTableOptions = {
+	private _options: PaginableTableOptions = {
 		cursor: 'default',
 		hoverableRows: false,
 		striped: null,
 		variant: null,
-		searchable: false
+		searchable: false,
+		collapsed: true
 	};
+	get options(): PaginableTableOptions {
+		return this._options;
+	}
+	@Input()
+	set options(v: PaginableTableOptions) {
+		this._options = v;
+		this.buildForm(this.form, this._items);
+	}
 
 	private _items!: Array<T>;
 	@Input()
@@ -152,13 +161,14 @@ export class PaginableListComponent<T = any> {
 	}
 
 	buildForm(form: FormArray, items: Array<any>) {
+		form.clear();
 		for (const index in items) {
 			if (Object.prototype.hasOwnProperty.call(items, index)) {
 				const item = items[index];
 
 				const group = this.#fb.group({
 					selected: [true],
-					collapsed: [true],
+					collapsed: [this.options.collapsed],
 					data: [item],
 					children: this.#fb.array([])
 				});

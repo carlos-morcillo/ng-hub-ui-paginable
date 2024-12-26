@@ -1,3 +1,5 @@
-<i *ngIf="value" [ngClass]="classlist">
-	{{ content }}
-</i>
+@if (value) {
+  <i [ngClass]="classlist">
+    {{ content }}
+  </i>
+}

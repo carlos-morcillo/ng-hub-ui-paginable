@@ -6,8 +6,8 @@ import {
 	inject
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { PaginableTranslationService } from './services/paginable-translation.service';
-import { equals, interpolateString, isDefined } from './utils';
+import { PaginableTranslationService } from '../services/paginable-translation.service';
+import { equals, interpolateString, isDefined } from '../utils';
 
 @Pipe({
 	name: 'translate',

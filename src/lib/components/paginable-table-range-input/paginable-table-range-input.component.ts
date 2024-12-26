@@ -5,7 +5,7 @@ import {
 	NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
-import { TranslatePipe } from '../../translate.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
 	selector: 'hub-table-range-input, paginable-table-range-input',

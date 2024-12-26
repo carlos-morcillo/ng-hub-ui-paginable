@@ -1,13 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import {
-	AsyncPipe,
-	NgFor,
-	NgIf,
-	NgSwitch,
-	NgSwitchCase,
-	NgSwitchDefault,
-	NgTemplateOutlet
-} from '@angular/common';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
 	Component,
 	ContentChild,
@@ -62,28 +54,24 @@ import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordin
 import { PaginableTablePagination } from '../../interfaces/paginable-table-pagination';
 import { PaginationParamsChangeEvent } from '../../interfaces/params-change-event';
 import { IsObservablePipe } from '../../pipes/is-observable.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
 import { UnwrapAsyncPipe } from '../../pipes/unwrap-async.pipe';
 import { PaginableService } from '../../services/paginable.service';
 import { PaginationService } from '../../services/pagination.service';
-import { TranslatePipe } from '../../translate.pipe';
 import { generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
+import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
 import { PaginableTableDropdownComponent } from '../paginable-table-dropdown/paginable-table-dropdown.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
-import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
 
 @Component({
-	selector: 'hub-table, paginable-table',
+	selector: 'hub-table, hub-ui-table',
+	standalone: true,
 	templateUrl: './paginable-table.component.html',
 	styleUrls: ['./paginable-table.component.scss'],
-	standalone: true,
 	imports: [
-		NgIf,
-		NgFor,
-		NgSwitch,
-		NgSwitchCase,
-		NgSwitchDefault,
+		NgClass,
 		NgTemplateOutlet,
 		AsyncPipe,
 		ReactiveFormsModule,

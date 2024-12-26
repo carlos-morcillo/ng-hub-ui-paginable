@@ -1,13 +1,18 @@
 import { DOCUMENT } from '@angular/common';
 import { Directive, ElementRef, Inject, Output } from '@angular/core';
-import { distinctUntilChanged, map, switchMap, takeUntil, tap, } from 'rxjs/operators';
+import {
+	distinctUntilChanged,
+	map,
+	switchMap,
+	takeUntil,
+	tap
+} from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
 
 @Directive({
-	selector: '[resizable]',
+	selector: '[resizable]'
 })
 export class ResizableDirective {
-
 	@Output()
 	readonly resizable = fromEvent<MouseEvent>(
 		this.elementRef.nativeElement,
@@ -27,7 +32,7 @@ export class ResizableDirective {
 	);
 
 	constructor(
-		@Inject(DOCUMENT) private readonly documentRef: any/* Document */,
+		@Inject(DOCUMENT) private readonly documentRef: any /* Document */,
 		@Inject(ElementRef) private readonly elementRef: ElementRef<HTMLElement>
-	) { }
+	) {}
 }

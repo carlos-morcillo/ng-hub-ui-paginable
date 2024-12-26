@@ -3,7 +3,7 @@
  * @description Angular component for rendering icons with support for different icon libraries.
  */
 
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Icon } from '../../interfaces/paginable-table-header';
 import { containsFontAwesomeClass } from '../../utils/icons';
@@ -25,7 +25,7 @@ export type IconType = 'font-awesome' | 'material' | 'bootstrap';
 @Component({
 	selector: 'hub-icon, ng-hub-ui-icon',
 	standalone: true,
-	imports: [NgIf, NgClass],
+	imports: [NgClass],
 	templateUrl: './icon.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
