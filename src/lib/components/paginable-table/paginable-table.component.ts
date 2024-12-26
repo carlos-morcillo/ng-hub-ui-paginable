@@ -64,6 +64,7 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
 import { PaginableTableDropdownComponent } from '../paginable-table-dropdown/paginable-table-dropdown.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { HubIconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'hub-table, hub-ui-table',
@@ -82,7 +83,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		IsObservablePipe,
 		PaginableTableDropdownComponent,
 		DropdownComponent,
-		MenuFilterComponent
+		MenuFilterComponent,
+		HubIconComponent
 	],
 	animations: [
 		trigger('fadeInOut', [
