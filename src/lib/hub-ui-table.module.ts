@@ -3,6 +3,14 @@ import { PaginableTableConfig } from './interfaces/paginable-table-config';
 import { PaginableTranslationService } from './services/paginable-translation.service';
 import { PaginableService } from './services/paginable.service';
 import { PaginateConfigService } from './services/paginate-config.service';
+// import { PaginableTableComponent } from './components/paginable-table/paginable-table.component';
+// import { PaginableTableHeaderDirective } from './directives/paginable-table-header.directive';
+// import { PaginableTableRowDirective } from './directives/paginable-table-row.directive';
+// import { PaginableTableCellDirective } from './directives/paginable-table-cell.directive';
+// import { PaginableTableLoadingDirective } from './directives/paginable-table-loading.directive';
+// import { PaginableTableErrorDirective } from './directives/paginable-table-error.directive';
+// import { PaginableTableExpandingRowDirective } from './directives/paginable-table-expanding-row.directive';
+// import { PaginableTableFilterDirective } from './directives/paginable-table-filter.directive';
 
 @NgModule({
 	imports: [

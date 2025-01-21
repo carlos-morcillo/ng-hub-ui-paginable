@@ -1,5 +1,5 @@
 // Modules
-export { HubUITableModule as NgPaginableModule } from './hub-ui-table.module';
+export { HubUITableModule } from './hub-ui-table.module';
 
 // Components
 export { HubIconComponent } from './components/icon/icon.component';

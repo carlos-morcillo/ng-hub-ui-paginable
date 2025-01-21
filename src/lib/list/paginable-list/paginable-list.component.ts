@@ -25,7 +25,7 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
 import { getValue } from '../../utils';
 
 @Component({
-	selector: 'hub-list, hub-ui-list, ng80-paginable-list',
+	selector: 'hub-list, hub-ui-list, hub-paginable-list',
 	templateUrl: './paginable-list.component.html',
 	styleUrls: ['./paginable-list.component.scss'],
 	host: {

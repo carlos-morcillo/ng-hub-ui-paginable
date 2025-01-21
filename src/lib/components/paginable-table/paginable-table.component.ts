@@ -61,10 +61,10 @@ import { PaginableService } from '../../services/paginable.service';
 import { PaginationService } from '../../services/pagination.service';
 import { generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
+import { HubIconComponent } from '../icon/icon.component';
 import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
 import { PaginableTableDropdownComponent } from '../paginable-table-dropdown/paginable-table-dropdown.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
-import { HubIconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'hub-table, hub-ui-table',
@@ -84,7 +84,8 @@ import { HubIconComponent } from '../icon/icon.component';
 		PaginableTableDropdownComponent,
 		DropdownComponent,
 		MenuFilterComponent,
-		HubIconComponent
+		HubIconComponent,
+		PaginatorComponent
 	],
 	animations: [
 		trigger('fadeInOut', [

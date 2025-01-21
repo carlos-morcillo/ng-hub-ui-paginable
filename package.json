@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-table",
-	"version": "1.54.2",
+	"version": "19.0.0",
 	"peerDependencies": {
 		"@angular/common": ">=18.0.0",
 		"@angular/core": ">=18.0.0"
