@@ -5,9 +5,9 @@ Out-of-the-box integration with Laravel responses and other frameworks and Boost
 
 ## Versions
 
-| Angular          | ng-pagination |
+| Angular          | ng-hub-ui-table |
 |------------------|:---------:|
-| >=14.0.0 <18.0.0 |   v1.x    |
+| >=16.0.0 |   v1.x    |
 
 ---
 
