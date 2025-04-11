@@ -1,9 +1,9 @@
 {
-	"name": "ng-paginable",
-	"version": "1.43.1",
+	"name": "ng-hub-ui-table",
+	"version": "19.0.0",
 	"peerDependencies": {
-		"@angular/common": ">=16.0.0",
-		"@angular/core": ">=16.0.0"
+		"@angular/common": ">=18.0.0",
+		"@angular/core": ">=18.0.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"

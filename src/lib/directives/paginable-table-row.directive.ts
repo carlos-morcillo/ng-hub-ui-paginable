@@ -1,10 +1,9 @@
 import { Directive, TemplateRef } from '@angular/core';
 
 @Directive({
-	selector: '[paginableTableRow]'
+	selector: '[rowTpt], [paginableTableRow]',
+	standalone: true
 })
 export class PaginableTableRowDirective {
-
-	constructor(public template: TemplateRef<any>) { }
-
+	constructor(public template: TemplateRef<any>) {}
 }

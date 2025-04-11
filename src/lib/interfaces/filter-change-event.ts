@@ -1,4 +1,4 @@
 export interface FilterChangeEvent {
 	searchText?: string;
-	specificSearch?: any;
+	specificSearch?: Record<string, {}>;
 }

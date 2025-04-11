@@ -3,17 +3,20 @@ import { PaginableTablePagination } from '../../interfaces/paginable-table-pagin
 import { PaginableService } from '../../services/paginable.service';
 
 @Component({
-	selector: 'paginable-table-paginator',
+	selector: 'hub-paginator, paginable-table-paginator',
+	standalone: true,
 	templateUrl: './paginator.component.html',
-	styleUrls: ['./paginator.component.scss']
+	styleUrls: ['./paginator.component.scss'],
+	imports: []
 })
 export class PaginatorComponent {
-	private _configSvc = inject(PaginableService);
+	#configSvc = inject(PaginableService);
+	tableHeader: any;
 
-	@Input() pagination!: PaginableTablePagination | null;
-	@Output() onPageClick = new EventEmitter<number>();
+	@Input({ required: true }) pagination: PaginableTablePagination | null;
+	@Output() pageClick = new EventEmitter<number>();
 
-	mapping: any = this._configSvc.mapping;
+	mapping: any = this.#configSvc.mapping;
 
 	get currentPage(): number {
 		return (
@@ -29,7 +32,23 @@ export class PaginatorComponent {
 		);
 	}
 
-	pageClick(page: number) {
-		this.onPageClick.next(page);
+	/**
+	 * Triggers an event with the page number when a page is clicked.
+	 *
+	 * @param {number} page - Takes a `page` parameter, which is a number representing the page that was clicked. This function emits
+	 * the `page` value using a `Subject` called `onPageClick`.
+	 */
+	onPageClick(page: number) {
+		this.pageClick.next(page);
 	}
+
+	// scrollToTableHeader() {
+	// 	debugger;
+	// 	if (this.tableHeader && this.tableHeader.nativeElement) {
+	// 		this.tableHeader.nativeElement.scrollIntoView({
+	// 			behavior: 'smooth',
+	// 			block: 'start'
+	// 		});
+	// 	}
+	// }
 }

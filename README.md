@@ -7,7 +7,7 @@ Out-of-the-box integration with Laravel responses and other frameworks and Boost
 
 | Angular          | ng-pagination |
 |------------------|:---------:|
-| >=14.0.0 <15.0.0 |   v1.x    |
+| >=14.0.0 <18.0.0 |   v1.x    |
 
 ---
 
@@ -310,7 +310,6 @@ This allows performing bulk actions on the currently selected rows in the table.
 ## Outputs
 | Output  | Type | Description |
 | ------------- | ------------- | ------------- |
-| (itemClick)  | T | Fired when item is added while `[multiple]="true"`. Outputs added item |
 | (onPageClick) | number | Fired on select blur |
 | (onSelected)  | T \| Array<T> | Triggered when a row or multiples rows are selected or unselected |
 | (onParamsChange) | PaginationParamsChangeEvent | Triggered when ordination or page change |
@@ -523,7 +522,7 @@ The `ng-paginable-list` component allows rendering data in a nested, hierarchica
 To use it, simply pass the data structure to the `tree` input:
 
 ```html
-<ng80-paginable-list [tree]="data"></ng80-paginable-list>
+<hub-ui-paginable-list [tree]="data"></hub-ui-paginable-list>
 ```
 
 ```ts
@@ -548,31 +547,49 @@ This will generate a list with the items and subitems.
 The available options are:
 
 - `bindLabel` - Property of the item object to use as label
+- `bindValue` - Property for the unique value of each item
+- `bindChildren` - Property with child items
 - `selectable` - Enables single or multiple selection. Values: `'single' | 'multiple'` 
-
-#### Outputs
-
-Emits the following events:
-
-- `itemClick` - When clicking an item. Returns the item and its collapsed state.
 
 #### Customization
 
-You can use a template to customize the markup for each item:
+You can use a template to customize the markup for each item. The `listItemTpt` template now receives the next parameters:
 
 ```html
-<ng80-paginable-list
-  [tree]="data"
-  [selectable]="'multiple'"
-  (itemClick)="onSelect($event)">
+<ng-template listItemTpt let-data="data" let-depth="depth" let-index="index" let-collapsed="collapsed" let-selected="selected">
 
-  <ng-template listItemTpt let-item>
-    <div class="custom">  
-      {{item.label}}
+</ng-template>  
+```
+
+Where:
+
+- `data` - Item
+- `depth` - Item depth
+- `index` - Item index
+- `collapsed` - Whether it is collapsed
+- `selected` - Whether it is selected
+
+```html
+<hub-ui-paginable-list
+  [items]="data"
+  bindValue="id"
+  bindChildren="subItems"
+  selectable="multiple" 
+  (clickFn)="onClick($event)">
+
+  <ng-template
+    listItemTpt
+    let-data="data"
+    let-depth="depth"
+    let-selected="selected">
+    
+    <div>
+     {{ data.name }} (depth: {{depth}}, selected: {{selected}})
     </div>
-  </ng-template>
   
-</ng80-paginable-list>
+  </ng-template>
+
+</hub-ui-paginable-list>
 ```
 
 This allows fully customizing the rendered item.

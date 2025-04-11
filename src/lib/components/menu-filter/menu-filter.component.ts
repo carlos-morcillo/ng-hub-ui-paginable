@@ -3,22 +3,37 @@ import {
 	ControlValueAccessor,
 	FormArray,
 	FormBuilder,
-	NG_VALUE_ACCESSOR
+	FormGroup,
+	NG_VALUE_ACCESSOR,
+	ReactiveFormsModule
 } from '@angular/forms';
 import {
+	BooleanMatchModes,
 	DateMatchModes,
-	MatchMode,
+	MatchModes,
 	MenuFilterOperators,
 	MenuFilterRule,
 	MenuFilterValue,
+	NullMatchModes,
 	NumberMatchModes,
 	StringMatchModes
 } from '../../interfaces/column-filter-event';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { DropdownComponent } from '../dropdown/dropdown.component';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import { KeyValuePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
 	selector: 'menu-filter',
+	standalone: true,
+	imports: [
+		ReactiveFormsModule,
+		KeyValuePipe,
+		UpperCasePipe,
+		TranslatePipe,
+		UcfirstPipe
+	],
 	templateUrl: './menu-filter.component.html',
 	styleUrls: ['./menu-filter.component.scss'],
 	providers: [
@@ -30,33 +45,43 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 	]
 })
 export class MenuFilterComponent implements ControlValueAccessor {
-	private _fb = inject(FormBuilder);
-	private _parent = inject(DropdownComponent);
+	#fb = inject(FormBuilder);
+	#parent = inject(DropdownComponent);
 
-	private _header!: PaginableTableHeader;
+	#header!: PaginableTableHeader;
 	@Input()
 	get header(): PaginableTableHeader {
-		return this._header;
+		return this.#header;
 	}
 	set header(v: PaginableTableHeader) {
-		this._header = v;
+		this.#header = v;
 		this.setMatchMode();
 		this.setDefaultValue();
 	}
 
-	form = this._fb.group({
+	form = this.#fb.group({
 		operator: [MenuFilterOperators.And],
-		rules: this._fb.array([])
+		rules: this.#fb.array([])
 	});
 
-	onChange = (value: MenuFilterValue) => {};
+	get rulesFA(): FormArray {
+		return this.form.get('rules') as FormArray;
+	}
+
+	onChange = (value: MenuFilterValue | null) => {};
 	onTouched = () => {};
 
-	matchModes: Array<MatchMode> = [];
+	matchModes: Array<MatchModes> = [];
+	nullMatchModes = NullMatchModes;
 
 	defaultValue!: MenuFilterValue;
 
-	writeValue(value: MenuFilterValue): void {
+	/**
+	 * Clears existing rules, sets a default value if none is provided, adds rules based on the input value, and patches the form with the input value.
+	 * @param {MenuFilterValue} value - MenuFilterValue
+	 */
+	writeValue(value: MenuFilterValue | null): void {
+		this.rulesFA.clear();
 		if (!value) {
 			value = this.defaultValue;
 		}
@@ -72,9 +97,16 @@ export class MenuFilterComponent implements ControlValueAccessor {
 		this.onTouched = fn;
 	}
 
+	/**
+	 * Adds a new form group to a FormArray with default values or values provided as input.
+	 *
+	 * @param {MenuFilterRule} [value] - The `value` parameter in the `add` method is an optional parameter of type `MenuFilterRule`.
+	 * It is used to provide a value that will be patched into the form group created within the method. If a `value` is provided, it
+	 * will be used to patch the form group's
+	 */
 	add(value?: MenuFilterRule) {
 		const rulesFA = this.form.get('rules') as FormArray;
-		const ruleFG = this._fb.group({
+		const ruleFG = this.#fb.group({
 			value: [null],
 			matchMode: [this.matchModes[0]]
 		});
@@ -84,43 +116,90 @@ export class MenuFilterComponent implements ControlValueAccessor {
 		rulesFA.push(ruleFG);
 	}
 
+	/**
+	 * Clears all rules in a FormArray, adds a new rule, and applies the changes.
+	 */
 	clear() {
 		const rulesFA = this.form.get('rules') as FormArray;
 		rulesFA.clear();
+		this.add();
 		this.apply();
 	}
 
+	/**
+	 * Filters rules based on certain conditions and then calls onChange with the filtered rules or null.
+	 */
 	apply() {
-		this.onChange(this.form.value as any);
-		this._parent.closeDropdown();
+		let { operator, rules } = this.form.value as MenuFilterValue;
+		rules = rules?.filter(
+			(rule) =>
+				[NullMatchModes.IsNotNull, NullMatchModes.IsNull].includes(
+					rule.matchMode as any
+				) ||
+				(rule.value !== undefined && rule.value !== null)
+		);
+		this.onChange(
+			rules.length
+				? {
+						operator,
+						rules
+				  }
+				: null
+		);
+		this.#parent.closeDropdown();
 	}
 
+	/**
+	 * Determines the appropriate match modes based on the filter type and assigns them to the `matchModes` property.
+	 */
 	setMatchMode() {
+		let matchModes;
 		switch (this.header.filter?.type) {
-			case 'text':
-				this.matchModes = Object.keys(StringMatchModes) as any;
-				break;
 			case 'number':
-				this.matchModes = Object.keys(NumberMatchModes) as any;
+				matchModes = NumberMatchModes;
 				break;
 			case 'date':
-				this.matchModes = Object.keys(DateMatchModes) as any;
+			case 'date-range':
+				matchModes = DateMatchModes;
+				break;
+			case 'boolean':
+				matchModes = BooleanMatchModes;
 				break;
 			default:
-				console.warn('Unknown filter type');
+				matchModes = StringMatchModes;
 				break;
 		}
+		this.matchModes = { ...matchModes, ...NullMatchModes };
 	}
 
+	/**
+	 * Initializes a default value for a menu filter with an operator and a rule containing a null value and a match mode.
+	 */
 	setDefaultValue() {
+		const matchMode = Object.values(this.matchModes)[0];
 		this.defaultValue = {
 			operator: MenuFilterOperators.And,
 			rules: [
 				{
 					value: null,
-					matchMode: this.matchModes[0]
+					matchMode
 				}
 			]
 		};
+	}
+
+	/**
+	 * Disables or enables a form control based on the selected match mode in a FormGroup.
+	 *
+	 * @param {FormGroup} group - The `group` parameter is a FormGroup object in Angular, which represents a collection of FormControl
+	 * instances. It is typically used to manage the form controls within a form.
+	 */
+	enableOrDisableValueControl(group: FormGroup) {
+		const { matchMode } = group.value;
+		if (Object.values(NullMatchModes).includes(matchMode)) {
+			group.get('value')?.disable();
+		} else {
+			group.get('value')?.enable();
+		}
 	}
 }

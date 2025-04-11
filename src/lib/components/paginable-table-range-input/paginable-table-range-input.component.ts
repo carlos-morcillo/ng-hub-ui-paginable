@@ -1,10 +1,18 @@
 import { Component, forwardRef, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+	ControlValueAccessor,
+	FormsModule,
+	NG_VALUE_ACCESSOR
+} from '@angular/forms';
+import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
-	selector: 'paginable-table-range-input',
+	selector: 'hub-table-range-input, paginable-table-range-input',
 	templateUrl: './paginable-table-range-input.component.html',
 	styleUrls: ['./paginable-table-range-input.component.scss'],
+	standalone: true,
+	imports: [FormsModule, TranslatePipe, UcfirstPipe],
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,

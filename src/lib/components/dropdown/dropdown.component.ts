@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -6,16 +5,15 @@ import {
 	EventEmitter,
 	HostBinding,
 	Input,
-	OnInit,
 	Output,
 	inject
 } from '@angular/core';
 import { generateUniqueId } from '../../utils';
 
 @Component({
-	selector: 'ng80-dropdown',
+	selector: 'hub-dropdown, hub-ui-dropdown',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [],
 	templateUrl: './dropdown.component.html',
 	styleUrls: ['./dropdown.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,

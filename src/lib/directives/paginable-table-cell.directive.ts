@@ -1,12 +1,10 @@
-import { Directive, TemplateRef, Input } from '@angular/core';
+import { Directive, Input, TemplateRef } from '@angular/core';
 
 @Directive({
-	selector: '[paginableTableCell]'
+	selector: '[cellTpt], [paginableTableCell]',
+	standalone: true
 })
 export class PaginableTableCellDirective {
-
-	@Input() header!: string;
-
-	constructor(public template: TemplateRef<any>) { }
-
+	@Input({ required: true }) header!: string;
+	constructor(public template: TemplateRef<any>) {}
 }

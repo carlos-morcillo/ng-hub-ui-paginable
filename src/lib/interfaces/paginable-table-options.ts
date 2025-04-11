@@ -1,12 +1,45 @@
-/* Specifies the options that can be
-passed to a paginable table component. */
+/**
+ * Configuration options for a paginable table component.
+ */
 export interface PaginableTableOptions {
+	/**
+	 * Enables server-side pagination instead of client-side.
+	 */
 	serverSidePagination?: boolean;
+
+	/**
+	 * Sets the cursor style when hovering over table rows.
+	 */
 	cursor?: 'pointer' | 'default';
+
+	/**
+	 * Enables hover effects on table rows.
+	 */
 	hoverableRows?: boolean;
+
+	/**
+	 * Applies alternating background colors to rows, columns, or none.
+	 */
 	striped?: 'rows' | 'columns' | null;
-	/* Allows for specifying a custom colour variant for the table component. The `variant` property is optional and of type 
-	`string`, meaning it can accept any string value. This allows for customization and flexibility in styling the table 
-	component based on different variants or themes. */
+
+	/**
+	 * Custom color theme variant for styling the table.
+	 * Can be any string value that maps to a predefined theme.
+	 */
 	variant?: string | null;
+
+	/**
+	 * Enables search functionality for table content.
+	 */
+	searchable?: boolean;
+
+	/**
+	 * Displays table in a collapsed state initially.
+	 */
+	collapsed?: boolean;
+
+	/**
+	 * Enables horizontal and/or vertical scrolling for table content.
+	 */
+	scrollable?: boolean;
 }

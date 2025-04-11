@@ -1,41 +1,120 @@
 # Changelog
+# [1.52.3] - 2024-09-26
+- Stability
+
+# [1.52.2] - 2024-09-26
+- Stability
+- Removed residues from ngx-translate library
+
+# [1.52.1] - 2024-09-26
+- Stability
+
+# [1.52.0] - 2024-09-26
+- Refactored pagination structure. Added BEM classes to all items to improve customisation.
+  
+# [1.51.4] - 2024-09-26
+- Stability
+
+# [1.51.3] - 2024-09-26
+- Stability
+
+# [1.51.2] - 2024-09-26
+- Stability
+
+# [1.51.1] - 2024-09-26
+- Added cursor pointer to clickable items
+
+# [1.51.0] - 2024-09-26
+- Added clickFn input
+  
+# [1.50.1] - 2024-09-12
+- Stability
+  
+# [1.50.0] - 2024-09-12
+- String observables are now allowed in the table headers
+
+# [1.49.2] - 2024-07-25
+- Stability
+
+# [1.49.1] - 2024-07-23
+- Stability
+  
+# [1.49.0] - 2024-07-23
+- Added support for material, bootstrap and font awesome buttons.
+
+# [1.48.1] - 2024-07-16
+- Fixed issue with boolean filters.
+
+# [1.47.0] - 2024-06-18
+- Added null match modes.
+
+# [1.46.2] - 2024-06-17
+- Fixed boolean filter values.
+
+# [1.46.1] - 2024-06-17
+- Fixed column counts call.
+
+# [1.46.0] - 2024-06-17
+- Added boolean filters.
+
+# [1.45.3] - 2024-05-13
+- Replaced Equals and NotEquals to Equal and NotEqual.
+
+# [1.45.2] - 2024-05-13
+- Fixed position style of table.
+- 
+# [1.45.1] - 2024-04-25
+- Fixed clear filter button.
+
+# [1.45.0] - 2024-04-21
+- Added filter rule removing.
+  
+# [1.44.3] - 2024-03-27
+- Fixed some filter issues.
+  
+# [1.44.1] - 2024-02-06
+- Fixed dropdown buttons handlers.
+
+# [1.44.0] - 2023-12-19
+- New bindValue, bindLabel, and bindChildren inputs allow more control over item properties mapping
+- Item template now exposes data, depth, index, collapsed, and selected properties for greater customization.
 
 # [1.43.1] - 2023-11-27
-- Fixed checkbox click event
+- Fixed checkbox click event.
 
 # [1.43.0] - 2023-11-20
-- Refactored and documented paginable list
+- Refactored and documented paginable list.
 
 # [1.42.0] - 2023-11-20
-- Removed library ngx-translate
+- Removed library ngx-translate.
 
 # [1.40.5] - 2023-11-09
-- Fixed some translation issues
+- Fixed some translation issues.
 
 # [1.40.4] - 2023-10-31
-- Updated documentation
+- Updated documentation.
   
 # [1.40.3] - 2023-10-31
-- Updated documentation
+- Updated documentation.
 
 # [1.40.2] - 2023-10-26
-- Fixed some translation issues
-- 
+- Fixed some translation issues.
+
 # [1.40.1] - 2023-10-25
-- Fixed some translation issues
-- Fixed paginable list search and pagination
+- Fixed some translation issues.
+- Fixed paginable list search and pagination.
 
 # [1.40.0] - 2023-10-25
-- Added menu filters
-- Working on paginated lists
+- Added menu filters.
+- Working on paginated lists.
 
 # [1.39.0] - 2023-09-04
 - Added stripped and variant options
-- 
+
 ## [1.38.0] - 2023-07-17
 ### Changed
-- Updated dependencies to Angular 16
-- 
+- Updated dependencies to Angular 16.
+
 ## [1.37.1] - 2023-07-04
 ### Changed
 - The tooltips are removed when clicking on the parent element.

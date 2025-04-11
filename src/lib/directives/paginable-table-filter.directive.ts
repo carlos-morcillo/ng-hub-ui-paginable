@@ -1,12 +1,11 @@
 import { Directive, TemplateRef, Input } from '@angular/core';
 
 @Directive({
-	selector: '[paginableTableFilter]'
+	selector: '[filterTpt], [paginableTableFilter]',
+	standalone: true
 })
 export class PaginableTableFilterDirective {
-
 	@Input() header!: string;
 
-	constructor(public template: TemplateRef<any>) { }
-
+	constructor(public template: TemplateRef<any>) {}
 }

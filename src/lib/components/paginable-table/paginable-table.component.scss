@@ -1,168 +1,70 @@
-:host {
-	display: block;
+.hub-table__container {
+	height: 100%;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: auto auto 1fr auto;
+	grid-template-areas:
+		'header'
+		'subheader'
+		'content'
+		'footer';
+}
 
-	.table-container {
-		max-width: 100%;
-		overflow-x: auto;
-		position: relative;
-	}
+.header {
+	grid-area: header;
+}
+.subheader {
+	grid-area: subheader;
+	margin-top: 1rem;
+} /* Opcional */
+.content {
+	grid-area: content;
+	margin-top: 1rem;
+}
+.footer {
+	grid-area: footer;
+	margin-top: 1rem;
+}
 
-	table {
-		position: relative;
-
-		&.table.table-selectable {
-			tbody > tr {
-				cursor: pointer;
-
-				&.row-selected {
-					background-color: #ccc;
-				}
-			}
-		}
-	}
-
-	thead {
-		&.sticky {
+.hub-table__table-container {
+	overflow: auto;
+}
+.hub-table__table {
+	position: relative;
+	&.hub-table__table--scrollable {
+		thead {
 			position: sticky;
-			inset-block-start: 0;
-		}
-		tr {
-			&.filter_row {
-				.filter_cell {
-					background-color: #eee;
-					padding: 0.25rem;
-					vertical-align: middle;
-				}
-				.filter_cell_clear {
-					padding: 8px;
-				}
-			}
-			th {
-				padding: 8px;
-				transition: box-shadow 0.3s;
-			}
-			&:hover {
-				th:not(:last-child) {
-					box-shadow: -1px 0px 0px 0px #eee, 1px 0px 0px 0px #eee;
-				}
-			}
+			top: 0;
+			z-index: 10;
 		}
 	}
-	tfoot {
-		&.sticky {
-			position: sticky;
-			inset-block-end: 0;
-		}
+	.sticky-start {
+		background-color: white;
+		left: 0;
+		position: sticky;
+		z-index: 9;
+	}
 
-		th,
-		td {
-			&.sticky-start {
-				background-color: white;
-				left: 0;
-				position: sticky;
-				z-index: 9;
-			}
+	.sticky-end {
+		background-color: white;
+		right: 0;
+		position: sticky;
+		z-index: 9;
+	}
 
-			&.sticky-end {
-				background-color: white;
-				right: 0;
-				position: sticky;
-				z-index: 9;
-			}
-		}
+	.hub-table__table-container {
+		width: 100%;
+		overflow: auto;
+	}
 
-		.actions {
-			text-align: center;
-			white-space: nowrap;
-			width: 1%;
-
-			button {
-				opacity: 0.4;
-
-				&:hover {
-					opacity: 1;
-				}
-			}
-		}
-
-		.table {
-			&.table-hover {
-				tr:hover {
-					td {
-						&.sticky-start,
-						&.sticky-end {
-							background-color: inherit;
-						}
-					}
-				}
-			}
-		}
+	.clickable-item {
+		cursor: pointer;
 	}
 }
 
-.tooltip-example {
-	text-align: center;
-	padding: 0 50px;
-}
-.tooltip-example [tooltip] {
-	display: inline-block;
-	margin: 50px 20px;
-	width: 180px;
-	height: 50px;
-	border: 1px solid gray;
-	border-radius: 5px;
-	line-height: 50px;
-	text-align: center;
-}
-.ng-tooltip {
-	position: absolute;
-	max-width: 150px;
-	font-size: 14px;
-	text-align: center;
-	color: #f8f8f2;
-	padding: 3px 8px;
-	background: #282a36;
-	border-radius: 4px;
-	z-index: 1000;
-	opacity: 0;
-}
-.ng-tooltip:after {
-	content: '';
-	position: absolute;
-	border-style: solid;
-}
-.ng-tooltip-top:after {
-	top: 100%;
-	left: 50%;
-	margin-left: -5px;
-	border-width: 5px;
-	border-color: black transparent transparent transparent;
-}
-.ng-tooltip-bottom:after {
-	bottom: 100%;
-	left: 50%;
-	margin-left: -5px;
-	border-width: 5px;
-	border-color: transparent transparent black transparent;
-}
-.ng-tooltip-left:after {
-	top: 50%;
-	left: 100%;
-	margin-top: -5px;
-	border-width: 5px;
-	border-color: transparent transparent transparent black;
-}
-.ng-tooltip-right:after {
-	top: 50%;
-	right: 100%;
-	margin-top: -5px;
-	border-width: 5px;
-	border-color: transparent black transparent transparent;
-}
-.ng-tooltip-show {
-	opacity: 1;
-}
-
-.button-label:first-letter {
-	text-transform: uppercase;
+::ng-deep {
+	.form-control:read-only {
+		background-color: var(--bs-secondary-bg);
+		opacity: 1;
+	}
 }

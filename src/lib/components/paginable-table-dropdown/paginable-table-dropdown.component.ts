@@ -1,14 +1,24 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
-import { PaginableTableButton } from '../../interfaces/paginable-table-button';
+import { NgClass, NgStyle } from '@angular/common';
+import {
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	inject
+} from '@angular/core';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 
 @Component({
-	selector: 'paginable-table-dropdown',
+	selector: 'hub-table-dropdown, paginable-table-dropdown',
+	standalone: true,
+	imports: [NgClass, NgStyle],
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })
-export class PaginableTableDropdownComponent {
-	@Input() item: any;
+export class PaginableTableDropdownComponent<T = any> {
+	private _elementRef = inject(ElementRef);
+
+	@Input() item: T | undefined;
 
 	private _options: PaginableTableDropdown = { buttons: [] };
 	@Input()
@@ -23,8 +33,7 @@ export class PaginableTableDropdownComponent {
 			...v
 		};
 		if (this._options.fill === 'clear') {
-			this.buttonClass =
-				'btn btn-link text-' + (this._options.color ?? 'muted');
+			this.buttonClass = 'btn text-' + (this._options.color ?? 'muted');
 		} else {
 			this.buttonClass =
 				'btn ' +
@@ -39,8 +48,13 @@ export class PaginableTableDropdownComponent {
 	buttonClass: string | null = null;
 	shown: boolean = false;
 
-	constructor(private _elementRef: ElementRef) {}
-
+	/**
+	 * Checks if the clicked element is outside the component's native element and if the component is currently shown, and if so,
+	 * it closes the component.
+	 *
+	 * @param event - Represents the event that triggered the clickOut function. It contains information about the event, such as
+	 * the target element that was clicked.
+	 */
 	@HostListener('document:click', ['$event'])
 	clickOut(event) {
 		if (
@@ -51,11 +65,9 @@ export class PaginableTableDropdownComponent {
 		}
 	}
 
-	handle(button: PaginableTableButton) {
-		// button.handler(...[this.item]);
-		this.close();
-	}
-
+	/**
+	 * Sets the "shown" property to false.
+	 */
 	close() {
 		this.shown = false;
 	}

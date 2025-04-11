@@ -1,21 +1,30 @@
 import { animate, style, transition, trigger } from '@angular/animations';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
 	Component,
 	ContentChild,
 	ContentChildren,
+	EnvironmentInjector,
 	EventEmitter,
 	Input,
 	OnDestroy,
+	OnInit,
 	Output,
 	QueryList,
+	ResourceRef,
 	TemplateRef,
 	ViewChildren,
-	forwardRef
+	forwardRef,
+	inject,
+	input,
+	model,
+	resource
 } from '@angular/core';
 import {
-	FormControl,
 	FormGroup,
+	FormsModule,
 	NG_VALUE_ACCESSOR,
+	ReactiveFormsModule,
 	UntypedFormBuilder,
 	UntypedFormControl
 } from '@angular/forms';
@@ -28,7 +37,7 @@ import {
 	merge,
 	of
 } from 'rxjs';
-import { catchError, debounceTime, map, startWith, tap } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 import { BREAKPOINTS } from '../../constants/breakpoints';
 import { PaginableTableCellDirective } from '../../directives/paginable-table-cell.directive';
 import { PaginableTableErrorDirective } from '../../directives/paginable-table-error.directive';
@@ -39,24 +48,50 @@ import { PaginableTableLoadingDirective } from '../../directives/paginable-table
 import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
 import { FilterChangeEvent } from '../../interfaces/filter-change-event';
+import { ItemClickEvent } from '../../interfaces/item-click-event';
 import { PaginableTableButton } from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { PaginableTableItem } from '../../interfaces/paginable-table-item';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
-import { PaginableTablePagination } from '../../interfaces/paginable-table-pagination';
 import { PaginationParamsChangeEvent } from '../../interfaces/params-change-event';
-import { View } from '../../interfaces/view';
+import { IsObservablePipe } from '../../pipes/is-observable.pipe';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import { UnwrapAsyncPipe } from '../../pipes/unwrap-async.pipe';
 import { PaginableService } from '../../services/paginable.service';
 import { PaginationService } from '../../services/pagination.service';
 import { generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
+import { HubIconComponent } from '../icon/icon.component';
+import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
+import { PaginableTableDropdownComponent } from '../paginable-table-dropdown/paginable-table-dropdown.component';
+import { PaginableTableRangeInputComponent } from '../paginable-table-range-input/paginable-table-range-input.component';
+import { PaginatorComponent } from '../paginator/paginator.component';
 
 @Component({
-	selector: 'paginable-table',
+	selector: 'hub-table, hub-ui-table',
+	standalone: true,
 	templateUrl: './paginable-table.component.html',
 	styleUrls: ['./paginable-table.component.scss'],
+	imports: [
+		NgClass,
+		NgTemplateOutlet,
+		AsyncPipe,
+		ReactiveFormsModule,
+		FormsModule,
+		TranslatePipe,
+		UcfirstPipe,
+		UnwrapAsyncPipe,
+		IsObservablePipe,
+		PaginableTableDropdownComponent,
+		DropdownComponent,
+		MenuFilterComponent,
+		HubIconComponent,
+		PaginatorComponent,
+		PaginableTableRangeInputComponent
+	],
 	animations: [
 		trigger('fadeInOut', [
 			transition(':enter', [
@@ -74,11 +109,18 @@ import { DropdownComponent } from '../dropdown/dropdown.component';
 			useExisting: forwardRef(() => PaginableTableComponent),
 			multi: true
 		}
-	]
+	],
+	host: {
+		class: 'd-block paginable-table'
+	}
 })
-export class PaginableTableComponent implements OnDestroy {
+export class PaginableTableComponent<T = any> implements OnInit, OnDestroy {
+	#injector = inject(EnvironmentInjector);
+	#fb = inject(UntypedFormBuilder);
+	#configSvc = inject(PaginableService);
+	#paginationSvc = inject(PaginationService);
+
 	@Input() id!: string;
-	private _headers?: PaginableTableHeader[];
 
 	@Input() showSearchInput: boolean = true;
 	@Input() options: PaginableTableOptions = {
@@ -98,12 +140,13 @@ export class PaginableTableComponent implements OnDestroy {
 	 * @type {(PaginableTableHeader[])}
 	 * @memberof PaginableTableComponent
 	 */
-	@Input()
+	private _headers?: PaginableTableHeader[];
 	get headers(): Array<PaginableTableHeader> {
 		return this._headers ?? [];
 	}
-	set headers(v: Array<PaginableTableHeader | string>) {
-		this._headers = v.map((header) => {
+	@Input()
+	set headers(value: Array<PaginableTableHeader | string>) {
+		this._headers = value.map((header) => {
 			if (typeof header === 'string') {
 				return {
 					title: header,
@@ -127,8 +170,11 @@ export class PaginableTableComponent implements OnDestroy {
 				);
 			}
 		}
+
 		this._initializeFilterForm();
-		this._countColumns();
+
+		// We need to wait for all other inputs to be ready before initializing the column count
+		setTimeout(() => this._countColumns());
 	}
 
 	/**
@@ -151,94 +197,92 @@ export class PaginableTableComponent implements OnDestroy {
 		);
 	}
 
-	data!: PaginableTablePagination | null;
+	// /**
+	//  * Items paginated
+	//  *
+	//  * @private
+	//  * @type {PaginableTablePagination}
+	//  * @memberof PaginableTableComponent
+	//  */
+	// private _pagination: PaginableTablePagination | null = null;
+	// @Input()
+	// get pagination():
+	// 	| PaginableTablePagination
+	// 	| Observable<PaginableTablePagination>
+	// 	| null {
+	// 	return this._pagination;
+	// }
+	// set pagination(
+	// 	v: PaginableTablePagination | Observable<PaginableTablePagination>
+	// ) {
+	// 	if (!v) {
+	// 		this.data = null;
+	// 	} else if (isObservable(v)) {
+	// 		(v as Observable<PaginableTablePagination>)
+	// 			.pipe(
+	// 				map((value: PaginableTablePagination) => ({
+	// 					loading: false,
+	// 					error: false,
+	// 					value: value
+	// 				})),
+	// 				startWith({ loading: true, error: false, value: null }),
+	// 				catchError((error) =>
+	// 					of({ loading: false, error, value: null })
+	// 				),
+	// 				map((o) => {
+	// 					this.loading = !!o.loading;
+	// 					this.errorOcurred = o.error;
+	// 					return o.value;
+	// 				})
+	// 			)
+	// 			.subscribe((result: PaginableTablePagination | null) => {
+	// 				this.data = result;
+	// 				this.markSelected();
+	// 			});
+	// 	} else {
+	// 		this.data = v as PaginableTablePagination;
+	// 	}
+	// 	this.allRowsSelected = false;
+	// 	if (this.selectable || this.batchActions?.length) {
+	// 		this.markSelected();
+	// 	}
+	// }
 
-	/**
-	 * Items paginated
-	 *
-	 * @private
-	 * @type {PaginableTablePagination}
-	 * @memberof PaginableTableComponent
-	 */
-	private _pagination: PaginableTablePagination | null = null;
-	@Input()
-	get pagination():
-		| PaginableTablePagination
-		| Observable<PaginableTablePagination>
-		| null {
-		return this._pagination;
-	}
-	set pagination(
-		v: PaginableTablePagination | Observable<PaginableTablePagination>
-	) {
-		if (!v) {
-			this.data = null;
-		} else if (isObservable(v)) {
-			(v as Observable<PaginableTablePagination>)
-				.pipe(
-					map((value: PaginableTablePagination) => ({
-						loading: false,
-						error: false,
-						value: value
-					})),
-					startWith({ loading: true, error: false, value: null }),
-					catchError((error) =>
-						of({ loading: false, error, value: null })
-					),
-					map((o) => {
-						this.loading = !!o.loading;
-						this.errorOcurred = o.error;
-						return o.value;
-					})
-				)
-				.subscribe((result: PaginableTablePagination | null) => {
-					this.data = result;
-					this.markSelected();
-				});
-		} else {
-			this.data = v as PaginableTablePagination;
-		}
-		this.allRowsSelected = false;
-		if (this.selectable || this.batchActions?.length) {
-			this.markSelected();
-		}
-	}
-
-	/**
-	 * Items not paginated
-	 *
-	 * @private
-	 * @type {any[]}
-	 * @memberof PaginableTableComponent
-	 */
-	private _rows: any[] | null = null;
-	@Input()
-	get rows(): any[] | null {
-		return this._rows;
-	}
-	set rows(v: any[]) {
-		this._rows = v;
-		const params = {
-			page: 1,
-			ordination: this.ordination,
-			searchText: this.searchText,
-			searchKeys: this.searchKeys,
-			paginate: this.paginate
-		};
-		this.data = this.rows
-			? this._paginationSvc.generate(this.rows, params)
-			: null;
-		this.allRowsSelected = false;
-		this.markSelected();
-	}
+	// /**
+	//  * Items not paginated
+	//  *
+	//  * @private
+	//  * @type {any[]}
+	//  * @memberof PaginableTableComponent
+	//  */
+	// private _rows: any[] | null = null;
+	// @Input()
+	// get rows(): any[] | null {
+	// 	return this._rows;
+	// }
+	// set rows(v: any[]) {
+	// 	this._rows = v;
+	// 	const params = {
+	// 		page: 1,
+	// 		ordination: this.ordination(),
+	// 		searchText: this.searchText(),
+	// 		searchKeys: this.searchKeys,
+	// 		paginate: this.paginate
+	// 	};
+	// 	this.data = this.rows
+	// 	#paginationSvc.generate(this.rows, params)
+	// 		: null;
+	// 	this.allRowsSelected = false;
+	// 	this.markSelected();
+	// }
 
 	/**
 	 * Collection of selected rows
 	 *
-	 * @type {any[]}
+	 * @type {Array<T>}
 	 * @memberof PaginableTableComponent
 	 */
-	selectedItems: any[] = [];
+	selectedItems: Array<T> = [];
 
 	/**
 	 * Set whether all page rows are selecteds
@@ -247,22 +291,6 @@ export class PaginableTableComponent implements OnDestroy {
 	 * @memberof PaginableTableComponent
 	 */
 	allRowsSelected: boolean = false;
-
-	/**
-	 * Set whether the rows are selectable
-	 *
-	 * @type {boolean}
-	 * @memberof PaginableTableComponent
-	 */
-	@Input() selectable: boolean = false;
-
-	/**
-	 * Set whether the selectable can be multiple
-	 *
-	 * @type {boolean}
-	 * @memberof PaginableTableComponent
-	 */
-	@Input() multiple: boolean = false;
 
 	/**
 	 * If set, it will be the property returned in the onSelected event
@@ -289,10 +317,7 @@ export class PaginableTableComponent implements OnDestroy {
 
 	@Input() paginationInfo: boolean = true;
 
-	searchText: string = '';
 	@Input() searchKeys: string[] = ['name'];
-
-	@Input() ordination: PaginableTableOrdination | null = null;
 
 	/**
 	 * Collection of actions for items
@@ -321,20 +346,54 @@ export class PaginableTableComponent implements OnDestroy {
 
 	batchAction?: PaginableTableButton | null = null;
 
+	// readonly data = input.required<ResourceRef<Array<T>>>();
+
+	private _data: ResourceRef<Array<T>>;
+	get data(): ResourceRef<Array<T>> {
+		return this._data;
+	}
+	@Input()
+	set data(v: ResourceRef<Array<T>> | Array<T>) {
+		this._data = Array.isArray(v)
+			? resource({
+					loader: async () => Promise.resolve(v),
+					injector: this.#injector
+				})
+			: v;
+	}
+
+	readonly ordination = model<PaginableTableOrdination>();
+
+	readonly searchText = model<string>();
+
+	readonly page = model<number>();
+
+	readonly perPage = model<number>();
+
+	readonly stickyActions = input<boolean>(false);
+
 	/**
-	 * Sets the action column to sticky
+	 * Set whether the rows are selectable
 	 *
-	 * @type {PaginableTableRowAction[]}
+	 * @type {boolean}
 	 * @memberof PaginableTableComponent
 	 */
-	@Input() stickyActions: boolean = true;
+	readonly selectable = input<boolean>(false);
+
+	/**
+	 * Set whether the selectable can be multiple
+	 *
+	 * @type {boolean}
+	 * @memberof PaginableTableComponent
+	 */
+	readonly multiple = input<boolean>(false);
 
 	/**
 	 * On item click event emitter
 	 *
 	 * @memberof PaginableTableComponent
 	 */
-	@Output() itemClick = new EventEmitter<any>();
+	@Input() clickFn: (event: ItemClickEvent<T>) => void | Promise<void>;
 
 	/**
 	 * On page click event emitter
@@ -352,46 +411,26 @@ export class PaginableTableComponent implements OnDestroy {
 	@Output() filterChange = new EventEmitter<FilterChangeEvent>();
 
 	// TODO: Put default config
-	mapping: any = this._configSvc.mapping;
+	mapping: any = this.#configSvc.mapping;
 
-	/**
-	 * Rows per page options
-	 *
-	 * @private
-	 * @type {number[]}
-	 * @memberof PaginableTableComponent
-	 */
-	private _perPageOptions: number[] = [10, 20, 50, 100];
-	@Input()
-	get perPageOptions(): number[] {
-		return this._perPageOptions;
-	}
-	set perPageOptions(v: number[]) {
-		this._perPageOptions = v;
-		this.itemsPerPage = this._perPageOptions.length
-			? this._perPageOptions[0]
-			: 20;
-	}
-
-	/**
-	 * Items per page
-	 *
-	 * @private
-	 * @type {number}
-	 * @memberof PaginableTableComponent
-	 */
-	private _itemsPerPage: number = 20;
-	@Input()
-	get itemsPerPage(): number {
-		return this._itemsPerPage;
-	}
-	set itemsPerPage(v: number) {
-		this._itemsPerPage = +v;
-		if (this.data) {
-			this.data.currentPage = 1;
-		}
-		this.triggerTheParamChanges();
-	}
+	// /**
+	//  * Rows per page options
+	//  *
+	//  * @private
+	//  * @type {number[]}
+	//  * @memberof PaginableTableComponent
+	//  */
+	// private _perPageOptions: number[] = [10, 20, 50, 100];
+	// @Input()
+	// get perPageOptions(): number[] {
+	// 	return this._perPageOptions;
+	// }
+	// set perPageOptions(v: number[]) {
+	// 	this._perPageOptions = v;
+	// 	this.itemsPerPage = this._perPageOptions.length
+	// 		? this._perPageOptions[0]
+	// 		: 20;
+	// }
 
 	responsiveCSSClass: string | null = '';
 	private _responsive?: string;
@@ -412,6 +451,8 @@ export class PaginableTableComponent implements OnDestroy {
 	}
 
 	filterHeaders?: PaginableTableHeader[];
+
+	hasColumnFilters: boolean = false;
 
 	/**
 	 * Filter form
@@ -445,6 +486,8 @@ export class PaginableTableComponent implements OnDestroy {
 	 */
 	@Input() paginate: boolean = true;
 
+	@ContentChildren(PaginatorComponent)
+	paginators?: QueryList<DropdownComponent>;
 	@ContentChild(PaginableTableRowDirective, { read: TemplateRef })
 	templateRow?: TemplateRef<any>;
 	@ContentChildren(PaginableTableHeaderDirective)
@@ -475,28 +518,9 @@ export class PaginableTableComponent implements OnDestroy {
 
 	@Input() viewSaverForm: any;
 
-	private _views?: View[];
-	@Input()
-	get views(): View[] | null {
-		return this._views ?? null;
-	}
-	set views(v: View[]) {
-		this._views = v;
-	}
-
-	get searchFG(): FormControl {
-		return this.filterFG.get('searchText') as FormControl;
-	}
-
 	get specificSearchFG(): FormGroup {
 		return this.filterFG.get('specificSearch') as FormGroup;
 	}
-
-	constructor(
-		private _fb: UntypedFormBuilder,
-		private _configSvc: PaginableService,
-		private _paginationSvc: PaginationService
-	) {}
 
 	ngOnInit() {
 		if (!this.id) {
@@ -544,31 +568,51 @@ export class PaginableTableComponent implements OnDestroy {
 		return get(item, key);
 	}
 
-	itemClicked(item: any) {
-		if (this.selectable) {
-			this.toggle(item);
-		} else {
-			this.itemClick.next(item);
-		}
-	}
-
-	filter() {
-		if (!this.data) {
+	/**
+	 * Handles click events by extracting specific properties and passing them to a callback function.
+	 *
+	 * @param  - The `onItemClick` function takes in the following parameters: collapsed, selected and item.
+	 * @param {number} depth - The `depth` parameter in the `onItemClick` function represents the depth level of the item being
+	 * clicked. It is a number that indicates how deep the item is nested within a hierarchical structure.
+	 * @param {number} index - The `index` parameter in the `onItemClick` function represents the position of the item that was clicked
+	 * within a list or array. It is a number that indicates the index of the clicked item.
+	 *
+	 * @returns If the `clickFn` property is not defined in the current context, the `onItemClick` function will return without
+	 * executing any further code.
+	 */
+	onItemClick(
+		{ collapsed, selected, ...item },
+		depth: number,
+		index: number
+	) {
+		if (!this.clickFn) {
 			return;
 		}
-		this.data.currentPage = 1;
-		this.filterChange.emit({
-			searchText: this.searchFG?.value ?? null,
-			specificSearch: this.specificSearchFG?.value ?? null
+
+		this.clickFn({
+			depth,
+			index,
+			selected,
+			collapsed,
+			value: item as T,
+			item: item as T
 		});
 	}
 
+	filter() {
+		debugger;
+		// if (!this.data) {
+		// 	return;
+		// }
+		// this.data.currentPage = 1;
+		// this.filterChange.emit({
+		// 	searchText: this.searchText(),
+		// 	specificSearch: this.specificSearchFG?.value ?? null
+		// });
+	}
+
 	pageClicked(page: number) {
-		if (!this.data) {
-			return;
-		}
-		this.data.currentPage = page;
-		this.triggerTheParamChanges();
+		this.page.set(page);
 	}
 
 	/**
@@ -583,44 +627,47 @@ export class PaginableTableComponent implements OnDestroy {
 		if (!header.sortable) {
 			return;
 		}
-		if (!this.ordination || this.ordination.property !== header.property) {
-			this.ordination = {
+		if (
+			!this.ordination() ||
+			this.ordination()?.property !== header.property
+		) {
+			this.ordination.set({
 				property: header.property as any,
 				direction: 'ASC'
-			};
+			});
 		} else {
-			this.ordination = {
+			this.ordination.set({
 				property: header.property,
-				direction: this.ordination.direction === 'ASC' ? 'DESC' : 'ASC'
-			};
+				direction:
+					this.ordination()?.direction === 'ASC' ? 'DESC' : 'ASC'
+			});
 		}
-
-		this.triggerTheParamChanges();
+		// 	this.triggerTheParamChanges();
 	}
 
-	triggerTheParamChanges() {
-		if (!this.data) {
-			return;
-		}
-		const params: PaginationParamsChangeEvent = {
-			page: this.data.currentPage,
-			perPage: this.itemsPerPage,
-			ordination: this.ordination as any,
-			searchText: this.searchFG.value ?? null,
-			searchKeys: this.searchKeys,
-			paginate: this.paginate
-		};
+	// triggerTheParamChanges() {
+	// 	if (!this.data) {
+	// 		return;
+	// 	}
+	// 	const params: PaginationParamsChangeEvent = {
+	// 		page: this.data.currentPage,
+	// 		perPage: this.itemsPerPage,
+	// 		ordination: this.ordination(),
+	// 		searchText: this.searchText(),
+	// 		searchKeys: this.searchKeys,
+	// 		paginate: this.paginate
+	// 	};
 
-		Object.keys(params).forEach(
-			(k) => params[k] == null && delete params[k]
-		);
+	// 	Object.keys(params).forEach(
+	// 		(k) => params[k] == null && delete params[k]
+	// 	);
 
-		if (!this.rows) {
-			this.onParamsChange.next(params);
-		} else {
-			this.data = this._paginationSvc.generate(this.rows, params);
-		}
-	}
+	// 	if (!this.rows) {
+	// 		this.onParamsChange.next(params);
+	// 	} else {
+	// 		this.data#paginationSvc.generate(this.rows, params);
+	// 	}
+	// }
 
 	/**
 	 * Get the ordination class
@@ -630,10 +677,13 @@ export class PaginableTableComponent implements OnDestroy {
 	 * @memberof PaginableTableComponent
 	 */
 	getOrdenationClass(header: PaginableTableHeader) {
-		if (!this.ordination || this.ordination.property !== header.property) {
+		if (
+			!this.ordination ||
+			this.ordination()?.property !== header.property
+		) {
 			return 'fa-sort';
 		}
-		return this.ordination.direction.toUpperCase() === 'ASC'
+		return this.ordination()?.direction.toUpperCase() === 'ASC'
 			? 'fa-sort-up'
 			: 'fa-sort-down';
 	}
@@ -790,7 +840,7 @@ export class PaginableTableComponent implements OnDestroy {
 			item.selected = true;
 		}
 
-		if (!this.multiple) {
+		if (!this.multiple()) {
 			this.selectedItems = item.selected ? [needle] : [];
 			this.data[this.mapping.data].forEach((o) => {
 				const needle = this.selectableProperty
@@ -858,31 +908,36 @@ export class PaginableTableComponent implements OnDestroy {
 	_initializeFilterForm(): void {
 		this.filterFGSct?.unsubscribe();
 
-		this.filterFG = this._fb.group({
+		this.filterFG = this.#fb.group({
 			searchText: []
 		});
 
 		if (this.headers?.length) {
-			const specificSearchFG = this._fb.group({});
+			const filtersFG = this.#fb.group({});
 
 			this.filterHeaders = (
-				this._headers as PaginableTableHeader[]
-			).filter((h) => typeof h === 'object' && h.filter);
+				this._headers as Array<PaginableTableHeader>
+			).filter((header) => typeof header === 'object' && header.filter);
 			this.filterHeaders.forEach((h) => {
-				specificSearchFG.addControl(
+				filtersFG.addControl(
 					(h.filter?.key || h.property) as string,
 					new UntypedFormControl(null)
 				);
 			});
+
+			this.hasColumnFilters = this.filterHeaders.some(
+				(filter) => filter.filter && filter.filter?.mode !== 'menu'
+			);
+
 			if (this.id) {
 				const view = JSON.parse(
 					localStorage.getItem('paginable-table_view_' + this.id) ??
 						'{}'
 				);
-				specificSearchFG.patchValue(view);
+				filtersFG.patchValue(view);
 			}
 
-			this.filterFG.addControl('specificSearch', specificSearchFG);
+			this.filterFG.addControl('specificSearch', filtersFG);
 		}
 
 		this.filterFGSct = merge(
@@ -912,12 +967,14 @@ export class PaginableTableComponent implements OnDestroy {
 	 */
 	private _countColumns() {
 		let count = this.headers.length;
-		if ((this.selectable && this.multiple) || this.batchActions?.length) {
+		if (
+			(this.selectable() && this.multiple()) ||
+			this.batchActions?.length
+		) {
 			count++;
 		}
 		if (
-			(this.templateExpandingRows?.length ||
-				this.filterHeaders?.length) &&
+			this.templateExpandingRows?.length &&
 			!this.lastColumnOnlyHasButtons
 		) {
 			count++;
@@ -940,7 +997,7 @@ export class PaginableTableComponent implements OnDestroy {
 	 */
 	emitValue() {
 		this.onChange(
-			this.multiple ? this.selectedItems : this.selectedItems[0]
+			this.multiple() ? this.selectedItems : this.selectedItems[0]
 		);
 	}
 

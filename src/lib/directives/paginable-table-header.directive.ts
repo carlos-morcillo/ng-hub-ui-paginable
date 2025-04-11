@@ -1,9 +1,10 @@
 import { Directive, Input, TemplateRef } from '@angular/core';
 
 @Directive({
-	selector: '[paginableTableHeader]'
+	selector: '[headerTpt], [paginableTableHeader]',
+	standalone: true
 })
 export class PaginableTableHeaderDirective {
-	@Input() header!: string;
+	@Input({ required: true }) header!: string;
 	constructor(public template: TemplateRef<any>) {}
 }

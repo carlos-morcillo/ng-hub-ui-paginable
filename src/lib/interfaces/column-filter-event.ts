@@ -5,7 +5,7 @@ export interface MenuFilterValue {
 
 export interface MenuFilterRule {
 	value: string | null;
-	matchMode: MatchMode;
+	matchMode: MatchModes;
 }
 
 export enum MenuFilterOperators {
@@ -18,8 +18,8 @@ export enum StringMatchModes {
 	Contains = 'Contains',
 	NotContains = 'NotContains',
 	EndsWith = 'EndsWith',
-	Equals = 'Equals',
-	NotEquals = 'NotEquals'
+	Equal = 'Equal',
+	NotEqual = 'NotEqual'
 }
 
 export enum NumberMatchModes {
@@ -27,8 +27,8 @@ export enum NumberMatchModes {
 	GreaterThanOrEqual = 'GreaterThanOrEqual',
 	LessThan = 'LessThan',
 	LessThanOrEqual = 'LessThanOrEqual',
-	Equals = 'Equals',
-	NotEquals = 'NotEquals'
+	Equal = 'Equal',
+	NotEqual = 'NotEqual'
 }
 
 export enum DateMatchModes {
@@ -40,7 +40,19 @@ export enum DateMatchModes {
 	AfterOrEqual = 'AfterOrEqual'
 }
 
-export type MatchMode =
-	| keyof StringMatchModes
+export enum BooleanMatchModes {
+	Equal = 'Equal',
+	NotEqual = 'NotEqual'
+}
+
+export enum NullMatchModes {
+	IsNull = 'IsNull',
+	IsNotNull = 'IsNotNull'
+}
+
+export type MatchModes =
+	| NullMatchModes
+	| StringMatchModes
 	| NumberMatchModes
-	| DateMatchModes;
+	| DateMatchModes
+	| BooleanMatchModes;
