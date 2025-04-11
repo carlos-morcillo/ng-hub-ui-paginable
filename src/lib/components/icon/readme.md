@@ -4,6 +4,16 @@
 
 The `HubIconComponent` is a versatile Angular component designed to render icons from different icon libraries. It supports Font Awesome, Material Icons, and Bootstrap icons, making it a flexible solution for projects that use multiple icon sets.
 
+## Part of ng-hub-ui Family
+
+This component is part of the ng-hub-ui ecosystem, which includes:
+
+*   [ng-hub-ui-table](https://www.npmjs.com/package/ng-hub-ui-table)
+*   [ng-hub-ui-modal](https://www.npmjs.com/package/ng-hub-ui-modal)
+*   [ng-hub-ui-stepper](https://www.npmjs.com/package/ng-hub-ui-stepper)
+*   [ng-hub-ui-breadcrumbs](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
+*   [ng-hub-ui-portal](https://www.npmjs.com/package/ng-hub-ui-portal)
+
 ## Installation
 
 Ensure you have the necessary dependencies installed in your Angular project. The component is designed to be used as a standalone component, so it doesn't require additional module imports.
