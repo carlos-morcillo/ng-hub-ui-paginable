@@ -2,51 +2,54 @@
 	<ul class="pager pagination pager__list">
 		<li
 			class="page-item pager__item"
-			[class.pager__item--disabled]="currentPage === 1"
-			[class.disabled]="currentPage === 1"
+			[class.pager__item--disabled]="page() === 1"
+			[class.disabled]="page() === 1"
 		>
 			<a
 				role="button"
 				class="page-link pager__link"
 				href="javascript:{}"
-				(click)="onPageClick(1)"
+				(click)="page.set(1)"
 			>
 				<i class="pager__icon fa fa-angle-double-left"></i>
 			</a>
 		</li>
 		<li
 			class="page-item pager__item"
-			[class.pager__item--disabled]="currentPage <= 1"
-			[class.disabled]="currentPage <= 1"
+			[class.pager__item--disabled]="page() <= 1"
+			[class.disabled]="page() <= 1"
 		>
 			<a
 				role="button"
 				class="page-link pager__link"
 				href="javascript:{}"
 				aria-label="Previous"
-				(click)="onPageClick(currentPage - 1)"
+				(click)="page.set(page() - 1)"
 			>
 				<span class="pager__icon-wrapper" aria-hidden="true">
 					<i class="pager__icon fa fa-angle-left"></i>
 				</span>
 			</a>
 		</li>
-		@if (currentPage - 1 > 1) {
-		<li class="page-item pager__item pager__item--disabled disabled">
-			<a role="button" class="page-link pager__link" href="javascript:{}"
-				>...</a
-			>
-		</li>
+		@if (page() - 1 > 1) {
+			<li class="page-item pager__item pager__item--disabled disabled">
+				<a
+					role="button"
+					class="page-link pager__link"
+					href="javascript:{}"
+					>...</a
+				>
+			</li>
 		}
 		<li class="page-item pager__item">
-			@if (currentPage - 1 >= 1) {
-			<a
-				role="button"
-				class="page-link pager__link"
-				href="javascript:{}"
-				(click)="onPageClick(currentPage - 1)"
-				>{{ currentPage - 1 }}</a
-			>
+			@if (page() - 1 >= 1) {
+				<a
+					role="button"
+					class="page-link pager__link"
+					href="javascript:{}"
+					(click)="page.set(page() - 1)"
+					>{{ page() - 1 }}</a
+				>
 			}
 		</li>
 		<li class="page-item pager__item pager__item--active active">
@@ -54,57 +57,78 @@
 				role="button"
 				class="page-link pager__link"
 				href="javascript:{}"
-				>{{ currentPage }}</a
+				>{{ page() }}</a
 			>
 		</li>
-		<li class="page-item pager__item">
-			@if (currentPage + 1 <= lastPage) {
-			<a
-				role="button"
-				class="page-link pager__link"
-				href="javascript:{}"
-				(click)="onPageClick(currentPage + 1)"
-				>{{ currentPage + 1 }}</a
-			>
+		@if (total()) {
+			<li class="page-item pager__item">
+				@if (page() + 1 <= $any(total())) {
+					<a
+						role="button"
+						class="page-link pager__link"
+						href="javascript:{}"
+						(click)="page.set(page() + 1)"
+						>{{ page() + 1 }}</a
+					>
+				}
+			</li>
+			@if (page() + 1 < $any(total())) {
+				<li
+					class="page-item pager__item pager__item--disabled disabled"
+				>
+					<a
+						role="button"
+						class="page-link pager__link"
+						href="javascript:{}"
+						>...</a
+					>
+				</li>
 			}
-		</li>
-		@if (currentPage + 1 < lastPage) {
-		<li class="page-item pager__item pager__item--disabled disabled">
-			<a role="button" class="page-link pager__link" href="javascript:{}"
-				>...</a
+			<li
+				class="page-item pager__item"
+				[class.pager__item--disabled]="page() >= $any(total())"
+				[class.disabled]="page() >= $any(total())"
 			>
-		</li>
+				<a
+					role="button"
+					class="page-link pager__link"
+					href="javascript:{}"
+					aria-label="Next"
+					(click)="page.set(page() + 1)"
+				>
+					<span class="pager__icon-wrapper" aria-hidden="true">
+						<i class="pager__icon fa fa-angle-right"></i>
+					</span>
+				</a>
+			</li>
+			<li
+				class="page-item pager__item"
+				[class.pager__item--disabled]="page() === total()"
+				[class.disabled]="page() === total()"
+			>
+				<a
+					role="button"
+					class="page-link pager__link"
+					href="javascript:{}"
+					(click)="page.set(total() ?? 1)"
+				>
+					<i class="pager__icon fa fa-angle-double-right"></i>
+				</a>
+			</li>
+		} @else {
+			<li class="page-item pager__item">
+				<a
+					role="button"
+					class="page-link pager__link"
+					href="javascript:{}"
+					aria-label="Next"
+					(click)="page.set(page() + 1)"
+				>
+					<span class="pager__icon-wrapper" aria-hidden="true">
+						<i class="pager__icon fa fa-angle-right"></i>
+					</span>
+				</a>
+			</li>
 		}
-		<li
-			class="page-item pager__item"
-			[class.pager__item--disabled]="currentPage >= lastPage"
-			[class.disabled]="currentPage >= lastPage"
-		>
-			<a
-				role="button"
-				class="page-link pager__link"
-				href="javascript:{}"
-				aria-label="Next"
-				(click)="onPageClick(currentPage + 1)"
-			>
-				<span class="pager__icon-wrapper" aria-hidden="true">
-					<i class="pager__icon fa fa-angle-right"></i>
-				</span>
-			</a>
-		</li>
-		<li
-			class="page-item pager__item"
-			[class.pager__item--disabled]="currentPage === lastPage"
-			[class.disabled]="currentPage === lastPage"
-		>
-			<a
-				role="button"
-				class="page-link pager__link"
-				href="javascript:{}"
-				(click)="onPageClick(lastPage)"
-			>
-				<i class="pager__icon fa fa-angle-double-right"></i>
-			</a>
-		</li>
 	</ul>
 </nav>

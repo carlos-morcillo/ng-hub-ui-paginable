@@ -42,7 +42,7 @@ export { PaginableService } from './services/paginable.service';
 export { PaginationService } from './services/pagination.service';
 
 // Constants
-export { BREAKPOINTS } from './constants/breakpoints';
+export { TableBreakpoint } from './constants/breakpoints';
 
 // Enums
 export { SelectionTypes } from './enums/selection-types';

@@ -7,11 +7,12 @@ import {
 	inject
 } from '@angular/core';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
+import { HubIconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'hub-table-dropdown, paginable-table-dropdown',
 	standalone: true,
-	imports: [NgClass, NgStyle],
+	imports: [NgClass, NgStyle, HubIconComponent],
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })
