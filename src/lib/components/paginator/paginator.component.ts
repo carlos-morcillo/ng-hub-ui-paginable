@@ -7,6 +7,6 @@ import { Component, input, model } from '@angular/core';
 	styleUrls: ['./paginator.component.scss']
 })
 export class PaginatorComponent {
-	readonly page = model.required<number>();
-	readonly total = input<number | null>();
+	readonly page = model<number>(1);
+	readonly numberOfPages = input<number | null>();
 }

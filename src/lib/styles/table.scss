@@ -1,0 +1,135 @@
+//
+// Base styles
+//
+$tablePrefix: hub- !default;
+
+.hub-table {
+	--#{$tablePrefix}body-color: #212529;
+	--#{$tablePrefix}body-bg: #fff;
+	--#{$tablePrefix}border-width: 1px;
+	--#{$tablePrefix}border-color: #dee2e6;
+	--#{$tablePrefix}border-radius: 0.375rem;
+
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	min-width: 0;
+
+	&__top-bar {
+		display: flex;
+		justify-content: end;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	// Área 1: acciones y filtros
+	&__batch-actions {
+	}
+	&__search {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: stretch;
+		justify-content: end;
+
+		&-input {
+			position: relative;
+			flex: 1 1 auto;
+			width: 1%;
+			min-width: 0;
+			display: block;
+			width: 100%;
+			padding: 0.375rem 0.75rem;
+			font-size: 1rem;
+			font-weight: 400;
+			line-height: 1.5;
+			color: var(--#{$tablePrefix}body-color);
+			appearance: none;
+			background-color: var(--#{$tablePrefix}body-bg);
+			background-clip: padding-box;
+			border: var(--#{$tablePrefix}border-width) solid
+				var(--#{$tablePrefix}border-color);
+			border-radius: var(--#{$tablePrefix}border-radius);
+			transition:
+				border-color 0.15s ease-in-out,
+				box-shadow 0.15s ease-in-out;
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+			border-color: #777;
+		}
+		&-button {
+			color: #777;
+			border-color: #777;
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+	}
+	&__delete-filters {
+	}
+
+	&__bottom-bar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	// Área 3: paginación
+	&__paginator {
+		overflow: auto;
+		margin: auto;
+	}
+	&__pagination-settings {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin: auto;
+	}
+	&__pagination-info {
+		margin: auto;
+	}
+}
+
+.hub-table__table-container {
+	overflow: auto;
+}
+.hub-table__table {
+	position: relative;
+	&.hub-table__table--scrollable {
+		thead {
+			position: sticky;
+			top: 0;
+			z-index: 10;
+		}
+	}
+	.sticky-start {
+		background-color: white;
+		left: 0;
+		position: sticky;
+		z-index: 9;
+	}
+
+	.sticky-end {
+		background-color: white;
+		right: 0;
+		position: sticky;
+		z-index: 9;
+	}
+
+	.hub-table__table-container {
+		width: 100%;
+		overflow: auto;
+	}
+
+	.clickable-item {
+		cursor: pointer;
+	}
+}
+
+::ng-deep {
+	.form-control:read-only {
+		background-color: var(--#{$tablePrefix}secondary-bg);
+		opacity: 1;
+	}
+}

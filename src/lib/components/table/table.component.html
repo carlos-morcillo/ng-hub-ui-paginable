@@ -1,62 +1,90 @@
-<pre>{{ filterFG?.value | json }}</pre>
-<div class="batch-actions">
-	@for (button of batchActions(); track $index) {
-		@if (button['buttons']?.length) {
-			<hub-table-dropdown
-				[options]="$any(button)"
-				[disabled]="!selectedItems?.length"
-			>
-			</hub-table-dropdown>
-		} @else {
-			<button
-				class="btn"
-				role="button"
-				class="{{ button.color ? 'btn-' + button.color : 'btn-light' }}"
-				(click)="handleBatchAction(button)"
-				[disabled]="!selectedItems?.length"
-			>
-				@if (button.icon) {
-					<i class="me-2 mr-2 {{ button.icon }}"></i>
+@if (batchActions().length || searchable() || headerFilters().length) {
+	<div class="hub-table__top-bar">
+		@if (batchActions().length) {
+			<div class="hub-table__batch-actions">
+				@for (button of batchActions(); track $index) {
+					@if (button['buttons']?.length) {
+						<hub-table-dropdown
+							class="hub-table__batch-actions-dropdown"
+							[options]="$any(button)"
+							[disabled]="!value.length"
+						>
+						</hub-table-dropdown>
+					} @else {
+						<button
+							class="hub-table__batch-actions-btn btn {{
+								button.color
+									? 'btn-' + button.color
+									: 'btn-light'
+							}}"
+							role="button"
+							(click)="handleBatchAction(button)"
+							[disabled]="!value.length"
+						>
+							@if (button.icon) {
+								<i
+									class="hub-table__batch-actions-btn-icon me-2 mr-2 {{
+										button.icon
+									}}"
+								></i>
+							}
+							@if (button.title) {
+								<span
+									class="hub-table__batch-actions-btn-title"
+									>{{ button.title | ucfirst }}</span
+								>
+							}
+						</button>
+					}
 				}
-				@if (button.title) {
-					{{ button.title | ucfirst }}
-				}
-			</button>
+			</div>
 		}
-	}
-</div>
-<div class="search">
-	<input
-		type="text"
-		class="search-input"
-		[(ngModel)]="searchTerm"
-		[ngModelOptions]="{ standalone: true }"
-		aria-label="Search"
-		(keyup.enter)="filter()"
-	/>
-	<button class="search_button" type="button" (click)="filter()">
-		<i class="fa-solid fa-search" aria-hidden="true"></i>
-	</button>
-</div>
-<div class="delete-filters-button">
-	@if (headerFilters()?.length) {
-		<button
-			type="button"
-			class="btn btn-outline-danger"
-			(click)="clearAdvancedFilters()"
-			[disabled]="filterLoading"
-		>
-			<i class="fa-solid fa-eraser"></i>
-			{{ 'CLEAN_FILTERS' | translate | ucfirst }}
-		</button>
-	}
-</div>
+
+		@if (searchable()) {
+			<div class="hub-table__search">
+				<input
+					type="text"
+					class="hub-table__search-input"
+					(input)="searchProxy$.next($any($event.target).value)"
+					[value]="searchTerm()"
+					aria-label="Search"
+				/>
+				<button
+					class="hub-table__search-button btn btn-outline-dark"
+					type="button"
+				>
+					<i
+						class="hub-table__search-icon fa-solid fa-search"
+						aria-hidden="true"
+					></i>
+				</button>
+			</div>
+		}
+
+		@if (headerFilters().length) {
+			<div class="hub-table__delete-filters">
+				<button
+					type="button"
+					class="hub-table__delete-filters-btn btn btn-outline-danger"
+					(click)="clearFilters()"
+					[disabled]="filterLoading"
+				>
+					<i
+						class="hub-table__delete-filters-icon fa-solid fa-eraser"
+					></i>
+					{{ 'CLEAN_FILTERS' | translate | ucfirst }}
+				</button>
+			</div>
+		}
+	</div>
+}
+
 <div
-	class="{{ responsiveCSSClass }} hub-table__table-container content"
-	[class.table-responsive]="responsiveCSSClass"
+	class="hub-table__table-container content {{ responsiveCSSClass() }}"
+	[class.table-responsive]="responsiveCSSClass()"
 >
 	<table
-		class="table mb-0 hub-table__table"
+		class="hub-table__table table mb-0"
 		[class.table-hover]="
 			(options().hoverableRows || selectable()) && !loading()
 		"
@@ -66,10 +94,12 @@
 		[class.hub-table__table--scrollable]="options().scrollable"
 		[ngClass]="options().variant ? 'table-' + options().variant : null"
 	>
-		<thead [formGroup]="filterFG">
-			<tr>
-				@if ((selectable() && multiple()) || batchActions?.length) {
-					<th class="sticky-start actions">
+		<thead class="hub-table__head" [formGroup]="filtersFG">
+			<tr class="hub-table__head-row">
+				@if ((selectable() && multiple()) || batchActions.length) {
+					<th
+						class="hub-table__header-cell hub-table__header-cell--actions sticky-start"
+					>
 						<input
 							type="checkbox"
 							[(ngModel)]="allRowsSelected"
@@ -81,6 +111,7 @@
 				}
 				@for (header of fixedHeaders(); track header.property) {
 					<th
+						class="hub-table__header-cell"
 						resizable
 						[class.sticky-start]="header.sticky === 'start'"
 						[class.sticky-end]="header.sticky === 'end'"
@@ -89,7 +120,7 @@
 						[class.text-center]="header.align === 'center'"
 					>
 						<div
-							class="d-flex flex-nowrap align-items-center justify-content-between gap-2"
+							class="hub-table__header-cell-content d-flex flex-nowrap align-items-center justify-content-between gap-2"
 						>
 							<ng-container
 								[ngTemplateOutlet]="
@@ -98,10 +129,7 @@
 								"
 								[ngTemplateOutletContext]="{
 									header,
-									property: getProperty(
-										header,
-										header.property
-									)
+									property: header | get: header.property
 								}"
 							>
 							</ng-container>
@@ -110,12 +138,15 @@
 								header.filter?.mode === 'menu'
 							) {
 								<div
-									class="d-flex gap-2 ms-auto align-items-center"
+									class="hub-table__header-cell-actions d-flex gap-2 ms-auto align-items-center"
 								>
-									<button class="btn" (click)="sort(header)">
+									<button
+										class="hub-table__sort-btn btn"
+										(click)="sort(header)"
+									>
 										@if (header.sortable) {
 											<i
-												class="fa"
+												class="hub-table__sort-icon fa"
 												[ngClass]="
 													getOrdenationClass(header)
 												"
@@ -129,22 +160,22 @@
 											(open)="
 												onDropdownFilterOpened($event)
 											"
-											class="filter-dropdown"
+											class="hub-table__filter-dropdown"
 										>
 											<div
-												class="d-flex flex-nowrap gap-2 button filter-dropdown__toggle-content"
+												class="hub-table__filter-dropdown-toggle d-flex flex-nowrap gap-2 button filter-dropdown__toggle-content"
 											>
 												<i
-													class="fa-solid fa-filter"
+													class="hub-table__filter-dropdown-icon fa-solid fa-filter"
 													[class.text-success]="
-														filterFG.get(
+														filtersFG.get(
 															header.filter
 																?.key ||
 																header.property
 														)?.value?.rules?.length
 													"
 													[class.filter-dropdown__toggle-content--active]="
-														filterFG.get(
+														filtersFG.get(
 															header.filter
 																?.key ||
 																header.property
@@ -152,7 +183,7 @@
 													"
 												></i>
 												@if (
-													filterFG.get(
+													filtersFG.get(
 														header.filter?.key ||
 															header.property
 													)?.value?.rules;
@@ -160,7 +191,7 @@
 												) {
 													@if (rules.length) {
 														<span
-															class="badge rounded-pill text-bg-primary"
+															class="hub-table__filter-dropdown-badge badge rounded-pill text-bg-primary"
 														>
 															{{ rules.length }}
 														</span>
@@ -169,7 +200,7 @@
 											</div>
 											@if (dropdown.isOpened) {
 												<menu-filter
-													class="content filter-dropdown__content"
+													class="hub-table__filter-dropdown-content content filter-dropdown__content"
 													[header]="header"
 													[formControlName]="
 														header.filter?.key ||
@@ -186,15 +217,19 @@
 					</th>
 				}
 				@if (templateExpandingRows().length) {
-					<th class="sticky-end"></th>
+					<th
+						class="hub-table__header-cell hub-table__header-cell--expander sticky-end"
+					></th>
 				}
 			</tr>
 
 			<!-- Filtering -->
 			@if (hasColumnFilters()) {
-				<tr class="filter_row">
-					@if ((selectable() && multiple()) || batchActions?.length) {
-						<th class="filter_cell sticky-start"></th>
+				<tr class="hub-table__filter-row filter_row">
+					@if ((selectable() && multiple()) || batchActions.length) {
+						<th
+							class="hub-table__filter-cell filter_cell sticky-start"
+						></th>
 					}
 					@for (
 						header of fixedHeaders();
@@ -204,14 +239,14 @@
 						@let formControlName =
 							header.filter?.key || header.property;
 						<th
-							class="filter_cell"
+							class="hub-table__filter-cell filter_cell"
 							[class.sticky-start]="header.sticky === 'start'"
 							[class.sticky-end]="header.sticky === 'end'"
 						>
 							@if (
 								header.filter &&
-								header.filter?.mode !== 'menu' &&
-								filterFG.get(formControlName)
+								header.filter.mode !== 'menu' &&
+								filtersFG.get(formControlName)
 							) {
 								<ng-container
 									[ngTemplateOutlet]="
@@ -221,7 +256,7 @@
 									[ngTemplateOutletContext]="{
 										header: header,
 										formControl:
-											filterFG.get(formControlName)
+											filtersFG.get(formControlName)
 									}"
 								>
 								</ng-container>
@@ -231,10 +266,10 @@
 				</tr>
 			}
 		</thead>
-		<tbody>
+		<tbody class="hub-table__body">
 			@if (loading()) {
-				<tr>
-					<td [attr.colspan]="headersCount()">
+				<tr class="hub-table__body-row">
+					<td class="hub-table__cell" [attr.colspan]="headersCount()">
 						<ng-container
 							[ngTemplateOutlet]="
 								loadingTpt() || defaultLoadingTpt
@@ -244,7 +279,7 @@
 					</td>
 				</tr>
 			} @else {
-				@for (item of data(); track $index) {
+				@for (item of rows(); track $index) {
 					<ng-container
 						[ngTemplateOutlet]="templateRow() || defaultRowTemplate"
 						[ngTemplateOutletContext]="{ $implicit: item }"
@@ -255,54 +290,62 @@
 		</tbody>
 	</table>
 </div>
-
-<!-- Pagination -->
-@if (page()) {
-	@if (paginationPosition() == 'bottom' || paginationPosition() === 'both') {
-		<hub-paginator class="pager-container__paginator" [(page)]="page">
-		</hub-paginator>
+<div class="hub-table__bottom-bar">
+	<!-- Pagination -->
+	@if (page()) {
+		@if (
+			paginationPosition() == 'bottom' || paginationPosition() === 'both'
+		) {
+			<hub-paginator
+				class="hub-table__paginator pager-container__paginator"
+				[(page)]="$any(page)"
+				[numberOfPages]="numberOfPages()"
+			>
+			</hub-paginator>
+		}
+		<div class="hub-table__pagination-settings">
+			<label class="hub-table__pagination-label">
+				{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:
+			</label>
+			<select
+				class="hub-table__pagination-select"
+				[(ngModel)]="perPage"
+				[ngModelOptions]="{ standalone: true }"
+			>
+				@for (option of perPageOptions(); track option) {
+					<option
+						[value]="option"
+						class="hub-table__pagination-select-option"
+					>
+						{{ option }}
+					</option>
+				}
+			</select>
+		</div>
+		@if (totalItems() !== null && totalItems() !== undefined) {
+			<p class="hub-table__pagination-info">
+				{{
+					'SHOWING_X_OF_Y_ROWS'
+						| translate
+							: {
+									amount: rows().length,
+									total: totalItems()
+							  }
+						| ucfirst
+				}}
+			</p>
+		}
 	}
-	<div
-		class="pager-container__settings d-flex align-items-center gap-2 flex-nowrap"
-	>
-		<label class="pager-container__label text-nowrap fs-6 text-muted">
-			{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:
-		</label>
-		<select
-			class="pager-container__select form-select form-select-sm"
-			[(ngModel)]="perPage"
-			[ngModelOptions]="{ standalone: true }"
-		>
-			@for (option of perPageOptions(); track option) {
-				<option [value]="option" class="pager-container__select-option">
-					{{ option }}
-				</option>
-			}
-		</select>
-	</div>
-	@if (totalItems() !== null && totalItems() !== undefined) {
-		<p class="pager-container__info mb-0 fs-6 text-muted">
-			{{
-				'SHOWING_X_OF_Y_ROWS'
-					| translate
-						: {
-								amount: data.length,
-								total: totalItems()
-						  }
-					| ucfirst
-			}}
-		</p>
-	}
-}
-
+</div>
 <ng-template #defaultRowTemplate let-item>
 	<tr
+		class="hub-table__body-row"
 		(click)="onItemClick(item)"
-		[class.row-selected]="selectable() && item.selected"
-		[class.clickable-item]="clickFn"
+		[class.hub-table__body-row--selected]="selectable() && item.selected"
+		[class.hub-table__body-row--clickable]="clickFn()"
 	>
-		@if ((selectable() && multiple()) || batchActions?.length) {
-			<td class="sticky-start">
+		@if ((selectable() && multiple()) || batchActions.length) {
+			<td class="hub-table__cell hub-table__cell--select sticky-start">
 				<input
 					type="checkbox"
 					[(ngModel)]="item.selected"
@@ -313,6 +356,7 @@
 		}
 		@for (header of fixedHeaders(); track $index) {
 			<td
+				class="hub-table__cell"
 				[class.sticky-start]="header.sticky === 'start'"
 				[class.sticky-end]="header.sticky === 'end'"
 				[class.text-start]="header.align === 'start'"
@@ -327,24 +371,27 @@
 					[ngTemplateOutletContext]="{
 						header: header,
 						item: item,
-						property: getProperty(item, header.property)
+						property: item.data | get: header.property
 					}"
 				>
 				</ng-container>
 			</td>
 		}
 		@if (templateExpandingRows().length) {
-			<td class="actions sticky-end" [class.sticky-end]="stickyActions()">
+			<td
+				class="hub-table__cell hub-table__cell--expander actions sticky-end"
+				[class.sticky-end]="stickyActions()"
+			>
 				@if (templateExpandingRows().length) {
 					<button
 						(click)="toggleExpandedRow(item)"
 						type="button"
-						class="btn btn-link px-2"
+						class="hub-table__expander-btn btn btn-link px-2"
 					>
 						<i
-							class="fa"
-							[class.fa-caret-up]="item.unfold"
-							[class.fa-caret-down]="!item.unfold"
+							class="hub-table__expander-icon fa"
+							[class.fa-caret-up]="!item.collapsed"
+							[class.fa-caret-down]="!item.collapsed"
 						></i>
 					</button>
 				}
@@ -352,7 +399,7 @@
 		}
 		<!-- <td *ngIf="!lastColumnOnlyHasButtons && filterHeaders?.length"></td> -->
 	</tr>
-	@if (item.unfold) {
+	@if (!item.collapsed) {
 		@for (template of templateExpandingRows(); track template) {
 			<ng-container
 				[ngTemplateOutlet]="template.templateRef"
@@ -364,14 +411,20 @@
 </ng-template>
 
 <ng-template #defaultNoDataTpt>
-	<div class="alert alert-info d-flex align-items-center m-4" role="alert">
-		<i class="fa-solid fa-info fa-2x me-4 mr-4" aria-hidden="true"></i>
+	<div
+		class="hub-table__no-data alert alert-info d-flex align-items-center m-4"
+		role="alert"
+	>
+		<i
+			class="hub-table__no-data-icon fa-solid fa-info fa-2x me-4 mr-4"
+			aria-hidden="true"
+		></i>
 		{{ 'NO_RESULTS_FOUND' | translate | ucfirst }}
 	</div>
 </ng-template>
 
 <ng-template #defaultLoadingTpt>
-	<div>
+	<div class="hub-table__loading">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -444,7 +497,7 @@
 </ng-template>
 
 <ng-template #defaultErrorTpt>
-	<div class="m-4 p-4 text-center text-danger">
+	<div class="hub-table__error m-4 p-4 text-center text-danger">
 		<svg
 			aria-hidden="true"
 			focusable="false"
@@ -469,18 +522,19 @@
 <ng-template #defaultHeaderTpt let-header="header" let-property="property">
 	@if (header.icon) {
 		<i
-			class="fa-solid fa-{{ header.icon }}"
+			class="hub-table__header-icon fa-solid fa-{{ header.icon }}"
 			[class.me-2]="header.title"
 			aria-hidden="true"
 		></i>
 	}
 	<div
+		class="hub-table__header-title"
 		[class.me-auto]="header.align === 'start'"
 		[class.ms-auto]="header.align === 'end'"
 		[class.mx-auto]="header.align === 'center'"
 	>
 		@if (header.title) {
-			<span class="text-wrap">{{
+			<span class="hub-table__header-title-text text-wrap">{{
 				header.title ?? header.property | unwrapAsync
 			}}</span>
 		}
@@ -576,27 +630,27 @@
 >
 	@if (header.buttons) {
 		<div
-			class="d-flex flex-nowrap gap-2 justify-content-end align-items-center"
+			class="hub-table__cell-buttons d-flex flex-nowrap gap-2 justify-content-end align-items-center"
 		>
 			@for (button of header.buttons; track button) {
 				@if (button.buttons) {
 					<hub-table-dropdown
 						[options]="button"
 						[item]="item"
-						class="d-inline-block"
+						class="hub-table__cell-dropdown d-inline-block"
 					>
 					</hub-table-dropdown>
 				} @else {
 					@if (!(isHidden(button, item) | async)) {
 						<button
 							type="button"
-							class="btn px-1"
+							class="hub-table__cell-btn btn px-1"
 							[attr.title]="button.tooltip"
 							(click)="handleAction($event, button.handler, item)"
 							[ngClass]="button.classlist ?? []"
 						>
 							<div
-								class="d-flex flex-nowrap align-items-center gap-1"
+								class="hub-table__cell-btn-content d-flex flex-nowrap align-items-center gap-1"
 								[ngClass]="
 									button.color ? 'text-' + button.color : ''
 								"
@@ -605,9 +659,11 @@
 									[config]="button.icon"
 								></ng-hub-ui-icon>
 								@if (button.title) {
-									<ng-container class="button-label">
-										{{ button.title }}</ng-container
+									<ng-container
+										class="hub-table__cell-btn-label button-label"
 									>
+										{{ button.title }}
+									</ng-container>
 								}
 							</div>
 						</button>
@@ -616,6 +672,6 @@
 			}
 		</div>
 	} @else {
-		{{ property }}
+		<span class="hub-table__cell-value">{{ property }}</span>
 	}
 </ng-template>

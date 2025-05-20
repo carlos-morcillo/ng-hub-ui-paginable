@@ -1,0 +1,147 @@
+@if (batchActions?.length || options.searchable) {
+	<div class="d-flex justify-content-between gap-3">
+		<div class="ms-auto">
+			<div class="d-flex justify-content-end gap-2">
+				@if (options.searchable) {
+					<div class="input-group search_input-group">
+						<input
+							type="text"
+							class="form-control border border-light search_input"
+							[formControl]="searchFG"
+							[placeholder]="'SEARCH' | ucfirst"
+							(keyup.enter)="filter()"
+						/>
+						<div class="input-group-append">
+							<button
+								class="btn btn-light search_button"
+								type="button"
+								(click)="filter()"
+							>
+								<i class="fa fa-search" aria-hidden="true"></i>
+							</button>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+
+<ng-container
+	[ngTemplateOutlet]="containerTpt"
+	[ngTemplateOutletContext]="{
+		formArray: form,
+		isRoot: true,
+		items: items,
+		depth: 0
+	}"
+></ng-container>
+
+<ng-template
+	#containerTpt
+	let-formArray="formArray"
+	let-isRoot="isRoot"
+	let-items="items"
+	let-depth="depth"
+>
+	<ul class="list-group list-group-flush tree-list" [class.root]="isRoot">
+		@for (
+			formGroup of formArray.controls;
+			track formGroup;
+			let index = $index
+		) {
+			<li
+				class="list-group-item tree-list__node"
+				[class.clickable-item]="clickFn"
+				[formGroup]="formGroup"
+				(click)="
+					onItemClick(formGroup.value, depth, index);
+					$event.preventDefault();
+					$event.stopPropagation()
+				"
+			>
+				@if (formGroup.value; as item) {
+					<div
+						class="d-flex justify-content-between align-items-center gap-2"
+					>
+						@if (selectable === 'multiple') {
+							<input
+								class="form-check-input tree-list__node-checkbox"
+								type="checkbox"
+								formControlName="selected"
+								(click)="$event.stopPropagation()"
+							/>
+						}
+						<div class="tree-list__node-label">
+							<ng-container
+								[ngTemplateOutlet]="itemTpt || defaultItemtTpt"
+								[ngTemplateOutletContext]="{
+									data: items[index],
+									depth,
+									index,
+									collapsed:
+										!!formGroup.get('collapsed').value,
+									selected: formGroup.get('selected').value
+								}"
+							>
+							</ng-container>
+						</div>
+						<div
+							class="tree-list__node-buttons d-flex align-items-center gap-2"
+						>
+							@if (item[bindChildren]?.length) {
+								<button
+									class="btn"
+									(click)="
+										toggleCollapsed(
+											formGroup.get('collapsed')
+										);
+										$event.preventDefault();
+										$event.stopPropagation()
+									"
+								>
+									<i
+										class="fas"
+										[ngClass]="
+											item.collapsed
+												? 'fa-chevron-down'
+												: 'fa-chevron-up'
+										"
+									></i>
+								</button>
+							}
+						</div>
+					</div>
+					@if (item[bindChildren]?.length && !item.collapsed) {
+						<ng-container
+							[ngTemplateOutlet]="containerTpt"
+							[ngTemplateOutletContext]="{
+								formArray: formGroup.get('children'),
+								items: items[index][bindChildren],
+								depth: depth + 1
+							}"
+						></ng-container>
+					}
+				}
+			</li>
+		}
+	</ul>
+</ng-template>
+
+<ng-template #noDataRowTpt>
+	<li class="list-group-item">
+		<ng-container [ngTemplateOutlet]="noDataTpt || defaultNoDataTpt">
+		</ng-container>
+	</li>
+</ng-template>
+
+<ng-template #defaultNoDataTpt>
+	<div class="alert alert-info d-flex align-items-center m-4" role="alert">
+		<i class="fa fa-info fa-2x me-4 mr-4" aria-hidden="true"></i>
+		{{ 'NO_RESULTS_FOUND' | ucfirst }}
+	</div>
+</ng-template>
+
+<ng-template #defaultItemtTpt let-data="data">
+	{{ data[bindLabel] }}
+</ng-template>

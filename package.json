@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-table",
-	"version": "19.1.0",
+	"version": "19.4.0",
 	"peerDependencies": {
 		"@angular/common": ">=18.0.0",
 		"@angular/core": ">=18.0.0"
@@ -10,10 +10,10 @@
 	},
 	"sideEffects": false,
 	"private": false,
-	"description": "Paginated table/list",
+	"description": "Highly customizable Angular table and list components with pagination, sorting and filtering support.",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/carlos-morcillo/ng-paginable.git"
+		"url": "git+https://github.com/carlos-morcillo/ng-hub-ui-paginable.git"
 	},
 	"keywords": [
 		"table",
@@ -33,7 +33,7 @@
 	"author": "Carlos Morcillo <carlos.morcillo@me.com>",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/carlos-morcillo/ng-paginable/issues"
+		"url": "https://github.com/carlos-morcillo/ng-hub-ui-paginable/issues"
 	},
-	"homepage": "https://github.com/carlos-morcillo/ng-paginable#readme"
+	"homepage": "https://github.com/carlos-morcillo/ng-hub-ui-paginable#readme"
 }

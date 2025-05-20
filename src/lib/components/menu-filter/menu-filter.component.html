@@ -45,7 +45,7 @@
 							![
 								nullMatchModes.IsNull,
 								nullMatchModes.IsNotNull
-							].includes(group.get('matchMode').value)
+							].includes(group.get('matchMode')?.value)
 						) {
 							<div>
 								@switch (header.filter?.type) {
@@ -92,7 +92,8 @@
 										>
 											<option [ngValue]="null">
 												{{
-													header.filter.placeholder ??
+													header.filter
+														?.placeholder ??
 														'SELECT_ONE'
 														| translate
 														| ucfirst
@@ -131,7 +132,7 @@
 							</div>
 						}
 					</div>
-					@if (rulesFA?.controls.length > 1) {
+					@if (rulesFA.controls.length > 1) {
 						<div class="d-flex justify-content-end">
 							<button
 								class="btn btn-sm text-danger text-center w-100"
@@ -143,7 +144,7 @@
 						</div>
 					}
 				</li>
-				@if (rulesFA?.controls.length > 1) {
+				@if (rulesFA.controls.length > 1) {
 					<li class="filter__rule__divider">
 						<hr class="dropdown-divider" />
 					</li>

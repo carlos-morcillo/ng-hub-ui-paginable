@@ -60,9 +60,9 @@
 				>{{ page() }}</a
 			>
 		</li>
-		@if (total()) {
+		@if (numberOfPages()) {
 			<li class="page-item pager__item">
-				@if (page() + 1 <= $any(total())) {
+				@if (page() + 1 <= numberOfPages()!) {
 					<a
 						role="button"
 						class="page-link pager__link"
@@ -72,7 +72,7 @@
 					>
 				}
 			</li>
-			@if (page() + 1 < $any(total())) {
+			@if (page() + 1 < numberOfPages()!) {
 				<li
 					class="page-item pager__item pager__item--disabled disabled"
 				>
@@ -86,8 +86,8 @@
 			}
 			<li
 				class="page-item pager__item"
-				[class.pager__item--disabled]="page() >= $any(total())"
-				[class.disabled]="page() >= $any(total())"
+				[class.pager__item--disabled]="page() >= numberOfPages()!"
+				[class.disabled]="page() >= numberOfPages()!"
 			>
 				<a
 					role="button"
@@ -103,14 +103,14 @@
 			</li>
 			<li
 				class="page-item pager__item"
-				[class.pager__item--disabled]="page() === total()"
-				[class.disabled]="page() === total()"
+				[class.pager__item--disabled]="page() === numberOfPages()"
+				[class.disabled]="page() === numberOfPages()"
 			>
 				<a
 					role="button"
 					class="page-link pager__link"
 					href="javascript:{}"
-					(click)="page.set(total() ?? 1)"
+					(click)="page.set(numberOfPages() ?? 1)"
 				>
 					<i class="pager__icon fa fa-angle-double-right"></i>
 				</a>

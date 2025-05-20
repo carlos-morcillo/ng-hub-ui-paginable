@@ -1,25 +1,19 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import {
-	AsyncPipe,
-	JsonPipe,
-	NgClass,
-	NgTemplateOutlet
-} from '@angular/common';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
 	Component,
-	EnvironmentInjector,
-	EventEmitter,
-	Output,
 	TemplateRef,
 	computed,
 	contentChild,
 	contentChildren,
+	effect,
 	forwardRef,
 	inject,
 	input,
 	model,
 	viewChildren
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
 	FormGroup,
 	FormsModule,
@@ -27,9 +21,15 @@ import {
 	ReactiveFormsModule,
 	UntypedFormBuilder
 } from '@angular/forms';
-import { get } from 'lodash';
-import { Observable, isObservable, of } from 'rxjs';
 
+import {
+	BehaviorSubject,
+	Observable,
+	debounceTime,
+	distinctUntilChanged,
+	isObservable,
+	of
+} from 'rxjs';
 import { TableBreakpoint } from '../../constants/breakpoints';
 import { PaginableTableCellDirective } from '../../directives/paginable-table-cell.directive';
 import { PaginableTableErrorDirective } from '../../directives/paginable-table-error.directive';
@@ -39,21 +39,19 @@ import { PaginableTableHeaderDirective } from '../../directives/paginable-table-
 import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
 import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
-import { FilterChangeEvent } from '../../interfaces/filter-change-event';
 import { ItemClickEvent } from '../../interfaces/item-click-event';
 import { PaginableTableButton } from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
-import { PaginableTableItem } from '../../interfaces/paginable-table-item';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
-import { PaginationParamsChangeEvent } from '../../interfaces/params-change-event';
+import { PaginationState } from '../../interfaces/pagination-state';
+import { TableRow } from '../../interfaces/table-row';
+import { GetPipe } from '../../pipes/get.pipe';
 import { IsObservablePipe } from '../../pipes/is-observable.pipe';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
 import { UnwrapAsyncPipe } from '../../pipes/unwrap-async.pipe';
-import { PaginableService } from '../../services/paginable.service';
-import { PaginationService } from '../../services/pagination.service';
 import { generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { HubIconComponent } from '../icon/icon.component';
@@ -65,8 +63,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 @Component({
 	selector: 'hub-table, hub-ui-table',
 	standalone: true,
-	templateUrl: './paginable-table.component.html',
-	styleUrls: ['./paginable-table.component.scss'],
+	templateUrl: './table.component.html',
 	imports: [
 		NgClass,
 		NgTemplateOutlet,
@@ -84,8 +81,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		HubIconComponent,
 		PaginatorComponent,
 		PaginableTableRangeInputComponent,
-		JsonPipe,
-		AsyncPipe
+		AsyncPipe,
+		GetPipe
 	],
 	animations: [
 		trigger('fadeInOut', [
@@ -101,19 +98,16 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => PaginableTableComponent),
+			useExisting: forwardRef(() => HubTableComponent),
 			multi: true
 		}
 	],
 	host: {
-		class: 'd-block paginable-table'
+		class: 'hub-table'
 	}
 })
-export class PaginableTableComponent<T = any> {
-	#injector = inject(EnvironmentInjector);
+export class HubTableComponent<T = any> {
 	#fb = inject(UntypedFormBuilder);
-	#configSvc = inject(PaginableService);
-	#paginationSvc = inject(PaginationService);
 
 	id = input(generateUniqueId(16));
 
@@ -124,114 +118,13 @@ export class PaginableTableComponent<T = any> {
 		variant: null
 	});
 
-	errorOcurred: boolean = false;
-
-	// /**
-	//  * The number of columns in the table.
-	//  *
-	//  * @type {number}
-	//  * @memberof PaginableTableComponent
-	//  */
-	// columnsCount: number = 0;
-
-	// get lastColumnOnlyHasButtons() {
-	// 	if (!this._headers) {
-	// 		return null;
-	// 	}
-	// 	const lastHeader = this._headers[this._headers.length - 1];
-	// 	return (
-	// 		lastHeader.constructor.name === 'Object' &&
-	// 		(lastHeader as PaginableTableHeader).buttons &&
-	// 		!(lastHeader as PaginableTableHeader).property
-	// 	);
-	// }
-
-	// /**
-	//  * Items paginated
-	//  *
-	//  * @private
-	//  * @type {PaginableTablePagination}
-	//  * @memberof PaginableTableComponent
-	//  */
-	// private _pagination: PaginableTablePagination | null = null;
-	// @Input()
-	// get pagination():
-	// 	| PaginableTablePagination
-	// 	| Observable<PaginableTablePagination>
-	// 	| null {
-	// 	return this._pagination;
-	// }
-	// set pagination(
-	// 	v: PaginableTablePagination | Observable<PaginableTablePagination>
-	// ) {
-	// 	if (!v) {
-	// 		this.data = null;
-	// 	} else if (isObservable(v)) {
-	// 		(v as Observable<PaginableTablePagination>)
-	// 			.pipe(
-	// 				map((value: PaginableTablePagination) => ({
-	// 					loading: false,
-	// 					error: false,
-	// 					value: value
-	// 				})),
-	// 				startWith({ loading: true, error: false, value: null }),
-	// 				catchError((error) =>
-	// 					of({ loading: false, error, value: null })
-	// 				),
-	// 				map((o) => {
-	// 					this.loading = !!o.loading;
-	// 					this.errorOcurred = o.error;
-	// 					return o.value;
-	// 				})
-	// 			)
-	// 			.subscribe((result: PaginableTablePagination | null) => {
-	// 				this.data = result;
-	// 				this.markSelected();
-	// 			});
-	// 	} else {
-	// 		this.data = v as PaginableTablePagination;
-	// 	}
-	// 	this.allRowsSelected = false;
-	// 	if (this.selectable || this.batchActions?.length) {
-	// 		this.markSelected();
-	// 	}
-	// }
-
-	// /**
-	//  * Items not paginated
-	//  *
-	//  * @private
-	//  * @type {any[]}
-	//  * @memberof PaginableTableComponent
-	//  */
-	// private _rows: any[] | null = null;
-	// @Input()
-	// get rows(): any[] | null {
-	// 	return this._rows;
-	// }
-	// set rows(v: any[]) {
-	// 	this._rows = v;
-	// 	const params = {
-	// 		page: 1,
-	// 		ordination: this.ordination(),
-	// 		searchText: this.searchText(),
-	// 		searchKeys: this.searchKeys,
-	// 		paginate: this.paginate
-	// 	};
-	// 	this.data = this.rows
-	// 	#paginationSvc.generate(this.rows, params)
-	// 		: null;
-	// 	this.allRowsSelected = false;
-	// 	this.markSelected();
-	// }
-
 	/**
 	 * Collection of selected rows
 	 *
 	 * @type {Array<T>}
 	 * @memberof PaginableTableComponent
 	 */
-	selectedItems: Array<T> = [];
+	value: Array<T> = [];
 
 	/**
 	 * Set whether all page rows are selecteds
@@ -242,46 +135,12 @@ export class PaginableTableComponent<T = any> {
 	allRowsSelected: boolean = false;
 
 	/**
-	 * If set, it will be the property returned in the selected event
+	 * Time to ouput the filter form value
 	 *
-	 * @type {string}
+	 * @type {number}
 	 * @memberof PaginableTableComponent
 	 */
-	readonly selectableProperty = input<string>();
-
-	/**
-	 * Event triggered when a row or multiples rows are selected or unselected
-	 *
-	 * @memberof PaginableTableComponent
-	 */
-	@Output() selected = new EventEmitter<any>();
-
-	// /**
-	//  * Collection of actions for items
-	//  *
-	//  * @type {PaginableTableRowAction[]}
-	//  * @memberof PaginableTableComponent
-	//  */
-	// private _batchActions: Array<
-	// 	PaginableTableDropdown | PaginableTableButton
-	// > = [];
-	// @Input()
-	// get batchActions(): Array<PaginableTableDropdown | PaginableTableButton> {
-	// 	return this._batchActions;
-	// }
-	// set batchActions(v: Array<PaginableTableDropdown | PaginableTableButton>) {
-	// 	this._batchActions = v.map((b) => {
-	// 		if ((b as PaginableTableDropdown).buttons) {
-	// 			b = { fill: null, position: 'start', color: 'light', ...b };
-	// 		}
-	// 		return b;
-	// 	});
-	// 	// this._countColumns();
-	// }
-
-	// batchActionsDropdown?: PaginableTableDropdown;
-
-	// batchAction?: PaginableTableButton | null = null;
+	readonly debounce = input<number>(0);
 
 	readonly headers = model<Array<PaginableTableHeader | string>>([]);
 
@@ -314,18 +173,13 @@ export class PaginableTableComponent<T = any> {
 			}
 		}
 		return fixedHeaders;
-
-		// this._initializeFilterForm();
-
-		// // We need to wait for all other inputs to be ready before initializing the column count
-		// setTimeout(() => this._countColumns());
 	});
 
 	headersCount = computed(() => {
 		let count = this.fixedHeaders().length;
 		if (
 			(this.selectable() && this.multiple()) ||
-			this.batchActions?.length
+			this.batchActions().length
 		) {
 			count++;
 		}
@@ -346,30 +200,113 @@ export class PaginableTableComponent<T = any> {
 		return headerFilters;
 	});
 
+	readonly filters = model<Record<string, {}> | null>({});
+
+	/**
+	 * Filter form
+	 *
+	 * @type {FormGroup}
+	 * @memberof PaginableTableComponent
+	 */
+	filtersFG: FormGroup = new FormGroup({});
+
+	filterLoading: boolean = false;
+
+	filterEffect = effect(() => {
+		const filters = this.filters();
+
+		// Le damos un poco de tiempo para
+		setTimeout(() => {
+			this.filtersFG.patchValue(filters ?? {}, { emitEvent: false });
+		}, 16);
+	});
+
+	filtersChange = toSignal(
+		this.filtersFG.valueChanges.pipe(debounceTime(this.debounce()))
+	);
+
+	filtersFGChangeEffect = effect(() => {
+		const filters = this.filtersChange();
+		if (filters === undefined) return;
+
+		if (this.setFilters) {
+			this.filters.set(filters);
+		}
+		this.setFilters = true;
+	});
+
 	hasColumnFilters = computed(() => {
 		return this.headerFilters().some(
 			({ filter }) => filter?.mode !== 'menu'
 		);
 	});
 
-	readonly data = model<Array<T>>();
+	readonly rows = input<
+		Array<TableRow<T>>,
+		Array<T> | PaginationState | null | undefined
+	>([], {
+		alias: 'data',
+		transform: (
+			v: Array<T> | PaginationState | null | undefined
+		): Array<TableRow<T>> => {
+			if (!v) return [];
+
+			const items = Array.isArray(v) ? v : ((v.data as Array<T>) ?? []);
+
+			if (!Array.isArray(v)) {
+				this.page.set(v.page);
+				this.perPage.set(v.perPage);
+				this.totalItems.set(v.totalItems);
+			}
+
+			return items.map((item) => this.transformIntoRow(item));
+		}
+	});
+
+	rowsEffect = effect(() => {
+		const rows = this.rows();
+		this.markSelected();
+	});
+
+	setFilters: boolean = true;
+
+	transformIntoRow(data: T): TableRow<T> {
+		return {
+			selected: false,
+			collapsed: true,
+			data
+		};
+	}
+
+	readonly perPageOptions = input<Array<number>>([20, 50, 100]);
+	readonly page = model<number | null>(null);
+	readonly perPage = model<number | null>(null);
+	readonly totalItems = model<number | null>(null);
+
+	readonly numberOfPages = computed((): number | null => {
+		if (this.perPage() && this.totalItems()) {
+			return Math.ceil(this.totalItems()! / this.perPage()!);
+		}
+		return null;
+	});
 
 	readonly ordination = model<PaginableTableOrdination>();
 
-	readonly searchTexPaginatorComponentt = model<string>();
+	/**
+	 * Set if the data must be paginated
+	 *
+	 * @type {boolean}
+	 * @memberof PaginableTableComponent
+	 */
+	readonly paginate = input<boolean>(true);
 
-	readonly page = model<number>(1);
-
-	readonly perPage = model<number>(20);
-
-	readonly perPageOptions = input<Array<number>>([20, 50, 100]);
-
-	readonly totalItems = input<number | null>(null);
-
-	paginated = computed(() => {
-		console.log(this.page() && this.perPage());
-		return this.page() && this.perPage();
-	});
+	/**
+	 * If set, it will be the property returned in the selected event
+	 *
+	 * @type {string}
+	 * @memberof PaginableTableComponent
+	 */
+	readonly bindValue = input<string>();
 
 	readonly loading = model<boolean>(false);
 
@@ -377,26 +314,30 @@ export class PaginableTableComponent<T = any> {
 
 	readonly paginationInfo = input<boolean>(true);
 
-	// TODO: Sustituir por searchFn
-	readonly searchKeys = input<string[]>([]);
-
 	readonly stickyActions = input<boolean>(false);
 
 	readonly batchActions = input<
+		Array<PaginableTableDropdown | PaginableTableButton>,
 		Array<PaginableTableDropdown | PaginableTableButton>
-	>([]);
+	>([], {
+		transform: (
+			value: Array<PaginableTableDropdown | PaginableTableButton>
+		) => {
+			return value.map((item) => {
+				if ((item as PaginableTableDropdown).buttons) {
+					item = {
+						fill: null,
+						position: 'start',
+						color: 'light',
+						...item
+					};
+				}
+				return item;
+			});
+		}
+	});
 
 	readonly selectable = input<boolean>(false);
-
-	/**
-	 * Set whether the rows are selectable
-	 *
-	 * @type {boolean}
-	 * @memberof PaginableTableComponent
-	 */
-	readonly searchable = input<boolean>(true);
-
-	readonly searchTerm = model<string>();
 
 	/**
 	 * Set whether the selectable can be multiple
@@ -407,30 +348,48 @@ export class PaginableTableComponent<T = any> {
 	readonly multiple = input<boolean>(false);
 
 	/**
+	 * Set whether the rows are selectable
+	 *
+	 * @type {boolean}
+	 * @memberof PaginableTableComponent
+	 */
+	readonly searchable = input<boolean>(true);
+
+	readonly searchTerm = model<string>('');
+
+	searchProxy$ = new BehaviorSubject<string>(this.searchTerm());
+
+	searchTermEffect = effect(() => {
+		const delay = this.debounce();
+		// console.log('delay');
+
+		const sub = this.searchProxy$
+			.pipe(debounceTime(delay), distinctUntilChanged())
+			.subscribe((value) => {
+				// console.log('subscribe');
+				this.searchTerm.set(value);
+			});
+
+		// Inicializar el proxy con el valor actual
+		this.searchProxy$.next(this.searchTerm());
+
+		return () => {
+			return sub.unsubscribe();
+		};
+	});
+
+	readonly searchFn = input<(a: T, b: T) => boolean>();
+
+	// TODO: Implementar
+	readonly compareFn = input<(a: T, b: T) => boolean>();
+
+	/**
 	 * On item click event emitter
 	 *
 	 * @memberof PaginableTableComponent
 	 */
 	readonly clickFn =
 		input<(event: ItemClickEvent<T>) => void | Promise<void>>();
-
-	/**
-	 * On page click event emitter
-	 *
-	 * @memberof PaginableTableComponent
-	 */
-	// @Output() pageClick = new EventEmitter<number>();
-
-	/**
-	 * On params change event emitter
-	 *
-	 * @memberof PaginableTableComponent
-	 */
-	@Output() onParamsChange = new EventEmitter<PaginationParamsChangeEvent>();
-	@Output() filterChange = new EventEmitter<FilterChangeEvent>();
-
-	// TODO: Put default config
-	mapping: any = this.#configSvc.mapping;
 
 	readonly responsive = input<TableBreakpoint | null>(null);
 
@@ -444,37 +403,7 @@ export class PaginableTableComponent<T = any> {
 		return null;
 	});
 
-	/**
-	 * Filter form
-	 *
-	 * @type {FormGroup}
-	 * @memberof PaginableTableComponent
-	 */
-	filterFG: FormGroup = new FormGroup({});
-
-	// filterFGSct?: Subscription;
-
-	filterLoading: boolean = false;
-
-	// filterTrigger$: Subject<void> = new Subject();
-
-	/**
-	 * Time to ouput the filter form value
-	 *
-	 * @type {number}
-	 * @memberof PaginableTableComponent
-	 */
-	readonly debounce = input<number>(1024);
-
 	disabled: boolean = false;
-
-	/**
-	 * Set if the data must be paginated
-	 *
-	 * @type {boolean}
-	 * @memberof PaginableTableComponent
-	 */
-	readonly paginate = input<boolean>(true);
 
 	readonly templateRow = contentChild(PaginableTableRowDirective, {
 		read: TemplateRef
@@ -497,19 +426,11 @@ export class PaginableTableComponent<T = any> {
 
 	readonly dropdownComponents = viewChildren(DropdownComponent);
 
-	// get specificSearchFG(): FormGroup {
-	// 	return this.filterFG.get('specificSearch') as FormGroup;
-	// }
-
-	// ngOnDestroy(): void {
-	// 	this.filterFGSct?.unsubscribe();
-	// }
-
 	writeValue(value: any): void {
 		if (value) {
-			this.selectedItems = Array.isArray(value) ? value : [value];
+			this.value = Array.isArray(value) ? value : [value];
 		} else {
-			this.selectedItems = [];
+			this.value = [];
 		}
 		this.markSelected();
 	}
@@ -530,18 +451,6 @@ export class PaginableTableComponent<T = any> {
 	}
 
 	/**
-	 * Obtiene la propiedad del objeto cuya clave es pasada por parámetro
-	 *
-	 * @param {object} item
-	 * @param {string} key
-	 * @returns {*}
-	 * @memberof PaginableTableComponent
-	 */
-	getProperty(item: object, key: string): any {
-		return get(item, key);
-	}
-
-	/**
 	 * Handles click events by extracting specific properties and passing them to a callback function.
 	 *
 	 * @param  - The `onItemClick` function takes in the following parameters: collapsed, selected and item.
@@ -553,6 +462,7 @@ export class PaginableTableComponent<T = any> {
 	 * @returns If the `clickFn` property is not defined in the current context, the `onItemClick` function will return without
 	 * executing any further code.
 	 */
+	// TODO: Move to a parent
 	onItemClick(
 		{ collapsed, selected, ...item },
 		depth?: number,
@@ -572,22 +482,6 @@ export class PaginableTableComponent<T = any> {
 			item: item as T
 		});
 	}
-
-	filter() {
-		debugger;
-		// if (!this.data) {
-		// 	return;
-		// }
-		// this.data.currentPage = 1;
-		// this.filterChange.emit({
-		// 	searchText: this.searchText(),
-		// 	specificSearch: this.specificSearchFG?.value ?? null
-		// });
-	}
-
-	// pageClicked(page: number) {
-	// 	this.page.set(page);
-	// }
 
 	/**
 	 * If paging is done on the server, a parameter change subscription is launched. Otherwise,
@@ -616,32 +510,7 @@ export class PaginableTableComponent<T = any> {
 					this.ordination()?.direction === 'ASC' ? 'DESC' : 'ASC'
 			});
 		}
-		// 	this.triggerTheParamChanges();
 	}
-
-	// triggerTheParamChanges() {
-	// 	if (!this.data) {
-	// 		return;
-	// 	}
-	// 	const params: PaginationParamsChangeEvent = {
-	// 		page: this.data.currentPage,
-	// 		perPage: this.itemsPerPage,
-	// 		ordination: this.ordination(),
-	// 		searchText: this.searchText(),
-	// 		searchKeys: this.searchKeys,
-	// 		paginate: this.paginate
-	// 	};
-
-	// 	Object.keys(params).forEach(
-	// 		(k) => params[k] == null && delete params[k]
-	// 	);
-
-	// 	if (!this.rows) {
-	// 		this.onParamsChange.next(params);
-	// 	} else {
-	// 		this.data#paginationSvc.generate(this.rows, params);
-	// 	}
-	// }
 
 	/**
 	 * Get the ordination class
@@ -650,7 +519,9 @@ export class PaginableTableComponent<T = any> {
 	 * @returns
 	 * @memberof PaginableTableComponent
 	 */
-	getOrdenationClass(header: PaginableTableHeader) {
+	getOrdenationClass(
+		header: PaginableTableHeader
+	): 'fa-sort' | 'fa-sort-up' | 'fa-sort-down' {
 		if (
 			!this.ordination ||
 			this.ordination()?.property !== header.property
@@ -735,16 +606,8 @@ export class PaginableTableComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	handleBatchAction(event: any) {
-		event.handler(this.selectedItems);
+		event.handler(this.value);
 	}
-
-	/**
-	 * Determines whether to display the batch actions menu
-	 *
-	 * @type {boolean}
-	 * @memberof PaginableTableComponent
-	 */
-	batchActionsShown: boolean = false;
 
 	// TODO: Hacer para todas las columnas
 	isHidden(button: PaginableTableButton, item: any): Observable<boolean> {
@@ -760,11 +623,11 @@ export class PaginableTableComponent<T = any> {
 	/**
 	 * Expand or unexpand an expanding row
 	 *
-	 * @param {PaginableTableItem} item
+	 * @param {TableRow} item
 	 * @memberof PaginableTableComponent
 	 */
-	toggleExpandedRow(item: PaginableTableItem) {
-		item.unfold = !item.unfold;
+	toggleExpandedRow(item: TableRow) {
+		item.collapsed = !item.collapsed;
 	}
 
 	/**
@@ -774,21 +637,21 @@ export class PaginableTableComponent<T = any> {
 	 */
 	toggleAll() {
 		this.allRowsSelected = !this.allRowsSelected;
-		if (!this.data) {
+		const rows = this.rows();
+		if (!rows) {
 			return;
 		}
-		this.data[this.mapping.data].forEach((o) => {
-			const selectableProperty = this.selectableProperty();
-			const needle = selectableProperty ? o[selectableProperty] : o;
-			const index = this.selectedItems.indexOf(needle);
+		for (const row of rows) {
+			const bindValue = this.bindValue();
+			const needle = bindValue ? row.data[bindValue] : row.data;
+			const index = this.value.indexOf(needle);
 			if (index > -1 && !this.allRowsSelected) {
-				this.selectedItems.splice(index, 1);
+				this.value.splice(index, 1);
 			} else if (index === -1 && this.allRowsSelected) {
-				this.selectedItems.push(needle);
+				this.value.push(needle);
 			}
-			o.selected = this.allRowsSelected;
-		});
-		this.selected.emit(this.selectedItems);
+			row.selected = this.allRowsSelected;
+		}
 		this.emitValue();
 	}
 
@@ -798,37 +661,34 @@ export class PaginableTableComponent<T = any> {
 	 * @param {*} item
 	 * @memberof PaginableTableComponent
 	 */
-	toggle(item: any) {
-		if (!this.data) {
+	toggle(item: TableRow<T>) {
+		const rows = this.rows();
+		if (!rows) {
 			return;
 		}
-		const selectableProperty = this.selectableProperty();
-		const needle = selectableProperty ? item[selectableProperty] : item;
-		const index = this.selectedItems.indexOf(needle);
+
+		const bindValue = this.bindValue();
+		const needle = bindValue ? item.data[bindValue] : item.data;
+
+		const index = this.value.indexOf(needle);
 		if (index > -1) {
-			this.selectedItems.splice(index, 1);
+			this.value.splice(index, 1);
 			item.selected = false;
 		} else {
-			this.selectedItems.push(needle);
+			this.value.push(needle);
 			item.selected = true;
 		}
 
 		if (!this.multiple()) {
-			this.selectedItems = item.selected ? [needle] : [];
-			this.data[this.mapping.data].forEach((o) => {
-				const selectablePropertyValue = this.selectableProperty();
-				const needle = selectablePropertyValue
-					? o[selectablePropertyValue]
-					: o;
-				o.selected = this.selectedItems.indexOf(needle) > -1;
+			this.value = item.selected ? [needle] : [];
+			rows.forEach((o) => {
+				const needle = bindValue ? o[bindValue] : o;
+				o.selected = this.value.indexOf(needle) > -1;
 			});
 		} else {
-			this.allRowsSelected = this.data[this.mapping.data].every(
-				(o) => o.selected
-			);
+			this.allRowsSelected = rows.every((o) => o.selected);
 		}
 
-		this.selected.emit(this.selectedItems);
 		this.emitValue();
 	}
 
@@ -838,17 +698,26 @@ export class PaginableTableComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	markSelected() {
-		if (!this.data?.[this.mapping.data]?.length) {
+		const rows = this.rows();
+		if (!rows?.length) {
 			return;
 		}
-		this.data[this.mapping.data].forEach((o) => {
-			const selectableProperty = this.selectableProperty();
-			const needle = selectableProperty ? o[selectableProperty] : o;
-			o.selected = this._contains(this.selectedItems, needle);
+
+		const bindValue = this.bindValue();
+
+		rows.forEach((row) => {
+			const needle = bindValue ? row.data[bindValue] : row.data;
+			row.selected = this._contains(this.value, needle);
 		});
-		this.allRowsSelected = this.data[this.mapping.data].every(
-			(o) => o.selected
-		);
+		this.allRowsSelected = rows.every((o) => o.selected);
+	}
+
+	/**
+	 * Emite el valor de los items seleccionados
+	 *
+	 */
+	emitValue() {
+		this.onChange(this.multiple() ? this.value : this.value[0]);
 	}
 
 	/**
@@ -860,6 +729,7 @@ export class PaginableTableComponent<T = any> {
 	 * @return {*}  {boolean}
 	 * @memberof PaginableTableComponent
 	 */
+	// TODO: Move to utils file
 	private _contains(list: any[], needle: any): boolean {
 		if (typeof needle === 'object' && needle !== null) {
 			list = list.map((o) => {
@@ -873,18 +743,24 @@ export class PaginableTableComponent<T = any> {
 		return list.indexOf(needle) > -1;
 	}
 
+	/**
+	 * Initializes the filters form group by creating form controls for each header filter.
+	 * Maps header filters to form controls using either the filter key or property name as the control name.
+	 * The initial value for each control is set to null.
+	 */
 	initializeFilterFG() {
-		this.filterFG = this.#fb.group(
-			Object.values(this.headerFilters()).reduce(
-				(acc, { filter = null, property }) => {
-					return {
-						...acc,
-						[filter?.key || property]: this.#fb.control(null)
-					};
-				},
-				{}
-			)
-		);
+		Object.keys(this.filtersFG.controls).forEach((controlName) => {
+			this.filtersFG.removeControl(controlName);
+		});
+
+		for (const { filter = null, property } of this.headerFilters()) {
+			this.filtersFG.addControl(
+				filter?.key || property,
+				this.#fb.control(null)
+			);
+		}
+		// NOTE: Evitamos que al saltar el cambio de filtros del formulario, se restablezcan los filtros.
+		this.setFilters = false;
 	}
 
 	/**
@@ -892,18 +768,8 @@ export class PaginableTableComponent<T = any> {
 	 *
 	 * @memberof PaginableTableComponent
 	 */
-	clearAdvancedFilters(): void {
-		this.filterFG.reset();
-	}
-
-	/**
-	 * Emite el valor de los items seleccionados
-	 *
-	 */
-	emitValue() {
-		this.onChange(
-			this.multiple() ? this.selectedItems : this.selectedItems[0]
-		);
+	clearFilters(): void {
+		this.filtersFG.reset();
 	}
 
 	/**

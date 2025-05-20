@@ -36,7 +36,7 @@ export class HubIconComponent implements Icon {
 	 * @type {string | Icon}
 	 */
 	@Input({ required: true })
-	set config(value: string | Icon) {
+	set config(value: string | Icon | undefined) {
 		if (!value) {
 			value = '';
 		}

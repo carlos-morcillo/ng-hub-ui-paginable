@@ -13,16 +13,15 @@ import {
 	NG_VALUE_ACCESSOR,
 	ReactiveFormsModule
 } from '@angular/forms';
-import { PaginatorComponent } from '../../components/paginator/paginator.component';
-import { PaginableListItemDirective } from '../../directives/paginable-list-item.directive';
-import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
-import { ItemClickEvent } from '../../interfaces/item-click-event';
-import { PaginableTableButton } from '../../interfaces/paginable-table-button';
-import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
-import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
-import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
-import { TranslatePipe } from '../../pipes/translate.pipe';
-import { getValue } from '../../utils';
+import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
+import { PaginableTableNotFoundDirective } from '../../../directives/paginable-table-not-found.directive';
+import { ItemClickEvent } from '../../../interfaces/item-click-event';
+import { PaginableTableButton } from '../../../interfaces/paginable-table-button';
+import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
+import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
+import { UcfirstPipe } from '../../../pipes/ucfirst.pipe';
+import { getValue } from '../../../utils';
+import { PaginatorComponent } from '../../paginator/paginator.component';
 
 @Component({
 	selector: 'hub-list, hub-ui-list, hub-paginable-list',
@@ -43,7 +42,6 @@ import { getValue } from '../../utils';
 		ReactiveFormsModule,
 		PaginatorComponent,
 		PaginableTableNotFoundDirective,
-		TranslatePipe,
 		UcfirstPipe
 	],
 	standalone: true
