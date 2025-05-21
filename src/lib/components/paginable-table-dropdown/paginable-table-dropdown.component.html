@@ -6,44 +6,55 @@
 		[attr.title]="options.tooltip"
 		data-toggle="dropdown"
 		[attr.aria-expanded]="shown"
-		(click)="shown = !shown"
+		(click)="toggle()"
 		[disabled]="disabled"
 	>
 		<div class="d-flex flex-nowrap align-items-center gap-1">
 			<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
 			@if (options.title) {
-			{{ options.title }}
+				{{ options.title }}
 			}
 		</div>
 	</button>
-	<div
-		class="dropdown-menu dropdown-menu-{{ options.position }}"
-		[class.show]="shown"
-		[ngStyle]="{
-			right:
-				options.position == 'end' || options.position === 'right'
-					? 0
-					: 'initial'
-		}"
-	>
-		@for (dropdownItem of options.buttons; track dropdownItem) { @if
-		(!dropdownItem.hidden) {
-		<button
-			class="dropdown-item"
-			type="button"
-			[attr.title]="dropdownItem.tooltip"
-			[ngClass]="
-				dropdownItem.color ? 'text-' + dropdownItem.color : 'text-dark'
-			"
-			(click)="item && dropdownItem.handler && dropdownItem.handler(item)"
+	<ng-template #dropdownTpt>
+		<div
+			class="dropdown-menu dropdown-menu-{{ options.position }}"
+			[class.show]="shown"
+			[ngStyle]="{
+				right:
+					options.position == 'end' || options.position === 'right'
+						? 0
+						: 'initial'
+			}"
 		>
-			<div class="d-flex align-items-center gap-2">
-				<ng-hub-ui-icon [config]="dropdownItem.icon"></ng-hub-ui-icon>
-				@if (dropdownItem.title) {
-				{{ dropdownItem.title }}
+			@for (dropdownItem of options.buttons; track dropdownItem) {
+				@if (!dropdownItem.hidden) {
+					<button
+						class="dropdown-item"
+						type="button"
+						[attr.title]="dropdownItem.tooltip"
+						[ngClass]="
+							dropdownItem.color
+								? 'text-' + dropdownItem.color
+								: 'text-dark'
+						"
+						(click)="
+							item &&
+								dropdownItem.handler &&
+								dropdownItem.handler(item)
+						"
+					>
+						<div class="d-flex align-items-center gap-2">
+							<ng-hub-ui-icon
+								[config]="dropdownItem.icon"
+							></ng-hub-ui-icon>
+							@if (dropdownItem.title) {
+								{{ dropdownItem.title }}
+							}
+						</div>
+					</button>
 				}
-			</div>
-		</button>
-		} }
-	</div>
+			}
+		</div>
+	</ng-template>
 </div>

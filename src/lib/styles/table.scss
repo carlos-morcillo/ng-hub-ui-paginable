@@ -10,6 +10,34 @@ $tablePrefix: hub- !default;
 	--#{$tablePrefix}border-color: #dee2e6;
 	--#{$tablePrefix}border-radius: 0.375rem;
 
+	// Reset needed for nesting tables
+	--#{$tablePrefix}table-color-type: initial;
+	--#{$tablePrefix}table-bg-type: initial;
+	--#{$tablePrefix}table-color-state: initial;
+	--#{$tablePrefix}table-bg-state: initial;
+
+	// End of reset
+	--#{$tablePrefix}table-color: #212529;
+	--#{$tablePrefix}table-bg: #ffffff;
+	--#{$tablePrefix}table-border-width: 1px;
+	--#{$tablePrefix}table-border-color: #dee2e6;
+	--#{$tablePrefix}table-accent-bg: transparent;
+	--#{$tablePrefix}table-striped-color: #212529;
+	--#{$tablePrefix}table-striped-bg: rgba(0, 0, 0, 0.05);
+	--#{$tablePrefix}table-active-color: #212529;
+	--#{$tablePrefix}table-active-bg: rgba(0, 0, 0, 0.1);
+	--#{$tablePrefix}table-hover-color: #212529;
+	--#{$tablePrefix}table-hover-bg: rgba(0, 0, 0, 0.075);
+	--#{$tablePrefix}table-cell-padding-x: 1rem;
+	--#{$tablePrefix}table-cell-padding-y: 0.5rem;
+
+	// Breakpoints
+	--#{$tablePrefix}breakpoint-sm: 576px;
+	--#{$tablePrefix}breakpoint-md: 768px;
+	--#{$tablePrefix}breakpoint-lg: 992px;
+	--#{$tablePrefix}breakpoint-xl: 1200px;
+	--#{$tablePrefix}breakpoint-xxl: 1400px;
+
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
@@ -131,5 +159,228 @@ $tablePrefix: hub- !default;
 	.form-control:read-only {
 		background-color: var(--#{$tablePrefix}secondary-bg);
 		opacity: 1;
+	}
+}
+
+//
+// Basic Bootstrap table
+//
+
+.hub-table__table {
+	width: 100%;
+	margin-bottom: var(--#{$tablePrefix}table-cell-padding-y);
+	vertical-align: var(--#{$tablePrefix}table-cell-vertical-align);
+	border-color: var(--#{$tablePrefix}table-border-color);
+
+	// Target th & td
+	// We need the child combinator to prevent styles leaking to nested tables which doesn't have a `.hub-table__table` class.
+	// We use the universal selectors here to simplify the selector (else we would need 6 different selectors).
+	// Another advantage is that this generates less code and makes the selector less specific making it easier to override.
+	// stylelint-disable-next-line selector-max-universal
+	> :not(caption) > * > * {
+		padding: var(--#{$tablePrefix}table-cell-padding-y)
+			var(--#{$tablePrefix}table-cell-padding-x);
+		// Following the precept of cascades: https://codepen.io/miriamsuzanne/full/vYNgodb
+		color: var(
+			--#{$tablePrefix}table-color-state,
+			var(
+				--#{$tablePrefix}table-color-type,
+				var(--#{$tablePrefix}table-color)
+			)
+		);
+		background-color: var(--#{$tablePrefix}table-bg);
+		border-bottom-width: var(--#{$tablePrefix}table-border-width);
+		box-shadow: inset 0 0 0 9999px
+			var(
+				--#{$tablePrefix}table-bg-state,
+				var(
+					--#{$tablePrefix}table-bg-type,
+					var(--#{$tablePrefix}table-accent-bg)
+				)
+			);
+	}
+
+	> tbody {
+		vertical-align: inherit;
+	}
+
+	> thead {
+		vertical-align: bottom;
+	}
+}
+
+.hub-table__table-group-divider {
+	border-top: calc(var(--#{$tablePrefix}table-border-width) * 2) solid
+		var(--#{$tablePrefix}table-group-separator-color);
+}
+
+//
+// Change placement of captions with a class
+//
+
+.caption-top {
+	caption-side: top;
+}
+
+//
+// Condensed table w/ half padding
+//
+
+.hub-table__table-sm {
+	// stylelint-disable-next-line selector-max-universal
+	> :not(caption) > * > * {
+		padding: var(--#{$tablePrefix}table-cell-padding-y-sm)
+			var(--#{$tablePrefix}table-cell-padding-x-sm);
+	}
+}
+
+// Border versions
+//
+// Add or remove borders all around the table and between all the columns.
+//
+// When borders are added on all sides of the cells, the corners can render odd when
+// these borders do not have the same color or if they are semi-transparent.
+// Therefore we add top and border bottoms to the `tr`s and left and right borders
+// to the `td`s or `th`s
+
+.hub-table__table-bordered {
+	> :not(caption) > * {
+		border-width: var(--#{$tablePrefix}table-border-width) 0;
+		// stylelint-disable-next-line selector-max-universal
+		> * {
+			border-width: 0 var(--#{$tablePrefix}table-border-width);
+		}
+	}
+}
+
+.hub-table__table-borderless {
+	// stylelint-disable-next-line selector-max-universal
+	> :not(caption) > * > * {
+		border-bottom-width: 0;
+	}
+
+	> :not(:first-child) {
+		border-top-width: 0;
+	}
+}
+
+// Zebra-striping
+//
+// Default zebra-stripe styles (alternating gray and transparent backgrounds)
+
+// For rows
+.hub-table__table-striped-odd {
+	> tbody > tr:nth-of-type(odd) > * {
+		--#{$tablePrefix}table-table-color-type: var(
+			--#{$tablePrefix}table-table-striped-color
+		);
+		--#{$tablePrefix}table-table-bg-type: var(
+			--#{$tablePrefix}table-table-striped-bg
+		);
+	}
+}
+
+.hub-table__table-striped-even {
+	> tbody > tr:nth-of-type(even) > * {
+		--#{$tablePrefix}table-table-color-type: var(
+			--#{$tablePrefix}table-table-striped-color
+		);
+		--#{$tablePrefix}table-table-bg-type: var(
+			--#{$tablePrefix}table-table-striped-bg
+		);
+	}
+}
+
+// For columns
+.hub-table__table-striped-columns-odd {
+	> :not(caption) > tr > :nth-child(odd) {
+		--#{$tablePrefix}table-table-color-type: var(
+			--#{$tablePrefix}table-table-striped-color
+		);
+		--#{$tablePrefix}table-table-bg-type: var(
+			--#{$tablePrefix}table-table-striped-bg
+		);
+	}
+}
+
+.hub-table__table-striped-columns-even {
+	> :not(caption) > tr > :nth-child(even) {
+		--#{$tablePrefix}table-table-color-type: var(
+			--#{$tablePrefix}table-table-striped-color
+		);
+		--#{$tablePrefix}table-table-bg-type: var(
+			--#{$tablePrefix}table-table-striped-bg
+		);
+	}
+}
+
+// Active table
+//
+// The `.hub-table__table-active` class can be added to highlight rows or cells
+.hub-table__table-active {
+	--#{$tablePrefix}table-color-state: var(
+		--#{$tablePrefix}table-active-color
+	);
+	--#{$tablePrefix}table-bg-state: var(--#{$tablePrefix}table-active-bg);
+}
+
+// Hover effect
+//
+// Placed here since it has to come after the potential zebra striping
+.hub-table__table-hover {
+	> tbody > tr:hover > * {
+		--#{$tablePrefix}table-color-state: var(
+			--#{$tablePrefix}table-hover-color
+		);
+		--#{$tablePrefix}table-bg-state: var(--#{$tablePrefix}table-hover-bg);
+	}
+}
+
+// // Table variants
+// //
+// // Table variants set the table cell backgrounds, border colors
+// // and the colors of the striped, hovered & active tables
+
+// @each $color, $value in $table-variants {
+//   @include table-variant($color, $value);
+// }
+
+.hub-table__table-responsive {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 576px) {
+	.hub-table__table-responsive-sm {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+@media (max-width: 768px) {
+	.hub-table__table-responsive-md {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+@media (max-width: 992px) {
+	.hub-table__table-responsive-lg {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+@media (max-width: 1200px) {
+	.hub-table__table-responsive-xl {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+@media (max-width: 1400px) {
+	.hub-table__table-responsive-xxl {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 }

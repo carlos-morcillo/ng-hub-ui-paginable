@@ -80,19 +80,23 @@
 }
 
 <div
-	class="hub-table__table-container content {{ responsiveCSSClass() }}"
-	[class.table-responsive]="responsiveCSSClass()"
+	class="hub-table__table-container {{ responsiveCSSClass() }}"
+	[class.hub-table__table-responsive]="responsiveCSSClass()"
 >
 	<table
-		class="hub-table__table table mb-0"
-		[class.table-hover]="
+		class="hub-table__table"
+		[class.hub-table__table-hover]="
 			(options().hoverableRows || selectable()) && !loading()
 		"
-		[class.table-striped]="options().striped === 'rows'"
-		[class.table-striped-columns]="options().striped === 'columns'"
-		[class.table-selectable]="selectable()"
+		[class.hub-table__table-striped]="options().striped === 'rows'"
+		[class.hub-table__table-striped-columns]="
+			options().striped === 'columns'
+		"
+		[class.hub-table__table-selectable]="selectable()"
 		[class.hub-table__table--scrollable]="options().scrollable"
-		[ngClass]="options().variant ? 'table-' + options().variant : null"
+		[ngClass]="
+			options().variant ? 'hub-table__table-' + options().variant : null
+		"
 	>
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
@@ -225,11 +229,9 @@
 
 			<!-- Filtering -->
 			@if (hasColumnFilters()) {
-				<tr class="hub-table__filter-row filter_row">
+				<tr class="hub-table__filter-row">
 					@if ((selectable() && multiple()) || batchActions.length) {
-						<th
-							class="hub-table__filter-cell filter_cell sticky-start"
-						></th>
+						<th class="hub-table__filter-cell sticky-start"></th>
 					}
 					@for (
 						header of fixedHeaders();
@@ -239,7 +241,7 @@
 						@let formControlName =
 							header.filter?.key || header.property;
 						<th
-							class="hub-table__filter-cell filter_cell"
+							class="hub-table__filter-cell"
 							[class.sticky-start]="header.sticky === 'start'"
 							[class.sticky-end]="header.sticky === 'end'"
 						>
@@ -379,7 +381,7 @@
 		}
 		@if (templateExpandingRows().length) {
 			<td
-				class="hub-table__cell hub-table__cell--expander actions sticky-end"
+				class="hub-table__cell hub-table__cell--expander sticky-end"
 				[class.sticky-end]="stickyActions()"
 			>
 				@if (templateExpandingRows().length) {
