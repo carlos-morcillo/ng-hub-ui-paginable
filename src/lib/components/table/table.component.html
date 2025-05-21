@@ -342,7 +342,7 @@
 <ng-template #defaultRowTemplate let-item>
 	<tr
 		class="hub-table__body-row"
-		(click)="onItemClick(item)"
+		(click)="onItemClick($event, item)"
 		[class.hub-table__body-row--selected]="selectable() && item.selected"
 		[class.hub-table__body-row--clickable]="clickFn()"
 	>

@@ -2,7 +2,7 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { DEFAULT_PAGINABLE_CONFIG } from '../constants/defaults';
 import { PaginableTableConfig } from '../interfaces/paginable-table-config';
 import { mergeDeep } from '../utils';
-import { PaginateConfigService } from './paginate-config.service';
+import { PaginableConfigService } from './paginate-config.service';
 
 @Injectable()
 export class PaginableService {
@@ -14,7 +14,7 @@ export class PaginableService {
 
 	constructor(
 		@Optional()
-		@Inject(PaginateConfigService)
+		@Inject(PaginableConfigService)
 		private _config = DEFAULT_PAGINABLE_CONFIG
 	) {
 		this.initialize();

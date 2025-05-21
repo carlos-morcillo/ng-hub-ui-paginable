@@ -2,7 +2,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { PaginableTableConfig } from './interfaces/paginable-table-config';
 import { PaginableTranslationService } from './services/paginable-translation.service';
 import { PaginableService } from './services/paginable.service';
-import { PaginateConfigService } from './services/paginate-config.service';
+import { PaginableConfigService } from './services/paginate-config.service';
 // import { PaginableTableComponent } from './components/paginable-table/paginable-table.component';
 // import { PaginableTableHeaderDirective } from './directives/paginable-table-header.directive';
 // import { PaginableTableRowDirective } from './directives/paginable-table-row.directive';
@@ -35,15 +35,15 @@ import { PaginateConfigService } from './services/paginate-config.service';
 	],
 	providers: []
 })
-export class HubUITableModule {
+export class TableModule {
 	static forRoot(
 		config?: PaginableTableConfig
-	): ModuleWithProviders<HubUITableModule> {
+	): ModuleWithProviders<TableModule> {
 		return {
-			ngModule: HubUITableModule,
+			ngModule: TableModule,
 			providers: [
 				{
-					provide: PaginateConfigService,
+					provide: PaginableConfigService,
 					useValue: config
 				},
 				PaginableService,

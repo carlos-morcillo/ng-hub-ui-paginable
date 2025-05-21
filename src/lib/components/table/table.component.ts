@@ -39,7 +39,7 @@ import { PaginableTableHeaderDirective } from '../../directives/paginable-table-
 import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
 import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
-import { ItemClickEvent } from '../../interfaces/item-click-event';
+import { TableRowClickEvent } from '../../interfaces/item-click-event';
 import { PaginableTableButton } from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
@@ -389,7 +389,7 @@ export class HubTableComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	readonly clickFn =
-		input<(event: ItemClickEvent<T>) => void | Promise<void>>();
+		input<(event: TableRowClickEvent<T>) => void | Promise<void>>();
 
 	readonly responsive = input<TableBreakpoint | null>(null);
 
@@ -462,25 +462,12 @@ export class HubTableComponent<T = any> {
 	 * @returns If the `clickFn` property is not defined in the current context, the `onItemClick` function will return without
 	 * executing any further code.
 	 */
-	// TODO: Move to a parent
-	onItemClick(
-		{ collapsed, selected, ...item },
-		depth?: number,
-		index?: number
-	) {
+	onItemClick(event: MouseEvent, item: TableRow) {
 		const clickFn = this.clickFn();
 		if (!clickFn) {
 			return;
 		}
-
-		clickFn({
-			depth,
-			index,
-			selected,
-			collapsed,
-			value: item as T,
-			item: item as T
-		});
+		clickFn({ ...item, event });
 	}
 
 	/**
@@ -643,7 +630,9 @@ export class HubTableComponent<T = any> {
 		}
 		for (const row of rows) {
 			const bindValue = this.bindValue();
-			const needle = bindValue ? row.data[bindValue] : row.data;
+			const needle = bindValue
+				? (row.data as Record<string, any>)[bindValue]
+				: row.data;
 			const index = this.value.indexOf(needle);
 			if (index > -1 && !this.allRowsSelected) {
 				this.value.splice(index, 1);
@@ -658,31 +647,35 @@ export class HubTableComponent<T = any> {
 	/**
 	 * Select or unselect a row
 	 *
-	 * @param {*} item
+	 * @param {*} row
 	 * @memberof PaginableTableComponent
 	 */
-	toggle(item: TableRow<T>) {
+	toggle(row: TableRow<T>) {
 		const rows = this.rows();
 		if (!rows) {
 			return;
 		}
 
 		const bindValue = this.bindValue();
-		const needle = bindValue ? item.data[bindValue] : item.data;
+		const needle = bindValue
+			? (row.data as Record<string, any>)[bindValue]
+			: row.data;
 
 		const index = this.value.indexOf(needle);
 		if (index > -1) {
 			this.value.splice(index, 1);
-			item.selected = false;
+			row.selected = false;
 		} else {
 			this.value.push(needle);
-			item.selected = true;
+			row.selected = true;
 		}
 
 		if (!this.multiple()) {
-			this.value = item.selected ? [needle] : [];
+			this.value = row.selected ? [needle] : [];
 			rows.forEach((o) => {
-				const needle = bindValue ? o[bindValue] : o;
+				const needle = bindValue
+					? (o.data as Record<string, any>)[bindValue]
+					: o.data;
 				o.selected = this.value.indexOf(needle) > -1;
 			});
 		} else {
@@ -777,7 +770,7 @@ export class HubTableComponent<T = any> {
 	 *
 	 * @param {id} - The `onDropdownFilterOpened` function takes an object parameter `id`.
 	 */
-	onDropdownFilterOpened({ id }) {
+	onDropdownFilterOpened({ id }: { id: string }) {
 		this.dropdownComponents()?.forEach((dropdown) => {
 			if (dropdown.id !== id && dropdown.isOpened) {
 				dropdown.closeDropdown();
