@@ -104,7 +104,7 @@
 	>
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
-				@if ((selectable() && multiple()) || batchActions.length) {
+				@if (batchActions().length) {
 					<th
 						class="hub-table__header-cell hub-table__header-cell--actions sticky-start"
 					>
