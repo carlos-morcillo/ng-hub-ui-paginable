@@ -20,7 +20,7 @@ export interface PaginableTableOptions {
 	/**
 	 * Applies alternating background colors to rows, columns, or none.
 	 */
-	striped?: 'rows' | 'columns' | null;
+	striped?: 'rows-odd' | 'rows-even' | 'columns-odd' | 'columns-even' | null;
 
 	/**
 	 * Custom color theme variant for styling the table.

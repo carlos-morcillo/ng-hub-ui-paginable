@@ -8,9 +8,11 @@ import {
 	TemplateRef,
 	ViewChild,
 	ViewContainerRef,
-	inject
+	inject,
+	input
 } from '@angular/core';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
+import { TableRowEvent } from '../../interfaces/table-row';
 import { HubIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -22,7 +24,7 @@ import { HubIconComponent } from '../icon/icon.component';
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })
 export class PaginableTableDropdownComponent<T = any> {
-	private _elementRef = inject(ElementRef);
+	#elementRef = inject(ElementRef);
 
 	@ViewChild('dropdownTpt') dropdownTpt!: TemplateRef<any>;
 
@@ -30,34 +32,35 @@ export class PaginableTableDropdownComponent<T = any> {
 	private embeddedView: EmbeddedViewRef<any> | null = null;
 	private renderedElement: HTMLElement | null = null;
 
-	@Input() item: T | undefined;
+	readonly row = input<TableRowEvent<T>>();
 
-	private _options: PaginableTableDropdown = { buttons: [] };
+	#options: PaginableTableDropdown = { buttons: [] };
+
 	@Input()
 	get options(): PaginableTableDropdown {
-		return this._options;
+		return this.#options;
 	}
 	set options(v: PaginableTableDropdown) {
-		this._options = {
+		this.#options = {
 			position: 'end',
 			fill: 'clear',
 			color: 'muted',
 			...v
 		};
-		if (this._options.fill === 'clear') {
-			this.buttonClass = 'btn text-' + (this._options.color ?? 'muted');
+		if (this.#options.fill === 'clear') {
+			this.buttonClass = 'btn text-' + (this.#options.color ?? 'muted');
 		} else {
 			this.buttonClass =
 				'btn ' +
-				['btn', this._options.fill, this._options.color]
+				['btn', this.#options.fill, this.#options.color]
 					.filter((o) => o)
 					.join('-');
 		}
 	}
 
-	@Input() appendTo: HTMLElement | 'body' | null = 'body';
+	readonly appendTo = input<HTMLElement | 'body' | null>('body');
 
-	@Input() disabled: boolean = false;
+	readonly disabled = input<boolean>(false);
 
 	buttonClass: string | null = null;
 	shown: boolean = false;
@@ -72,7 +75,7 @@ export class PaginableTableDropdownComponent<T = any> {
 	@HostListener('document:click', ['$event'])
 	clickOut(event) {
 		if (
-			!this._elementRef.nativeElement.contains(event.target) &&
+			!this.#elementRef.nativeElement.contains(event.target) &&
 			this.shown
 		) {
 			this.close();
@@ -87,12 +90,13 @@ export class PaginableTableDropdownComponent<T = any> {
 
 		this.shown = true;
 
+		const appendTo = this.appendTo();
 		const target =
-			this.appendTo === 'body'
+			appendTo === 'body'
 				? document.body
-				: this.appendTo instanceof HTMLElement
-					? this.appendTo
-					: this._elementRef.nativeElement;
+				: appendTo instanceof HTMLElement
+					? appendTo
+					: this.#elementRef.nativeElement;
 
 		// Crea la vista
 		this.embeddedView = this.vcr.createEmbeddedView(this.dropdownTpt);
@@ -101,7 +105,7 @@ export class PaginableTableDropdownComponent<T = any> {
 		const [element] = this.embeddedView.rootNodes as HTMLElement[];
 		this.renderedElement = element;
 
-		const button = this._elementRef.nativeElement.querySelector('button');
+		const button = this.#elementRef.nativeElement.querySelector('button');
 		const rect = button.getBoundingClientRect();
 
 		Object.assign(element.style, {

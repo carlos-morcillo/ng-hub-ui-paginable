@@ -7,7 +7,7 @@
 		data-toggle="dropdown"
 		[attr.aria-expanded]="shown"
 		(click)="toggle()"
-		[disabled]="disabled"
+		[disabled]="disabled()"
 	>
 		<div class="d-flex flex-nowrap align-items-center gap-1">
 			<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
@@ -39,9 +39,9 @@
 								: 'text-dark'
 						"
 						(click)="
-							item &&
+							row() &&
 								dropdownItem.handler &&
-								dropdownItem.handler(item)
+								dropdownItem.handler(row())
 						"
 					>
 						<div class="d-flex align-items-center gap-2">

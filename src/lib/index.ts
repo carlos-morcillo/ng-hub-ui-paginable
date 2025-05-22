@@ -35,7 +35,7 @@ export { PaginableTablePagination } from './interfaces/paginable-table-paginatio
 export { PaginableTableRowAction } from './interfaces/paginable-table-row-action';
 export { PaginationState } from './interfaces/pagination-state';
 export { PaginationParamsChangeEvent } from './interfaces/params-change-event';
-export { TableRow } from './interfaces/table-row';
+export { TableRowEvent } from './interfaces/table-row';
 
 // Services
 export { PaginableTranslationService } from './services/paginable-translation.service';

@@ -271,46 +271,30 @@ $tablePrefix: hub- !default;
 // For rows
 .hub-table__table-striped-odd {
 	> tbody > tr:nth-of-type(odd) > * {
-		--#{$tablePrefix}table-table-color-type: var(
-			--#{$tablePrefix}table-table-striped-color
-		);
-		--#{$tablePrefix}table-table-bg-type: var(
-			--#{$tablePrefix}table-table-striped-bg
-		);
+		color: var(--#{$tablePrefix}table-striped-color);
+		background-color: var(--#{$tablePrefix}table-striped-bg);
 	}
 }
 
 .hub-table__table-striped-even {
 	> tbody > tr:nth-of-type(even) > * {
-		--#{$tablePrefix}table-table-color-type: var(
-			--#{$tablePrefix}table-table-striped-color
-		);
-		--#{$tablePrefix}table-table-bg-type: var(
-			--#{$tablePrefix}table-table-striped-bg
-		);
+		color: var(--#{$tablePrefix}table-striped-color);
+		background-color: var(--#{$tablePrefix}table-striped-bg);
 	}
 }
 
 // For columns
 .hub-table__table-striped-columns-odd {
 	> :not(caption) > tr > :nth-child(odd) {
-		--#{$tablePrefix}table-table-color-type: var(
-			--#{$tablePrefix}table-table-striped-color
-		);
-		--#{$tablePrefix}table-table-bg-type: var(
-			--#{$tablePrefix}table-table-striped-bg
-		);
+		color: var(--#{$tablePrefix}table-striped-color);
+		background-color: var(--#{$tablePrefix}table-striped-bg);
 	}
 }
 
 .hub-table__table-striped-columns-even {
 	> :not(caption) > tr > :nth-child(even) {
-		--#{$tablePrefix}table-table-color-type: var(
-			--#{$tablePrefix}table-table-striped-color
-		);
-		--#{$tablePrefix}table-table-bg-type: var(
-			--#{$tablePrefix}table-table-striped-bg
-		);
+		color: var(--#{$tablePrefix}table-striped-color);
+		background-color: var(--#{$tablePrefix}table-striped-bg);
 	}
 }
 

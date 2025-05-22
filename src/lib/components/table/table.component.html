@@ -83,14 +83,18 @@
 	class="hub-table__table-container {{ responsiveCSSClass() }}"
 	[class.hub-table__table-responsive]="responsiveCSSClass()"
 >
+	@let striped = options().striped;
+	<pre>{{ striped }}</pre>
 	<table
 		class="hub-table__table"
 		[class.hub-table__table-hover]="
 			(options().hoverableRows || selectable()) && !loading()
 		"
-		[class.hub-table__table-striped]="options().striped === 'rows'"
-		[class.hub-table__table-striped-columns]="
-			options().striped === 'columns'
+		[class.hub-table__table-striped-odd]="striped === 'rows-odd'"
+		[class.hub-table__table-striped-even]="striped === 'rows-even'"
+		[class.hub-table__table-striped-columns-odd]="striped === 'columns-odd'"
+		[class.hub-table__table-striped-columns-even]="
+			striped === 'columns-even'
 		"
 		[class.hub-table__table-selectable]="selectable()"
 		[class.hub-table__table--scrollable]="options().scrollable"
@@ -372,7 +376,8 @@
 					"
 					[ngTemplateOutletContext]="{
 						header: header,
-						item: item,
+						item: item.data,
+						row: item,
 						property: item.data | get: header.property
 					}"
 				>
@@ -628,6 +633,7 @@
 	#defaultCellTpt
 	let-property="property"
 	let-item="item"
+	let-row="row"
 	let-header="header"
 >
 	@if (header.buttons) {
@@ -638,17 +644,17 @@
 				@if (button.buttons) {
 					<hub-table-dropdown
 						[options]="button"
-						[item]="item"
+						[row]="row"
 						class="hub-table__cell-dropdown d-inline-block"
 					>
 					</hub-table-dropdown>
 				} @else {
-					@if (!(isHidden(button, item) | async)) {
+					@if (!(isHidden(button, row) | async)) {
 						<button
 							type="button"
 							class="hub-table__cell-btn btn px-1"
 							[attr.title]="button.tooltip"
-							(click)="handleAction($event, button.handler, item)"
+							(click)="handleAction($event, button.handler, row)"
 							[ngClass]="button.classlist ?? []"
 						>
 							<div

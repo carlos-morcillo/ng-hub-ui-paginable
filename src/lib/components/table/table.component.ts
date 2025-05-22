@@ -40,7 +40,10 @@ import { PaginableTableLoadingDirective } from '../../directives/paginable-table
 import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
 import { TableRowClickEvent } from '../../interfaces/item-click-event';
-import { PaginableTableButton } from '../../interfaces/paginable-table-button';
+import {
+	BatchTableButton,
+	PaginableTableButton
+} from '../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
@@ -317,11 +320,11 @@ export class HubTableComponent<T = any> {
 	readonly stickyActions = input<boolean>(false);
 
 	readonly batchActions = input<
-		Array<PaginableTableDropdown | PaginableTableButton>,
-		Array<PaginableTableDropdown | PaginableTableButton>
+		Array<PaginableTableDropdown | BatchTableButton>,
+		Array<PaginableTableDropdown | BatchTableButton>
 	>([], {
 		transform: (
-			value: Array<PaginableTableDropdown | PaginableTableButton>
+			value: Array<PaginableTableDropdown | BatchTableButton>
 		) => {
 			return value.map((item) => {
 				if ((item as PaginableTableDropdown).buttons) {
@@ -578,28 +581,34 @@ export class HubTableComponent<T = any> {
 	 * Handles the action to execute
 	 *
 	 * @param {Function} handler
-	 * @param {*} item
+	 * @param {*} row
 	 * @memberof PaginableTableComponent
 	 */
-	handleAction(event: Event, handler: (...args: any) => void, item: any) {
+	handleAction(
+		event: Event,
+		handler: (row: TableRow) => void,
+		row: TableRow
+	) {
 		event.stopPropagation();
-		handler(item);
+		handler(row);
 	}
 
 	/**
 	 * Handles the action to be executed in a batch
 	 *
-	 * @param {Event} event
+	 * @param {BatchTableButton} button
 	 * @memberof PaginableTableComponent
 	 */
-	handleBatchAction(event: any) {
-		event.handler(this.value);
+	handleBatchAction(button: BatchTableButton) {
+		if (button.handler) {
+			button.handler(this.value);
+		}
 	}
 
 	// TODO: Hacer para todas las columnas
-	isHidden(button: PaginableTableButton, item: any): Observable<boolean> {
+	isHidden(button: PaginableTableButton, row: TableRow): Observable<boolean> {
 		if (typeof button.hidden === 'function') {
-			const result = button.hidden(item);
+			const result = button.hidden(row);
 			return isObservable(result)
 				? (result as Observable<boolean>)
 				: of(result);
@@ -717,23 +726,19 @@ export class HubTableComponent<T = any> {
 	 * Check if a needle exists in a list
 	 *
 	 * @private
-	 * @param {any[]} list
+	 * @param {T[]} items
 	 * @param {*} needle
 	 * @return {*}  {boolean}
 	 * @memberof PaginableTableComponent
 	 */
 	// TODO: Move to utils file
-	private _contains(list: any[], needle: any): boolean {
+	private _contains(items: T[], needle: T): boolean {
 		if (typeof needle === 'object' && needle !== null) {
-			list = list.map((o) => {
-				const { selected, ...clone } = o;
-				return clone;
-			});
-
-			const { selected, ...p } = needle;
-			return list.some((o) => JSON.stringify(o) === JSON.stringify(p));
+			return items.some(
+				(o) => JSON.stringify(o) === JSON.stringify(needle)
+			);
 		}
-		return list.indexOf(needle) > -1;
+		return items.indexOf(needle) > -1;
 	}
 
 	/**

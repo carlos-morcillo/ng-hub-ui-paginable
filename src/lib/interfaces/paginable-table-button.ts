@@ -1,4 +1,5 @@
 import { Icon } from './paginable-table-header';
+import { TableRow, TableRowEvent } from './table-row';
 
 /**
  * This interface defines a type of button that can be used in a paginable table. It contains properties for the title, label,
@@ -13,7 +14,7 @@ import { Icon } from './paginable-table-header';
  * @export
  * @interface PaginableTableButton
  */
-export interface PaginableTableButton {
+export interface PaginableTableButton<T = any> {
 	title?: string;
 	label?: string;
 	tooltip?: string;
@@ -23,8 +24,12 @@ export interface PaginableTableButton {
 	 *
 	 * @memberof PaginableTableButton
 	 */
-	handler?: (item?: any) => void;
+	handler?: (event?: TableRowEvent<T>) => void;
 	color?: string;
-	hidden?: boolean | ((item: any) => boolean);
+	hidden?: boolean | ((row: TableRow<T>) => boolean);
 	classlist?: string[] | string;
 }
+
+export type BatchTableButton<T = any> = PaginableTableButton & {
+	handler?: (items: Array<T>) => void;
+};
