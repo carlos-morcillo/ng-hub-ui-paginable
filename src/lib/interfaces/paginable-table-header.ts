@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { PaginableTableButton } from './paginable-table-button';
 import { PaginableTableDropdown } from './paginable-table-dropdown';
+import { RowButton } from './row-button';
 
 export interface PaginableTableHeader {
 	title?: string | Observable<string>;
@@ -10,7 +10,7 @@ export interface PaginableTableHeader {
 	sortable?: boolean;
 	wrapping?: 'wrap' | 'nowrap';
 	sticky?: 'start' | 'end';
-	buttons?: Array<PaginableTableButton | PaginableTableDropdown>;
+	buttons?: Array<RowButton | PaginableTableDropdown>;
 	filter?: InputFilter | DropdownFilter | BooleanFilter;
 	onlyButtons?: boolean;
 }

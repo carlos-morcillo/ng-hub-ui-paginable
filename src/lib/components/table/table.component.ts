@@ -39,11 +39,7 @@ import { PaginableTableHeaderDirective } from '../../directives/paginable-table-
 import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
 import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
-import { TableRowClickEvent } from '../../interfaces/item-click-event';
-import {
-	BatchTableButton,
-	PaginableTableButton
-} from '../../interfaces/paginable-table-button';
+import { ListButton, RowButton, TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
@@ -101,7 +97,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => HubTableComponent),
+			useExisting: forwardRef(() => TableComponent),
 			multi: true
 		}
 	],
@@ -109,7 +105,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		class: 'hub-table'
 	}
 })
-export class HubTableComponent<T = any> {
+export class TableComponent<T = any> {
 	#fb = inject(UntypedFormBuilder);
 
 	id = input(generateUniqueId(16));
@@ -320,12 +316,10 @@ export class HubTableComponent<T = any> {
 	readonly stickyActions = input<boolean>(false);
 
 	readonly batchActions = input<
-		Array<PaginableTableDropdown | BatchTableButton>,
-		Array<PaginableTableDropdown | BatchTableButton>
+		Array<PaginableTableDropdown | ListButton>,
+		Array<PaginableTableDropdown | ListButton>
 	>([], {
-		transform: (
-			value: Array<PaginableTableDropdown | BatchTableButton>
-		) => {
+		transform: (value: Array<PaginableTableDropdown | ListButton>) => {
 			return value.map((item) => {
 				if ((item as PaginableTableDropdown).buttons) {
 					item = {
@@ -392,7 +386,7 @@ export class HubTableComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	readonly clickFn =
-		input<(event: TableRowClickEvent<T>) => void | Promise<void>>();
+		input<(event: TableRowEvent<T>) => void | Promise<void>>();
 
 	readonly responsive = input<TableBreakpoint | null>(null);
 
@@ -596,17 +590,17 @@ export class HubTableComponent<T = any> {
 	/**
 	 * Handles the action to be executed in a batch
 	 *
-	 * @param {BatchTableButton} button
+	 * @param {ListButton} button
 	 * @memberof PaginableTableComponent
 	 */
-	handleBatchAction(button: BatchTableButton) {
+	handleBatchAction(button: ListButton) {
 		if (button.handler) {
 			button.handler(this.value);
 		}
 	}
 
 	// TODO: Hacer para todas las columnas
-	isHidden(button: PaginableTableButton, row: TableRow): Observable<boolean> {
+	isHidden(button: RowButton, row: TableRow): Observable<boolean> {
 		if (typeof button.hidden === 'function') {
 			const result = button.hidden(row);
 			return isObservable(result)

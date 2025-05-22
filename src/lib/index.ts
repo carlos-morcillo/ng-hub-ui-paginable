@@ -8,7 +8,7 @@ export { PaginableTableDropdownComponent } from './components/paginable-table-dr
 export { PaginableTableRangeInputComponent } from './components/paginable-table-range-input/paginable-table-range-input.component';
 export { PaginatorComponent } from './components/paginator/paginator.component';
 export { ResizableComponent } from './components/resizable/resizable.component';
-export { HubTableComponent as PaginableTableComponent } from './components/table/table.component';
+export { TableComponent } from './components/table/table.component';
 
 // Directives
 export { PaginableListItemDirective } from './directives/paginable-list-item.directive';
@@ -24,18 +24,7 @@ export { ResizableDirective } from './directives/resizable.directive';
 export { TooltipDirective } from './directives/tooltip.directive';
 
 // Interfaces
-export { FilterChangeEvent } from './interfaces/filter-change-event';
-export { PaginableTableButton } from './interfaces/paginable-table-button';
-export { PaginableTableConfig } from './interfaces/paginable-table-config';
-export { PaginableTableDropdown } from './interfaces/paginable-table-dropdown';
-export { PaginableTableHeader } from './interfaces/paginable-table-header';
-export { PaginableTableOptions } from './interfaces/paginable-table-options';
-export { PaginableTableOrdination } from './interfaces/paginable-table-ordination';
-export { PaginableTablePagination } from './interfaces/paginable-table-pagination';
-export { PaginableTableRowAction } from './interfaces/paginable-table-row-action';
-export { PaginationState } from './interfaces/pagination-state';
-export { PaginationParamsChangeEvent } from './interfaces/params-change-event';
-export { TableRowEvent } from './interfaces/table-row';
+export * from './interfaces';
 
 // Services
 export { PaginableTranslationService } from './services/paginable-translation.service';

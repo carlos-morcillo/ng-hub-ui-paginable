@@ -31,7 +31,7 @@
 							@if (button.title) {
 								<span
 									class="hub-table__batch-actions-btn-title"
-									>{{ button.title | ucfirst }}</span
+									>{{ button.title | unwrapAsync }}</span
 								>
 							}
 						</button>
@@ -84,7 +84,6 @@
 	[class.hub-table__table-responsive]="responsiveCSSClass()"
 >
 	@let striped = options().striped;
-	<pre>{{ striped }}</pre>
 	<table
 		class="hub-table__table"
 		[class.hub-table__table-hover]="
@@ -104,7 +103,7 @@
 	>
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
-				@if (batchActions().length) {
+				@if (selectable()) {
 					<th
 						class="hub-table__header-cell hub-table__header-cell--actions sticky-start"
 					>
@@ -284,7 +283,7 @@
 						</ng-container>
 					</td>
 				</tr>
-			} @else {
+			} @else if (rows().length) {
 				@for (item of rows(); track $index) {
 					<ng-container
 						[ngTemplateOutlet]="templateRow() || defaultRowTemplate"
@@ -292,13 +291,22 @@
 					>
 					</ng-container>
 				}
+			} @else {
+				<tr>
+					<td [attr.colspan]="headersCount()">
+						<ng-container
+							[ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt"
+						>
+						</ng-container>
+					</td>
+				</tr>
 			}
 		</tbody>
 	</table>
 </div>
 <div class="hub-table__bottom-bar">
 	<!-- Pagination -->
-	@if (page()) {
+	@if (page() !== undefined && page() !== null) {
 		@if (
 			paginationPosition() == 'bottom' || paginationPosition() === 'both'
 		) {
@@ -653,7 +661,7 @@
 						<button
 							type="button"
 							class="hub-table__cell-btn btn px-1"
-							[attr.title]="button.tooltip"
+							[attr.title]="button.tooltip | unwrapAsync"
 							(click)="handleAction($event, button.handler, row)"
 							[ngClass]="button.classlist ?? []"
 						>

@@ -11,15 +11,16 @@ import {
 	inject,
 	input
 } from '@angular/core';
+import { TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
-import { TableRowEvent } from '../../interfaces/table-row';
+import { UnwrapAsyncPipe } from '../../pipes/unwrap-async.pipe';
 import { HubIconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'hub-table-dropdown, paginable-table-dropdown',
 
 	standalone: true,
-	imports: [NgClass, NgStyle, HubIconComponent],
+	imports: [NgClass, NgStyle, HubIconComponent, UnwrapAsyncPipe],
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })

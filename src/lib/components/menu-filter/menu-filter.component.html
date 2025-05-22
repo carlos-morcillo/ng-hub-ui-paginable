@@ -17,7 +17,7 @@
 	}
 	<ng-container formArrayName="rules">
 		@for (
-			group of rulesFA?.controls;
+			group of rulesFA.controls;
 			track group;
 			let index = $index;
 			let last = $last

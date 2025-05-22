@@ -6,7 +6,7 @@
 		[attr.title]="options.tooltip"
 		data-toggle="dropdown"
 		[attr.aria-expanded]="shown"
-		(click)="toggle()"
+		(click)="toggle(); $event.stopPropagation()"
 		[disabled]="disabled()"
 	>
 		<div class="d-flex flex-nowrap align-items-center gap-1">
@@ -32,7 +32,7 @@
 					<button
 						class="dropdown-item"
 						type="button"
-						[attr.title]="dropdownItem.tooltip"
+						[attr.title]="dropdownItem.title | unwrapAsync"
 						[ngClass]="
 							dropdownItem.color
 								? 'text-' + dropdownItem.color
@@ -48,8 +48,8 @@
 							<ng-hub-ui-icon
 								[config]="dropdownItem.icon"
 							></ng-hub-ui-icon>
-							@if (dropdownItem.title) {
-								{{ dropdownItem.title }}
+							@if (dropdownItem.label) {
+								{{ dropdownItem.label | unwrapAsync }}
 							}
 						</div>
 					</button>

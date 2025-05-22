@@ -16,9 +16,9 @@ import {
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
 import { PaginableTableNotFoundDirective } from '../../../directives/paginable-table-not-found.directive';
 import { ItemClickEvent } from '../../../interfaces/item-click-event';
-import { PaginableTableButton } from '../../../interfaces/paginable-table-button';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
+import { RowButton } from '../../../interfaces/row-button';
 import { UcfirstPipe } from '../../../pipes/ucfirst.pipe';
 import { getValue } from '../../../utils';
 import { PaginatorComponent } from '../../paginator/paginator.component';
@@ -114,14 +114,12 @@ export class PaginableListComponent<T = any> {
 	 * @type {PaginableTableRowAction[]}
 	 * @memberof PaginableTableComponent
 	 */
-	private _batchActions: Array<
-		PaginableTableDropdown | PaginableTableButton
-	> = [];
+	private _batchActions: Array<PaginableTableDropdown | RowButton> = [];
 	@Input()
-	get batchActions(): Array<PaginableTableDropdown | PaginableTableButton> {
+	get batchActions(): Array<PaginableTableDropdown | RowButton> {
 		return this._batchActions;
 	}
-	set batchActions(v: Array<PaginableTableDropdown | PaginableTableButton>) {
+	set batchActions(v: Array<PaginableTableDropdown | RowButton>) {
 		this._batchActions = v.map((b) => {
 			if ((b as PaginableTableDropdown).buttons) {
 				b = { fill: null, position: 'start', color: 'light', ...b };

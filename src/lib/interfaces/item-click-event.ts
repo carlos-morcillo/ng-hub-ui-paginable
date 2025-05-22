@@ -1,5 +1,3 @@
-import { TableRowEvent } from './table-row';
-
 /**
  * Represents a generic click event on a table row.
  *
@@ -19,14 +17,3 @@ export interface ItemClickEvent<T = any> {
 	value: T;
 	item: T;
 }
-
-/**
- * Represents a table row click event enriched with the originating mouse event.
- *
- * @template T - The type of the row data.
- * @extends TableRowEvent<T>
- * @property {MouseEvent} event - The mouse event that triggered the interaction.
- */
-export type TableRowClickEvent<T = any> = TableRowEvent<T> & {
-	event: MouseEvent;
-};
