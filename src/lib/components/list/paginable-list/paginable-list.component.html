@@ -55,7 +55,7 @@
 				[class.clickable-item]="clickFn"
 				[formGroup]="formGroup"
 				(click)="
-					onItemClick(formGroup.value, depth, index);
+					onItemClick(formGroup.value, depth, index, $event);
 					$event.preventDefault();
 					$event.stopPropagation()
 				"

@@ -15,7 +15,7 @@ import {
 } from '@angular/forms';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
 import { PaginableTableNotFoundDirective } from '../../../directives/paginable-table-not-found.directive';
-import { ItemClickEvent } from '../../../interfaces/item-click-event';
+import { ListClickEvent } from '../../../interfaces/item-click-event';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
 import { RowButton } from '../../../interfaces/row-button';
@@ -83,7 +83,7 @@ export class PaginableListComponent<T = any> {
 		this.buildForm(this.form, this._items);
 	}
 
-	@Input() clickFn: (event: ItemClickEvent<T>) => void | Promise<void>;
+	@Input() clickFn: (event: ListClickEvent<T>) => void | Promise<void>;
 
 	form: FormArray = this.#fb.array([]);
 
@@ -203,21 +203,28 @@ export class PaginableListComponent<T = any> {
 	}
 
 	/**
-	 * Handles click events by extracting specific properties and passing them to a callback function.
+	 * Emits a structured click event for the clicked list item, including metadata and state.
 	 *
-	 * @param  - The `onItemClick` function takes in the following parameters: collapsed, selected and item.
-	 * @param {number} depth - The `depth` parameter in the `onItemClick` function represents the depth level of the item being
-	 * clicked. It is a number that indicates how deep the item is nested within a hierarchical structure.
-	 * @param {number} index - The `index` parameter in the `onItemClick` function represents the position of the item that was clicked
-	 * within a list or array. It is a number that indicates the index of the clicked item.
+	 * This method is typically called when an item in the list is clicked. It extracts contextual
+	 * information such as depth, index, selection state, and expansion state, then passes it to
+	 * the user-defined `clickFn` callback.
 	 *
-	 * @returns If the `clickFn` property is not defined in the current context, the `onItemClick` function will return without
-	 * executing any further code.
+	 * If a `bindLabel` is configured, the emitted `value` will be derived from that property;
+	 * otherwise, the full item will be passed as `value`.
+	 *
+	 * @param item - The list item object, including `selected` and `collapsed` state.
+	 * @param depth - The nesting depth of the item within a tree structure (0 = root level).
+	 * @param index - The position of the item in the current visible list or page.
+	 * @param event - The native `MouseEvent` that triggered the click.
+	 *
+	 * @remarks
+	 * If the `clickFn` callback is not defined, the method exits early and no event is emitted.
 	 */
 	onItemClick(
 		{ collapsed, selected, ...item },
 		depth: number,
-		index: number
+		index: number,
+		event: MouseEvent
 	) {
 		if (!this.clickFn) {
 			return;
@@ -229,7 +236,8 @@ export class PaginableListComponent<T = any> {
 			selected,
 			collapsed,
 			value: this.bindLabel ? getValue(item, this.bindLabel) : item,
-			item: item as T
+			item: item as T,
+			mouseEvent: event
 		});
 	}
 

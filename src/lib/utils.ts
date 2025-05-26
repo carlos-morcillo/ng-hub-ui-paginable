@@ -143,8 +143,8 @@ export function generateUniqueId(length: number): string {
  * and returns the interpolated string.
  */
 export function interpolateString(
-	expr: string,
-	params?: any,
+	expr: string = '',
+	params: any = {},
 	templateMatcher: RegExp = /{{\s?([^{}\s]*)\s?}}/g
 ) {
 	if (!params) {
