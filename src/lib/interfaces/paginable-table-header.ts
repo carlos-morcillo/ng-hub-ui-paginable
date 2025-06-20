@@ -15,11 +15,55 @@ export interface PaginableTableHeader {
 	onlyButtons?: boolean;
 }
 
+/**
+ * Represents the configuration for an input filter used in a paginable table header.
+ *
+ * @property mode - Optional. Specifies the display mode of the filter input, either 'row' or 'menu'.
+ * @property type - The type of the filter input, defined by `MenuFilterInputType`.
+ * @property key - Optional. The key associated with the filter, typically used for identifying the filter field.
+ * @property placeholder - Optional. Placeholder text to display in the filter input.
+ */
 interface InputFilter {
 	mode?: 'row' | 'menu';
-	type: 'text' | 'number' | 'number-range' | 'date' | 'date-range';
+	type: `${MenuFilterInputType}`;
 	key?: string;
 	placeholder?: string;
+}
+
+/**
+ * Enum representing the available input types for menu filters.
+ * These types define how the user can input data for filtering.
+ */
+export enum MenuFilterInputType {
+	/**
+	 * A simple text input (e.g., string, keyword).
+	 */
+	Text = 'text',
+
+	/**
+	 * A single numeric input (e.g., quantity, price).
+	 */
+	Number = 'number',
+
+	/**
+	 * A range input for numbers (e.g., min and max values).
+	 */
+	NumberRange = 'number-range',
+
+	/**
+	 * A single date input (e.g., created at, due date).
+	 */
+	Date = 'date',
+
+	/**
+	 * A range input for dates (e.g., from - to).
+	 */
+	DateRange = 'date-range',
+
+	/**
+	 * A boolean input for true/false filters
+	 */
+	Boolean = 'boolean'
 }
 
 interface DropdownFilter {

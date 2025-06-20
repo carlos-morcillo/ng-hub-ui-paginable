@@ -53,7 +53,7 @@ npm install ng-hub-ui-paginable
 
 | Name                | Type                             | Description                                                                 |
 |---------------------|----------------------------------|-----------------------------------------------------------------------------|
-| `headers`           | `PaginableTableHeader[]`         | Column definition with support for titles, sorting, and filters.             |
+| `headers`           | `PaginableTableHeader[]`         | Column definition with support for titles, sorting, and filters.            |
 | `data` / `rows`     | `T[]` or `PaginationState<T>`    | Can be a flat array or a paginated object.                                  |
 | `page`              | `number`                         | Current page (model signal).                                                |
 | `perPage`           | `number`                         | Number of items per page.                                                   |
@@ -64,7 +64,7 @@ npm install ng-hub-ui-paginable
 | `ordination`        | `PaginableTableOrdination`       | Sorting property and direction.                                             |
 | `filters`           | `Record<string, any>`            | Active advanced filters.                                                    |
 | `searchTerm`        | `string`                         | Search term.                                                                |
-| `paginationPosition`| `'top' | 'bottom' | 'both'`     | Where the paginator is located.                                             |
+| `paginationPosition`| `'top' | 'bottom' | 'both'`      | Where the paginator is located.                                             |
 | `loading`           | `boolean`                        | Loading state.                                                              |
 | `paginate`          | `boolean`                        | Whether the table should paginate or not.                                   |
 | `bindValue`         | `string`                         | Property used to uniquely identify selected items.                          |
