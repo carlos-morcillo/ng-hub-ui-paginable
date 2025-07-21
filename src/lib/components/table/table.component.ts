@@ -51,7 +51,7 @@ import { IsObservablePipe } from '../../pipes/is-observable.pipe';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
 import { UnwrapAsyncPipe } from '../../pipes/unwrap-async.pipe';
-import { generateUniqueId } from '../../utils';
+import { debouncedSignal, generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { HubIconComponent } from '../icon/icon.component';
 import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
@@ -220,12 +220,14 @@ export class TableComponent<T = any> {
 		}, 16);
 	});
 
-	filtersChange = toSignal(
-		this.filtersFG.valueChanges.pipe(debounceTime(this.debounce()))
+	filtersChange = debouncedSignal(
+		toSignal(this.filtersFG.valueChanges),
+		this.debounce
 	);
 
 	filtersFGChangeEffect = effect(() => {
 		const filters = this.filtersChange();
+		console.log(this.debounce(), filters);
 		if (filters === undefined) return;
 
 		if (this.setFilters) {
@@ -358,12 +360,10 @@ export class TableComponent<T = any> {
 
 	searchTermEffect = effect(() => {
 		const delay = this.debounce();
-		// console.log('delay');
 
 		const sub = this.searchProxy$
 			.pipe(debounceTime(delay), distinctUntilChanged())
 			.subscribe((value) => {
-				// console.log('subscribe');
 				this.searchTerm.set(value);
 			});
 

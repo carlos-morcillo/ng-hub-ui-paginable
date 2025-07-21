@@ -1,3 +1,35 @@
+import { effect, Signal, signal } from '@angular/core';
+
+/**
+ * Creates a debounced version of a given signal. The returned signal updates its value
+ * only after the specified debounce time has elapsed since the last change in the source signal.
+ *
+ * @template T - The type of the signal's value.
+ * @param sourceSignal - The source signal to debounce.
+ * @param debounceDelay - Either a number (ms) or a signal<number> indicating debounce delay.
+ * @returns A new signal that emits debounced values from the source signal.
+ */
+export function debouncedSignal<T>(
+	sourceSignal: Signal<T>,
+	debounceDelay: number | Signal<number> = 0
+): Signal<T> {
+	const debounced = signal(sourceSignal());
+
+	effect((onCleanup) => {
+		const delay =
+			typeof debounceDelay === 'number' ? debounceDelay : debounceDelay();
+		const value = sourceSignal();
+
+		const timeout = setTimeout(() => {
+			debounced.set(value);
+		}, delay);
+
+		onCleanup(() => clearTimeout(timeout));
+	});
+
+	return debounced;
+}
+
 /**
  * Determines if two objects or two values are equivalent.
  *
