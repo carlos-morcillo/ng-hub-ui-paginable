@@ -17,6 +17,34 @@ import { PaginableTranslationService } from '../../services/paginable-translatio
 import { PaginableService } from '../../services/paginable.service';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
 
+// Mock services
+class MockPaginableTranslationService {
+	getTranslation(key: string) {
+		const translations: Record<string, string> = {
+			'LOADING': 'loading',
+			'SEARCH': 'search',
+			'NO_RESULTS_FOUND': 'No results found'
+		};
+		return translations[key] || key;
+	}
+	
+	setTranslations() {}
+	initialize() {}
+}
+
+class MockPaginableService {
+	config = {
+		language: 'en',
+		mapping: {}
+	};
+	
+	get mapping() {
+		return this.config.mapping;
+	}
+	
+	initialize() {}
+}
+
 describe('MenuFilterComponent', () => {
 	let component: MenuFilterComponent;
 	let fixture: ComponentFixture<MenuFilterComponent>;
@@ -24,12 +52,17 @@ describe('MenuFilterComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [MenuFilterComponent],
-			imports: [ReactiveFormsModule, TranslatePipe, UcfirstPipe],
+			imports: [MenuFilterComponent, ReactiveFormsModule, TranslatePipe, UcfirstPipe],
 			providers: [
 				FormBuilder,
-				PaginableService,
-				PaginableTranslationService,
+				{
+					provide: PaginableService,
+					useClass: MockPaginableService
+				},
+				{
+					provide: PaginableTranslationService,
+					useClass: MockPaginableTranslationService
+				},
 				{
 					provide: DropdownComponent,
 					useValue: {
@@ -42,6 +75,14 @@ describe('MenuFilterComponent', () => {
 		fixture = TestBed.createComponent(MenuFilterComponent);
 		component = fixture.componentInstance;
 		formBuilder = TestBed.inject(FormBuilder);
+		
+		// Set a default header before detecting changes
+		component.header = {
+			title: 'Test Header',
+			property: 'testProperty',
+			filter: { type: 'text' }
+		};
+		
 		fixture.detectChanges();
 	});
 

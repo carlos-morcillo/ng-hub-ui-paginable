@@ -45,6 +45,9 @@ describe('PaginatorComponent', () => {
 		fixture = TestBed.createComponent(PaginatorComponent);
 		component = fixture.componentInstance;
 
+		// Set required inputs for standalone component
+		fixture.componentRef.setInput('numberOfPages', 10);
+
 		// Create host component fixture for integration tests
 		hostFixture = TestBed.createComponent(TestHostComponent);
 		hostComponent = hostFixture.componentInstance;
