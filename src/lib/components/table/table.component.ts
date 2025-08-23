@@ -105,11 +105,47 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		class: 'hub-table'
 	}
 })
+/**
+ * A highly configurable and feature-rich table component for Angular applications.
+ * Provides data visualization with pagination, sorting, filtering, and selection capabilities.
+ * 
+ * Features:
+ * - Pagination (local and remote)
+ * - Column sorting with customizable sort functions
+ * - Advanced filtering with column-specific filters
+ * - Row selection (single and multiple)
+ * - Expandable rows
+ * - Custom templates for headers, cells, and special states
+ * - Responsive design with configurable breakpoints
+ * - Batch actions for selected rows
+ * - Search functionality with debouncing
+ * - Loading and error states
+ * - Accessibility features
+ * 
+ * @template T The type of data objects displayed in the table
+ * @example
+ * ```html
+ * <hub-ui-table
+ *   [headers]="headers"
+ *   [data]="data()"
+ *   [(page)]="page"
+ *   [totalItems]="totalItems"
+ *   [loading]="loading"
+ *   [searchable]="true"
+ *   [selectable]="true"
+ *   [(searchTerm)]="searchTerm"
+ *   [(ordination)]="ordination">
+ * </hub-ui-table>
+ * ```
+ */
 export class TableComponent<T = any> {
+	/** Form builder service for creating reactive forms */
 	#fb = inject(UntypedFormBuilder);
 
+	/** Unique identifier for the table component instance */
 	id = input(generateUniqueId(16));
 
+	/** Visual and behavioral options for the table */
 	readonly options = input<PaginableTableOptions>({
 		cursor: 'default',
 		hoverableRows: false,
@@ -141,8 +177,10 @@ export class TableComponent<T = any> {
 	 */
 	readonly debounce = input<number>(0);
 
+	/** Column headers configuration. Can be strings for simple headers or PaginableTableHeader objects for advanced features */
 	readonly headers = model<Array<PaginableTableHeader | string>>([]);
 
+	/** Computed headers with normalized configuration and automatic button column handling */
 	readonly fixedHeaders = computed(() => {
 		const headers = this.headers();
 		const fixedHeaders: Array<PaginableTableHeader> = headers.map(
@@ -174,6 +212,7 @@ export class TableComponent<T = any> {
 		return fixedHeaders;
 	});
 
+	/** Computed total number of columns including selection and expansion columns */
 	headersCount = computed(() => {
 		let count = this.fixedHeaders().length;
 		if (
@@ -191,6 +230,7 @@ export class TableComponent<T = any> {
 		return count;
 	});
 
+	/** Computed list of headers that have filter configurations */
 	headerFilters = computed(() => {
 		const headerFilters = this.fixedHeaders().filter(
 			(header) => header.filter
@@ -199,6 +239,7 @@ export class TableComponent<T = any> {
 		return headerFilters;
 	});
 
+	/** Model for filter values applied to the table columns */
 	readonly filters = model<Record<string, {}> | null>({});
 
 	/**
@@ -209,8 +250,10 @@ export class TableComponent<T = any> {
 	 */
 	filtersFG: FormGroup = new FormGroup({});
 
+	/** Indicates if filters are currently being applied or processed */
 	filterLoading: boolean = false;
 
+	/** Effect that synchronizes external filter changes with the internal form */
 	filterEffect = effect(() => {
 		const filters = this.filters();
 
@@ -220,14 +263,15 @@ export class TableComponent<T = any> {
 		}, 16);
 	});
 
+	/** Debounced signal for filter form changes to prevent excessive API calls */
 	filtersChange = debouncedSignal(
 		toSignal(this.filtersFG.valueChanges),
 		this.debounce
 	);
 
+	/** Effect that handles filter form changes and updates the filters model */
 	filtersFGChangeEffect = effect(() => {
 		const filters = this.filtersChange();
-		console.log(this.debounce(), filters);
 		if (filters === undefined) return;
 
 		if (this.setFilters) {
@@ -236,12 +280,18 @@ export class TableComponent<T = any> {
 		this.setFilters = true;
 	});
 
+	/** Computed boolean indicating if any column has inline filters (not menu filters) */
 	hasColumnFilters = computed(() => {
 		return this.headerFilters().some(
 			({ filter }) => filter?.mode !== 'menu'
 		);
 	});
 
+	/** 
+	 * Table data input that accepts either raw data array or PaginationState object.
+	 * Automatically transforms data into TableRow format and handles pagination state.
+	 * When PaginationState is provided, automatically sets page, perPage, and totalItems.
+	 */
 	readonly rows = input<
 		Array<TableRow<T>>,
 		Array<T> | PaginationState | null | undefined
@@ -264,13 +314,21 @@ export class TableComponent<T = any> {
 		}
 	});
 
+	/** Effect that runs when rows data changes to update selection state */
 	rowsEffect = effect(() => {
 		const rows = this.rows();
 		this.markSelected();
 	});
 
+	/** Internal flag to prevent filter feedback loops during initialization */
 	setFilters: boolean = true;
 
+	/**
+	 * Transforms raw data item into TableRow format with default selection and expansion state.
+	 * 
+	 * @param data The raw data item to transform
+	 * @returns TableRow with default collapsed and unselected state
+	 */
 	transformIntoRow(data: T): TableRow<T> {
 		return {
 			selected: false,
@@ -279,11 +337,16 @@ export class TableComponent<T = any> {
 		};
 	}
 
+	/** Available options for number of items per page */
 	readonly perPageOptions = input<Array<number>>([20, 50, 100]);
+	/** Current page number (1-based) */
 	readonly page = model<number | null>(null);
+	/** Number of items to display per page */
 	readonly perPage = model<number | null>(null);
+	/** Total number of items available across all pages */
 	readonly totalItems = model<number | null>(null);
 
+	/** Computed total number of pages based on perPage and totalItems */
 	readonly numberOfPages = computed((): number | null => {
 		if (this.perPage() && this.totalItems()) {
 			return Math.ceil(this.totalItems()! / this.perPage()!);
@@ -291,6 +354,7 @@ export class TableComponent<T = any> {
 		return null;
 	});
 
+	/** Current column sorting configuration */
 	readonly ordination = model<PaginableTableOrdination>();
 
 	/**
@@ -309,14 +373,19 @@ export class TableComponent<T = any> {
 	 */
 	readonly bindValue = input<string>();
 
+	/** Loading state indicator for the table */
 	readonly loading = model<boolean>(false);
 
+	/** Position where pagination controls should be displayed */
 	readonly paginationPosition = input<'bottom' | 'top' | 'both'>('bottom');
 
+	/** Whether to show pagination information (e.g., "Showing 1 to 10 of 100 entries") */
 	readonly paginationInfo = input<boolean>(true);
 
+	/** Whether action buttons should stick to viewport during scrolling */
 	readonly stickyActions = input<boolean>(false);
 
+	/** Actions that can be performed on multiple selected rows */
 	readonly batchActions = input<
 		Array<PaginableTableDropdown | ListButton>,
 		Array<PaginableTableDropdown | ListButton>
@@ -336,6 +405,7 @@ export class TableComponent<T = any> {
 		}
 	});
 
+	/** Whether rows can be selected by clicking on them */
 	readonly selectable = input<boolean>(false);
 
 	/**
@@ -352,12 +422,16 @@ export class TableComponent<T = any> {
 	 * @type {boolean}
 	 * @memberof PaginableTableComponent
 	 */
+	/** Whether the table includes a search input field */
 	readonly searchable = input<boolean>(true);
 
+	/** Current search term for filtering table data */
 	readonly searchTerm = model<string>('');
 
+	/** Internal BehaviorSubject for debouncing search term changes */
 	searchProxy$ = new BehaviorSubject<string>(this.searchTerm());
 
+	/** Effect that handles debounced search term updates */
 	searchTermEffect = effect(() => {
 		const delay = this.debounce();
 
@@ -375,8 +449,10 @@ export class TableComponent<T = any> {
 		};
 	});
 
+	/** Custom search function for filtering table data */
 	readonly searchFn = input<(a: T, b: T) => boolean>();
 
+	/** Custom comparison function for row equality checks (TODO: Implement) */
 	// TODO: Implementar
 	readonly compareFn = input<(a: T, b: T) => boolean>();
 
@@ -388,8 +464,10 @@ export class TableComponent<T = any> {
 	readonly clickFn =
 		input<(event: TableRowEvent<T>) => void | Promise<void>>();
 
+	/** Responsive breakpoint configuration for table layout */
 	readonly responsive = input<TableBreakpoint | null>(null);
 
+	/** Computed CSS class for responsive table behavior */
 	responsiveCSSClass = computed(() => {
 		const response = this.responsive();
 		if (response && Object.keys(TableBreakpoint).includes(response)) {
@@ -400,29 +478,45 @@ export class TableComponent<T = any> {
 		return null;
 	});
 
+	/** Disabled state for the entire table component */
 	disabled: boolean = false;
 
+	/** Custom template for table rows */
 	readonly templateRow = contentChild(PaginableTableRowDirective, {
 		read: TemplateRef
 	});
+	/** Collection of custom header templates */
 	readonly headerTpts = contentChildren(PaginableTableHeaderDirective);
+	/** Collection of custom cell templates for specific columns */
 	readonly templateCells = contentChildren(PaginableTableCellDirective);
+	/** Template to display when no data is available */
 	readonly noDataTpt = contentChild(PaginableTableNotFoundDirective, {
 		read: TemplateRef
 	});
+	/** Template to display during loading state */
 	readonly loadingTpt = contentChild(PaginableTableLoadingDirective, {
 		read: TemplateRef
 	});
+	/** Template to display during error state */
 	readonly errorTpt = contentChild(PaginableTableErrorDirective, {
 		read: TemplateRef
 	});
+	/** Collection of templates for expandable row content */
 	readonly templateExpandingRows = contentChildren(
 		PaginableTableExpandingRowDirective
 	);
+	/** Collection of custom filter templates for specific columns */
 	readonly filterTpts = contentChildren(PaginableTableFilterDirective);
 
+	/** Collection of dropdown components used in the table */
 	readonly dropdownComponents = viewChildren(DropdownComponent);
 
+	/**
+	 * Implements ControlValueAccessor.writeValue()
+	 * Sets the selected value(s) from external form controls or ngModel
+	 * 
+	 * @param value The value to set (can be single item or array)
+	 */
 	writeValue(value: any): void {
 		if (value) {
 			this.value = Array.isArray(value) ? value : [value];
@@ -432,17 +526,37 @@ export class TableComponent<T = any> {
 		this.markSelected();
 	}
 
+	/** ControlValueAccessor callback for value changes */
 	onChange = (_: any) => {};
+	/** ControlValueAccessor callback for touch events */
 	onTouch = () => {};
 
+	/**
+	 * Implements ControlValueAccessor.registerOnChange()
+	 * Registers callback function for value changes
+	 * 
+	 * @param fn The callback function to register
+	 */
 	registerOnChange(fn: any): void {
 		this.onChange = fn;
 	}
 
+	/**
+	 * Implements ControlValueAccessor.registerOnTouched()
+	 * Registers callback function for touch events
+	 * 
+	 * @param fn The callback function to register
+	 */
 	registerOnTouched(fn: any): void {
 		this.onTouch = fn;
 	}
 
+	/**
+	 * Implements ControlValueAccessor.setDisabledState()
+	 * Sets the disabled state of the component
+	 * 
+	 * @param isDisabled Whether the component should be disabled
+	 */
 	setDisabledState(isDisabled: boolean): void {
 		this.disabled = isDisabled;
 	}
@@ -459,6 +573,14 @@ export class TableComponent<T = any> {
 	 * @returns If the `clickFn` property is not defined in the current context, the `onItemClick` function will return without
 	 * executing any further code.
 	 */
+	/**
+	 * Handles click events on table rows.
+	 * Executes the provided clickFn callback with row details and event information.
+	 * 
+	 * @param event The mouse event that triggered the click
+	 * @param item The table row that was clicked
+	 * @returns void if no click function is defined
+	 */
 	onItemClick(event: MouseEvent, item: TableRow) {
 		const clickFn = this.clickFn();
 		if (!clickFn) {
@@ -474,6 +596,14 @@ export class TableComponent<T = any> {
 	 * @param {PaginableTableHeader} header
 	 * @returns {void}
 	 * @memberof PaginableTableComponent
+	 */
+	/**
+	 * Handles column sorting by updating the ordination state.
+	 * Toggles between ASC and DESC directions, or sets initial ASC direction.
+	 * Only processes sortable headers.
+	 * 
+	 * @param header The header configuration for the column to sort
+	 * @returns void if header is not sortable
 	 */
 	sort(header: PaginableTableHeader): void {
 		if (!header.sortable) {
@@ -503,6 +633,13 @@ export class TableComponent<T = any> {
 	 * @returns
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Determines the appropriate Font Awesome icon class for column sorting indicators.
+	 * Returns different icons based on current sort state and direction.
+	 * 
+	 * @param header The header configuration to check sort state for
+	 * @returns FontAwesome class name for sort icon
+	 */
 	getOrdenationClass(
 		header: PaginableTableHeader
 	): 'fa-sort' | 'fa-sort-up' | 'fa-sort-down' {
@@ -524,6 +661,13 @@ export class TableComponent<T = any> {
 	 * @returns {TemplateRef<PaginableTableCellDirective>}
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Retrieves a custom header template for the specified column.
+	 * Searches through headerTpts collection for a matching template directive.
+	 * 
+	 * @param header The header configuration to find template for
+	 * @returns The template reference if found, null otherwise
+	 */
 	getHeaderTemplate(header: PaginableTableHeader): TemplateRef<any> | null {
 		const property = header instanceof String ? header : header.property;
 		if (!property) {
@@ -541,6 +685,13 @@ export class TableComponent<T = any> {
 	 * @param {(PaginableTableHeader)} header
 	 * @returns {TemplateRef<PaginableTableCellDirective>}
 	 * @memberof PaginableTableComponent
+	 */
+	/**
+	 * Retrieves a custom cell template for the specified column.
+	 * Searches through templateCells collection for a matching template directive.
+	 * 
+	 * @param header The header configuration to find cell template for
+	 * @returns The template reference if found, null otherwise
 	 */
 	getCellTemplate(header: PaginableTableHeader): TemplateRef<any> | null {
 		const property = header instanceof String ? header : header.property;
@@ -560,6 +711,13 @@ export class TableComponent<T = any> {
 	 * @returns {TemplateRef<PaginableTableCellDirective>}
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Retrieves a custom filter template for the specified column.
+	 * Searches through filterTpts collection for a matching template directive.
+	 * 
+	 * @param header The header configuration to find filter template for
+	 * @returns The filter template reference if found, null otherwise
+	 */
 	getFilterTemplate(
 		header: PaginableTableHeader
 	): TemplateRef<PaginableTableFilterDirective> | null {
@@ -578,6 +736,14 @@ export class TableComponent<T = any> {
 	 * @param {*} row
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Handles action button clicks within table rows.
+	 * Prevents event bubbling and executes the provided handler function.
+	 * 
+	 * @param event The click event to stop propagation for
+	 * @param handler The action handler function to execute
+	 * @param row The table row context for the action
+	 */
 	handleAction(
 		event: Event,
 		handler: (row: TableRow) => void,
@@ -593,13 +759,27 @@ export class TableComponent<T = any> {
 	 * @param {ListButton} button
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Handles batch action execution on selected rows.
+	 * Executes the button's handler function with currently selected values.
+	 * 
+	 * @param button The batch action button configuration with handler
+	 */
 	handleBatchAction(button: ListButton) {
 		if (button.handler) {
 			button.handler(this.value);
 		}
 	}
 
-	// TODO: Hacer para todas las columnas
+	/**
+	 * Determines if a row button should be hidden based on its configuration.
+	 * Handles both function and boolean hidden properties, returning Observable for consistency.
+	 * 
+	 * @param button The button configuration to check visibility for
+	 * @param row The table row context
+	 * @returns Observable<boolean> indicating if button should be hidden
+	 * @todo Implement this logic for all columns, not just buttons
+	 */
 	isHidden(button: RowButton, row: TableRow): Observable<boolean> {
 		if (typeof button.hidden === 'function') {
 			const result = button.hidden(row);
@@ -616,6 +796,12 @@ export class TableComponent<T = any> {
 	 * @param {TableRow} item
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Toggles the expanded/collapsed state of a table row.
+	 * Used for rows that have expandable content.
+	 * 
+	 * @param item The table row to toggle expansion state for
+	 */
 	toggleExpandedRow(item: TableRow) {
 		item.collapsed = !item.collapsed;
 	}
@@ -624,6 +810,11 @@ export class TableComponent<T = any> {
 	 * Select or unselect all page items
 	 *
 	 * @memberof PaginableTableComponent
+	 */
+	/**
+	 * Toggles selection state for all visible rows on the current page.
+	 * Updates both individual row selection and the allRowsSelected flag.
+	 * Respects the bindValue configuration for complex object selection.
 	 */
 	toggleAll() {
 		this.allRowsSelected = !this.allRowsSelected;
@@ -652,6 +843,13 @@ export class TableComponent<T = any> {
 	 *
 	 * @param {*} row
 	 * @memberof PaginableTableComponent
+	 */
+	/**
+	 * Toggles selection state for a single table row.
+	 * Handles both single and multiple selection modes.
+	 * Updates the internal value array and emits changes via ControlValueAccessor.
+	 * 
+	 * @param row The table row to toggle selection for
 	 */
 	toggle(row: TableRow<T>) {
 		const rows = this.rows();
@@ -693,6 +891,11 @@ export class TableComponent<T = any> {
 	 *
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Updates the selection state of all rows based on the current value array.
+	 * Called when the rows data changes or when external value changes occur.
+	 * Respects the bindValue configuration for object property matching.
+	 */
 	markSelected() {
 		const rows = this.rows();
 		if (!rows?.length) {
@@ -709,8 +912,8 @@ export class TableComponent<T = any> {
 	}
 
 	/**
-	 * Emite el valor de los items seleccionados
-	 *
+	 * Emits the current selection value through the ControlValueAccessor interface.
+	 * Handles both single and multiple selection modes appropriately.
 	 */
 	emitValue() {
 		this.onChange(this.multiple() ? this.value : this.value[0]);
@@ -725,7 +928,15 @@ export class TableComponent<T = any> {
 	 * @return {*}  {boolean}
 	 * @memberof PaginableTableComponent
 	 */
-	// TODO: Move to utils file
+	/**
+	 * Checks if a needle value exists within an items array.
+	 * Handles both primitive and object comparisons using JSON serialization for objects.
+	 * 
+	 * @param items The array to search within
+	 * @param needle The value to search for
+	 * @returns true if needle is found in items, false otherwise
+	 * @todo Move this utility function to a shared utils file
+	 */
 	private _contains(items: T[], needle: T): boolean {
 		if (typeof needle === 'object' && needle !== null) {
 			return items.some(
@@ -735,6 +946,11 @@ export class TableComponent<T = any> {
 		return items.indexOf(needle) > -1;
 	}
 
+	/**
+	 * Initializes the filters form group by creating form controls for each header filter.
+	 * Maps header filters to form controls using either the filter key or property name as the control name.
+	 * The initial value for each control is set to null.
+	 */
 	/**
 	 * Initializes the filters form group by creating form controls for each header filter.
 	 * Maps header filters to form controls using either the filter key or property name as the control name.
@@ -760,6 +976,10 @@ export class TableComponent<T = any> {
 	 *
 	 * @memberof PaginableTableComponent
 	 */
+	/**
+	 * Resets all filter form controls to their initial state.
+	 * Clears all applied filters and returns the table to unfiltered state.
+	 */
 	clearFilters(): void {
 		this.filtersFG.reset();
 	}
@@ -768,6 +988,12 @@ export class TableComponent<T = any> {
 	 * Closes all other dropdowns except the one with the specified id.
 	 *
 	 * @param {id} - The `onDropdownFilterOpened` function takes an object parameter `id`.
+	 */
+	/**
+	 * Handles dropdown filter opening by closing all other dropdowns.
+	 * Ensures only one dropdown filter is open at a time for better UX.
+	 * 
+	 * @param id The unique identifier of the dropdown that was opened
 	 */
 	onDropdownFilterOpened({ id }: { id: string }) {
 		this.dropdownComponents()?.forEach((dropdown) => {

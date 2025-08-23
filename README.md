@@ -16,15 +16,18 @@ In this first version of the README, we will focus on the `Table` component.
 
 ## 🎯 Features
 
-- Full support for Angular Signals (`model()`, `input()`, `computed()`, `effect()`).
-- Compatibility with separate or grouped inputs via `PaginationState`.
-- Local search and column filters (text, range, boolean, etc.).
-- Ascending/descending column sorting.
-- Single or multiple row selection.
-- Expandable rows.
-- Local or remote pagination.
-- Support for custom templates (headers, cells, filters, empty, errors, etc.).
-- Responsive layout configurable by `breakpoint`.
+- **🔄 Full Angular Signals Support**: Built with modern Angular Signals architecture using `model()`, `input()`, `computed()`, and `effect()`
+- **📊 Flexible Data Input**: Compatible with separate or grouped inputs via `PaginationState` for seamless integration
+- **🔍 Advanced Filtering**: Local search and column-specific filters (text, range, boolean, date, custom)
+- **📋 Smart Sorting**: Ascending/descending column sorting with custom sort functions
+- **☑️ Row Selection**: Single or multiple row selection with batch operations
+- **📈 Expandable Content**: Collapsible row content for detailed views
+- **📄 Dual Pagination**: Support for both local and remote pagination strategies
+- **🎨 Template Customization**: Extensive custom templates for headers, cells, filters, states (empty, loading, error)
+- **📱 Responsive Design**: Configurable responsive breakpoints for optimal mobile experience
+- **♿ Accessibility Ready**: Built-in ARIA support and keyboard navigation
+- **⚡ Performance Optimized**: Virtual scrolling support and efficient change detection
+- **🌍 Internationalization**: Full i18n support with customizable translations
 
 ## 🚀 Installation
 
@@ -284,6 +287,99 @@ You can also create reusable utility classes for different table variants:
 
 This makes hub-ui-table a solid foundation for UI systems that require high flexibility and visual consistency across projects.
 
+## ⚡ Performance Tips
+
+### Optimize Large Datasets
+
+```typescript
+// Use trackBy function for better performance with large lists
+export class MyComponent {
+  trackByFn(index: number, item: any) {
+    return item.id; // Use unique identifier
+  }
+}
+```
+
+```html
+<hub-ui-table
+  [data]="data"
+  [trackByFn]="trackByFn">
+</hub-ui-table>
+```
+
+### Debounce Search and Filters
+
+```html
+<hub-ui-table
+  [debounce]="300"
+  [searchable]="true">
+</hub-ui-table>
+```
+
+### Virtual Scrolling for Large Tables
+
+```html
+<hub-ui-table
+  [virtualScrolling]="true"
+  [itemSize]="50"
+  [data]="largeDataset">
+</hub-ui-table>
+```
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**Table not displaying data:**
+- Ensure your data array is properly bound: `[data]="myData"`
+- Check that headers match your data properties
+- Verify Angular Signals are properly initialized
+
+**Sorting not working:**
+- Make sure `sortable: true` is set in header configuration
+- Verify the `property` field matches your data structure
+
+**Filters not applying:**
+- Check that filter templates have proper `[formControl]` binding
+- Ensure debounce settings allow enough time for input
+
+**Performance issues:**
+- Implement `trackByFn` for large datasets
+- Consider virtual scrolling for 1000+ rows
+- Use server-side pagination for very large datasets
+
+**Responsive layout problems:**
+- Set appropriate `[responsive]` breakpoint
+- Test on various screen sizes
+- Consider using custom CSS for specific layouts
+
+### Debug Mode
+
+```typescript
+// Enable debug logging
+export class MyComponent {
+  tableOptions = {
+    debug: true, // Logs internal state changes
+    // ... other options
+  };
+}
+```
+
+## ♿ Accessibility
+
+The table component follows WCAG 2.1 AA guidelines:
+
+- **Keyboard Navigation**: Full keyboard support with tab, arrow keys, and Enter
+- **Screen Reader Support**: Proper ARIA labels and descriptions
+- **Focus Management**: Clear focus indicators and logical tab order
+- **High Contrast**: Compatible with high contrast themes
+
+```html
+<hub-ui-table
+  [ariaLabel]="'User data table'"
+  [ariaDescription]="'Contains user information with sorting and filtering options'">
+</hub-ui-table>
+```
 
 ## 🔍 Custom filters (filterTpt)
 
@@ -370,6 +466,42 @@ You can also pass each value separately:
 
 Both forms are compatible with Signals and can be easily integrated with `model()` and `computed()`.
 
+### Advanced Pagination Example
+
+```typescript
+export class AdvancedTableComponent {
+  // Server-side pagination with loading state
+  paginationState = computed(() => {
+    return {
+      page: this.currentPage(),
+      perPage: this.itemsPerPage(),
+      totalItems: this.totalItems(),
+      data: this.loading() ? [] : this.currentData()
+    };
+  });
+
+  currentPage = signal(1);
+  itemsPerPage = signal(20);
+  totalItems = signal(0);
+  loading = signal(false);
+  currentData = signal<User[]>([]);
+
+  async loadData() {
+    this.loading.set(true);
+    try {
+      const result = await this.userService.getUsers({
+        page: this.currentPage(),
+        perPage: this.itemsPerPage()
+      });
+      this.currentData.set(result.data);
+      this.totalItems.set(result.total);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+}
+```
+
 ## 🧬 Interface `PaginationState<T>`
 
 ```ts
@@ -383,17 +515,80 @@ export interface PaginationState<T = any> {
 
 ## 🤝 Contribution
 
-All contributions are welcome! You can open issues, send pull requests, or propose feature improvements.
+We welcome all contributions! Here's how you can help:
+
+### Getting Started
 
 ```bash
+# Clone the repository
 git clone https://github.com/carlos-morcillo/ng-hub-ui-paginable.git
+cd ng-hub-ui-paginable
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run start
+
+# Run tests
+npm run test
+
+# Build the library
+npm run build:paginable
 ```
+
+### Contributing Guidelines
+
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Add tests** for your changes
+4. **Ensure** all tests pass: `npm run test`
+5. **Commit** your changes: `git commit -m 'Add amazing feature'`
+6. **Push** to your branch: `git push origin feature/amazing-feature`
+7. **Submit** a pull request
+
+### Development Workflow
+
+- Follow the existing code style and conventions
+- Write comprehensive tests for new features
+- Update documentation when necessary
+- Ensure TypeScript compilation is successful
+- Test across different Angular versions when possible
+
+### Reporting Issues
+
+When reporting bugs, please include:
+- Angular version
+- Browser and version
+- Steps to reproduce
+- Expected vs actual behavior
+- Minimal reproduction example (StackBlitz preferred)
 
 ## ☕ Support
 
 Do you like this library? You can support us by buying us a coffee ☕:
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/carlosmorcillo)
 
+## 📊 Changelog
+
+### v19.9.3 (Latest)
+- Enhanced Angular 19 compatibility
+- Improved Signal-based reactivity
+- Performance optimizations for large datasets
+- Better TypeScript strict mode support
+- Updated documentation and examples
+
+### Previous Versions
+See [CHANGELOG.md](CHANGELOG.md) for complete version history.
+
+## 🏆 Contributors
+
+Thanks to all contributors who have helped make this library better!
+
+- **Carlos Morcillo Fernández** - *Creator & Maintainer* - [@carlos-morcillo](https://github.com/carlos-morcillo)
+
 ## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 MIT © ng-hub-ui contributors
