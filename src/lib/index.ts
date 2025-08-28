@@ -1,5 +1,5 @@
 // Modules
-export { TableModule } from './paginable.module';
+export { HubUITableModule } from './paginable.module';
 
 // Components
 export { HubIconComponent } from './components/icon/icon.component';

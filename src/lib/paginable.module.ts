@@ -35,12 +35,12 @@ import { PaginableConfigService } from './services/paginate-config.service';
 	],
 	providers: []
 })
-export class TableModule {
+export class HubUITableModule {
 	static forRoot(
 		config?: PaginableTableConfig
-	): ModuleWithProviders<TableModule> {
+	): ModuleWithProviders<HubUITableModule> {
 		return {
-			ngModule: TableModule,
+			ngModule: HubUITableModule,
 			providers: [
 				{
 					provide: PaginableConfigService,

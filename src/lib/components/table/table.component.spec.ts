@@ -1,16 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { TableComponent } from './table.component';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
-import { PaginationState } from '../../interfaces/pagination-state';
 import { TableRow } from '../../interfaces/table-row';
 import { PaginableTranslationService } from '../../services/paginable-translation.service';
 import { PaginableService } from '../../services/paginable.service';
 import { PaginableConfigService } from '../../services/paginate-config.service';
+import { TableComponent } from './table.component';
 
 // Mock services
 class MockPaginableTranslationService {
@@ -18,14 +16,14 @@ class MockPaginableTranslationService {
 
 	getTranslation(key: string) {
 		const translations: Record<string, string> = {
-			'LOADING': 'loading',
-			'SEARCH': 'search',
-			'NO_RESULTS_FOUND': 'No results found',
-			'SHOWING_X_OF_Y_ROWS': 'Showing {{amount}} of {{total}} rows'
+			LOADING: 'loading',
+			SEARCH: 'search',
+			NO_RESULTS_FOUND: 'No results found',
+			SHOWING_X_OF_Y_ROWS: 'Showing {{amount}} of {{total}} rows'
 		};
 		return translations[key] || key;
 	}
-	
+
 	setTranslations() {}
 	initialize() {}
 }
@@ -35,11 +33,11 @@ class MockPaginableService {
 		language: 'en',
 		mapping: {}
 	};
-	
+
 	get mapping() {
 		return this.config.mapping;
 	}
-	
+
 	initialize() {}
 }
 
@@ -49,11 +47,7 @@ describe('TableComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [
-				TableComponent,
-				BrowserAnimationsModule,
-				CommonModule
-			],
+			imports: [TableComponent, BrowserAnimationsModule, CommonModule],
 			providers: [
 				{
 					provide: PaginableTranslationService,
@@ -102,9 +96,12 @@ describe('TableComponent', () => {
 		it('should handle string headers', () => {
 			component.headers.set(['name', 'email', 'age']);
 			const fixedHeaders = component.fixedHeaders();
-			
+
 			expect(fixedHeaders.length).toBe(3);
-			expect(fixedHeaders[0]).toEqual({ title: 'name', property: 'name' });
+			expect(fixedHeaders[0]).toEqual({
+				title: 'name',
+				property: 'name'
+			});
 		});
 
 		it('should handle object headers', () => {
@@ -114,7 +111,7 @@ describe('TableComponent', () => {
 			];
 			component.headers.set(headers);
 			const fixedHeaders = component.fixedHeaders();
-			
+
 			expect(fixedHeaders).toEqual(headers);
 		});
 
@@ -127,7 +124,7 @@ describe('TableComponent', () => {
 			];
 			component.headers.set(headers);
 			const fixedHeaders = component.fixedHeaders();
-			
+
 			expect(fixedHeaders[0].onlyButtons).toBe(true);
 			expect(fixedHeaders[0].align).toBe('end');
 			expect(fixedHeaders[0].wrapping).toBe('nowrap');
@@ -145,8 +142,10 @@ describe('TableComponent', () => {
 				{ id: 1, name: 'John' },
 				{ id: 2, name: 'Jane' }
 			];
-			const transformedRows = testData.map(item => component.transformIntoRow(item));
-			
+			const transformedRows = testData.map((item) =>
+				component.transformIntoRow(item)
+			);
+
 			expect(transformedRows.length).toBe(2);
 			expect(transformedRows[0].data).toEqual({ id: 1, name: 'John' });
 			expect(transformedRows[0].selected).toBe(false);
@@ -155,7 +154,9 @@ describe('TableComponent', () => {
 
 		it('should handle empty data', () => {
 			const emptyData: any[] = [];
-			const transformedRows = emptyData.map(item => component.transformIntoRow(item));
+			const transformedRows = emptyData.map((item) =>
+				component.transformIntoRow(item)
+			);
 			expect(transformedRows).toEqual([]);
 		});
 	});
@@ -178,11 +179,15 @@ describe('TableComponent', () => {
 		it('should identify headers with filters', () => {
 			const headers: PaginableTableHeader[] = [
 				{ title: 'Name', property: 'name', filter: { type: 'text' } },
-				{ title: 'Age', property: 'age', filter: { type: 'number-range' } },
+				{
+					title: 'Age',
+					property: 'age',
+					filter: { type: 'number-range' }
+				},
 				{ title: 'Email', property: 'email' }
 			];
 			component.headers.set(headers);
-			
+
 			const headerFilters = component.headerFilters();
 			expect(headerFilters.length).toBe(2);
 		});
@@ -192,16 +197,20 @@ describe('TableComponent', () => {
 				{ title: 'Name', property: 'name', filter: { type: 'text' } }
 			];
 			component.headers.set(headers);
-			
+
 			expect(component.hasColumnFilters()).toBe(true);
 		});
 
 		it('should not detect menu-only filters as inline', () => {
 			const headers: PaginableTableHeader[] = [
-				{ title: 'Name', property: 'name', filter: { type: 'text', mode: 'menu' } }
+				{
+					title: 'Name',
+					property: 'name',
+					filter: { type: 'text', mode: 'menu' }
+				}
 			];
 			component.headers.set(headers);
-			
+
 			expect(component.hasColumnFilters()).toBe(false);
 		});
 
@@ -209,11 +218,11 @@ describe('TableComponent', () => {
 			// First add controls to the FormGroup using FormControl constructor
 			component.filtersFG.addControl('name', new FormControl(''));
 			component.filtersFG.addControl('age', new FormControl(''));
-			
+
 			component.filtersFG.patchValue({ name: 'John', age: 25 });
 			expect(component.filtersFG.value.name).toBe('John');
 			expect(component.filtersFG.value.age).toBe(25);
-			
+
 			component.clearFilters();
 			// After reset(), form controls return to their initial state (empty string in this case)
 			expect(component.filtersFG.value.name).toBe('');
@@ -228,7 +237,7 @@ describe('TableComponent', () => {
 				property: 'name',
 				sortable: true
 			};
-			
+
 			component.sort(header);
 			expect(component.ordination()?.property).toBe('name');
 			expect(component.ordination()?.direction).toBe('ASC');
@@ -240,11 +249,11 @@ describe('TableComponent', () => {
 				property: 'name',
 				sortable: true
 			};
-			
+
 			component.ordination.set({ property: 'name', direction: 'ASC' });
 			component.sort(header);
 			expect(component.ordination()?.direction).toBe('DESC');
-			
+
 			component.sort(header);
 			expect(component.ordination()?.direction).toBe('ASC');
 		});
@@ -255,7 +264,7 @@ describe('TableComponent', () => {
 				property: 'name',
 				sortable: false
 			};
-			
+
 			const initialOrdination = component.ordination();
 			component.sort(header);
 			expect(component.ordination()).toBe(initialOrdination);
@@ -267,14 +276,14 @@ describe('TableComponent', () => {
 				property: 'name',
 				sortable: true
 			};
-			
+
 			// No sort applied
 			expect(component.getOrdenationClass(header)).toBe('fa-sort');
-			
+
 			// ASC sort
 			component.ordination.set({ property: 'name', direction: 'ASC' });
 			expect(component.getOrdenationClass(header)).toBe('fa-sort-up');
-			
+
 			// DESC sort
 			component.ordination.set({ property: 'name', direction: 'DESC' });
 			expect(component.getOrdenationClass(header)).toBe('fa-sort-down');
@@ -283,24 +292,33 @@ describe('TableComponent', () => {
 
 	describe('Template System', () => {
 		it('should retrieve header template', () => {
-			const header: PaginableTableHeader = { title: 'Name', property: 'name' };
+			const header: PaginableTableHeader = {
+				title: 'Name',
+				property: 'name'
+			};
 			const template = component.getHeaderTemplate(header);
-			
+
 			// In basic test setup, no templates are configured
 			expect(template).toBeNull();
 		});
 
 		it('should retrieve cell template', () => {
-			const header: PaginableTableHeader = { title: 'Name', property: 'name' };
+			const header: PaginableTableHeader = {
+				title: 'Name',
+				property: 'name'
+			};
 			const template = component.getCellTemplate(header);
-			
+
 			expect(template).toBeNull();
 		});
 
 		it('should retrieve filter template', () => {
-			const header: PaginableTableHeader = { title: 'Name', property: 'name' };
+			const header: PaginableTableHeader = {
+				title: 'Name',
+				property: 'name'
+			};
 			const template = component.getFilterTemplate(header);
-			
+
 			expect(template).toBeNull();
 		});
 	});
@@ -313,7 +331,7 @@ describe('TableComponent', () => {
 				selected: false,
 				collapsed: true
 			};
-			
+
 			// Test that onItemClick doesn't throw when no clickFn is set
 			expect(() => component.onItemClick(mockEvent, row)).not.toThrow();
 		});
@@ -325,7 +343,7 @@ describe('TableComponent', () => {
 				selected: false,
 				collapsed: true
 			};
-			
+
 			// Should not throw error
 			expect(() => component.onItemClick(mockEvent, row)).not.toThrow();
 		});
@@ -338,11 +356,11 @@ describe('TableComponent', () => {
 				selected: false,
 				collapsed: true
 			};
-			
+
 			spyOn(mockEvent, 'stopPropagation');
-			
+
 			component.handleAction(mockEvent, mockHandler, row);
-			
+
 			expect(mockEvent.stopPropagation).toHaveBeenCalled();
 			expect(mockHandler).toHaveBeenCalledWith(row);
 		});
@@ -350,10 +368,10 @@ describe('TableComponent', () => {
 		it('should handle batch actions', () => {
 			const mockHandler = jasmine.createSpy('handler');
 			const button = { label: 'Delete', handler: mockHandler };
-			
+
 			component.value = [{ id: 1 }, { id: 2 }];
 			component.handleBatchAction(button);
-			
+
 			expect(mockHandler).toHaveBeenCalledWith(component.value);
 		});
 	});
@@ -365,10 +383,10 @@ describe('TableComponent', () => {
 				selected: false,
 				collapsed: true
 			};
-			
+
 			component.toggleExpandedRow(row);
 			expect(row.collapsed).toBe(false);
-			
+
 			component.toggleExpandedRow(row);
 			expect(row.collapsed).toBe(true);
 		});
@@ -378,14 +396,14 @@ describe('TableComponent', () => {
 		it('should write value', () => {
 			const value = [{ id: 1, name: 'John' }];
 			component.writeValue(value);
-			
+
 			expect(component.value).toEqual(value);
 		});
 
 		it('should write single value as array', () => {
 			const value = { id: 1, name: 'John' };
 			component.writeValue(value);
-			
+
 			expect(component.value).toEqual([value]);
 		});
 
@@ -397,21 +415,21 @@ describe('TableComponent', () => {
 		it('should register onChange callback', () => {
 			const callback = jasmine.createSpy('onChange');
 			component.registerOnChange(callback);
-			
+
 			expect(component.onChange).toBe(callback);
 		});
 
 		it('should register onTouched callback', () => {
 			const callback = jasmine.createSpy('onTouched');
 			component.registerOnTouched(callback);
-			
+
 			expect(component.onTouch).toBe(callback);
 		});
 
 		it('should set disabled state', () => {
 			component.setDisabledState(true);
 			expect(component.disabled).toBe(true);
-			
+
 			component.setDisabledState(false);
 			expect(component.disabled).toBe(false);
 		});
@@ -425,11 +443,16 @@ describe('TableComponent', () => {
 		});
 
 		it('should check if array contains objects', () => {
-			const items = [{ id: 1, name: 'John' }, { id: 2, name: 'Jane' }];
+			const items = [
+				{ id: 1, name: 'John' },
+				{ id: 2, name: 'Jane' }
+			];
 			const needle = { id: 1, name: 'John' };
-			
+
 			expect(component['_contains'](items, needle)).toBe(true);
-			expect(component['_contains'](items, { id: 3, name: 'Bob' })).toBe(false);
+			expect(component['_contains'](items, { id: 3, name: 'Bob' })).toBe(
+				false
+			);
 		});
 	});
 
@@ -440,12 +463,14 @@ describe('TableComponent', () => {
 				name: `User ${i}`,
 				email: `user${i}@example.com`
 			}));
-			
+
 			const startTime = performance.now();
-			const transformedRows = largeDataset.map(item => component.transformIntoRow(item));
+			const transformedRows = largeDataset.map((item) =>
+				component.transformIntoRow(item)
+			);
 			fixture.detectChanges();
 			const endTime = performance.now();
-			
+
 			// Should complete within reasonable time (less than 100ms)
 			expect(endTime - startTime).toBeLessThan(100);
 			expect(transformedRows.length).toBe(1000);
@@ -453,12 +478,12 @@ describe('TableComponent', () => {
 
 		it('should properly cleanup when destroyed', () => {
 			expect(fixture.componentRef).toBeTruthy();
-			
+
 			// Verify component exists before destroy
 			expect(component).toBeTruthy();
-			
+
 			fixture.destroy();
-			
+
 			// After destroy, we can test that no errors occur during cleanup
 			expect(() => fixture.detectChanges()).toThrowError();
 		});

@@ -117,111 +117,113 @@
 					</th>
 				}
 				@for (header of fixedHeaders(); track header.property) {
-					<th
-						class="hub-table__header-cell"
-						resizable
-						[class.sticky-start]="header.sticky === 'start'"
-						[class.sticky-end]="header.sticky === 'end'"
-						[class.text-start]="header.align === 'start'"
-						[class.text-end]="header.align === 'end'"
-						[class.text-center]="header.align === 'center'"
-					>
-						<div
-							class="hub-table__header-cell-content d-flex flex-nowrap align-items-center justify-content-between gap-2"
+					@if (!(isColumnHidden(header) | async)) {
+						<th
+							class="hub-table__header-cell"
+							resizable
+							[class.sticky-start]="header.sticky === 'start'"
+							[class.sticky-end]="header.sticky === 'end'"
+							[class.text-start]="header.align === 'start'"
+							[class.text-end]="header.align === 'end'"
+							[class.text-center]="header.align === 'center'"
 						>
-							<ng-container
-								[ngTemplateOutlet]="
-									getHeaderTemplate(header) ||
-									defaultHeaderTpt
-								"
-								[ngTemplateOutletContext]="{
-									header,
-									property: header | get: header.property
-								}"
+							<div
+								class="hub-table__header-cell-content d-flex flex-nowrap align-items-center justify-content-between gap-2"
 							>
-							</ng-container>
-							@if (
-								header.sortable ||
-								header.filter?.mode === 'menu'
-							) {
-								<div
-									class="hub-table__header-cell-actions d-flex gap-2 ms-auto align-items-center"
+								<ng-container
+									[ngTemplateOutlet]="
+										getHeaderTemplate(header) ||
+										defaultHeaderTpt
+									"
+									[ngTemplateOutletContext]="{
+										header,
+										property: header | get: header.property
+									}"
 								>
-									<button
-										class="hub-table__sort-btn btn"
-										(click)="sort(header)"
+								</ng-container>
+								@if (
+									header.sortable ||
+									header.filter?.mode === 'menu'
+								) {
+									<div
+										class="hub-table__header-cell-actions d-flex gap-2 ms-auto align-items-center"
 									>
-										@if (header.sortable) {
-											<i
-												class="hub-table__sort-icon fa"
-												[ngClass]="
-													getOrdenationClass(header)
-												"
-												aria-hidden="true"
-											></i>
-										}
-									</button>
-									@if (header.filter?.mode === 'menu') {
-										<hub-dropdown
-											#dropdown
-											(open)="
-												onDropdownFilterOpened($event)
-											"
-											class="hub-table__filter-dropdown"
+										<button
+											class="hub-table__sort-btn btn"
+											(click)="sort(header)"
 										>
-											<div
-												class="hub-table__filter-dropdown-toggle d-flex flex-nowrap gap-2 button filter-dropdown__toggle-content"
-											>
+											@if (header.sortable) {
 												<i
-													class="hub-table__filter-dropdown-icon fa-solid fa-filter"
-													[class.text-success]="
-														filtersFG.get(
-															header.filter
-																?.key ||
-																header.property
-														)?.value?.rules?.length
+													class="hub-table__sort-icon fa"
+													[ngClass]="
+														getOrdenationClass(header)
 													"
-													[class.filter-dropdown__toggle-content--active]="
-														filtersFG.get(
-															header.filter
-																?.key ||
-																header.property
-														)?.value?.rules?.length
-													"
+													aria-hidden="true"
 												></i>
-												@if (
-													filtersFG.get(
-														header.filter?.key ||
-															header.property
-													)?.value?.rules;
-													as rules
-												) {
-													@if (rules.length) {
-														<span
-															class="hub-table__filter-dropdown-badge badge rounded-pill text-bg-primary"
-														>
-															{{ rules.length }}
-														</span>
-													}
-												}
-											</div>
-											@if (dropdown.isOpened) {
-												<menu-filter
-													class="hub-table__filter-dropdown-content content filter-dropdown__content"
-													[header]="header"
-													[formControlName]="
-														header.filter?.key ||
-														header.property
-													"
-												>
-												</menu-filter>
 											}
-										</hub-dropdown>
-									}
-								</div>
-							}
-						</div>
-					</th>
+										</button>
+										@if (header.filter?.mode === 'menu') {
+											<hub-dropdown
+												#dropdown
+												(open)="
+													onDropdownFilterOpened($event)
+												"
+												class="hub-table__filter-dropdown"
+											>
+												<div
+													class="hub-table__filter-dropdown-toggle d-flex flex-nowrap gap-2 button filter-dropdown__toggle-content"
+												>
+													<i
+														class="hub-table__filter-dropdown-icon fa-solid fa-filter"
+														[class.text-success]="
+															filtersFG.get(
+																header.filter
+																	?.key ||
+																	header.property
+															)?.value?.rules?.length
+														"
+														[class.filter-dropdown__toggle-content--active]="
+															filtersFG.get(
+																header.filter
+																	?.key ||
+																	header.property
+															)?.value?.rules?.length
+														"
+													></i>
+													@if (
+														filtersFG.get(
+															header.filter?.key ||
+																header.property
+														)?.value?.rules;
+														as rules
+													) {
+														@if (rules.length) {
+															<span
+																class="hub-table__filter-dropdown-badge badge rounded-pill text-bg-primary"
+															>
+																{{ rules.length }}
+															</span>
+														}
+													}
+												</div>
+												@if (dropdown.isOpened) {
+													<menu-filter
+														class="hub-table__filter-dropdown-content content filter-dropdown__content"
+														[header]="header"
+														[formControlName]="
+															header.filter?.key ||
+															header.property
+														"
+													>
+													</menu-filter>
+												}
+											</hub-dropdown>
+										}
+									</div>
+								}
+							</div>
+						</th>
+					}
 				}
 				@if (templateExpandingRows().length) {
 					<th
@@ -241,32 +243,34 @@
 						track $index;
 						let last = $last
 					) {
-						@let formControlName =
-							header.filter?.key || header.property;
-						<th
-							class="hub-table__filter-cell"
-							[class.sticky-start]="header.sticky === 'start'"
-							[class.sticky-end]="header.sticky === 'end'"
-						>
-							@if (
-								header.filter &&
-								header.filter.mode !== 'menu' &&
-								filtersFG.get(formControlName)
-							) {
-								<ng-container
-									[ngTemplateOutlet]="
-										getFilterTemplate(header) ||
-										defaultFilterTpt
-									"
-									[ngTemplateOutletContext]="{
-										header: header,
-										formControl:
-											filtersFG.get(formControlName)
-									}"
-								>
-								</ng-container>
-							}
-						</th>
+						@if (!(isColumnHidden(header) | async)) {
+							@let formControlName =
+								header.filter?.key || header.property;
+							<th
+								class="hub-table__filter-cell"
+								[class.sticky-start]="header.sticky === 'start'"
+								[class.sticky-end]="header.sticky === 'end'"
+							>
+								@if (
+									header.filter &&
+									header.filter.mode !== 'menu' &&
+									filtersFG.get(formControlName)
+								) {
+									<ng-container
+										[ngTemplateOutlet]="
+											getFilterTemplate(header) ||
+											defaultFilterTpt
+										"
+										[ngTemplateOutletContext]="{
+											header: header,
+											formControl:
+												filtersFG.get(formControlName)
+										}"
+									>
+									</ng-container>
+								}
+							</th>
+						}
 					}
 				</tr>
 			}
@@ -369,28 +373,30 @@
 			</td>
 		}
 		@for (header of fixedHeaders(); track $index) {
-			<td
-				class="hub-table__cell"
-				[class.sticky-start]="header.sticky === 'start'"
-				[class.sticky-end]="header.sticky === 'end'"
-				[class.text-start]="header.align === 'start'"
-				[class.text-end]="header.align === 'end'"
-				[class.text-center]="header.align === 'center'"
-				[style.width]="header.buttons?.length ? '0' : 'auto'"
-			>
-				<ng-container
-					[ngTemplateOutlet]="
-						getCellTemplate(header) || defaultCellTpt
-					"
-					[ngTemplateOutletContext]="{
-						header: header,
-						item: item.data,
-						row: item,
-						property: item.data | get: header.property
-					}"
+			@if (!(isColumnHidden(header) | async)) {
+				<td
+					class="hub-table__cell"
+					[class.sticky-start]="header.sticky === 'start'"
+					[class.sticky-end]="header.sticky === 'end'"
+					[class.text-start]="header.align === 'start'"
+					[class.text-end]="header.align === 'end'"
+					[class.text-center]="header.align === 'center'"
+					[style.width]="header.buttons?.length ? '0' : 'auto'"
 				>
-				</ng-container>
-			</td>
+					<ng-container
+						[ngTemplateOutlet]="
+							getCellTemplate(header) || defaultCellTpt
+						"
+						[ngTemplateOutletContext]="{
+							header: header,
+							item: item.data,
+							row: item,
+							property: item.data | get: header.property
+						}"
+					>
+					</ng-container>
+				</td>
+			}
 		}
 		@if (templateExpandingRows().length) {
 			<td

@@ -214,7 +214,16 @@ export class TableComponent<T = any> {
 
 	/** Computed total number of columns including selection and expansion columns */
 	headersCount = computed(() => {
-		let count = this.fixedHeaders().length;
+		let count = this.fixedHeaders().filter(header => {
+			if (typeof header.hidden === 'function') {
+				const result = header.hidden();
+				if (result instanceof Promise || isObservable(result)) {
+					return false;
+				}
+				return !result;
+			}
+			return !header.hidden;
+		}).length;
 		if (
 			(this.selectable() && this.multiple()) ||
 			this.batchActions().length
@@ -788,6 +797,34 @@ export class TableComponent<T = any> {
 				: of(result);
 		}
 		return of(!!button.hidden);
+	}
+
+	/**
+	 * Determines if a header column should be hidden based on its configuration.
+	 * Handles boolean values, synchronous functions, and asynchronous functions (Promise/Observable).
+	 * 
+	 * @param header The header configuration to check visibility for
+	 * @returns Observable<boolean> indicating if column should be hidden
+	 */
+	isColumnHidden(header: PaginableTableHeader): Observable<boolean> {
+		if (typeof header.hidden === 'function') {
+			const result = header.hidden();
+			if (isObservable(result)) {
+				return result as Observable<boolean>;
+			}
+			if (result instanceof Promise) {
+				return new Observable(subscriber => {
+					result.then(value => {
+						subscriber.next(value);
+						subscriber.complete();
+					}).catch(error => {
+						subscriber.error(error);
+					});
+				});
+			}
+			return of(result);
+		}
+		return of(!!header.hidden);
 	}
 
 	/**

@@ -10,21 +10,40 @@ Esta biblioteca surge de la necesidad de ofrecer componentes de visualización d
 
 ## 📦 Descripción
 
-`ng-hub-ui-paginable` proporciona una tabla (`<hub-ui-table>`), una lista (`<hub-ui-list>`) y un paginador (`<hub-ui-paginator>`) preparados para trabajar en conjunto o por separado, facilitando la gestión de datos paginados, búsquedas, filtros y selección de ítems.
+`ng-hub-ui-paginable` proporciona tres componentes principales que trabajan juntos de manera fluida:
 
-En esta primera versión del README nos centraremos en el componente `Tabla`.
+- **Componente Tabla** (`<hub-ui-table>` o `<hub-table>`): Tabla de datos avanzada con paginación, filtros, ordenación y selección
+- **Componente Lista** (`<hub-ui-list>` o `<hub-list>`): Lista jerárquica con elementos expandibles, selección y plantillas personalizadas  
+- **Componente Paginador** (`<hub-ui-paginator>` o `<hub-paginator>`): Controles de paginación independientes
+- **Componentes Adicionales**: Iconos, dropdowns, columnas redimensionables, inputs de rango y menús de filtro
+
+Todos los componentes están construidos como componentes standalone de Angular con soporte completo para Angular Signals.
 
 ## 🎯 Funcionalidades principales
 
-- Soporte completo para Angular Signals (`model()`, `input()`, `computed()`, `effect()`).
-- Compatibilidad con entradas separadas o agrupadas mediante `PaginationState`.
-- Búsqueda local y filtros por columna (texto, rango, booleano...).
-- Ordenación de columnas ascendente/descendente.
-- Selección individual o múltiple de filas.
-- Filas expandibles.
-- Paginación local o remota.
-- Soporte para templates personalizados (cabeceras, celdas, filtros, vacíos, errores...).
-- Diseño responsive configurable por `breakpoint`.
+### Funcionalidades Centrales
+- **🔄 Soporte completo para Angular Signals**: Construido con arquitectura moderna de Angular Signals usando `model()`, `input()`, `computed()` y `effect()`
+- **📊 Entrada de datos flexible**: Compatible con entradas separadas o agrupadas mediante `PaginationState` para integración fluida
+- **🔍 Filtros avanzados**: Filtros específicos por columna con múltiples tipos (texto, dropdown, booleano, rango de fechas, rango numérico)
+- **📋 Ordenación inteligente**: Ordenación de columnas ascendente/descendente con indicadores visuales
+- **☑️ Selección de filas**: Selección individual o múltiple de filas con operaciones en lote y soporte ControlValueAccessor
+- **📈 Contenido expandible**: Contenido de filas colapsable para vistas detalladas con plantillas personalizadas
+- **📄 Paginación dual**: Soporte para estrategias de paginación local y remota
+- **🎨 Personalización de plantillas**: Plantillas personalizadas extensivas para cabeceras, celdas, filtros, estados (vacío, carga, error)
+- **📱 Diseño responsive**: Breakpoints configurables para experiencia móvil óptima
+- **♿ Listo para accesibilidad**: Soporte ARIA integrado y navegación por teclado
+- **⚡ Optimizado para rendimiento**: Búsqueda/filtrado con debounce y detección de cambios eficiente
+- **🌍 Internacionalización**: Soporte i18n completo con traducciones personalizables (inglés/español incluidos)
+
+### Funcionalidades Avanzadas
+- **🔧 Columnas redimensionables**: Ajuste interactivo del ancho de columnas
+- **📌 Columnas fijas**: Fijar columnas al inicio o final durante el scroll horizontal
+- **🎭 Visibilidad dinámica de columnas**: Mostrar/ocultar columnas basado en condiciones, permisos o preferencias del usuario
+- **🔘 Botones de acción**: Acciones a nivel de fila con dropdowns y visibilidad condicional
+- **🎪 Iconos personalizados**: Soporte para FontAwesome, Material Icons y Bootstrap Icons
+- **🎨 Variantes visuales**: Múltiples opciones de estilo incluyendo filas rayadas, hover y temas personalizados
+- **🔍 Filtros de menú**: Filtrado avanzado con paneles de filtro dedicados
+- **📋 Listas jerárquicas**: Estructuras de datos tipo árbol con nodos expandibles/colapsables
 
 ## 🚀 Instalación
 
