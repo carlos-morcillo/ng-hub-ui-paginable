@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-table",
-	"version": "19.9.3",
+	"version": "19.10.0",
 	"description": "Highly customizable Angular table and list components with pagination, sorting and filtering support. Built with Angular 19+ and Signal-based architecture.",
 	"main": "bundles/ng-hub-ui-table.umd.js",
 	"module": "fesm2022/ng-hub-ui-table.mjs",
