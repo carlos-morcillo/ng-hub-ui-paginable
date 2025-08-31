@@ -1,5 +1,80 @@
 # ng-hub-ui-paginable
 
+## 📋 Table of Contents
+
+- [🚀 Quick Start](#-quick-start)
+- [✨ Inspiration](#-inspiration)
+- [🧩 Library Family](#-library-family-ng-hub-ui)
+- [📦 Description](#-description)
+- [🎯 Features](#-features)
+- [🚀 Installation](#-installation)
+- [⚙️ Usage](#️-usage)
+- [🪄 API Reference](#-api-reference)
+- [🏗️ Table Headers Configuration](#️-table-headers-configuration-paginabletableheader)
+- [🔧 Resizable Columns](#-resizable-columns)
+- [🎪 Additional Components](#-additional-components)
+- [🎠 Templates](#-templates)
+- [🧠 Pagination and Data Handling](#-pagination-and-data-handling)
+- [🧬 PaginationState Interface](#-interface-paginationstatet)
+- [🌍 Internationalization](#-internationalization-and-translation-management)
+- [🧩 Styling](#-styling)
+- [⚡ Performance Tips](#-performance-tips)
+- [🔧 Troubleshooting](#-troubleshooting)
+- [♿ Accessibility](#-accessibility)
+- [🧪 Testing Guide](#-testing-guide)
+- [📚 Migration Guide](#-migration-guide)
+- [❓ FAQ](#-faq)
+- [🤝 Contribution](#-contribution)
+- [☕ Support](#-support)
+- [📊 Changelog](#-changelog)
+- [🏆 Contributors](#-contributors)
+- [📄 License](#-license)
+
+---
+
+## 🚀 Quick Start
+
+Get up and running with ng-hub-ui-paginable in less than 5 minutes:
+
+### 1. Install
+```bash
+npm install ng-hub-ui-paginable
+```
+
+### 2. Import
+```typescript
+import { TableComponent } from 'ng-hub-ui-paginable';
+
+@Component({
+  imports: [TableComponent],
+  // ...
+})
+```
+
+### 3. Use
+```html
+<hub-ui-table
+  [headers]="[{property: 'name', title: 'Name'}, {property: 'email', title: 'Email'}]"
+  [data]="[{name: 'John', email: 'john@example.com'}]">
+</hub-ui-table>
+```
+
+### 4. Advanced Features
+```html
+<hub-ui-table
+  [headers]="headers"
+  [data]="data"
+  [searchable]="true"
+  [selectable]="true"
+  [(searchTerm)]="searchTerm"
+  [(page)]="currentPage">
+</hub-ui-table>
+```
+
+**💡 That's it!** You now have a fully functional data table with search, pagination, and selection.
+
+---
+
 ## ✨ Inspiration
 
 This library arises from the need to offer highly configurable, accessible, and modern data visualization components for Angular applications, enabling integrated lists, tables, and pagination with full support for signals, reactive forms, and complete render customization.
@@ -18,6 +93,8 @@ This library arises from the need to offer highly configurable, accessible, and 
 - **Additional Components**: Icons, dropdowns, resizable columns, range inputs, and filter menus
 
 All components are built as standalone Angular components with full Angular Signals support.
+
+---
 
 ## 🎯 Features
 
@@ -44,6 +121,163 @@ All components are built as standalone Angular components with full Angular Sign
 - **🎨 Visual Variants**: Multiple styling options including striped, hoverable rows, and custom themes
 - **🔍 Menu Filters**: Advanced filtering with dedicated filter panels
 - **📋 Hierarchical Lists**: Tree-like data structures with expandable/collapsible nodes
+
+## 🏗️ Component Architecture
+
+### Library Structure
+
+```
+ng-hub-ui-paginable/
+├── 📦 Core Components
+│   ├── TableComponent        - Main data table with all features
+│   ├── PaginatorComponent    - Standalone pagination controls
+│   └── PaginableListComponent - Hierarchical list with tree structure
+├── 🎨 UI Components  
+│   ├── HubIconComponent      - Multi-library icon support
+│   ├── DropdownComponent     - Action dropdowns and menus
+│   ├── MenuFilterComponent   - Advanced filtering interfaces
+│   └── PaginableTableRangeInputComponent - Date/number range inputs
+├── 🔧 Utility Components
+│   └── ResizableComponent    - Column width adjustment
+├── 📋 Template Directives
+│   ├── PaginableTableHeaderDirective    - Custom headers
+│   ├── PaginableTableCellDirective      - Custom cells
+│   ├── PaginableTableFilterDirective    - Custom filters
+│   ├── PaginableTableRowDirective       - Custom rows
+│   ├── PaginableTableExpandingRowDirective - Expandable content
+│   ├── PaginableTableLoadingDirective   - Loading states
+│   ├── PaginableTableErrorDirective     - Error states
+│   └── PaginableTableNotFoundDirective  - Empty states
+├── ⚙️ Services
+│   ├── PaginableService             - Core configuration
+│   ├── PaginableTranslationService  - i18n management
+│   └── PaginationService           - Pagination logic
+└── 🎯 Utilities
+    ├── Pipes (get, translate, ucfirst, etc.)
+    ├── Interfaces (type definitions)
+    ├── Constants (defaults, breakpoints)
+    └── Utils (helper functions)
+```
+
+### Component Relationships
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    TableComponent                           │
+│  ┌─────────────────────────────────────────────────────────┤
+│  │ Header Row (with sorting, filtering, actions)           │
+│  │ ├── PaginableTableHeaderDirective (custom headers)     │
+│  │ ├── MenuFilterComponent (advanced filters)             │
+│  │ └── ResizableDirective (column resizing)              │
+│  ├─────────────────────────────────────────────────────────┤
+│  │ Data Rows                                               │
+│  │ ├── PaginableTableRowDirective (custom row templates)  │
+│  │ ├── PaginableTableCellDirective (custom cell content)  │
+│  │ ├── PaginableTableExpandingRowDirective (details)     │
+│  │ └── DropdownComponent (row actions)                   │
+│  ├─────────────────────────────────────────────────────────┤
+│  │ State Templates                                         │
+│  │ ├── PaginableTableLoadingDirective                    │
+│  │ ├── PaginableTableErrorDirective                      │
+│  │ └── PaginableTableNotFoundDirective                   │
+│  └─────────────────────────────────────────────────────────┤
+│                    PaginatorComponent                      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow Architecture
+
+```
+┌──────────────────┐    ┌─────────────────┐    ┌──────────────────┐
+│   User Input     │    │  Angular Signals│    │  Component State │
+│  ┌─────────────┐ │    │ ┌──────────────┐│    │ ┌──────────────┐ │
+│  │ Search      │ │───▶│ │ searchTerm() ││───▶│ │ Filtered Data│ │
+│  │ Filter      │ │    │ │ filters()    ││    │ │ Sorted Data  │ │
+│  │ Sort        │ │    │ │ ordination() ││    │ │ Paginated    │ │
+│  │ Select      │ │    │ │ page()       ││    │ │ Selected     │ │
+│  └─────────────┘ │    │ └──────────────┘│    │ └──────────────┘ │
+└──────────────────┘    └─────────────────┘    └──────────────────┘
+           │                       │                        │
+           │                       ▼                        │
+           │            ┌─────────────────┐                 │
+           │            │     Effects     │                 │
+           │            │ ┌──────────────┐│                 │
+           │            │ │ Debounced    ││                 │
+           │            │ │ Updates      ││                 │
+           │            │ │ Change       ││                 │
+           │            │ │ Detection    ││                 │
+           │            │ └──────────────┘│                 │
+           │            └─────────────────┘                 │
+           │                       │                        │
+           └───────────────────────┼────────────────────────┘
+                                   ▼
+                        ┌─────────────────┐
+                        │   Template      │
+                        │     Render      │
+                        │ ┌──────────────┐│
+                        │ │ Table HTML   ││
+                        │ │ Custom Tpls  ││
+                        │ │ Pagination   ││
+                        │ └──────────────┘│
+                        └─────────────────┘
+```
+
+### Signal-Based Reactivity
+
+The library leverages Angular Signals for optimal performance and reactivity:
+
+```typescript
+// Reactive data pipeline
+data = signal<User[]>([]);
+searchTerm = signal('');
+filters = signal({});
+ordination = signal<PaginableTableOrdination>();
+
+// Computed derived state
+filteredData = computed(() => {
+  let result = this.data();
+  
+  // Apply search
+  if (this.searchTerm()) {
+    result = result.filter(item => 
+      item.name.toLowerCase().includes(this.searchTerm().toLowerCase())
+    );
+  }
+  
+  // Apply filters
+  const filters = this.filters();
+  Object.keys(filters).forEach(key => {
+    if (filters[key]) {
+      result = result.filter(item => item[key] === filters[key]);
+    }
+  });
+  
+  // Apply sorting
+  const sort = this.ordination();
+  if (sort) {
+    result.sort((a, b) => {
+      const aVal = a[sort.property];
+      const bVal = b[sort.property];
+      return sort.direction === 'ASC' 
+        ? aVal > bVal ? 1 : -1 
+        : aVal < bVal ? 1 : -1;
+    });
+  }
+  
+  return result;
+});
+
+// Pagination computed
+paginatedData = computed(() => {
+  const filtered = this.filteredData();
+  const page = this.page() || 1;
+  const perPage = this.perPage() || 20;
+  const start = (page - 1) * perPage;
+  return filtered.slice(start, start + perPage);
+});
+```
+
+---
 
 ## 🚀 Installation
 
@@ -746,6 +980,8 @@ interface ListClickEvent<T> {
 | `page`         | `number` | `1`     | Current page (model signal).  |
 | `numberOfPages`| `number` | `null`  | Total number of pages.        |
 
+---
+
 ## 🎠 Templates
 
 The `hub-ui-table` component allows you to override almost any visual section using Angular templates (`<ng-template>`). This allows you to adapt the visualization of each cell, header, or special content to your specific needs.
@@ -1095,6 +1331,502 @@ The table component follows WCAG 2.1 AA guidelines:
   [ariaLabel]="'User data table'"
   [ariaDescription]="'Contains user information with sorting and filtering options'">
 </hub-ui-table>
+```
+
+## 🧪 Testing Guide
+
+### Unit Testing Components
+
+When testing components that use ng-hub-ui-paginable, follow these patterns:
+
+#### Basic Table Testing
+
+```typescript
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TableComponent } from 'ng-hub-ui-paginable';
+import { signal } from '@angular/core';
+
+describe('MyTableComponent', () => {
+  let component: MyTableComponent;
+  let fixture: ComponentFixture<MyTableComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TableComponent, MyTableComponent]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MyTableComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should render table with data', () => {
+    component.data.set([
+      { id: 1, name: 'John', email: 'john@example.com' },
+      { id: 2, name: 'Jane', email: 'jane@example.com' }
+    ]);
+    fixture.detectChanges();
+
+    const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
+    expect(rows.length).toBe(2);
+  });
+
+  it('should handle row selection', () => {
+    component.selectable.set(true);
+    component.data.set([{ id: 1, name: 'John' }]);
+    fixture.detectChanges();
+
+    const checkbox = fixture.debugElement.query(By.css('input[type="checkbox"]'));
+    checkbox.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.selectedItems().length).toBe(1);
+  });
+});
+```
+
+#### Testing Search Functionality
+
+```typescript
+it('should filter data when search term changes', fakeAsync(() => {
+  component.searchable.set(true);
+  component.data.set([
+    { name: 'John Doe' },
+    { name: 'Jane Smith' }
+  ]);
+  fixture.detectChanges();
+
+  const searchInput = fixture.debugElement.query(By.css('input[type="search"]'));
+  searchInput.nativeElement.value = 'John';
+  searchInput.nativeElement.dispatchEvent(new Event('input'));
+  
+  tick(300); // Account for debounce
+  fixture.detectChanges();
+
+  const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
+  expect(rows.length).toBe(1);
+}));
+```
+
+#### Testing Pagination
+
+```typescript
+it('should navigate between pages', () => {
+  component.page.set(1);
+  component.totalItems.set(100);
+  component.perPage.set(10);
+  fixture.detectChanges();
+
+  const nextButton = fixture.debugElement.query(By.css('.pagination .page-item:last-child button'));
+  nextButton.nativeElement.click();
+  fixture.detectChanges();
+
+  expect(component.page()).toBe(2);
+});
+```
+
+#### Testing Custom Templates
+
+```typescript
+@Component({
+  template: `
+    <hub-ui-table [headers]="headers" [data]="data">
+      <ng-template cellTpt header="name" let-data="data">
+        <strong>{{ data.name }}</strong>
+      </ng-template>
+    </hub-ui-table>
+  `
+})
+class TestHostComponent {
+  headers = [{ property: 'name', title: 'Name' }];
+  data = [{ name: 'John' }];
+}
+
+it('should render custom cell template', () => {
+  const fixture = TestBed.createComponent(TestHostComponent);
+  fixture.detectChanges();
+
+  const strongElement = fixture.debugElement.query(By.css('strong'));
+  expect(strongElement.nativeElement.textContent).toBe('John');
+});
+```
+
+### Testing with Reactive Forms
+
+```typescript
+it('should work with reactive forms', () => {
+  const form = new FormControl([]);
+  component.selectedItemsControl = form;
+  component.selectable.set(true);
+  component.multiple.set(true);
+  fixture.detectChanges();
+
+  // Simulate selection
+  component.onRowSelect({ id: 1, name: 'John' });
+  fixture.detectChanges();
+
+  expect(form.value).toEqual([{ id: 1, name: 'John' }]);
+});
+```
+
+### Mock Services
+
+```typescript
+class MockPaginableTranslationService {
+  getTranslation(key: string) {
+    const translations = {
+      'SEARCH': 'Search',
+      'NO_RESULTS_FOUND': 'No results found',
+      'LOADING': 'Loading...'
+    };
+    return translations[key] || key;
+  }
+}
+
+// In TestBed configuration
+providers: [
+  { provide: PaginableTranslationService, useClass: MockPaginableTranslationService }
+]
+```
+
+### Testing Performance
+
+```typescript
+it('should handle large datasets efficiently', () => {
+  const largeDataset = Array.from({ length: 10000 }, (_, i) => ({
+    id: i,
+    name: `User ${i}`,
+    email: `user${i}@example.com`
+  }));
+
+  const startTime = performance.now();
+  component.data.set(largeDataset);
+  fixture.detectChanges();
+  const endTime = performance.now();
+
+  expect(endTime - startTime).toBeLessThan(100); // Should render in less than 100ms
+});
+```
+
+### Accessibility Testing
+
+```typescript
+import { axe, toHaveNoViolations } from 'jasmine-axe';
+
+expect.extend(toHaveNoViolations);
+
+it('should be accessible', async () => {
+  component.data.set([{ name: 'John', email: 'john@example.com' }]);
+  fixture.detectChanges();
+
+  const results = await axe(fixture.nativeElement);
+  expect(results).toHaveNoViolations();
+});
+```
+
+---
+
+## 📚 Migration Guide
+
+### From v1.x to v1.52.x
+
+#### Breaking Changes
+- **ngx-translate dependency removed**: Use built-in translation service instead
+- **Component selectors updated**: `hub-ui-table` is now preferred over legacy selectors
+- **Angular Signals required**: Minimum Angular 16+ for Signals support
+
+#### Migration Steps
+
+**1. Update Translation System**
+```typescript
+// Before (v1.x)
+import { TranslateService } from '@ngx-translate/core';
+
+constructor(private translate: TranslateService) {
+  // Translation setup
+}
+
+// After (v1.52.x)
+import { PaginableTranslationService } from 'ng-hub-ui-paginable';
+
+constructor(private paginableTranslation: PaginableTranslationService) {
+  this.paginableTranslation.setTranslations({
+    search: 'Search...',
+    noResults: 'No results found'
+  });
+}
+```
+
+**2. Update Component Usage**
+```html
+<!-- Before -->
+<paginable-table [headers]="headers" [data]="data">
+</paginable-table>
+
+<!-- After -->
+<hub-ui-table [headers]="headers" [data]="data">
+</hub-ui-table>
+```
+
+**3. Migrate to Angular Signals**
+```typescript
+// Before (v1.x)
+export class MyComponent {
+  headers = [{ property: 'name', title: 'Name' }];
+  data = [];
+  page = 1;
+}
+
+// After (v1.52.x)
+export class MyComponent {
+  headers = signal([{ property: 'name', title: 'Name' }]);
+  data = signal([]);
+  page = signal(1);
+}
+```
+
+**4. Update Event Handlers**
+```typescript
+// Before
+onPageChange(page: number) {
+  this.page = page;
+}
+
+// After  
+onPageChange(page: number) {
+  this.page.set(page);
+}
+```
+
+### From Legacy Bootstrap 4 to Bootstrap 5
+
+**Update CSS Classes:**
+```html
+<!-- Before (Bootstrap 4) -->
+<div class="form-row">
+  <div class="col">
+    <hub-ui-table class="table-sm">
+    </hub-ui-table>
+  </div>
+</div>
+
+<!-- After (Bootstrap 5) -->
+<div class="row g-3">
+  <div class="col">
+    <hub-ui-table class="table table-sm">
+    </hub-ui-table>
+  </div>
+</div>
+```
+
+### Configuration Updates
+
+**Before (v1.x)**
+```typescript
+@NgModule({
+  imports: [
+    HubUITableModule.forRoot({
+      theme: 'bootstrap',
+      language: 'en'
+    })
+  ]
+})
+```
+
+**After (v1.52.x)**
+```typescript
+// In main.ts or app.config.ts
+import { provideTableConfig } from 'ng-hub-ui-paginable';
+
+export const appConfig = {
+  providers: [
+    provideTableConfig({
+      theme: 'bootstrap',
+      language: 'en'
+    })
+  ]
+};
+```
+
+### Common Migration Issues
+
+**Issue: Filters not working**
+```typescript
+// Solution: Ensure proper filter configuration
+headers = signal([{
+  property: 'name',
+  title: 'Name',
+  filter: { 
+    type: 'text', 
+    mode: 'row',  // Add mode if missing
+    placeholder: 'Search names...'
+  }
+}]);
+```
+
+**Issue: Selection not updating**
+```typescript
+// Solution: Use signals for reactive updates
+selectedItems = signal([]);
+
+onSelectionChange(items: any[]) {
+  this.selectedItems.set(items); // Use .set() instead of direct assignment
+}
+```
+
+**Issue: Custom templates not rendering**
+```html
+<!-- Ensure template directive names are correct -->
+<ng-template cellTpt header="name" let-data="data">
+  {{ data.name }}
+</ng-template>
+```
+
+---
+
+## ❓ FAQ
+
+### General Usage
+
+**Q: How do I enable search functionality?**
+```html
+<hub-ui-table [searchable]="true" [(searchTerm)]="searchTerm">
+</hub-ui-table>
+```
+
+**Q: Can I use both local and remote pagination?**
+A: Yes, set `options.serverSidePagination` to true for remote, false for local:
+```typescript
+options = { serverSidePagination: true };
+```
+
+**Q: How do I add action buttons to rows?**
+```typescript
+headers = [{
+  property: 'actions',
+  title: 'Actions',
+  buttons: [
+    { 
+      icon: 'fa-edit', 
+      handler: (row) => this.edit(row.data),
+      title: 'Edit'
+    }
+  ]
+}];
+```
+
+### Filtering
+
+**Q: How do I create custom filters?**
+```html
+<ng-template filterTpt header="status" let-formControl="formControl">
+  <select [formControl]="formControl" class="form-select">
+    <option value="">All</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
+</ng-template>
+```
+
+**Q: Can I filter by date ranges?**
+```typescript
+{
+  property: 'createdAt',
+  title: 'Created',
+  filter: {
+    type: 'date-range',
+    mode: 'menu'
+  }
+}
+```
+
+### Styling and Customization
+
+**Q: How do I customize table colors?**
+```scss
+.hub-table {
+  --hub-body-bg: #f8f9fa;
+  --hub-body-color: #212529;
+  --hub-border-color: #dee2e6;
+}
+```
+
+**Q: Can I make columns resizable?**
+```html
+<ng-template headerTpt header="name">
+  <th resizable>Name</th>
+</ng-template>
+```
+
+### Performance
+
+**Q: How do I optimize for large datasets?**
+```typescript
+// Use server-side pagination
+options = { serverSidePagination: true };
+
+// Add debounce to search
+<hub-ui-table [debounce]="300">
+```
+
+**Q: The table is slow with many columns, what can I do?**
+```typescript
+// Use dynamic column visibility
+headers = computed(() => {
+  return this.allHeaders().filter(h => 
+    this.visibleColumns().includes(h.property)
+  );
+});
+```
+
+### Integration
+
+**Q: How do I integrate with NgRx?**
+```typescript
+// Component
+data = this.store.selectSignal(selectUsers);
+loading = this.store.selectSignal(selectUsersLoading);
+
+// Actions
+onPageChange(page: number) {
+  this.store.dispatch(loadUsers({ page }));
+}
+```
+
+**Q: Can I use it with reactive forms?**
+```html
+<hub-ui-table 
+  [formControl]="selectedItemsControl"
+  [selectable]="true">
+</hub-ui-table>
+```
+
+### Troubleshooting
+
+**Q: Why aren't my templates showing?**
+A: Check template directive names and ensure imports:
+```typescript
+import { 
+  PaginableTableCellDirective,
+  PaginableTableHeaderDirective 
+} from 'ng-hub-ui-paginable';
+```
+
+**Q: Search is not working, why?**
+A: Ensure searchable is enabled and check data binding:
+```typescript
+// Make sure data is properly bound
+data = signal([...yourData]);
+searchTerm = signal('');
+```
+
+**Q: How do I debug table issues?**
+A: Enable console logging and check signals:
+```typescript
+// Check if signals are updating
+effect(() => {
+  console.log('Data changed:', this.data());
+  console.log('Search term:', this.searchTerm());
+});
 ```
 
 ## 🔍 Custom filters (filterTpt)
