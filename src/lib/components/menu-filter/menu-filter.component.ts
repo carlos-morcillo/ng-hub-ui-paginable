@@ -49,6 +49,8 @@ export class MenuFilterComponent implements ControlValueAccessor {
 	#parent = inject(DropdownComponent);
 
 	#header!: PaginableTableHeader;
+	// TODO: Skipped for migration because:
+	//  Accessor inputs cannot be migrated as they are too complex.
 	@Input()
 	get header(): PaginableTableHeader {
 		return this.#header;
@@ -169,7 +171,10 @@ export class MenuFilterComponent implements ControlValueAccessor {
 				matchModes = StringMatchModes;
 				break;
 		}
-		this.matchModes = { ...matchModes, ...NullMatchModes };
+		this.matchModes = [
+			...Object.values(matchModes as any),
+			...Object.values(NullMatchModes)
+		] as MatchModes[];
 	}
 
 	/**

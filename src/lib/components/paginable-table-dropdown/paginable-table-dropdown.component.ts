@@ -1,15 +1,15 @@
 import { NgClass, NgStyle } from '@angular/common';
 import {
-	Component,
-	ElementRef,
-	EmbeddedViewRef,
-	HostListener,
-	Input,
-	TemplateRef,
-	ViewChild,
-	ViewContainerRef,
-	inject,
-	input
+  Component,
+  ElementRef,
+  EmbeddedViewRef,
+  HostListener,
+  Input,
+  TemplateRef,
+  ViewContainerRef,
+  inject,
+  input,
+  viewChild
 } from '@angular/core';
 import { TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
@@ -27,7 +27,7 @@ import { HubIconComponent } from '../icon/icon.component';
 export class PaginableTableDropdownComponent<T = any> {
 	#elementRef = inject(ElementRef);
 
-	@ViewChild('dropdownTpt') dropdownTpt!: TemplateRef<any>;
+	readonly dropdownTpt = viewChild.required<TemplateRef<any>>('dropdownTpt');
 
 	private vcr = inject(ViewContainerRef);
 	private embeddedView: EmbeddedViewRef<any> | null = null;
@@ -37,6 +37,8 @@ export class PaginableTableDropdownComponent<T = any> {
 
 	#options: PaginableTableDropdown = { buttons: [] };
 
+	// TODO: Skipped for migration because:
+	//  Accessor inputs cannot be migrated as they are too complex.
 	@Input()
 	get options(): PaginableTableDropdown {
 		return this.#options;
@@ -74,7 +76,7 @@ export class PaginableTableDropdownComponent<T = any> {
 	 * the target element that was clicked.
 	 */
 	@HostListener('document:click', ['$event'])
-	clickOut(event) {
+	clickOut(event: MouseEvent) {
 		if (
 			!this.#elementRef.nativeElement.contains(event.target) &&
 			this.shown
@@ -100,7 +102,7 @@ export class PaginableTableDropdownComponent<T = any> {
 					: this.#elementRef.nativeElement;
 
 		// Crea la vista
-		this.embeddedView = this.vcr.createEmbeddedView(this.dropdownTpt);
+		this.embeddedView = this.vcr.createEmbeddedView(this.dropdownTpt());
 		this.embeddedView.detectChanges();
 
 		const [element] = this.embeddedView.rootNodes as HTMLElement[];

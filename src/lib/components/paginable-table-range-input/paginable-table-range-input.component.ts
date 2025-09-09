@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, input } from '@angular/core';
 import {
 	ControlValueAccessor,
 	FormsModule,
@@ -22,8 +22,8 @@ import { TranslatePipe } from '../../pipes/translate.pipe';
 	]
 })
 export class PaginableTableRangeInputComponent implements ControlValueAccessor {
-	@Input() disabled = false;
-	@Input() type: 'number' | 'date' = 'number';
+	disabled = false;
+	readonly type = input<'number' | 'date'>('number');
 
 	onChange = (value: [string | number, string | number]) => {};
 

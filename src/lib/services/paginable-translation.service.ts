@@ -9,7 +9,7 @@ import { getValue } from '../utils';
 export class PaginableTranslationService {
 	#paginableSvc = inject(PaginableService);
 
-	defaultTranslations: Record<string, string | any> = [enLang, esLang].reduce(
+	defaultTranslations: Record<string, string | any> = [enLang, esLang].reduce<Record<string, any>>(
 		(acc, c) => {
 			acc[c.lang] = c.data;
 			return acc;

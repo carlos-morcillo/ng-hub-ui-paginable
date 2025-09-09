@@ -29,12 +29,14 @@ export type IconType = 'font-awesome' | 'material' | 'bootstrap';
 	templateUrl: './icon.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HubIconComponent implements Icon {
+export class HubIconComponent {
 	/**
 	 * @input config
 	 * @description Sets the icon configuration. Can be a string or an Icon object.
 	 * @type {string | Icon}
 	 */
+	// TODO: Skipped for migration because:
+	//  Accessor inputs cannot be migrated as they are too complex.
 	@Input({ required: true })
 	set config(value: string | Icon | undefined) {
 		if (!value) {
@@ -54,21 +56,21 @@ export class HubIconComponent implements Icon {
 	 * @description The type of icon (font-awesome, material, or bootstrap).
 	 * @type {IconType}
 	 */
-	type: IconType;
+	type: IconType | null = null;
 
 	/**
 	 * @input value
 	 * @description The icon value or class name.
 	 * @type {string}
 	 */
-	value: string;
+	value: string = '';
 
 	/**
 	 * @input variant
 	 * @description The variant of the icon (if applicable).
 	 * @type {string}
 	 */
-	variant: string;
+	variant: string = '';
 
 	/**
 	 * @getter classlist
@@ -118,6 +120,6 @@ export class HubIconComponent implements Icon {
 	 * @returns {string | null} The icon content for material icons, or null for other types.
 	 */
 	get content(): string | null {
-		return ['material'].includes(this.type) ? this.value : null;
+		return this.type === 'material' ? this.value : null;
 	}
 }

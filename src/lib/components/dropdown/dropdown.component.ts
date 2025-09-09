@@ -1,12 +1,11 @@
 import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	HostBinding,
-	Input,
-	Output,
-	inject
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  inject,
+  input,
+  output
 } from '@angular/core';
 import { generateUniqueId } from '../../utils';
 
@@ -24,15 +23,16 @@ import { generateUniqueId } from '../../utils';
 export class DropdownComponent {
 	private _cdr = inject(ChangeDetectorRef);
 
-	@HostBinding() @Input() id = generateUniqueId(16);
+	@HostBinding()
+readonly id = input(generateUniqueId(16));
 
-	@Output() open = new EventEmitter<{
-		id: string;
-	}>();
+	readonly open = output<{
+    id: string;
+}>();
 
-	@Output() close = new EventEmitter<{
-		id: string;
-	}>();
+	readonly close = output<{
+    id: string;
+}>();
 
 	isOpened: boolean = false;
 
@@ -40,7 +40,7 @@ export class DropdownComponent {
 		this.isOpened = !this.isOpened;
 		this._cdr.markForCheck();
 		if (this.isOpened) {
-			this.open.next({ id: this.id });
+			this.open.emit({ id: this.id() });
 		}
 	}
 

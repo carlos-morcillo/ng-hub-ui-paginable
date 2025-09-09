@@ -683,7 +683,7 @@ export class TableComponent<T = any> {
 			return null;
 		}
 		const directive = this.headerTpts().find((o) => {
-			return o.header === property;
+			return o.header() === property;
 		});
 		return directive ? directive.template : null;
 	}
@@ -708,7 +708,7 @@ export class TableComponent<T = any> {
 			return null;
 		}
 		const directive = this.templateCells().find((o) => {
-			return o.header === property;
+			return o.header() === property;
 		});
 		return directive ? directive['template'] : null;
 	}
@@ -734,7 +734,7 @@ export class TableComponent<T = any> {
 		if (!property) {
 			return null;
 		}
-		const directive = this.filterTpts().find((o) => o.header === property);
+		const directive = this.filterTpts().find((o) => o.header() === property);
 		return directive ? directive.template : null;
 	}
 
@@ -942,8 +942,9 @@ export class TableComponent<T = any> {
 		const bindValue = this.bindValue();
 
 		rows.forEach((row) => {
-			const needle = bindValue ? row.data[bindValue] : row.data;
-			row.selected = this._contains(this.value, needle);
+			const data: any = row.data as any;
+			const needle = bindValue ? data[bindValue] : (data as any);
+			row.selected = this._contains(this.value as any, needle as any);
 		});
 		this.allRowsSelected = rows.every((o) => o.selected);
 	}
@@ -1034,7 +1035,7 @@ export class TableComponent<T = any> {
 	 */
 	onDropdownFilterOpened({ id }: { id: string }) {
 		this.dropdownComponents()?.forEach((dropdown) => {
-			if (dropdown.id !== id && dropdown.isOpened) {
+			if (dropdown.id() !== id && dropdown.isOpened) {
 				dropdown.closeDropdown();
 			}
 		});

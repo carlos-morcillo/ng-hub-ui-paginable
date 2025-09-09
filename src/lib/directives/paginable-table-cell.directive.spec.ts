@@ -1,6 +1,6 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CommonModule } from '@angular/common';
+
 
 import { PaginableTableCellDirective } from './paginable-table-cell.directive';
 
@@ -10,58 +10,54 @@ import { PaginableTableCellDirective } from './paginable-table-cell.directive';
 @Component({
 	template: `
 		<ng-template cellTpt header="name" let-data="data" #nameTemplate>
-			<div class="test-cell-name" [attr.data-name]="data?.name">
-				<strong>{{ data?.name || 'No Name' }}</strong>
-				<small *ngIf="data?.email">({{ data?.email }})</small>
-			</div>
+		  <div class="test-cell-name" [attr.data-name]="data?.name">
+		    <strong>{{ data?.name || 'No Name' }}</strong>
+		    @if (data?.email) {
+		      <small>({{ data?.email }})</small>
+		    }
+		  </div>
 		</ng-template>
-
+		
 		<ng-template cellTpt header="age" let-data="data" #ageTemplate>
-			<div class="test-cell-age" [class.adult]="data?.age >= 18">
-				<span class="age-value">{{ data?.age || 0 }} years</span>
-			</div>
+		  <div class="test-cell-age" [class.adult]="data?.age >= 18">
+		    <span class="age-value">{{ data?.age || 0 }} years</span>
+		  </div>
 		</ng-template>
-
+		
 		<ng-template cellTpt header="status" let-data="data" let-index="index" #statusTemplate>
-			<div class="test-cell-status" [attr.data-index]="index">
-				<span [class.active]="data?.active" [class.inactive]="!data?.active">
-					{{ data?.active ? 'Active' : 'Inactive' }}
-				</span>
-			</div>
+		  <div class="test-cell-status" [attr.data-index]="index">
+		    <span [class.active]="data?.active" [class.inactive]="!data?.active">
+		      {{ data?.active ? 'Active' : 'Inactive' }}
+		    </span>
+		  </div>
 		</ng-template>
-
+		
 		<ng-template paginableTableCell header="description" let-data="data" #descTemplate>
-			<div class="test-cell-description">
-				<p>{{ data?.description || 'No description available' }}</p>
-			</div>
+		  <div class="test-cell-description">
+		    <p>{{ data?.description || 'No description available' }}</p>
+		  </div>
 		</ng-template>
-
+		
 		<!-- Template without directive for comparison -->
 		<ng-template #regularTemplate let-data="data">
-			<div class="regular-template">{{ data?.name }}</div>
+		  <div class="regular-template">{{ data?.name }}</div>
 		</ng-template>
-	`,
+		`,
 	standalone: true,
-	imports: [PaginableTableCellDirective, CommonModule]
+	imports: [PaginableTableCellDirective]
 })
 class TestComponent {
-	@ViewChild('nameTemplate', { read: PaginableTableCellDirective }) 
-	nameDirective!: PaginableTableCellDirective;
+	readonly nameDirective = viewChild.required('nameTemplate', { read: PaginableTableCellDirective });
 
-	@ViewChild('nameTemplate', { read: TemplateRef }) 
-	nameTemplateRef!: TemplateRef<any>;
+	readonly nameTemplateRef = viewChild.required('nameTemplate', { read: TemplateRef });
 
-	@ViewChild('ageTemplate', { read: PaginableTableCellDirective })
-	ageDirective!: PaginableTableCellDirective;
+	readonly ageDirective = viewChild.required('ageTemplate', { read: PaginableTableCellDirective });
 
-	@ViewChild('statusTemplate', { read: PaginableTableCellDirective })
-	statusDirective!: PaginableTableCellDirective;
+	readonly statusDirective = viewChild.required('statusTemplate', { read: PaginableTableCellDirective });
 
-	@ViewChild('descTemplate', { read: PaginableTableCellDirective })
-	descDirective!: PaginableTableCellDirective;
+	readonly descDirective = viewChild.required('descTemplate', { read: PaginableTableCellDirective });
 
-	@ViewChild('regularTemplate', { read: TemplateRef })
-	regularTemplateRef!: TemplateRef<any>;
+	readonly regularTemplateRef = viewChild.required('regularTemplate', { read: TemplateRef });
 
 	// Test data
 	mockUserData = {
@@ -102,7 +98,7 @@ describe('PaginableTableCellDirective', () => {
 		fixture = TestBed.createComponent(TestComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
-		directive = component.nameDirective;
+		directive = component.nameDirective();
 	});
 
 	describe('Basic Functionality', () => {
@@ -115,7 +111,7 @@ describe('PaginableTableCellDirective', () => {
 		});
 
 		it('should have required header property', () => {
-			expect(directive.header).toBe('name');
+			expect(directive.header()).toBe('name');
 		});
 
 		it('should have templateRef property', () => {
@@ -125,27 +121,27 @@ describe('PaginableTableCellDirective', () => {
 
 		it('should have accessible template reference', () => {
 			expect(directive.template).toBeTruthy();
-			expect(component.nameTemplateRef).toBeTruthy();
+			expect(component.nameTemplateRef()).toBeTruthy();
 			expect(directive.template.constructor.name).toBe('TemplateRef');
 		});
 	});
 
 	describe('Header Property Configuration', () => {
 		it('should set header property correctly for name template', () => {
-			expect(component.nameDirective.header).toBe('name');
+			expect(component.nameDirective().header()).toBe('name');
 		});
 
 		it('should set header property correctly for age template', () => {
-			expect(component.ageDirective.header).toBe('age');
+			expect(component.ageDirective().header()).toBe('age');
 		});
 
 		it('should set header property correctly for status template', () => {
-			expect(component.statusDirective.header).toBe('status');
+			expect(component.statusDirective().header()).toBe('status');
 		});
 
 		it('should work with paginableTableCell selector', () => {
-			expect(component.descDirective.header).toBe('description');
-			expect(component.descDirective.template).toBeTruthy();
+			expect(component.descDirective().header()).toBe('description');
+			expect(component.descDirective().template).toBeTruthy();
 		});
 	});
 
@@ -166,7 +162,7 @@ describe('PaginableTableCellDirective', () => {
 		});
 
 		it('should render age template with conditional styling', () => {
-			const embeddedView = component.ageDirective.template.createEmbeddedView({
+			const embeddedView = component.ageDirective().template.createEmbeddedView({
 				data: component.mockUserData
 			});
 
@@ -179,7 +175,7 @@ describe('PaginableTableCellDirective', () => {
 		});
 
 		it('should render age template for minor correctly', () => {
-			const embeddedView = component.ageDirective.template.createEmbeddedView({
+			const embeddedView = component.ageDirective().template.createEmbeddedView({
 				data: component.mockMinorData
 			});
 
@@ -191,7 +187,7 @@ describe('PaginableTableCellDirective', () => {
 		});
 
 		it('should render status template with index context', () => {
-			const embeddedView = component.statusDirective.template.createEmbeddedView({
+			const embeddedView = component.statusDirective().template.createEmbeddedView({
 				data: component.mockUserData,
 				index: 5
 			});
@@ -209,7 +205,7 @@ describe('PaginableTableCellDirective', () => {
 		});
 
 		it('should handle inactive status', () => {
-			const embeddedView = component.statusDirective.template.createEmbeddedView({
+			const embeddedView = component.statusDirective().template.createEmbeddedView({
 				data: component.mockMinorData,
 				index: 2
 			});
@@ -257,7 +253,7 @@ describe('PaginableTableCellDirective', () => {
 		});
 
 		it('should render age template with zero age', () => {
-			const embeddedView = component.ageDirective.template.createEmbeddedView({
+			const embeddedView = component.ageDirective().template.createEmbeddedView({
 				data: { age: 0 }
 			});
 
@@ -271,35 +267,35 @@ describe('PaginableTableCellDirective', () => {
 
 	describe('Multiple Directive Instances', () => {
 		it('should handle multiple directive instances correctly', () => {
-			expect(component.nameDirective).toBeTruthy();
-			expect(component.ageDirective).toBeTruthy();
-			expect(component.statusDirective).toBeTruthy();
-			expect(component.descDirective).toBeTruthy();
+			expect(component.nameDirective()).toBeTruthy();
+			expect(component.ageDirective()).toBeTruthy();
+			expect(component.statusDirective()).toBeTruthy();
+			expect(component.descDirective()).toBeTruthy();
 		});
 
 		it('should have different template references for different directives', () => {
-			expect(component.nameDirective.template).not.toBe(component.ageDirective.template);
-			expect(component.ageDirective.template).not.toBe(component.statusDirective.template);
-			expect(component.statusDirective.template).not.toBe(component.descDirective.template);
+			expect(component.nameDirective().template).not.toBe(component.ageDirective().template);
+			expect(component.ageDirective().template).not.toBe(component.statusDirective().template);
+			expect(component.statusDirective().template).not.toBe(component.descDirective().template);
 		});
 
 		it('should have correct header values for each directive', () => {
-			expect(component.nameDirective.header).toBe('name');
-			expect(component.ageDirective.header).toBe('age');
-			expect(component.statusDirective.header).toBe('status');
-			expect(component.descDirective.header).toBe('description');
+			expect(component.nameDirective().header()).toBe('name');
+			expect(component.ageDirective().header()).toBe('age');
+			expect(component.statusDirective().header()).toBe('status');
+			expect(component.descDirective().header()).toBe('description');
 		});
 	});
 
 	describe('Selector Support', () => {
 		it('should work with cellTpt selector', () => {
-			expect(component.nameDirective).toBeTruthy();
-			expect(component.nameDirective.header).toBe('name');
+			expect(component.nameDirective()).toBeTruthy();
+			expect(component.nameDirective().header()).toBe('name');
 		});
 
 		it('should work with paginableTableCell selector', () => {
-			expect(component.descDirective).toBeTruthy();
-			expect(component.descDirective.header).toBe('description');
+			expect(component.descDirective()).toBeTruthy();
+			expect(component.descDirective().header()).toBe('description');
 		});
 	});
 
@@ -317,7 +313,7 @@ describe('PaginableTableCellDirective', () => {
 		});
 
 		it('should provide index context variable', () => {
-			const embeddedView = component.statusDirective.template.createEmbeddedView({
+			const embeddedView = component.statusDirective().template.createEmbeddedView({
 				data: component.mockUserData,
 				index: 10
 			});

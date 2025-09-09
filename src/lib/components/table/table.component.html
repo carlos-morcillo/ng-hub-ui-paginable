@@ -3,7 +3,7 @@
 		@if (batchActions().length) {
 			<div class="hub-table__batch-actions">
 				@for (button of batchActions(); track $index) {
-					@if (button['buttons']?.length) {
+					@if ($any(button).buttons?.length) {
 						<hub-table-dropdown
 							class="hub-table__batch-actions-dropdown"
 							[options]="$any(button)"

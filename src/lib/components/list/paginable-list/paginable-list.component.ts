@@ -83,7 +83,7 @@ export class PaginableListComponent<T = any> {
 		this.buildForm(this.form, this._items);
 	}
 
-	@Input() clickFn: (event: ListClickEvent<T>) => void | Promise<void>;
+	@Input() clickFn: (event: ListClickEvent<T>) => void | Promise<void> = () => {};
 
 	form: FormArray = this.#fb.array([]);
 
@@ -221,7 +221,7 @@ export class PaginableListComponent<T = any> {
 	 * If the `clickFn` callback is not defined, the method exits early and no event is emitted.
 	 */
 	onItemClick(
-		{ collapsed, selected, ...item },
+		{ collapsed, selected, ...item }: any,
 		depth: number,
 		index: number,
 		event: MouseEvent

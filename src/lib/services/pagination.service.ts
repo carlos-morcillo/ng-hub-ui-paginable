@@ -14,7 +14,7 @@ export class PaginationService {
 				if (searchText && searchText.trim() !== '') {
 					filtered = filtered.filter((item) => {
 						return params.searchKeys.some(
-							(o) =>
+							(o: string) =>
 								this.get(item, o)
 									.toString()
 									.toLowerCase()
