@@ -62,7 +62,9 @@ export const locale = {
 			STARTSWITH: 'Starts with',
 			CONTAINS: 'Contains',
 			NOTCONTAINS: 'Does not contain',
-			ENDSWITH: 'Ends with'
+			ENDSWITH: 'Ends with',
+			ISNULL: 'Is null',
+			ISNOTNULL: 'Is not null'
 		}
 	},
 	TRUE: 'true',

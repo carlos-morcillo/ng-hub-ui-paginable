@@ -43,6 +43,7 @@ Todos los componentes están construidos como componentes standalone de Angular 
 - **🎪 Iconos personalizados**: Soporte para FontAwesome, Material Icons y Bootstrap Icons
 - **🎨 Variantes visuales**: Múltiples opciones de estilo incluyendo filas rayadas, hover y temas personalizados
 - **🔍 Filtros de menú**: Filtrado avanzado con paneles de filtro dedicados
+- **🧩 Filtros de menú con reglas múltiples**: Operadores AND/OR, validaciones nulas y modos de coincidencia por regla
 - **📋 Listas jerárquicas**: Estructuras de datos tipo árbol con nodos expandibles/colapsables
 
 ## 🚀 Instalación
@@ -60,6 +61,42 @@ Asegúrate de incluir los estilos base globales (SCSS):
 ```
 
 Si usas Angular CLI, puedes añadirlo en `angular.json` como un `stylePreprocessorIncludePaths`.
+
+### 🧩 Tokens de personalización adicionales
+
+```scss
+.hub-table {
+  --hub-table-cell-vertical-align: middle;
+  --hub-icon-color: currentColor;
+  --hub-icon-size: 1em;
+}
+```
+
+```scss
+/* Botón de filtro y contador */
+.hub-table__filter-button {
+  /* estilos base */
+}
+.hub-table__filter-button--active {
+  /* estado activo */
+}
+.hub-table__filter-count {
+  /* estilos del badge */
+}
+```
+
+```scss
+/* Helpers de iconos */
+.hub-table__icon {
+  /* icono base */
+}
+.hub-table__icon--sm {
+  --hub-icon-size: 0.875em;
+}
+.hub-table__icon--lg {
+  --hub-icon-size: 1.33em;
+}
+```
 
 ## ⚙️ Uso básico
 
@@ -215,6 +252,8 @@ También puedes usar `tableRowTpt` con componentes expandibles.
 ## 🔍 Filtros personalizados (filterTpt)
 
 Puedes personalizar la interfaz de filtrado por columna mediante plantillas individuales por `header`.
+Estas plantillas se renderizan para filtros con `mode: 'row'`. Los filtros en `mode: 'menu'`
+usan la interfaz integrada del menú.
 
 ```html
 <ng-template filterTpt header="birthday" let-formControl="formControl">
@@ -257,6 +296,24 @@ Puedes personalizar la interfaz de filtrado por columna mediante plantillas indi
 ```
 
 Esto te permite adaptar cualquier tipo de filtro visual (date-range, boolean, dropdown, etc.) sin perder reactividad.
+
+### Forma del valor en filtros de menú
+
+Cuando un filtro usa `mode: 'menu'`, el valor almacenado en `filters` es un `MenuFilterValue`
+estructurado (operador + reglas). En `mode: 'row'`, el valor es el dato directo del input.
+
+```typescript
+import { MenuFilterOperators, StringMatchModes } from 'ng-hub-ui-paginable';
+
+filters = signal({
+  name: {
+    operator: MenuFilterOperators.And,
+    rules: [
+      { value: 'john', matchMode: StringMatchModes.Contains }
+    ]
+  }
+});
+```
 
 
 ## 🧠 Gestión de datos y paginación
@@ -307,6 +364,20 @@ export interface PaginationState<T = any> {
   data: ReadonlyArray<T> | null;
 }
 ```
+
+## 📊 Changelog
+
+## [19.10.2] - 2025-12-23
+### Added
+- `--hub-table-cell-vertical-align`, `--hub-icon-color`, and `--hub-icon-size` customization tokens.
+
+### Changed
+- Overlay utilities moved to `ng-hub-ui-utils` and dropdown integration now relies on that package.
+- Table cell vertical alignment defaults to `middle` via CSS variable.
+
+### Fixed
+- Menu filter match mode options now render their translated labels correctly.
+- Added missing translations for `IsNull` and `IsNotNull` match modes.
 
 ## 🤝 Contribuir
 

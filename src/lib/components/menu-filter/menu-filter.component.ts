@@ -22,14 +22,13 @@ import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
-import { KeyValuePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 
 @Component({
 	selector: 'menu-filter',
 	standalone: true,
 	imports: [
 		ReactiveFormsModule,
-		KeyValuePipe,
 		UpperCasePipe,
 		TranslatePipe,
 		UcfirstPipe

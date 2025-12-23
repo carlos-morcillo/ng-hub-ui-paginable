@@ -120,6 +120,7 @@ All components are built as standalone Angular components with full Angular Sign
 - **🎪 Custom Icons**: Support for FontAwesome, Material Icons, and Bootstrap Icons
 - **🎨 Visual Variants**: Multiple styling options including striped, hoverable rows, and custom themes
 - **🔍 Menu Filters**: Advanced filtering with dedicated filter panels
+- **🧩 Multi-rule Menu Filters**: AND/OR operators, null checks, and match modes per rule
 - **📋 Hierarchical Lists**: Tree-like data structures with expandable/collapsible nodes
 
 ## 🏗️ Component Architecture
@@ -749,17 +750,35 @@ Specialized component for number and date range filters:
 </hub-ui-range-input>
 ```
 
-### Menu Filter Component (`<hub-ui-menu-filter>`)
+### Menu Filters (automatic in `mode: 'menu'`)
 
-Advanced filtering component with multiple input types:
+Menu filters are rendered automatically when a column filter uses `mode: 'menu'`.
+You do not need to use a dedicated component directly; the table wires the menu filter
+based on the header configuration and the `filters` model.
 
-```html
-<hub-ui-menu-filter
-  [type]="'date-range'"
-  [formControl]="filterControl"
-  [options]="filterOptions">
-</hub-ui-menu-filter>
+```typescript
+import { MenuFilterOperators, StringMatchModes } from 'ng-hub-ui-paginable';
+
+const headers: PaginableTableHeader[] = [
+  {
+    property: 'name',
+    title: 'Name',
+    filter: { type: 'text', mode: 'menu' }
+  }
+];
+
+filters = signal({
+  name: {
+    operator: MenuFilterOperators.And,
+    rules: [
+      { value: 'john', matchMode: StringMatchModes.Contains }
+    ]
+  }
+});
 ```
+
+Note: Null checks use `NullMatchModes.IsNull` / `NullMatchModes.IsNotNull` and do not
+require a value.
 
 ### Action Buttons
 
@@ -869,6 +888,25 @@ Filters can be displayed in two modes:
 
 - **`row`**: Filter appears directly under the column header in a dedicated filter row
 - **`menu`**: Filter appears in a dropdown menu accessible via a filter button in the header
+
+### Menu Filter Value Shape
+
+When a filter uses `mode: 'menu'`, the value stored in `filters` is a structured
+`MenuFilterValue` (operator + rules). For `row` filters, the value is the raw input
+value (string/number/boolean/date).
+
+```typescript
+import { MenuFilterOperators, StringMatchModes } from 'ng-hub-ui-paginable';
+
+filters = signal({
+  name: {
+    operator: MenuFilterOperators.And,
+    rules: [
+      { value: 'john', matchMode: StringMatchModes.Contains }
+    ]
+  }
+});
+```
 
 ### Available Filter Types
 
@@ -1142,6 +1180,44 @@ Or for a specific section like the search input:
 ```
 
 This approach allows you to adapt the component to your theme without modifying the source code.
+
+### 🧩 Additional customization tokens
+
+Newer styling hooks are also exposed as CSS variables and helper classes:
+
+```scss
+.hub-table {
+  --hub-table-cell-vertical-align: middle;
+  --hub-icon-color: currentColor;
+  --hub-icon-size: 1em;
+}
+```
+
+```scss
+/* Filter button and badge */
+.hub-table__filter-button {
+  /* base styles */
+}
+.hub-table__filter-button--active {
+  /* active state */
+}
+.hub-table__filter-count {
+  /* badge styles */
+}
+```
+
+```scss
+/* Icon helpers */
+.hub-table__icon {
+  /* base icon */
+}
+.hub-table__icon--sm {
+  --hub-icon-size: 0.875em;
+}
+.hub-table__icon--lg {
+  --hub-icon-size: 1.33em;
+}
+```
 
 ### ⚙️ Seamless Bootstrap integration
 
@@ -1832,6 +1908,8 @@ effect(() => {
 ## 🔍 Custom filters (filterTpt)
 
 You can customize the column filter interface using individual templates per `header`.
+These templates are rendered for `mode: 'row'` filters. Menu filters (`mode: 'menu'`)
+use the built-in menu filter UI.
 
 ```html
 <ng-template filterTpt header="birthday" let-formControl="formControl">
@@ -2065,6 +2143,20 @@ export class AppComponent {
   }
 }
 ```
+
+## 📊 Changelog
+
+## [19.10.2] - 2025-12-23
+### Added
+- `--hub-table-cell-vertical-align`, `--hub-icon-color`, and `--hub-icon-size` customization tokens.
+
+### Changed
+- Overlay utilities moved to `ng-hub-ui-utils` and dropdown integration now relies on that package.
+- Table cell vertical alignment defaults to `middle` via CSS variable.
+
+### Fixed
+- Menu filter match mode options now render their translated labels correctly.
+- Added missing translations for `IsNull` and `IsNotNull` match modes.
 
 ## 🤝 Contribution
 

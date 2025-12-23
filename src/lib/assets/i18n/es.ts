@@ -61,7 +61,9 @@ export const locale = {
 			STARTSWITH: 'Comienza con',
 			CONTAINS: 'Contiene',
 			NOTCONTAINS: 'No contiene',
-			ENDSWITH: 'Termina con'
+			ENDSWITH: 'Termina con',
+			ISNULL: 'Es nulo',
+			ISNOTNULL: 'No es nulo'
 		}
 	},
 	TRUE: 'verdadero',

@@ -30,11 +30,10 @@
 							formControlName="matchMode"
 							(change)="enableOrDisableValueControl($any(group))"
 						>
-							@for (mode of matchModes | keyvalue; track mode) {
-								<option [value]="mode.key">
+							@for (mode of matchModes; track mode) {
+								<option [value]="mode">
 									{{
-										'MATCH_MODES.' + mode.key
-											| uppercase
+										'MATCH_MODES.' + (mode | uppercase)
 											| translate
 											| ucfirst
 									}}
@@ -138,7 +137,7 @@
 								class="btn btn-sm text-danger text-center w-100"
 								(click)="rulesFA.removeAt(index)"
 							>
-								<i class="fa-solid fa-trash me-2 mr-2"></i
+								<i class="hub-table__icon hub-table__icon--trash"></i
 								>{{ 'REMOVE_RULE' | translate | ucfirst }}
 							</button>
 						</div>
@@ -158,7 +157,7 @@
 				class="btn btn-sm text-primary text-center w-100"
 				(click)="add(); $event.stopPropagation()"
 			>
-				<i class="fa-solid fa-plus me-2 mr-2"></i
+				<i class="hub-table__icon hub-table__icon--plus"></i
 				>{{ 'ADD_RULE' | translate | ucfirst }}
 			</button>
 		</li>

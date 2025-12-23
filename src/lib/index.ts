@@ -2,6 +2,8 @@
 export { HubUITableModule } from './paginable.module';
 
 // Components
+export { DropdownComponent } from './components/dropdown/dropdown.component';
+export type { DropdownEvent } from './components/dropdown/dropdown.component';
 export { HubIconComponent } from './components/icon/icon.component';
 export { PaginableListComponent } from './components/list/paginable-list/paginable-list.component';
 export { PaginableTableDropdownComponent } from './components/paginable-table-dropdown/paginable-table-dropdown.component';
