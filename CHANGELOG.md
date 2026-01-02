@@ -17,7 +17,27 @@
 - Relaxed type definition for `items` input in `PaginableListComponent` to accept `ReadonlyArray` and `any`.
 - Updated `PaginationService.generate` signature to accept `ReadonlyArray<any>` alongside mutable arrays.
 
-All notable changes to this project are documented in this file.
+## [19.11.3] - 2026-01-02
+
+### Changed
+- Updated ng-hub-ui-utils peer dependency to version 1.2.0
+
+## [19.11.2] - 2026-01-02
+
+### Fixed
+- Fixed paginable-list component implementation
+
+### Changed
+- Updated translation service from PaginableTranslationService to HubTranslationService
+- Updated component test files
+- Updated README documentation
+
+## [19.11.1] - 2026-01-02
+
+### Fixed
+- Fixed build configuration to use compiled ng-hub-ui-utils from dist/ instead of source files
+- Fixed missing PaginableTableConfig interface export in public API
+- Resolved ng-packagr warnings by removing conflicting package.json entries
 
 ## [19.11.0] - 2026-01-01
 ### Added
