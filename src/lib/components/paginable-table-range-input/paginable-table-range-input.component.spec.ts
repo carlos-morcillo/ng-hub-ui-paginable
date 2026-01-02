@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { PaginableTableRangeInputComponent } from './paginable-table-range-input.component';
 import {
 	HUB_TRANSLATION_CONFIG,
-	PaginableTranslationService,
+	HubTranslationService,
 	TranslatePipe,
 	UcfirstPipe
 } from 'ng-hub-ui-utils';
@@ -25,7 +25,7 @@ describe('PaginableTableRangeInputComponent', () => {
 				UcfirstPipe
 			],
 			providers: [
-				PaginableTranslationService,
+				HubTranslationService,
 				{
 					provide: HUB_TRANSLATION_CONFIG,
 					useValue: {

@@ -31,6 +31,7 @@ export * from './interfaces';
 // Services
 export { PaginableService } from './services/paginable.service';
 export { PaginationService } from './services/pagination.service';
+export { HubTranslationService } from 'ng-hub-ui-utils';
 
 // Constants
 export { TableBreakpoint } from './constants/breakpoints';

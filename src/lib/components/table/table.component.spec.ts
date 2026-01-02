@@ -5,13 +5,13 @@ import { Subject } from 'rxjs';
 
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { TableRow } from '../../interfaces/table-row';
-import { PaginableTranslationService } from 'ng-hub-ui-utils';
+import { HubTranslationService } from 'ng-hub-ui-utils';
 import { PaginableService } from '../../services/paginable.service';
 import { PaginableConfigService } from '../../services/paginate-config.service';
 import { TableComponent } from './table.component';
 
 // Mock services
-class MockPaginableTranslationService {
+class MockHubTranslationService {
 	private translationSource = new Subject<any>();
 	translationObserver = this.translationSource.asObservable();
 
@@ -51,8 +51,8 @@ describe('TableComponent', () => {
 			imports: [TableComponent, BrowserAnimationsModule],
 			providers: [
 				{
-					provide: PaginableTranslationService,
-					useClass: MockPaginableTranslationService
+					provide: HubTranslationService,
+					useClass: MockHubTranslationService
 				},
 				{
 					provide: PaginableService,

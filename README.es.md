@@ -153,7 +153,7 @@ ng-hub-ui-paginable/
 │   └── PaginableTableNotFoundDirective  - Empty states
 ├── ⚙️ Services
 │   ├── PaginableService             - Core configuration
-│   ├── PaginableTranslationService  - i18n management
+│   ├── HubTranslationService  - i18n management
 │   └── PaginationService           - Pagination logic
 └── 🎯 Utilities
     ├── Pipes (get, translate, ucfirst, etc.)
@@ -1379,7 +1379,7 @@ this.translateService.setTranslation(lang, {
 
 ```typescript
 this.translate.get('PAGINABLE').subscribe(translations => {
-  this.paginableTranslationSvc.setTranslations(translations);
+  this.hubTranslationSvc.setTranslations(translations);
 });
 ```
 
@@ -1409,10 +1409,10 @@ this.translate.get('PAGINABLE').subscribe(translations => {
 
 ```typescript
 export class AppComponent {
-  #paginableTranslationSvc = inject(PaginableTranslationService);
+  #hubTranslationSvc = inject(HubTranslationService);
 
   constructor() {
-    this.#paginableTranslationSvc.setTranslations({
+    this.#hubTranslationSvc.setTranslations({
       search: 'Buscar...',
       noResults: 'No se encontraron resultados',
       loading: 'Cargando...'

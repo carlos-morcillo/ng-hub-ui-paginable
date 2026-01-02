@@ -14,14 +14,14 @@ import {
 } from '../../interfaces/column-filter-event';
 import { PaginableService } from '../../services/paginable.service';
 import {
-	PaginableTranslationService,
+	HubTranslationService,
 	TranslatePipe,
 	UcfirstPipe
 } from 'ng-hub-ui-utils';
 import { Subject } from 'rxjs';
 
 // Mock services
-class MockPaginableTranslationService {
+class MockHubTranslationService {
 	private translationSource = new Subject<any>();
 	translationObserver = this.translationSource.asObservable();
 
@@ -66,8 +66,8 @@ describe('MenuFilterComponent', () => {
 					useClass: MockPaginableService
 				},
 				{
-					provide: PaginableTranslationService,
-					useClass: MockPaginableTranslationService
+					provide: HubTranslationService,
+					useClass: MockHubTranslationService
 				},
 				{
 					provide: DropdownComponent,

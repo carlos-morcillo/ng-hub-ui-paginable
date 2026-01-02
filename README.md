@@ -153,7 +153,7 @@ ng-hub-ui-paginable/
 │   └── PaginableTableNotFoundDirective  - Empty states
 ├── ⚙️ Services
 │   ├── PaginableService             - Core configuration
-│   ├── PaginableTranslationService  - i18n management
+│   ├── HubTranslationService  - i18n management
 │   └── PaginationService           - Pagination logic
 └── 🎯 Utilities
     ├── Pipes (get, translate, ucfirst, etc.)
@@ -1549,7 +1549,7 @@ it('should work with reactive forms', () => {
 ### Mock Services
 
 ```typescript
-class MockPaginableTranslationService {
+class MockHubTranslationService {
   getTranslation(key: string) {
     const translations = {
       'SEARCH': 'Search',
@@ -1562,7 +1562,7 @@ class MockPaginableTranslationService {
 
 // In TestBed configuration
 providers: [
-  { provide: PaginableTranslationService, useClass: MockPaginableTranslationService }
+  { provide: HubTranslationService, useClass: MockHubTranslationService }
 ]
 ```
 
@@ -1624,10 +1624,10 @@ constructor(private translate: TranslateService) {
 }
 
 // After (v1.52.x)
-import { PaginableTranslationService } from 'ng-hub-ui-paginable';
+import { HubTranslationService } from 'ng-hub-ui-paginable';
 
-constructor(private paginableTranslation: PaginableTranslationService) {
-  this.paginableTranslation.setTranslations({
+constructor(private hubTranslation: HubTranslationService) {
+  this.hubTranslation.setTranslations({
     search: 'Search...',
     noResults: 'No results found'
   });
@@ -2052,7 +2052,7 @@ If you're using Transloco as your translation library, here's how to set up dyna
 ```typescript
 export class AppComponent {
   #translocoSvc = inject(TranslocoService);
-  #paginableTranslationSvc = inject(PaginableTranslationService);
+  #hubTranslationSvc = inject(HubTranslationService);
 
   translationLoadSuccess = toSignal(
     this.#translocoSvc.events$.pipe(
@@ -2071,7 +2071,7 @@ export class AppComponent {
 
     // Paginable translations
     const translations = this.#translocoSvc.translateObject('PAGINABLE');
-    this.#paginableTranslationSvc.setTranslations(
+    this.#hubTranslationSvc.setTranslations(
       typeof translations === 'object' ? translations : {}
     );
 
@@ -2088,13 +2088,13 @@ If you're using ngx-translate, you can set up translations similarly:
 ```typescript
 export class AppComponent {
   #translateSvc = inject(TranslateService);
-  #paginableTranslationSvc = inject(PaginableTranslationService);
+  #hubTranslationSvc = inject(HubTranslationService);
 
   constructor() {
     // Listen for language changes
     this.#translateSvc.onLangChange.subscribe((event) => {
       const translations = this.#translateSvc.instant('PAGINABLE');
-      this.#paginableTranslationSvc.setTranslations(
+      this.#hubTranslationSvc.setTranslations(
         typeof translations === 'object' ? translations : {}
       );
     });
@@ -2132,11 +2132,11 @@ You can also manually update translations without using a translation library:
 
 ```typescript
 export class AppComponent {
-  #paginableTranslationSvc = inject(PaginableTranslationService);
+  #hubTranslationSvc = inject(HubTranslationService);
 
   constructor() {
     // Set custom translations
-    this.#paginableTranslationSvc.setTranslations({
+    this.#hubTranslationSvc.setTranslations({
       search: 'Buscar...',
       noResults: 'No se encontraron resultados',
       loading: 'Cargando...',

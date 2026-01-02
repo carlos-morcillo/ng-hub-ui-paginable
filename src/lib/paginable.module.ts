@@ -1,5 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { HUB_TRANSLATION_CONFIG, PaginableTranslationService } from 'ng-hub-ui-utils';
+import { HUB_TRANSLATION_CONFIG, HubTranslationService } from 'ng-hub-ui-utils';
 import { locale as enLocale } from './assets/i18n/en';
 import { locale as esLocale } from './assets/i18n/es';
 import { PaginableTableConfig } from './interfaces/paginable-table-config';
@@ -61,7 +61,7 @@ export class HubUITableModule {
 					}),
 					deps: [PaginableService]
 				},
-				PaginableTranslationService
+				HubTranslationService
 			]
 		};
 	}
