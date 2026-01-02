@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-paginable",
-	"version": "19.11.1",
+	"version": "19.11.2",
 	"description": "Highly customizable Angular table and list components with pagination, sorting and filtering support. Built with Angular 19+ and Signal-based architecture.",
 	"peerDependencies": {
 		"@angular/common": ">=18.0.0",

@@ -54,12 +54,12 @@ export class PaginableListComponent<T = any> {
 		this.buildForm(this.form, this._items);
 	}
 
-	private _items!: Array<T>;
+	private _items: ReadonlyArray<T> = [];
 	@Input()
-	get items(): Array<T> {
+	get items(): ReadonlyArray<T> {
 		return this._items;
 	}
-	set items(v: Array<T>) {
+	set items(v: ReadonlyArray<T>) {
 		this._items = v ?? [];
 		this.form.clear();
 		this.buildForm(this.form, this._items);
@@ -138,7 +138,7 @@ export class PaginableListComponent<T = any> {
 		event.handler(this.value);
 	}
 
-	buildForm(form: FormArray, items: Array<any>) {
+	buildForm(form: FormArray, items: ReadonlyArray<any>) {
 		form.clear();
 		for (const index in items) {
 			if (Object.prototype.hasOwnProperty.call(items, index)) {
@@ -162,7 +162,7 @@ export class PaginableListComponent<T = any> {
 		}
 	}
 
-	buildValue(items: Array<T>): Array<T & { collapsed: boolean }> {
+	buildValue(items: ReadonlyArray<T>): Array<T & { collapsed: boolean }> {
 		const value: Array<T & { collapsed: boolean }> = [];
 		for (const item of items) {
 			const { children, ...newItem } = item as any;

@@ -1,5 +1,15 @@
 # Changelog
 
+## [19.11.2] - 2026-01-02
+
+### Fixed
+- Fixed paginable-list component implementation
+
+### Changed
+- Updated translation service from PaginableTranslationService to HubTranslationService
+- Updated component test files
+- Updated README documentation
+
 ## [19.11.1] - 2026-01-02
 
 ### Fixed
