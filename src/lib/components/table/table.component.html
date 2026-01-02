@@ -1,359 +1,230 @@
 @if (batchActions().length || searchable() || headerFilters().length) {
-	<div class="hub-table__top-bar">
-		@if (batchActions().length) {
-			<div class="hub-table__batch-actions">
-				@for (button of batchActions(); track $index) {
-					@if ($any(button).buttons?.length) {
-						<hub-table-dropdown
-							class="hub-table__batch-actions-dropdown"
-							[options]="$any(button)"
-							[disabled]="!value.length"
-						>
-						</hub-table-dropdown>
-					} @else {
-						<button
-							class="hub-table__batch-actions-btn btn {{
-								button.color
-									? 'btn-' + button.color
-									: 'btn-light'
-							}}"
-							role="button"
-							(click)="handleBatchAction(button)"
-							[disabled]="!value.length"
-						>
-							@if (button.icon) {
-								<i
-									class="hub-table__batch-actions-btn-icon me-2 mr-2 {{
-										button.icon
-									}}"
-								></i>
-							}
-							@if (button.title) {
-								<span
-									class="hub-table__batch-actions-btn-title"
-									>{{ button.title | unwrapAsync }}</span
-								>
-							}
-						</button>
-					}
-				}
-			</div>
-		}
-
-		@if (searchable()) {
-			<div class="hub-table__search">
-				<input
-					type="text"
-					class="hub-table__search-input"
-					(input)="searchProxy$.next($any($event.target).value)"
-					[value]="searchTerm()"
-					aria-label="Search"
-				/>
-				<button
-					class="hub-table__search-button btn btn-outline-dark"
-					type="button"
-				>
-					<i
-						class="hub-table__search-icon fa-solid fa-search"
-						aria-hidden="true"
-					></i>
-				</button>
-			</div>
-		}
-
-		@if (headerFilters().length) {
-			<div class="hub-table__delete-filters">
-				<button
-					type="button"
-					class="hub-table__delete-filters-btn btn btn-outline-danger"
-					(click)="clearFilters()"
-					[disabled]="filterLoading"
-				>
-					<i
-						class="hub-table__delete-filters-icon fa-solid fa-eraser"
-					></i>
-					{{ 'CLEAN_FILTERS' | translate | ucfirst }}
-				</button>
-			</div>
-		}
+<div class="hub-table__top-bar">
+	@if (batchActions().length) {
+	<div class="hub-table__batch-actions">
+		@for (button of batchActions(); track $index) { @if ($any(button).buttons?.length) {
+		<hub-table-dropdown class="hub-table__batch-actions-dropdown" [options]="$any(button)" [disabled]="!value.length">
+		</hub-table-dropdown>
+		} @else {
+		<button
+			class="hub-table__batch-actions-btn btn {{ button.color ? 'btn-' + button.color : 'btn-light' }}"
+			role="button"
+			(click)="handleBatchAction(button)"
+			[disabled]="!value.length"
+		>
+			@if (button.icon) {
+			<i class="hub-table__batch-actions-btn-icon {{ button.icon }}"></i>
+			} @if (button.title) {
+			<span class="hub-table__batch-actions-btn-title">{{ button.title | unwrapAsync }}</span>
+			}
+		</button>
+		} }
 	</div>
+	} @if (searchable()) {
+	<div class="hub-table__search">
+		<input
+			type="text"
+			class="hub-table__search-input"
+			(input)="searchProxy$.next($any($event.target).value)"
+			[value]="searchTerm()"
+			aria-label="Search"
+		/>
+		<button class="hub-table__search-button btn btn-outline-dark" type="button">
+			<i class="hub-table__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
+		</button>
+	</div>
+	} @if (headerFilters().length) {
+	<div class="hub-table__delete-filters">
+		<button
+			type="button"
+			class="hub-table__delete-filters-btn btn btn-outline-danger"
+			(click)="clearFilters()"
+			[disabled]="filterLoading"
+		>
+			<i class="hub-table__delete-filters-icon hub-table__icon hub-table__icon--eraser"></i>
+			{{ 'CLEAN_FILTERS' | translate | ucfirst }}
+		</button>
+	</div>
+	}
+</div>
 }
 
-<div
-	class="hub-table__table-container {{ responsiveCSSClass() }}"
-	[class.hub-table__table-responsive]="responsiveCSSClass()"
->
+<div class="hub-table__table-container {{ responsiveCSSClass() }}" [class.hub-table__table-responsive]="responsiveCSSClass()">
 	@let striped = options().striped;
 	<table
 		class="hub-table__table"
-		[class.hub-table__table-hover]="
-			(options().hoverableRows || selectable()) && !loading()
-		"
+		[class.hub-table__table-hover]="(options().hoverableRows || selectable()) && !loading()"
 		[class.hub-table__table-striped-odd]="striped === 'rows-odd'"
 		[class.hub-table__table-striped-even]="striped === 'rows-even'"
 		[class.hub-table__table-striped-columns-odd]="striped === 'columns-odd'"
-		[class.hub-table__table-striped-columns-even]="
-			striped === 'columns-even'
-		"
+		[class.hub-table__table-striped-columns-even]="striped === 'columns-even'"
 		[class.hub-table__table-selectable]="selectable()"
 		[class.hub-table__table--scrollable]="options().scrollable"
-		[ngClass]="
-			options().variant ? 'hub-table__table-' + options().variant : null
-		"
+		[ngClass]="options().variant ? 'hub-table__table-' + options().variant : null"
 	>
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
 				@if (selectable()) {
-					<th
-						class="hub-table__header-cell hub-table__header-cell--actions sticky-start"
+				<th class="hub-table__header-cell hub-table__header-cell--actions sticky-start">
+					<input
+						type="checkbox"
+						[(ngModel)]="allRowsSelected"
+						[ngModelOptions]="{ standalone: true }"
+						(click)="toggleAll()"
+						[disabled]="disabled"
+					/>
+				</th>
+				} @for (header of fixedHeaders(); track header.property) { @if (!(isColumnHidden(header) | async)) {
+				<th
+					class="hub-table__header-cell"
+					resizable
+					[class.sticky-start]="header.sticky === 'start'"
+					[class.sticky-end]="header.sticky === 'end'"
+					[class.text-start]="header.align === 'start'"
+					[class.text-end]="header.align === 'end'"
+					[class.text-center]="header.align === 'center'"
+				>
+					<div
+						class="hub-table__header-cell-content d-flex flex-nowrap align-items-center justify-content-between gap-2"
 					>
-						<input
-							type="checkbox"
-							[(ngModel)]="allRowsSelected"
-							[ngModelOptions]="{ standalone: true }"
-							(click)="toggleAll()"
-							[disabled]="disabled"
-						/>
-					</th>
-				}
-				@for (header of fixedHeaders(); track header.property) {
-					@if (!(isColumnHidden(header) | async)) {
-						<th
-							class="hub-table__header-cell"
-							resizable
-							[class.sticky-start]="header.sticky === 'start'"
-							[class.sticky-end]="header.sticky === 'end'"
-							[class.text-start]="header.align === 'start'"
-							[class.text-end]="header.align === 'end'"
-							[class.text-center]="header.align === 'center'"
-						>
-							<div
-								class="hub-table__header-cell-content d-flex flex-nowrap align-items-center justify-content-between gap-2"
-							>
-								<ng-container
-									[ngTemplateOutlet]="
-										getHeaderTemplate(header) ||
-										defaultHeaderTpt
-									"
-									[ngTemplateOutletContext]="{
+						<ng-container
+							[ngTemplateOutlet]="getHeaderTemplate(header) || defaultHeaderTpt"
+							[ngTemplateOutletContext]="{
 										header,
 										property: header | get: header.property
 									}"
-								>
-								</ng-container>
-								@if (
-									header.sortable ||
-									header.filter?.mode === 'menu'
-								) {
-									<div
-										class="hub-table__header-cell-actions d-flex gap-2 ms-auto align-items-center"
-									>
-										<button
-											class="hub-table__sort-btn btn"
-											(click)="sort(header)"
-										>
-											@if (header.sortable) {
-												<i
-													class="hub-table__sort-icon fa"
-													[ngClass]="
-														getOrdenationClass(header)
-													"
-													aria-hidden="true"
-												></i>
-											}
-										</button>
-										@if (header.filter?.mode === 'menu') {
-											<hub-dropdown
-												#dropdown
-												(open)="
-													onDropdownFilterOpened($event)
-												"
-												class="hub-table__filter-dropdown"
-											>
-												<div
-													class="hub-table__filter-dropdown-toggle d-flex flex-nowrap gap-2 button filter-dropdown__toggle-content"
-												>
-													<i
-														class="hub-table__filter-dropdown-icon fa-solid fa-filter"
-														[class.text-success]="
-															filtersFG.get(
-																header.filter
-																	?.key ||
-																	header.property
-															)?.value?.rules?.length
-														"
-														[class.filter-dropdown__toggle-content--active]="
-															filtersFG.get(
-																header.filter
-																	?.key ||
-																	header.property
-															)?.value?.rules?.length
-														"
-													></i>
-													@if (
-														filtersFG.get(
-															header.filter?.key ||
-																header.property
-														)?.value?.rules;
-														as rules
-													) {
-														@if (rules.length) {
-															<span
-																class="hub-table__filter-dropdown-badge badge rounded-pill text-bg-primary"
-															>
-																{{ rules.length }}
-															</span>
-														}
-													}
-												</div>
-												@if (dropdown.isOpened) {
-													<menu-filter
-														class="hub-table__filter-dropdown-content content filter-dropdown__content"
-														[header]="header"
-														[formControlName]="
-															header.filter?.key ||
-															header.property
-														"
-													>
-													</menu-filter>
-												}
-											</hub-dropdown>
-										}
-									</div>
+						>
+						</ng-container>
+						@if ( header.sortable || header.filter?.mode === 'menu' ) {
+						<div class="hub-table__header-cell-actions d-flex gap-2 ms-auto align-items-center">
+							<button class="hub-table__sort-btn btn" (click)="sort(header)">
+								@if (header.sortable) {
+								<i
+									class="hub-table__sort-icon hub-table__icon"
+									[ngClass]="getOrdenationClass(header)"
+									aria-hidden="true"
+								></i>
 								}
-							</div>
-						</th>
-					}
-				}
-				@if (templateExpandingRows().length) {
-					<th
-						class="hub-table__header-cell hub-table__header-cell--expander sticky-end"
-					></th>
+							</button>
+							@if (header.filter?.mode === 'menu') {
+							<hub-dropdown #dropdown (open)="onDropdownFilterOpened($event)" class="hub-table__filter-dropdown">
+								<div
+									class="hub-table__filter-button button"
+									[class.hub-table__filter-button--active]="
+										filtersFG.get(header.filter?.key || header.property)?.value?.rules?.length
+									"
+								>
+									<i class="hub-table__filter-button-icon hub-table__icon hub-table__icon--filter"></i>
+									@if ( filtersFG.get( header.filter?.key || header.property )?.value?.rules; as rules ) { @if
+									(rules.length) {
+									<span class="hub-table__filter-count">
+										{{ rules.length }}
+									</span>
+									} }
+								</div>
+								@if (dropdown.isOpened()) {
+								<menu-filter
+									class="hub-table__filter-dropdown-content content"
+									[header]="header"
+									[formControlName]="header.filter?.key || header.property"
+								>
+								</menu-filter>
+								}
+							</hub-dropdown>
+							}
+						</div>
+						}
+					</div>
+				</th>
+				} } @if (templateExpandingRows().length) {
+				<th class="hub-table__header-cell hub-table__header-cell--expander sticky-end"></th>
 				}
 			</tr>
 
 			<!-- Filtering -->
 			@if (hasColumnFilters()) {
-				<tr class="hub-table__filter-row">
-					@if ((selectable() && multiple()) || batchActions.length) {
-						<th class="hub-table__filter-cell sticky-start"></th>
+			<tr class="hub-table__filter-row">
+				@if ((selectable() && multiple()) || batchActions.length) {
+				<th class="hub-table__filter-cell sticky-start"></th>
+				} @for ( header of fixedHeaders(); track $index; let last = $last ) { @if (!(isColumnHidden(header) | async)) {
+				@let formControlName = header.filter?.key || header.property;
+				<th
+					class="hub-table__filter-cell"
+					[class.sticky-start]="header.sticky === 'start'"
+					[class.sticky-end]="header.sticky === 'end'"
+				>
+					@if ( header.filter && header.filter.mode !== 'menu' && filtersFG.get(formControlName) ) {
+					<ng-container
+						[ngTemplateOutlet]="getFilterTemplate(header) || defaultFilterTpt"
+						[ngTemplateOutletContext]="{
+							header: header,
+							formControl: filtersFG.get(formControlName)
+						}"
+					>
+					</ng-container>
 					}
-					@for (
-						header of fixedHeaders();
-						track $index;
-						let last = $last
-					) {
-						@if (!(isColumnHidden(header) | async)) {
-							@let formControlName =
-								header.filter?.key || header.property;
-							<th
-								class="hub-table__filter-cell"
-								[class.sticky-start]="header.sticky === 'start'"
-								[class.sticky-end]="header.sticky === 'end'"
-							>
-								@if (
-									header.filter &&
-									header.filter.mode !== 'menu' &&
-									filtersFG.get(formControlName)
-								) {
-									<ng-container
-										[ngTemplateOutlet]="
-											getFilterTemplate(header) ||
-											defaultFilterTpt
-										"
-										[ngTemplateOutletContext]="{
-											header: header,
-											formControl:
-												filtersFG.get(formControlName)
-										}"
-									>
-									</ng-container>
-								}
-							</th>
-						}
-					}
-				</tr>
+				</th>
+				} }
+			</tr>
 			}
 		</thead>
 		<tbody class="hub-table__body">
 			@if (loading()) {
-				<tr class="hub-table__body-row">
-					<td class="hub-table__cell" [attr.colspan]="headersCount()">
-						<ng-container
-							[ngTemplateOutlet]="
-								loadingTpt() || defaultLoadingTpt
-							"
-						>
-						</ng-container>
-					</td>
-				</tr>
-			} @else if (rows().length) {
-				@for (item of rows(); track $index) {
-					<ng-container
-						[ngTemplateOutlet]="templateRow() || defaultRowTemplate"
-						[ngTemplateOutletContext]="{ $implicit: item }"
-					>
-					</ng-container>
-				}
-			} @else {
-				<tr>
-					<td [attr.colspan]="headersCount()">
-						<ng-container
-							[ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt"
-						>
-						</ng-container>
-					</td>
-				</tr>
+			<tr class="hub-table__body-row">
+				<td class="hub-table__cell" [attr.colspan]="headersCount()">
+					<ng-container [ngTemplateOutlet]="loadingTpt() || defaultLoadingTpt"> </ng-container>
+				</td>
+			</tr>
+			} @else if (rows().length) { @for (item of rows(); track $index) {
+			<ng-container
+				[ngTemplateOutlet]="templateRow() || defaultRowTemplate"
+				[ngTemplateOutletContext]="{ $implicit: item }"
+			>
+			</ng-container>
+			} } @else {
+			<tr>
+				<td [attr.colspan]="headersCount()">
+					<ng-container [ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt"> </ng-container>
+				</td>
+			</tr>
 			}
 		</tbody>
 	</table>
 </div>
 <div class="hub-table__bottom-bar">
 	<!-- Pagination -->
-	@if (page() !== undefined && page() !== null) {
-		@if (
-			paginationPosition() == 'bottom' || paginationPosition() === 'both'
-		) {
-			<hub-paginator
-				class="hub-table__paginator pager-container__paginator"
-				[(page)]="$any(page)"
-				[numberOfPages]="numberOfPages()"
-			>
-			</hub-paginator>
-		}
-		<div class="hub-table__pagination-settings">
-			<label class="hub-table__pagination-label">
-				{{ 'ROWS_PER_PAGE' | translate | ucfirst }}:
-			</label>
-			<select
-				class="hub-table__pagination-select"
-				[(ngModel)]="perPage"
-				[ngModelOptions]="{ standalone: true }"
-			>
-				@for (option of perPageOptions(); track option) {
-					<option
-						[value]="option"
-						class="hub-table__pagination-select-option"
-					>
-						{{ option }}
-					</option>
-				}
-			</select>
-		</div>
-		@if (totalItems() !== null && totalItems() !== undefined) {
-			<p class="hub-table__pagination-info">
-				{{
-					'SHOWING_X_OF_Y_ROWS'
-						| translate
-							: {
-									amount: rows().length,
-									total: totalItems()
-							  }
-						| ucfirst
-				}}
-			</p>
-		}
+	@if (page() !== undefined && page() !== null) { @if ( paginationPosition() == 'bottom' || paginationPosition() === 'both' )
+	{
+	<hub-paginator
+		class="hub-table__paginator pager-container__paginator"
+		[(page)]="$any(page)"
+		[numberOfPages]="numberOfPages()"
+	>
+	</hub-paginator>
 	}
+	<div class="hub-table__pagination-settings">
+		<label class="hub-table__pagination-label"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
+		<select class="hub-table__pagination-select" [(ngModel)]="perPage" [ngModelOptions]="{ standalone: true }">
+			@for (option of perPageOptions(); track option) {
+			<option [value]="option" class="hub-table__pagination-select-option">
+				{{ option }}
+			</option>
+			}
+		</select>
+	</div>
+	@if (totalItems() !== null && totalItems() !== undefined) {
+	<p class="hub-table__pagination-info">
+		{{
+			'SHOWING_X_OF_Y_ROWS'
+				| translate
+					: {
+							amount: rows().length,
+							total: totalItems()
+					  }
+				| ucfirst
+		}}
+	</p>
+	} }
 </div>
 <ng-template #defaultRowTemplate let-item>
 	<tr
@@ -363,83 +234,58 @@
 		[class.hub-table__body-row--clickable]="clickFn()"
 	>
 		@if ((selectable() && multiple()) || batchActions.length) {
-			<td class="hub-table__cell hub-table__cell--select sticky-start">
-				<input
-					type="checkbox"
-					[(ngModel)]="item.selected"
-					[ngModelOptions]="{ standalone: true }"
-					(click)="$event.stopPropagation(); toggle(item)"
-				/>
-			</td>
-		}
-		@for (header of fixedHeaders(); track $index) {
-			@if (!(isColumnHidden(header) | async)) {
-				<td
-					class="hub-table__cell"
-					[class.sticky-start]="header.sticky === 'start'"
-					[class.sticky-end]="header.sticky === 'end'"
-					[class.text-start]="header.align === 'start'"
-					[class.text-end]="header.align === 'end'"
-					[class.text-center]="header.align === 'center'"
-					[style.width]="header.buttons?.length ? '0' : 'auto'"
-				>
-					<ng-container
-						[ngTemplateOutlet]="
-							getCellTemplate(header) || defaultCellTpt
-						"
-						[ngTemplateOutletContext]="{
-							header: header,
-							item: item.data,
-							row: item,
-							property: item.data | get: header.property
-						}"
-					>
-					</ng-container>
-				</td>
-			}
-		}
-		@if (templateExpandingRows().length) {
-			<td
-				class="hub-table__cell hub-table__cell--expander sticky-end"
-				[class.sticky-end]="stickyActions()"
+		<td class="hub-table__cell hub-table__cell--select sticky-start">
+			<input
+				type="checkbox"
+				[(ngModel)]="item.selected"
+				[ngModelOptions]="{ standalone: true }"
+				(click)="$event.stopPropagation(); toggle(item)"
+			/>
+		</td>
+		} @for (header of fixedHeaders(); track $index) { @if (!(isColumnHidden(header) | async)) {
+		<td
+			class="hub-table__cell"
+			[class.sticky-start]="header.sticky === 'start'"
+			[class.sticky-end]="header.sticky === 'end'"
+			[class.text-start]="header.align === 'start'"
+			[class.text-end]="header.align === 'end'"
+			[class.text-center]="header.align === 'center'"
+			[style.width]="header.buttons?.length ? '0' : 'auto'"
+		>
+			<ng-container
+				[ngTemplateOutlet]="getCellTemplate(header) || defaultCellTpt"
+				[ngTemplateOutletContext]="{
+					header: header,
+					item: item.data,
+					row: item,
+					property: item.data | get : header.property
+				}"
 			>
-				@if (templateExpandingRows().length) {
-					<button
-						(click)="toggleExpandedRow(item)"
-						type="button"
-						class="hub-table__expander-btn btn btn-link px-2"
-					>
-						<i
-							class="hub-table__expander-icon fa"
-							[class.fa-caret-up]="!item.collapsed"
-							[class.fa-caret-down]="!item.collapsed"
-						></i>
-					</button>
-				}
-			</td>
+			</ng-container>
+		</td>
+		} } @if (templateExpandingRows().length) {
+		<td class="hub-table__cell hub-table__cell--expander sticky-end" [class.sticky-end]="stickyActions()">
+			@if (templateExpandingRows().length) {
+			<button (click)="toggleExpandedRow(item)" type="button" class="hub-table__expander-btn btn btn-link px-2">
+				<i
+					class="hub-table__expander-icon hub-table__icon"
+					[class.hub-table__icon--caret-up]="!item.collapsed"
+					[class.hub-table__icon--caret-down]="item.collapsed"
+				></i>
+			</button>
+			}
+		</td>
 		}
 		<!-- <td *ngIf="!lastColumnOnlyHasButtons && filterHeaders?.length"></td> -->
 	</tr>
-	@if (!item.collapsed) {
-		@for (template of templateExpandingRows(); track template) {
-			<ng-container
-				[ngTemplateOutlet]="template.templateRef"
-				[ngTemplateOutletContext]="{ item: item }"
-			>
-			</ng-container>
-		}
-	}
+	@if (!item.collapsed) { @for (template of templateExpandingRows(); track template) {
+	<ng-container [ngTemplateOutlet]="template.templateRef" [ngTemplateOutletContext]="{ item: item }"> </ng-container>
+	} }
 </ng-template>
 
 <ng-template #defaultNoDataTpt>
-	<div
-		class="hub-table__no-data alert alert-info d-flex align-items-center m-4"
-		role="alert"
-	>
-		<i
-			class="hub-table__no-data-icon fa-solid fa-info fa-2x me-4 mr-4"
-			aria-hidden="true"
-		></i>
+	<div class="hub-table__no-data alert alert-info d-flex align-items-center m-4" role="alert">
+		<i class="hub-table__no-data-icon hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
 		{{ 'NO_RESULTS_FOUND' | translate | ucfirst }}
 	</div>
 </ng-template>
@@ -455,14 +301,7 @@
 			viewBox="0 0 100 100"
 			preserveAspectRatio="xMidYMid"
 		>
-			<circle
-				cx="50"
-				cy="50"
-				r="0"
-				fill="none"
-				stroke="#cccccc"
-				stroke-width="1"
-			>
+			<circle cx="50" cy="50" r="0" fill="none" stroke="#cccccc" stroke-width="1">
 				<animate
 					attributeName="r"
 					repeatCount="indefinite"
@@ -484,14 +323,7 @@
 					begin="0s"
 				></animate>
 			</circle>
-			<circle
-				cx="50"
-				cy="50"
-				r="0"
-				fill="none"
-				stroke="#333333"
-				stroke-width="1"
-			>
+			<circle cx="50" cy="50" r="0" fill="none" stroke="#333333" stroke-width="1">
 				<animate
 					attributeName="r"
 					repeatCount="indefinite"
@@ -527,7 +359,6 @@
 			role="img"
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 496 512"
-			class="svg-inline--fa-solid fa-sad-tear fa-w-16 fa-7x"
 			style="height: 64px"
 		>
 			<path
@@ -542,11 +373,7 @@
 
 <ng-template #defaultHeaderTpt let-header="header" let-property="property">
 	@if (header.icon) {
-		<i
-			class="hub-table__header-icon fa-solid fa-{{ header.icon }}"
-			[class.me-2]="header.title"
-			aria-hidden="true"
-		></i>
+	<i class="hub-table__header-icon hub-table__icon hub-table__icon--{{ header.icon }}" aria-hidden="true"></i>
 	}
 	<div
 		class="hub-table__header-title"
@@ -555,145 +382,84 @@
 		[class.mx-auto]="header.align === 'center'"
 	>
 		@if (header.title) {
-			<span class="hub-table__header-title-text text-wrap">{{
-				header.title ?? header.property | unwrapAsync
-			}}</span>
+		<span class="hub-table__header-title-text text-wrap">{{ header.title ?? header.property | unwrapAsync }}</span>
 		}
 	</div>
 </ng-template>
 
-<ng-template
-	#defaultFilterTpt
-	let-header="header"
-	let-formControl="formControl"
->
-	@switch (header.filter.type) {
-		@case ('dropdown') {
-			<select
-				[formControl]="formControl"
-				class="form-select form-control"
-			>
-				@if (header.filter.placeholder) {
-					<option [ngValue]="null">
-						{{ header.filter.placeholder }}
-					</option>
-				}
-				@if (header.filter.options | isObservable) {
-					@let options = header.filter.options | async;
-					@for (option of $any(options); track option) {
-						<option
-							[value]="option[header.filter.bindValue || 'id']"
-						>
-							{{ option[header.filter.bindLabel || 'name'] }}
-						</option>
-					}
-				} @else {
-					@for (option of header.filter.options; track option) {
-						<option
-							[value]="option[header.filter.bindValue || 'id']"
-						>
-							{{ option[header.filter.bindLabel || 'name'] }}
-						</option>
-					}
-				}
-			</select>
-		}
-		@case ('number-range') {
-			<hub-table-range-input type="number" [formControl]="formControl">
-			</hub-table-range-input>
-		}
-		@case ('date-range') {
-			<hub-table-range-input type="date" [formControl]="formControl">
-			</hub-table-range-input>
-		}
-		@case ('boolean') {
-			<select
-				[formControl]="formControl"
-				class="form-select form-control"
-			>
-				<option [ngValue]="null">
-					{{
-						header.filter.placeholder ?? 'SELECT_ONE'
-							| translate
-							| ucfirst
-					}}
-				</option>
-				<option [ngValue]="true">
-					{{
-						header.filter.trueLabel ??
-							('TRUE' | translate | ucfirst)
-					}}
-				</option>
-				<option [ngValue]="false">
-					{{
-						header.filter.falseLabel ??
-							('FALSE' | translate | ucfirst)
-					}}
-				</option>
-			</select>
-		}
-		@default {
-			<input
-				[type]="header.filter.type"
-				[formControl]="formControl"
-				class="form-control"
-				[placeholder]="header.filter.placeholder || ''"
-			/>
-		}
-	}
+<ng-template #defaultFilterTpt let-header="header" let-formControl="formControl">
+	@switch (header.filter.type) { @case ('dropdown') {
+	<select [formControl]="formControl" class="form-select form-control">
+		@if (header.filter.placeholder) {
+		<option [ngValue]="null">
+			{{ header.filter.placeholder }}
+		</option>
+		} @if (header.filter.options | isObservable) { @let options = header.filter.options | async; @for (option of
+		$any(options); track option) {
+		<option [value]="option[header.filter.bindValue || 'id']">
+			{{ option[header.filter.bindLabel || 'name'] }}
+		</option>
+		} } @else { @for (option of header.filter.options; track option) {
+		<option [value]="option[header.filter.bindValue || 'id']">
+			{{ option[header.filter.bindLabel || 'name'] }}
+		</option>
+		} }
+	</select>
+	} @case ('number-range') {
+	<hub-table-range-input type="number" [formControl]="formControl"> </hub-table-range-input>
+	} @case ('date-range') {
+	<hub-table-range-input type="date" [formControl]="formControl"> </hub-table-range-input>
+	} @case ('boolean') {
+	<select [formControl]="formControl" class="form-select form-control">
+		<option [ngValue]="null">
+			{{ header.filter.placeholder ?? 'SELECT_ONE' | translate | ucfirst }}
+		</option>
+		<option [ngValue]="true">
+			{{ header.filter.trueLabel ?? ('TRUE' | translate | ucfirst) }}
+		</option>
+		<option [ngValue]="false">
+			{{ header.filter.falseLabel ?? ('FALSE' | translate | ucfirst) }}
+		</option>
+	</select>
+	} @default {
+	<input
+		[type]="header.filter.type"
+		[formControl]="formControl"
+		class="form-control"
+		[placeholder]="header.filter.placeholder || ''"
+	/>
+	} }
 </ng-template>
 
-<ng-template
-	#defaultCellTpt
-	let-property="property"
-	let-item="item"
-	let-row="row"
-	let-header="header"
->
+<ng-template #defaultCellTpt let-property="property" let-item="item" let-row="row" let-header="header">
 	@if (header.buttons) {
-		<div
-			class="hub-table__cell-buttons d-flex flex-nowrap gap-2 justify-content-end align-items-center"
+	<div class="hub-table__cell-buttons d-flex flex-nowrap gap-2 justify-content-end align-items-center">
+		@for (button of header.buttons; track button) { @if (button.buttons) {
+		<hub-table-dropdown [options]="button" [row]="row" class="hub-table__cell-dropdown d-inline-block">
+		</hub-table-dropdown>
+		} @else { @if (!(isHidden(button, row) | async)) {
+		<button
+			type="button"
+			class="hub-table__cell-btn btn px-1"
+			[attr.title]="button.tooltip | unwrapAsync"
+			(click)="handleAction($event, button.handler, row)"
+			[ngClass]="button.classlist ?? []"
 		>
-			@for (button of header.buttons; track button) {
-				@if (button.buttons) {
-					<hub-table-dropdown
-						[options]="button"
-						[row]="row"
-						class="hub-table__cell-dropdown d-inline-block"
-					>
-					</hub-table-dropdown>
-				} @else {
-					@if (!(isHidden(button, row) | async)) {
-						<button
-							type="button"
-							class="hub-table__cell-btn btn px-1"
-							[attr.title]="button.tooltip | unwrapAsync"
-							(click)="handleAction($event, button.handler, row)"
-							[ngClass]="button.classlist ?? []"
-						>
-							<div
-								class="hub-table__cell-btn-content d-flex flex-nowrap align-items-center gap-1"
-								[ngClass]="
-									button.color ? 'text-' + button.color : ''
-								"
-							>
-								<ng-hub-ui-icon
-									[config]="button.icon"
-								></ng-hub-ui-icon>
-								@if (button.title) {
-									<ng-container
-										class="hub-table__cell-btn-label button-label"
-									>
-										{{ button.title }}
-									</ng-container>
-								}
-							</div>
-						</button>
-					}
+			<div
+				class="hub-table__cell-btn-content d-flex flex-nowrap align-items-center gap-1"
+				[ngClass]="button.color ? 'text-' + button.color : ''"
+			>
+				<ng-hub-ui-icon [config]="button.icon"></ng-hub-ui-icon>
+				@if (button.title) {
+				<ng-container class="hub-table__cell-btn-label button-label">
+					{{ button.title }}
+				</ng-container>
 				}
-			}
-		</div>
+			</div>
+		</button>
+		} } }
+	</div>
 	} @else {
-		<span class="hub-table__cell-value">{{ property }}</span>
+	<span class="hub-table__cell-value">{{ property }}</span>
 	}
 </ng-template>

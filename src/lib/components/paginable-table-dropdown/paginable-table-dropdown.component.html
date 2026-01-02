@@ -1,24 +1,23 @@
-<div class="btn-group" [class.show]="shown">
+<div class="table-dropdown" [class.table-dropdown--open]="shown">
 	<button
-		class="px-2 dropdown-toggle"
+		class="table-dropdown__toggle px-2 dropdown-toggle"
 		type="button"
 		[ngClass]="buttonClass"
 		[attr.title]="options.tooltip"
-		data-toggle="dropdown"
 		[attr.aria-expanded]="shown"
 		(click)="toggle(); $event.stopPropagation()"
 		[disabled]="disabled()"
 	>
-		<div class="d-flex flex-nowrap align-items-center gap-1">
-			<i [ngClass]="options.icon || 'fa fa-ellipsis-v'"></i>
+		<div class="table-dropdown__toggle-content d-flex flex-nowrap align-items-center gap-1">
+			<i class="table-dropdown__icon hub-table__icon" [ngClass]="options.icon || 'hub-table__icon--ellipsis-v'"></i>
 			@if (options.title) {
-				{{ options.title }}
+				<span class="table-dropdown__title">{{ options.title }}</span>
 			}
 		</div>
 	</button>
 	<ng-template #dropdownTpt>
 		<div
-			class="dropdown-menu dropdown-menu-{{ options.position }}"
+			class="table-dropdown__menu dropdown-menu dropdown-menu-{{ options.position }}"
 			[class.show]="shown"
 			[ngStyle]="{
 				right:
@@ -30,7 +29,7 @@
 			@for (dropdownItem of options.buttons; track dropdownItem) {
 				@if (!dropdownItem.hidden) {
 					<button
-						class="dropdown-item"
+						class="table-dropdown__item dropdown-item"
 						type="button"
 						[attr.title]="dropdownItem.title | unwrapAsync"
 						[ngClass]="
@@ -44,12 +43,13 @@
 								dropdownItem.handler(row())
 						"
 					>
-						<div class="d-flex align-items-center gap-2">
+						<div class="table-dropdown__item-content d-flex align-items-center gap-2">
 							<ng-hub-ui-icon
+								class="table-dropdown__item-icon"
 								[config]="dropdownItem.icon"
 							></ng-hub-ui-icon>
 							@if (dropdownItem.label) {
-								{{ dropdownItem.label | unwrapAsync }}
+								<span class="table-dropdown__item-label">{{ dropdownItem.label | unwrapAsync }}</span>
 							}
 						</div>
 					</button>

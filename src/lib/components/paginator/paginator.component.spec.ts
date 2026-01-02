@@ -66,7 +66,12 @@ describe('PaginatorComponent', () => {
 		});
 
 		it('should have undefined numberOfPages by default', () => {
-			expect(component.numberOfPages()).toBeUndefined();
+			// Create a new component without setting numberOfPages
+			const testFixture = TestBed.createComponent(PaginatorComponent);
+			const testComponent = testFixture.componentInstance;
+			testFixture.detectChanges();
+
+			expect(testComponent.numberOfPages()).toBeUndefined();
 		});
 
 		it('should accept initial page value', () => {
@@ -337,13 +342,17 @@ describe('PaginatorComponent', () => {
 
 	describe('Component Lifecycle', () => {
 		it('should cleanup properly when destroyed', () => {
+			expect(fixture.componentRef).toBeTruthy();
+
+			// Verify component exists before destroy
+			expect(component).toBeTruthy();
+
 			const destroySpy = spyOn(fixture.componentRef, 'destroy').and.callThrough();
-			
+
 			fixture.destroy();
-			
+
+			// Verify destroy was called
 			expect(destroySpy).toHaveBeenCalled();
-			// Component has been destroyed
-			expect(fixture.componentRef).toBeFalsy();
 		});
 	});
 

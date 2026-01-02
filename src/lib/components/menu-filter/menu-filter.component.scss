@@ -1,32 +1,45 @@
-/* Filter Operator */
-.filter__operator {
-}
+.filter {
+	/* Filter Operator */
+	&__operator {
+		&__control {
+			// Operator select control styles
+		}
+	}
 
-/* Filter Rules */
-.filter__rule {
-}
+	/* Filter Rules */
+	&__rule {
+		&__mode {
+			// Rule mode select styles
+		}
 
-.filter__rule__mode {
-}
+		&__value {
+			// Rule value input styles
+		}
 
-.filter__rule__value {
-}
+		&__divider {
+			.dropdown-divider {
+				// Divider styles
+			}
+		}
+	}
 
-.filter__rule__divider .dropdown-divider {
-}
+	/* Add Rule Button */
+	&__add-rule {
+		.btn-link {
+			// Add rule button styles
+		}
+	}
 
-/* Add Rule Button */
-.filter__add-rule .btn-link {
-}
+	/* Action Buttons */
+	&__actions {
+		&__clear {
+			// Clear button styles
+		}
 
-.filter_actions {
-}
-
-/* Action Buttons */
-.filter__actions__clear {
-}
-
-.filter__actions__apply {
+		&__apply {
+			// Apply button styles
+		}
+	}
 }
 
 .dropdown-item.active,

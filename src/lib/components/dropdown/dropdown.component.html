@@ -1,17 +1,9 @@
-<button
-	class="btn dropdown__toggle"
-	[class.show]="isOpened"
-	type="button"
-	data-bs-toggle="dropdown"
-	aria-expanded="false"
-	(click)="toggle()"
->
+<button class="dropdown__toggle btn" [class.dropdown__toggle--open]="isOpened()" type="button" [attr.aria-expanded]="isOpened()" (click)="toggle()">
 	<ng-content select=".button"></ng-content>
 </button>
-<ul
-	class="dropdown-menu dropdown__menu"
-	[class.show]="isOpened"
-	[attr.aria-hidden]="!isOpened"
->
-	<ng-content select=".content"></ng-content>
-</ul>
+
+<ng-template #dropdownContent>
+	<ul class="dropdown__menu dropdown-menu show" [attr.aria-hidden]="!isOpened()">
+		<ng-content select=".content"></ng-content>
+	</ul>
+</ng-template>

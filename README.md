@@ -7,16 +7,14 @@
 - [🧩 Library Family](#-library-family-ng-hub-ui)
 - [📦 Description](#-description)
 - [🎯 Features](#-features)
+- [🏗️ Component Architecture](#️-component-architecture)
 - [🚀 Installation](#-installation)
 - [⚙️ Usage](#️-usage)
-- [🪄 API Reference](#-api-reference)
 - [🏗️ Table Headers Configuration](#️-table-headers-configuration-paginabletableheader)
 - [🔧 Resizable Columns](#-resizable-columns)
 - [🎪 Additional Components](#-additional-components)
+- [🪄 API Reference](#-api-reference)
 - [🎠 Templates](#-templates)
-- [🧠 Pagination and Data Handling](#-pagination-and-data-handling)
-- [🧬 PaginationState Interface](#-interface-paginationstatet)
-- [🌍 Internationalization](#-internationalization-and-translation-management)
 - [🧩 Styling](#-styling)
 - [⚡ Performance Tips](#-performance-tips)
 - [🔧 Troubleshooting](#-troubleshooting)
@@ -24,9 +22,13 @@
 - [🧪 Testing Guide](#-testing-guide)
 - [📚 Migration Guide](#-migration-guide)
 - [❓ FAQ](#-faq)
+- [🔍 Custom filters](#-custom-filters-filtertpt)
+- [🧠 Pagination and Data Handling](#-pagination-and-data-handling)
+- [🧬 PaginationState Interface](#-interface-paginationstatet)
+- [🌍 Internationalization](#-internationalization-and-translation-management)
+- [📊 Changelog](#-changelog)
 - [🤝 Contribution](#-contribution)
 - [☕ Support](#-support)
-- [📊 Changelog](#-changelog)
 - [🏆 Contributors](#-contributors)
 - [📄 License](#-license)
 
@@ -2212,7 +2214,7 @@ When reporting bugs, please include:
 ## ☕ Support
 
 Do you like this library? You can support us by buying us a coffee ☕:
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/carlosmorcillo)
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/carlosmorcillo)
 
 ## 🏆 Contributors
 

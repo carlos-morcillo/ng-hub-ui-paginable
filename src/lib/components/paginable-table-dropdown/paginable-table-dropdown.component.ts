@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
-import { UnwrapAsyncPipe } from '../../pipes/unwrap-async.pipe';
+import { UnwrapAsyncPipe } from 'ng-hub-ui-utils';
 import { HubIconComponent } from '../icon/icon.component';
 
 @Component({

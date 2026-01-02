@@ -20,8 +20,7 @@ import {
 } from '../../interfaces/column-filter-event';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { DropdownComponent } from '../dropdown/dropdown.component';
-import { TranslatePipe } from '../../pipes/translate.pipe';
-import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 import { UpperCasePipe } from '@angular/common';
 
 @Component({

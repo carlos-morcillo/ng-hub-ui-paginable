@@ -1,6 +1,18 @@
+.table-dropdown {
+	&__toggle::after {
+		all: initial;
+	}
+
+	&__menu {
+		max-width: 10rem;
+	}
+}
+
+// Legacy support for dropdown-toggle class
 .dropdown-toggle::after {
 	all: initial;
 }
+
 .dropdown-menu {
 	max-width: 10rem;
 }

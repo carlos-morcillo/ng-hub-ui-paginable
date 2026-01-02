@@ -29,7 +29,6 @@ export { TooltipDirective } from './directives/tooltip.directive';
 export * from './interfaces';
 
 // Services
-export { PaginableTranslationService } from './services/paginable-translation.service';
 export { PaginableService } from './services/paginable.service';
 export { PaginationService } from './services/pagination.service';
 

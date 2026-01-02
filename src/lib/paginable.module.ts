@@ -1,6 +1,8 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { HUB_TRANSLATION_CONFIG, PaginableTranslationService } from 'ng-hub-ui-utils';
+import { locale as enLocale } from './assets/i18n/en';
+import { locale as esLocale } from './assets/i18n/es';
 import { PaginableTableConfig } from './interfaces/paginable-table-config';
-import { PaginableTranslationService } from './services/paginable-translation.service';
 import { PaginableService } from './services/paginable.service';
 import { PaginableConfigService } from './services/paginate-config.service';
 // import { PaginableTableComponent } from './components/paginable-table/paginable-table.component';
@@ -11,6 +13,11 @@ import { PaginableConfigService } from './services/paginate-config.service';
 // import { PaginableTableErrorDirective } from './directives/paginable-table-error.directive';
 // import { PaginableTableExpandingRowDirective } from './directives/paginable-table-expanding-row.directive';
 // import { PaginableTableFilterDirective } from './directives/paginable-table-filter.directive';
+
+const PAGINABLE_DICTIONARIES = {
+	[enLocale.lang]: enLocale.data,
+	[esLocale.lang]: esLocale.data
+};
 
 @NgModule({
 	imports: [
@@ -36,9 +43,7 @@ import { PaginableConfigService } from './services/paginate-config.service';
 	providers: []
 })
 export class HubUITableModule {
-	static forRoot(
-		config?: PaginableTableConfig
-	): ModuleWithProviders<HubUITableModule> {
+	static forRoot(config?: PaginableTableConfig): ModuleWithProviders<HubUITableModule> {
 		return {
 			ngModule: HubUITableModule,
 			providers: [
@@ -47,6 +52,15 @@ export class HubUITableModule {
 					useValue: config
 				},
 				PaginableService,
+				{
+					provide: HUB_TRANSLATION_CONFIG,
+					useFactory: (paginableService: PaginableService) => ({
+						dictionaries: PAGINABLE_DICTIONARIES,
+						language: paginableService.config.language ?? 'en',
+						fallbackLanguage: 'en'
+					}),
+					deps: [PaginableService]
+				},
 				PaginableTranslationService
 			]
 		};

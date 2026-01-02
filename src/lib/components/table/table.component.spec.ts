@@ -1,18 +1,19 @@
-import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Subject } from 'rxjs';
 
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { TableRow } from '../../interfaces/table-row';
-import { PaginableTranslationService } from '../../services/paginable-translation.service';
+import { PaginableTranslationService } from 'ng-hub-ui-utils';
 import { PaginableService } from '../../services/paginable.service';
 import { PaginableConfigService } from '../../services/paginate-config.service';
 import { TableComponent } from './table.component';
 
 // Mock services
 class MockPaginableTranslationService {
-	translationObserver = { subscribe: () => {} };
+	private translationSource = new Subject<any>();
+	translationObserver = this.translationSource.asObservable();
 
 	getTranslation(key: string) {
 		const translations: Record<string, string> = {
@@ -47,7 +48,7 @@ describe('TableComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [TableComponent, BrowserAnimationsModule, CommonModule],
+			imports: [TableComponent, BrowserAnimationsModule],
 			providers: [
 				{
 					provide: PaginableTranslationService,
@@ -224,9 +225,9 @@ describe('TableComponent', () => {
 			expect(component.filtersFG.value.age).toBe(25);
 
 			component.clearFilters();
-			// After reset(), form controls return to their initial state (empty string in this case)
-			expect(component.filtersFG.value.name).toBe('');
-			expect(component.filtersFG.value.age).toBe('');
+			// After reset(), form controls return to null (default Angular behavior)
+			expect(component.filtersFG.value.name).toBeNull();
+			expect(component.filtersFG.value.age).toBeNull();
 		});
 	});
 
@@ -278,15 +279,15 @@ describe('TableComponent', () => {
 			};
 
 			// No sort applied
-			expect(component.getOrdenationClass(header)).toBe('fa-sort');
+			expect(component.getOrdenationClass(header)).toBe('hub-table__icon--sort');
 
 			// ASC sort
 			component.ordination.set({ property: 'name', direction: 'ASC' });
-			expect(component.getOrdenationClass(header)).toBe('fa-sort-up');
+			expect(component.getOrdenationClass(header)).toBe('hub-table__icon--sort-up');
 
 			// DESC sort
 			component.ordination.set({ property: 'name', direction: 'DESC' });
-			expect(component.getOrdenationClass(header)).toBe('fa-sort-down');
+			expect(component.getOrdenationClass(header)).toBe('hub-table__icon--sort-down');
 		});
 	});
 
@@ -482,10 +483,12 @@ describe('TableComponent', () => {
 			// Verify component exists before destroy
 			expect(component).toBeTruthy();
 
+			const destroySpy = spyOn(fixture.componentRef, 'destroy').and.callThrough();
+
 			fixture.destroy();
 
-			// After destroy, we can test that no errors occur during cleanup
-			expect(() => fixture.detectChanges()).toThrowError();
+			// Verify destroy was called
+			expect(destroySpy).toHaveBeenCalled();
 		});
 	});
 });

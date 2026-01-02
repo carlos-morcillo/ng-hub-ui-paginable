@@ -1,25 +1,13 @@
-import { CommonModule } from '@angular/common';
-import {
-	Component,
-	ContentChild,
-	Input,
-	TemplateRef,
-	inject
-} from '@angular/core';
-import {
-	FormArray,
-	FormBuilder,
-	FormControl,
-	NG_VALUE_ACCESSOR,
-	ReactiveFormsModule
-} from '@angular/forms';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, ContentChild, Input, TemplateRef, inject } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
 import { PaginableTableNotFoundDirective } from '../../../directives/paginable-table-not-found.directive';
 import { ListClickEvent } from '../../../interfaces/item-click-event';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
 import { RowButton } from '../../../interfaces/row-button';
-import { UcfirstPipe } from '../../../pipes/ucfirst.pipe';
+import { UcfirstPipe } from 'ng-hub-ui-utils';
 import { getValue } from '../../../utils';
 import { PaginatorComponent } from '../../paginator/paginator.component';
 
@@ -37,13 +25,7 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 			multi: true
 		}
 	],
-	imports: [
-		CommonModule,
-		ReactiveFormsModule,
-		PaginatorComponent,
-		PaginableTableNotFoundDirective,
-		UcfirstPipe
-	],
+	imports: [ReactiveFormsModule, PaginatorComponent, PaginableTableNotFoundDirective, UcfirstPipe, NgTemplateOutlet, NgClass],
 	standalone: true
 })
 export class PaginableListComponent<T = any> {
@@ -172,10 +154,7 @@ export class PaginableListComponent<T = any> {
 				group.patchValue(item);
 
 				if (item[this.bindChildren]?.length) {
-					this.buildForm(
-						group.get('children') as FormArray,
-						item[this.bindChildren]
-					);
+					this.buildForm(group.get('children') as FormArray, item[this.bindChildren]);
 					// newItem['children'] = this.buildValue(children);
 				}
 				form.push(group);
@@ -220,12 +199,7 @@ export class PaginableListComponent<T = any> {
 	 * @remarks
 	 * If the `clickFn` callback is not defined, the method exits early and no event is emitted.
 	 */
-	onItemClick(
-		{ collapsed, selected, ...item }: any,
-		depth: number,
-		index: number,
-		event: MouseEvent
-	) {
+	onItemClick({ collapsed, selected, ...item }: any, depth: number, index: number, event: MouseEvent) {
 		if (!this.clickFn) {
 			return;
 		}

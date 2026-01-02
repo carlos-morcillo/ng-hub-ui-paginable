@@ -1,0 +1,94 @@
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PaginableTableHeaderDirective } from './paginable-table-header.directive';
+
+/**
+ * Test component for PaginableTableHeaderDirective
+ */
+@Component({
+	template: `
+		<ng-template paginableTableHeader [header]="headerName">
+			<div class="custom-header">{{ headerTitle }}</div>
+		</ng-template>
+	`,
+	standalone: true,
+	imports: [PaginableTableHeaderDirective]
+})
+class TestHeaderDirectiveComponent {
+	@ViewChild(PaginableTableHeaderDirective, { static: true })
+	directive!: PaginableTableHeaderDirective;
+
+	headerName = 'testColumn';
+	headerTitle = 'Test Header';
+}
+
+/**
+ * Test suite for PaginableTableHeaderDirective
+ * Tests custom header template directive functionality
+ */
+describe('PaginableTableHeaderDirective', () => {
+	let component: TestHeaderDirectiveComponent;
+	let fixture: ComponentFixture<TestHeaderDirectiveComponent>;
+	let directive: PaginableTableHeaderDirective;
+
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			imports: [TestHeaderDirectiveComponent]
+		});
+
+		fixture = TestBed.createComponent(TestHeaderDirectiveComponent);
+		component = fixture.componentInstance;
+		directive = component.directive;
+		fixture.detectChanges();
+	});
+
+	it('should create an instance', () => {
+		expect(directive).toBeTruthy();
+	});
+
+	it('should have a template reference', () => {
+		expect(directive.template).toBeTruthy();
+		expect(directive.template instanceof TemplateRef).toBe(true);
+	});
+
+	it('should have required header input', () => {
+		expect(directive.header()).toBe('testColumn');
+	});
+
+	it('should update header input', () => {
+		component.headerName = 'newColumn';
+		fixture.detectChanges();
+
+		expect(directive.header()).toBe('newColumn');
+	});
+
+	it('should work with headerTpt selector', () => {
+		@Component({
+			template: `
+				<ng-template headerTpt [header]="'columnName'">
+					<div>Custom Header</div>
+				</ng-template>
+			`,
+			standalone: true,
+			imports: [PaginableTableHeaderDirective]
+		})
+		class TestHeaderTptComponent {
+			@ViewChild(PaginableTableHeaderDirective, { static: true })
+			directive!: PaginableTableHeaderDirective;
+		}
+
+		const testFixture = TestBed.createComponent(TestHeaderTptComponent);
+		testFixture.detectChanges();
+
+		expect(testFixture.componentInstance.directive).toBeTruthy();
+		expect(testFixture.componentInstance.directive.header()).toBe('columnName');
+	});
+
+	it('should be accessible via ViewChild', () => {
+		expect(component.directive).toBe(directive);
+	});
+
+	it('should provide template context', () => {
+		expect(directive.template).toBeDefined();
+	});
+});

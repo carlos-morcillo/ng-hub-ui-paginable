@@ -1,4 +1,12 @@
 # Changelog
+
+## [19.11.1] - 2026-01-02
+
+### Fixed
+- Fixed build configuration to use compiled ng-hub-ui-utils from dist/ instead of source files
+- Fixed missing PaginableTableConfig interface export in public API
+- Resolved ng-packagr warnings by removing conflicting package.json entries
+
 # [1.52.3] - 2024-09-26
 - Stability
 

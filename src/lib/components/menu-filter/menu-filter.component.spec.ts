@@ -12,13 +12,19 @@ import {
 	NumberMatchModes,
 	StringMatchModes
 } from '../../interfaces/column-filter-event';
-import { TranslatePipe } from '../../pipes/translate.pipe';
-import { PaginableTranslationService } from '../../services/paginable-translation.service';
 import { PaginableService } from '../../services/paginable.service';
-import { UcfirstPipe } from '../../pipes/ucfirst.pipe';
+import {
+	PaginableTranslationService,
+	TranslatePipe,
+	UcfirstPipe
+} from 'ng-hub-ui-utils';
+import { Subject } from 'rxjs';
 
 // Mock services
 class MockPaginableTranslationService {
+	private translationSource = new Subject<any>();
+	translationObserver = this.translationSource.asObservable();
+
 	getTranslation(key: string) {
 		const translations: Record<string, string> = {
 			'LOADING': 'loading',
@@ -27,7 +33,7 @@ class MockPaginableTranslationService {
 		};
 		return translations[key] || key;
 	}
-	
+
 	setTranslations() {}
 	initialize() {}
 }

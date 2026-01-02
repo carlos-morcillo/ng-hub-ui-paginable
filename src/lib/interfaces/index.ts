@@ -2,6 +2,7 @@ export * from './column-filter-event';
 export * from './filter-change-event';
 export * from './item-click-event';
 export * from './list-button';
+export * from './paginable-table-config';
 export * from './paginable-table-dropdown';
 export * from './paginable-table-header';
 export * from './paginable-table-options';

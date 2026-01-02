@@ -3,15 +3,43 @@
 	overflow: auto;
 }
 
-.tree-list:not(.root) > .tree-list__node {
-	padding-right: 0;
-}
+.tree-list {
+	&:not(.root) > .tree-list__node {
+		padding-right: 0;
+	}
 
-.tree-list__node-label {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	flex-grow: 1;
+	&__search {
+		// Search container styles
+	}
+
+	&__search-input {
+		// Search input styles
+	}
+
+	&__search-button {
+		// Search button styles
+	}
+
+	&__search-icon {
+		// Search icon styles
+	}
+
+	&__node {
+		&-label {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			flex-grow: 1;
+		}
+
+		&-checkbox {
+			// Checkbox styles
+		}
+
+		&-buttons {
+			// Buttons container styles
+		}
+	}
 }
 
 .clickable-item {

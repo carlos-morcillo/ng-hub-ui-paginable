@@ -11,7 +11,7 @@
 				href="javascript:{}"
 				(click)="page.set(1)"
 			>
-				<i class="pager__icon fa fa-angle-double-left"></i>
+				<i class="pager__icon hub-table__icon hub-table__icon--angle-double-left"></i>
 			</a>
 		</li>
 		<li
@@ -27,7 +27,7 @@
 				(click)="page.set(page() - 1)"
 			>
 				<span class="pager__icon-wrapper" aria-hidden="true">
-					<i class="pager__icon fa fa-angle-left"></i>
+					<i class="pager__icon hub-table__icon hub-table__icon--angle-left"></i>
 				</span>
 			</a>
 		</li>
@@ -97,7 +97,7 @@
 					(click)="page.set(page() + 1)"
 				>
 					<span class="pager__icon-wrapper" aria-hidden="true">
-						<i class="pager__icon fa fa-angle-right"></i>
+						<i class="pager__icon hub-table__icon hub-table__icon--angle-right"></i>
 					</span>
 				</a>
 			</li>
@@ -112,7 +112,7 @@
 					href="javascript:{}"
 					(click)="page.set(numberOfPages() ?? 1)"
 				>
-					<i class="pager__icon fa fa-angle-double-right"></i>
+					<i class="pager__icon hub-table__icon hub-table__icon--angle-double-right"></i>
 				</a>
 			</li>
 		} @else {
@@ -125,7 +125,7 @@
 					(click)="page.set(page() + 1)"
 				>
 					<span class="pager__icon-wrapper" aria-hidden="true">
-						<i class="pager__icon fa fa-angle-right"></i>
+						<i class="pager__icon hub-table__icon hub-table__icon--angle-right"></i>
 					</span>
 				</a>
 			</li>
