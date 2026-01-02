@@ -1,5 +1,16 @@
 # Changelog
 
+## [19.11.5] - 2026-01-02
+
+### Bug Fixes
+
+*   **paginable:** relax stricter type checking on `items` input and internal `_items` property to `any` to allow readonly arrays.
+*   **interfaces:** update `PaginableTableDropdown`, `ListButton`, and `PaginationState` to accept `ReadonlyArray` for better compatibility with immutable data sources.
+
+### Refactor
+
+*   **paginable-list:** migrate `@Input` properties to `input()` signals for `bindValue`, `bindLabel`, `bindChildren`, `selectable`, `clickFn` and content queries.
+
 ## [19.11.4] - 2026-01-02
 
 ### Fixed

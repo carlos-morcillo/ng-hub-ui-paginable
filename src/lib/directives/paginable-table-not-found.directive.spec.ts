@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableNotFoundDirective } from './paginable-table-not-found.directive';
 
@@ -15,8 +15,7 @@ import { PaginableTableNotFoundDirective } from './paginable-table-not-found.dir
 	imports: [PaginableTableNotFoundDirective]
 })
 class TestNotFoundDirectiveComponent {
-	@ViewChild(PaginableTableNotFoundDirective, { static: true })
-	directive!: PaginableTableNotFoundDirective;
+	readonly directive = viewChild.required(PaginableTableNotFoundDirective);
 
 	noDataMessage = 'No data available';
 }
@@ -37,7 +36,7 @@ describe('PaginableTableNotFoundDirective', () => {
 
 		fixture = TestBed.createComponent(TestNotFoundDirectiveComponent);
 		component = fixture.componentInstance;
-		directive = component.directive;
+		directive = component.directive();
 		fixture.detectChanges();
 	});
 
@@ -61,18 +60,17 @@ describe('PaginableTableNotFoundDirective', () => {
 			imports: [PaginableTableNotFoundDirective]
 		})
 		class TestNoDataTptComponent {
-			@ViewChild(PaginableTableNotFoundDirective, { static: true })
-			directive!: PaginableTableNotFoundDirective;
+			readonly directive = viewChild.required(PaginableTableNotFoundDirective);
 		}
 
 		const testFixture = TestBed.createComponent(TestNoDataTptComponent);
 		testFixture.detectChanges();
 
-		expect(testFixture.componentInstance.directive).toBeTruthy();
+		expect(testFixture.componentInstance.directive()).toBeTruthy();
 	});
 
 	it('should be accessible via ViewChild', () => {
-		expect(component.directive).toBe(directive);
+		expect(component.directive()).toBe(directive);
 	});
 
 	it('should provide template context', () => {

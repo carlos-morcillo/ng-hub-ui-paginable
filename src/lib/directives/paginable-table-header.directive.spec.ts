@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableHeaderDirective } from './paginable-table-header.directive';
 
@@ -15,8 +15,7 @@ import { PaginableTableHeaderDirective } from './paginable-table-header.directiv
 	imports: [PaginableTableHeaderDirective]
 })
 class TestHeaderDirectiveComponent {
-	@ViewChild(PaginableTableHeaderDirective, { static: true })
-	directive!: PaginableTableHeaderDirective;
+	readonly directive = viewChild.required(PaginableTableHeaderDirective);
 
 	headerName = 'testColumn';
 	headerTitle = 'Test Header';
@@ -38,7 +37,7 @@ describe('PaginableTableHeaderDirective', () => {
 
 		fixture = TestBed.createComponent(TestHeaderDirectiveComponent);
 		component = fixture.componentInstance;
-		directive = component.directive;
+		directive = component.directive();
 		fixture.detectChanges();
 	});
 
@@ -73,19 +72,18 @@ describe('PaginableTableHeaderDirective', () => {
 			imports: [PaginableTableHeaderDirective]
 		})
 		class TestHeaderTptComponent {
-			@ViewChild(PaginableTableHeaderDirective, { static: true })
-			directive!: PaginableTableHeaderDirective;
+			readonly directive = viewChild.required(PaginableTableHeaderDirective);
 		}
 
 		const testFixture = TestBed.createComponent(TestHeaderTptComponent);
 		testFixture.detectChanges();
 
-		expect(testFixture.componentInstance.directive).toBeTruthy();
-		expect(testFixture.componentInstance.directive.header()).toBe('columnName');
+		expect(testFixture.componentInstance.directive()).toBeTruthy();
+		expect(testFixture.componentInstance.directive().header()).toBe('columnName');
 	});
 
 	it('should be accessible via ViewChild', () => {
-		expect(component.directive).toBe(directive);
+		expect(component.directive()).toBe(directive);
 	});
 
 	it('should provide template context', () => {

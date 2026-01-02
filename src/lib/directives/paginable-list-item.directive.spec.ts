@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableListItemDirective } from './paginable-list-item.directive';
 
@@ -14,8 +14,7 @@ import { PaginableListItemDirective } from './paginable-list-item.directive';
 	imports: [PaginableListItemDirective]
 })
 class TestListItemDirectiveComponent {
-	@ViewChild(PaginableListItemDirective, { static: true })
-	directive!: PaginableListItemDirective;
+	readonly directive = viewChild.required(PaginableListItemDirective);
 }
 
 /**
@@ -34,7 +33,7 @@ describe('PaginableListItemDirective', () => {
 
 		fixture = TestBed.createComponent(TestListItemDirectiveComponent);
 		component = fixture.componentInstance;
-		directive = component.directive;
+		directive = component.directive();
 		fixture.detectChanges();
 	});
 
@@ -48,7 +47,7 @@ describe('PaginableListItemDirective', () => {
 	});
 
 	it('should be accessible via ViewChild', () => {
-		expect(component.directive).toBe(directive);
+		expect(component.directive()).toBe(directive);
 	});
 
 	it('should provide template context', () => {
