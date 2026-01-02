@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, ContentChild, Input, TemplateRef, inject } from '@angular/core';
+import { Component, Input, TemplateRef, inject, contentChild, input } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { UcfirstPipe } from 'ng-hub-ui-utils';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
@@ -31,11 +31,11 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 export class PaginableListComponent<T = any> {
 	#fb = inject(FormBuilder);
 
-	@Input() bindValue?: string;
-	@Input() bindLabel: string = 'label';
-	@Input() bindChildren: string = 'children';
+	readonly bindValue = input<string>();
+	readonly bindLabel = input<string>('label');
+	readonly bindChildren = input<string>('children');
 
-	@Input() selectable!: string | null;
+	readonly selectable = input.required<string | null>();
 
 	private _options: PaginableTableOptions = {
 		cursor: 'default',
@@ -54,7 +54,7 @@ export class PaginableListComponent<T = any> {
 		this.buildForm(this.form, this._items);
 	}
 
-	private _items: ReadonlyArray<T> = [];
+	private _items: any = [];
 	@Input()
 	get items(): any {
 		return this._items;
@@ -65,7 +65,7 @@ export class PaginableListComponent<T = any> {
 		this.buildForm(this.form, this._items);
 	}
 
-	@Input() clickFn: (event: ListClickEvent<T>) => void | Promise<void> = () => {};
+	readonly clickFn = input<(event: ListClickEvent<T>) => void | Promise<void>>(() => { });
 
 	form: FormArray = this.#fb.array([]);
 
@@ -73,10 +73,8 @@ export class PaginableListComponent<T = any> {
 
 	// NOTE: Templates
 
-	@ContentChild(PaginableListItemDirective, { read: TemplateRef })
-	itemTpt?: TemplateRef<any>;
-	@ContentChild(PaginableTableNotFoundDirective, { read: TemplateRef })
-	noDataTpt?: TemplateRef<any>;
+	readonly itemTpt = contentChild(PaginableListItemDirective, { read: TemplateRef });
+	readonly noDataTpt = contentChild(PaginableTableNotFoundDirective, { read: TemplateRef });
 
 	// NOTE: Otros
 	isDisabled: boolean = false;
@@ -153,8 +151,8 @@ export class PaginableListComponent<T = any> {
 
 				group.patchValue(item);
 
-				if (item[this.bindChildren]?.length) {
-					this.buildForm(group.get('children') as FormArray, item[this.bindChildren]);
+				if (item[this.bindChildren()]?.length) {
+					this.buildForm(group.get('children') as FormArray, item[this.bindChildren()]);
 					// newItem['children'] = this.buildValue(children);
 				}
 				form.push(group);
@@ -200,16 +198,18 @@ export class PaginableListComponent<T = any> {
 	 * If the `clickFn` callback is not defined, the method exits early and no event is emitted.
 	 */
 	onItemClick({ collapsed, selected, ...item }: any, depth: number, index: number, event: MouseEvent) {
-		if (!this.clickFn) {
+		const clickFn = this.clickFn();
+  if (!clickFn) {
 			return;
 		}
 
-		this.clickFn({
+		const bindLabel = this.bindLabel();
+		clickFn({
 			depth,
 			index,
 			selected,
 			collapsed,
-			value: this.bindLabel ? getValue(item, this.bindLabel) : item,
+			value: bindLabel ? getValue(item, bindLabel) : item,
 			item: item as T,
 			mouseEvent: event
 		});

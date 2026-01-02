@@ -58,15 +58,15 @@ describe('TooltipDirective', () => {
 	});
 
 	it('should have tooltipTitle input', () => {
-		expect(directive.tooltipTitle).toBe('Test tooltip');
+		expect(directive.tooltipTitle()).toBe('Test tooltip');
 	});
 
 	it('should have placement input', () => {
-		expect(directive.placement).toBe('top');
+		expect(directive.placement()).toBe('top');
 	});
 
 	it('should have delay input', () => {
-		expect(directive.delay).toBe(300);
+		expect(directive.delay()).toBe(300);
 	});
 
 	it('should have default offset', () => {

@@ -12,5 +12,5 @@ export type ListButton<T = any> = RowButton<T> & {
 	/**
 	 * Function to execute on click, receiving an array of selected items.
 	 */
-	handler?: (items: Array<T>) => void;
+	handler?: (items: ReadonlyArray<T>) => void;
 };

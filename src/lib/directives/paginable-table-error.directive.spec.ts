@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableErrorDirective } from './paginable-table-error.directive';
 
@@ -15,8 +15,7 @@ import { PaginableTableErrorDirective } from './paginable-table-error.directive'
 	imports: [PaginableTableErrorDirective]
 })
 class TestErrorDirectiveComponent {
-	@ViewChild(PaginableTableErrorDirective, { static: true })
-	directive!: PaginableTableErrorDirective;
+	readonly directive = viewChild.required(PaginableTableErrorDirective);
 
 	errorMessage = 'An error occurred';
 }
@@ -37,7 +36,7 @@ describe('PaginableTableErrorDirective', () => {
 
 		fixture = TestBed.createComponent(TestErrorDirectiveComponent);
 		component = fixture.componentInstance;
-		directive = component.directive;
+		directive = component.directive();
 		fixture.detectChanges();
 	});
 
@@ -61,18 +60,17 @@ describe('PaginableTableErrorDirective', () => {
 			imports: [PaginableTableErrorDirective]
 		})
 		class TestErrorTptComponent {
-			@ViewChild(PaginableTableErrorDirective, { static: true })
-			directive!: PaginableTableErrorDirective;
+			readonly directive = viewChild.required(PaginableTableErrorDirective);
 		}
 
 		const testFixture = TestBed.createComponent(TestErrorTptComponent);
 		testFixture.detectChanges();
 
-		expect(testFixture.componentInstance.directive).toBeTruthy();
+		expect(testFixture.componentInstance.directive()).toBeTruthy();
 	});
 
 	it('should be accessible via ViewChild', () => {
-		expect(component.directive).toBe(directive);
+		expect(component.directive()).toBe(directive);
 	});
 
 	it('should provide template context', () => {

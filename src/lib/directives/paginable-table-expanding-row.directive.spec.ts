@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableExpandingRowDirective } from './paginable-table-expanding-row.directive';
 
@@ -15,8 +15,7 @@ import { PaginableTableExpandingRowDirective } from './paginable-table-expanding
 	imports: [PaginableTableExpandingRowDirective]
 })
 class TestExpandingRowDirectiveComponent {
-	@ViewChild(PaginableTableExpandingRowDirective, { static: true })
-	directive!: PaginableTableExpandingRowDirective;
+	readonly directive = viewChild.required(PaginableTableExpandingRowDirective);
 }
 
 /**
@@ -35,7 +34,7 @@ describe('PaginableTableExpandingRowDirective', () => {
 
 		fixture = TestBed.createComponent(TestExpandingRowDirectiveComponent);
 		component = fixture.componentInstance;
-		directive = component.directive;
+		directive = component.directive();
 		fixture.detectChanges();
 	});
 
@@ -59,18 +58,17 @@ describe('PaginableTableExpandingRowDirective', () => {
 			imports: [PaginableTableExpandingRowDirective]
 		})
 		class TestExpandingRowTptComponent {
-			@ViewChild(PaginableTableExpandingRowDirective, { static: true })
-			directive!: PaginableTableExpandingRowDirective;
+			readonly directive = viewChild.required(PaginableTableExpandingRowDirective);
 		}
 
 		const testFixture = TestBed.createComponent(TestExpandingRowTptComponent);
 		testFixture.detectChanges();
 
-		expect(testFixture.componentInstance.directive).toBeTruthy();
+		expect(testFixture.componentInstance.directive()).toBeTruthy();
 	});
 
 	it('should be accessible via ViewChild', () => {
-		expect(component.directive).toBe(directive);
+		expect(component.directive()).toBe(directive);
 	});
 
 	it('should provide template context', () => {

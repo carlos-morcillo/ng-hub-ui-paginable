@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableRowDirective } from './paginable-table-row.directive';
 
@@ -15,8 +15,7 @@ import { PaginableTableRowDirective } from './paginable-table-row.directive';
 	imports: [PaginableTableRowDirective]
 })
 class TestRowDirectiveComponent {
-	@ViewChild(PaginableTableRowDirective, { static: true })
-	directive!: PaginableTableRowDirective;
+	readonly directive = viewChild.required(PaginableTableRowDirective);
 }
 
 /**
@@ -35,7 +34,7 @@ describe('PaginableTableRowDirective', () => {
 
 		fixture = TestBed.createComponent(TestRowDirectiveComponent);
 		component = fixture.componentInstance;
-		directive = component.directive;
+		directive = component.directive();
 		fixture.detectChanges();
 	});
 
@@ -49,7 +48,7 @@ describe('PaginableTableRowDirective', () => {
 	});
 
 	it('should be accessible via ViewChild', () => {
-		expect(component.directive).toBe(directive);
+		expect(component.directive()).toBe(directive);
 	});
 
 	it('should work with rowTpt selector', () => {
@@ -63,14 +62,13 @@ describe('PaginableTableRowDirective', () => {
 			imports: [PaginableTableRowDirective]
 		})
 		class TestRowTptComponent {
-			@ViewChild(PaginableTableRowDirective, { static: true })
-			directive!: PaginableTableRowDirective;
+			readonly directive = viewChild.required(PaginableTableRowDirective);
 		}
 
 		const testFixture = TestBed.createComponent(TestRowTptComponent);
 		testFixture.detectChanges();
 
-		expect(testFixture.componentInstance.directive).toBeTruthy();
+		expect(testFixture.componentInstance.directive()).toBeTruthy();
 	});
 
 	it('should provide template context', () => {

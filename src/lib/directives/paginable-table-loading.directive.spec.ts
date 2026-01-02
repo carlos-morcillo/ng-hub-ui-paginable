@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableLoadingDirective } from './paginable-table-loading.directive';
 
@@ -15,8 +15,7 @@ import { PaginableTableLoadingDirective } from './paginable-table-loading.direct
 	imports: [PaginableTableLoadingDirective]
 })
 class TestLoadingDirectiveComponent {
-	@ViewChild(PaginableTableLoadingDirective, { static: true })
-	directive!: PaginableTableLoadingDirective;
+	readonly directive = viewChild.required(PaginableTableLoadingDirective);
 
 	loadingMessage = 'Loading...';
 }
@@ -37,7 +36,7 @@ describe('PaginableTableLoadingDirective', () => {
 
 		fixture = TestBed.createComponent(TestLoadingDirectiveComponent);
 		component = fixture.componentInstance;
-		directive = component.directive;
+		directive = component.directive();
 		fixture.detectChanges();
 	});
 
@@ -61,18 +60,17 @@ describe('PaginableTableLoadingDirective', () => {
 			imports: [PaginableTableLoadingDirective]
 		})
 		class TestLoadingTptComponent {
-			@ViewChild(PaginableTableLoadingDirective, { static: true })
-			directive!: PaginableTableLoadingDirective;
+			readonly directive = viewChild.required(PaginableTableLoadingDirective);
 		}
 
 		const testFixture = TestBed.createComponent(TestLoadingTptComponent);
 		testFixture.detectChanges();
 
-		expect(testFixture.componentInstance.directive).toBeTruthy();
+		expect(testFixture.componentInstance.directive()).toBeTruthy();
 	});
 
 	it('should be accessible via ViewChild', () => {
-		expect(component.directive).toBe(directive);
+		expect(component.directive()).toBe(directive);
 	});
 
 	it('should provide template context', () => {

@@ -52,7 +52,7 @@
 		) {
 			<li
 				class="list-group-item tree-list__node"
-				[class.clickable-item]="clickFn"
+				[class.clickable-item]="clickFn()"
 				[formGroup]="formGroup"
 				(click)="
 					onItemClick(formGroup.value, depth, index, $event);
@@ -64,7 +64,7 @@
 					<div
 						class="d-flex justify-content-between align-items-center gap-2"
 					>
-						@if (selectable === 'multiple') {
+						@if (selectable() === 'multiple') {
 							<input
 								class="form-check-input tree-list__node-checkbox"
 								type="checkbox"
@@ -74,7 +74,7 @@
 						}
 						<div class="tree-list__node-label">
 							<ng-container
-								[ngTemplateOutlet]="itemTpt || defaultItemtTpt"
+								[ngTemplateOutlet]="itemTpt() || defaultItemtTpt"
 								[ngTemplateOutletContext]="{
 									data: items[index],
 									depth,
@@ -89,7 +89,7 @@
 						<div
 							class="tree-list__node-buttons d-flex align-items-center gap-2"
 						>
-							@if (item[bindChildren]?.length) {
+							@if (item[bindChildren()]?.length) {
 								<button
 									class="btn"
 									(click)="
@@ -112,12 +112,12 @@
 							}
 						</div>
 					</div>
-					@if (item[bindChildren]?.length && !item.collapsed) {
+					@if (item[bindChildren()]?.length && !item.collapsed) {
 						<ng-container
 							[ngTemplateOutlet]="containerTpt"
 							[ngTemplateOutletContext]="{
 								formArray: formGroup.get('children'),
-								items: items[index][bindChildren],
+								items: items[index][bindChildren()],
 								depth: depth + 1
 							}"
 						></ng-container>
@@ -130,7 +130,7 @@
 
 <ng-template #noDataRowTpt>
 	<li class="list-group-item">
-		<ng-container [ngTemplateOutlet]="noDataTpt || defaultNoDataTpt">
+		<ng-container [ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt">
 		</ng-container>
 	</li>
 </ng-template>
@@ -143,5 +143,5 @@
 </ng-template>
 
 <ng-template #defaultItemtTpt let-data="data">
-	{{ data[bindLabel] }}
+	{{ data[bindLabel()] }}
 </ng-template>

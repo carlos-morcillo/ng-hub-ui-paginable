@@ -5,7 +5,7 @@ export interface PaginableTableDropdown {
 	tooltip?: string;
 	icon?: string;
 	color?: string;
-	buttons: Array<RowButton>;
+	buttons: ReadonlyArray<RowButton>;
 	position?: 'left' | 'right' | 'start' | 'end' | null;
 	fill?: 'clear' | 'outline' | null;
 }
