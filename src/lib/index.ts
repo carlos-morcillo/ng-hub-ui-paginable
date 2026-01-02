@@ -1,5 +1,6 @@
 // Modules
 export { HubUITableModule } from './paginable.module';
+export { HubUITableModule as TableModule } from './paginable.module';
 
 // Components
 export { DropdownComponent } from './components/dropdown/dropdown.component';

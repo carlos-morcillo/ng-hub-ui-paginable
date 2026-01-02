@@ -56,10 +56,10 @@ export class PaginableListComponent<T = any> {
 
 	private _items: ReadonlyArray<T> = [];
 	@Input()
-	get items(): ReadonlyArray<T> {
+	get items(): ReadonlyArray<T> | null | undefined {
 		return this._items;
 	}
-	set items(v: ReadonlyArray<T>) {
+	set items(v: ReadonlyArray<T> | null | undefined) {
 		this._items = v ?? [];
 		this.form.clear();
 		this.buildForm(this.form, this._items);

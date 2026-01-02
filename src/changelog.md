@@ -1,5 +1,10 @@
 # Changelog
 
+## [19.11.3] - 2026-01-02
+
+### Changed
+- Updated ng-hub-ui-utils peer dependency to version 1.2.0
+
 ## [19.11.2] - 2026-01-02
 
 ### Fixed
