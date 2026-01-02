@@ -1,5 +1,11 @@
 # Changelog
 
+## [19.11.4] - 2026-01-02
+
+### Fixed
+- Relaxed type definition for `items` input in `PaginableListComponent` to accept `ReadonlyArray` and `any`.
+- Updated `PaginationService.generate` signature to accept `ReadonlyArray<any>` alongside mutable arrays.
+
 All notable changes to this project are documented in this file.
 
 ## [19.11.0] - 2026-01-01

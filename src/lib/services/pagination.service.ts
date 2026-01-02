@@ -5,7 +5,7 @@ import { PaginableTablePagination } from '../interfaces/paginable-table-paginati
 	providedIn: 'root'
 })
 export class PaginationService {
-	generate(items: any[], params: any): any {
+	generate(items: any[] | ReadonlyArray<any>, params: any): any {
 		let filtered: Array<any> = [];
 		if (items && items.length) {
 			filtered = items.concat();

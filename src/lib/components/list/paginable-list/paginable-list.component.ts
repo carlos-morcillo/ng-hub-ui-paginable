@@ -1,13 +1,13 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, Input, TemplateRef, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { UcfirstPipe } from 'ng-hub-ui-utils';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
 import { PaginableTableNotFoundDirective } from '../../../directives/paginable-table-not-found.directive';
 import { ListClickEvent } from '../../../interfaces/item-click-event';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
 import { RowButton } from '../../../interfaces/row-button';
-import { UcfirstPipe } from 'ng-hub-ui-utils';
 import { getValue } from '../../../utils';
 import { PaginatorComponent } from '../../paginator/paginator.component';
 
@@ -56,10 +56,10 @@ export class PaginableListComponent<T = any> {
 
 	private _items: ReadonlyArray<T> = [];
 	@Input()
-	get items(): ReadonlyArray<T> | null | undefined {
+	get items(): any {
 		return this._items;
 	}
-	set items(v: ReadonlyArray<T> | null | undefined) {
+	set items(v: any) {
 		this._items = v ?? [];
 		this.form.clear();
 		this.buildForm(this.form, this._items);
