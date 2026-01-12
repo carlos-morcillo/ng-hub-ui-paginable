@@ -3,7 +3,7 @@
 		class="table-dropdown__toggle px-2 dropdown-toggle"
 		type="button"
 		[ngClass]="buttonClass"
-		[attr.title]="options.tooltip"
+		[attr.title]="options.tooltip | unwrapAsync"
 		[attr.aria-expanded]="shown"
 		(click)="toggle(); $event.stopPropagation()"
 		[disabled]="disabled()"
@@ -11,7 +11,7 @@
 		<div class="table-dropdown__toggle-content d-flex flex-nowrap align-items-center gap-1">
 			<i class="table-dropdown__icon hub-table__icon" [ngClass]="options.icon || 'hub-table__icon--ellipsis-v'"></i>
 			@if (options.title) {
-				<span class="table-dropdown__title">{{ options.title }}</span>
+				<span class="table-dropdown__title">{{ options.title | unwrapAsync }}</span>
 			}
 		</div>
 	</button>

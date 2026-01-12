@@ -453,10 +453,10 @@
 				[ngClass]="button.color ? 'text-' + button.color : ''"
 			>
 				<ng-hub-ui-icon [config]="button.icon"></ng-hub-ui-icon>
-				@if (button.title) {
-				<ng-container class="hub-table__cell-btn-label button-label">
-					{{ button.title }}
-				</ng-container>
+				@if (button.label) {
+				<span class="hub-table__cell-btn-label">{{ button.label | unwrapAsync }}</span>
+				} @else if (button.title) {
+				<span class="hub-table__cell-btn-label">{{ button.title | unwrapAsync }}</span>
 				}
 			</div>
 		</button>
