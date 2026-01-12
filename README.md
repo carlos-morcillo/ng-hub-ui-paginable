@@ -954,6 +954,7 @@ filters = signal({
 | `responsive`        | `TableBreakpoint`                | `null`  | Responsive breakpoint for table layout.                                    |
 | `options`           | `PaginableTableOptions`          | `{}`    | Visual configuration (cursor, hover, striped, variant).                    |
 | `clickFn`           | `(event: TableRowEvent<T>) => void` | `null` | Handler for row click events.                                             |
+| `rowClass`          | `string \| ((item: T) => string)` | `null` | Custom CSS class for a row. Can be a fixed string or a function that returns a class based on item data. |
 
 #### Outputs & Events
 
@@ -997,6 +998,7 @@ interface TableRowEvent<T> {
 | `options`        | `PaginableTableOptions`                      | `{}`        | Visual and behavioral options.                                |
 | `batchActions`   | `Array<PaginableTableDropdown \| ListButton>` | `[]`      | Actions for selected items.                                   |
 | `clickFn`        | `(event: ListClickEvent<T>) => void`         | `null`      | Handler for item click events.                               |
+| `rowClass`       | `string \| ((item: T) => string)`            | `null`      | Custom CSS class for a list item. Can be a fixed string or a function that returns a class based on item data. |
 
 **List Click Event (`ListClickEvent<T>`):**
 ```typescript
@@ -1261,6 +1263,164 @@ You can also create reusable utility classes for different table variants:
 ```
 
 This makes hub-ui-table a solid foundation for UI systems that require high flexibility and visual consistency across projects.
+
+### Dynamic Row Styling (`rowClass`)
+
+The `rowClass` input allows you to dynamically assign custom CSS classes to each row in both the table and list components. This is useful for visually highlighting rows based on their data. It accepts either a static `string` (to apply the same class to all rows) or a `function` that receives the item data and returns a class string.
+
+#### Table Example: Highlighting Inactive Users
+
+Imagine you want to highlight rows of users who are inactive.
+
+**1. Define the `rowClass` function in your component:**
+
+```typescript
+import { Component, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-user-table',
+  // ...
+})
+export class UserTableComponent {
+  users = signal([
+    { name: 'John Doe', status: 'active' },
+    { name: 'Jane Smith', status: 'inactive' },
+    { name: 'Peter Jones', status: 'active' },
+  ]);
+  
+  // Function to determine the class for each row
+  getUserRowClass = (user: { status: string }): string => {
+    if (user.status === 'inactive') {
+      return 'row-inactive';
+    }
+    return '';
+  };
+}
+```
+
+**2. Add your custom styles:**
+
+In your global `styles.scss` or component's stylesheet, define what `row-inactive` does:
+
+```scss
+.hub-table__body-row.row-inactive {
+  background-color: #f8d7da; // A light red background
+  opacity: 0.7;
+  
+  &:hover {
+    background-color: #f1c4c8;
+  }
+}
+```
+
+**3. Bind the function to the table:**
+
+```html
+<hub-ui-table
+  [headers]="headers"
+  [data]="users()"
+  [rowClass]="getUserRowClass">
+</hub-ui-table>
+```
+
+The table will now automatically apply the `row-inactive` class to rows where the user's status is `'inactive'`.
+
+#### Using the `RowClass` Enum
+
+For a more robust and type-safe approach, the library exports a `RowClass` enum.
+
+**1. Import `RowClass` and use it in your function:**
+
+```typescript
+import { Component, signal } from '@angular/core';
+import { RowClass } from 'ng-hub-ui-paginable';
+
+@Component({
+  selector: 'app-user-table',
+  // ...
+})
+export class UserTableComponent {
+  users = signal([
+    { name: 'John Doe', status: 'active' },
+    { name: 'Jane Smith', status: 'inactive' },
+    { name: 'Alex Ray', status: 'pending' },
+  ]);
+  
+  getUserRowClass = (user: { status: string }): string => {
+    switch (user.status) {
+      case 'active':
+        return RowClass.SUCCESS;
+      case 'inactive':
+        return RowClass.DANGER;
+      case 'pending':
+        return RowClass.WARNING;
+      default:
+        return '';
+    }
+  };
+}
+```
+
+**2. Bind the function to the table:**
+
+The component's template remains the same. The styles for the enum values are already included in the library, so you don't need to define them manually.
+
+```html
+<hub-ui-table
+  [headers]="headers"
+  [data]="users()"
+  [rowClass]="getUserRowClass">
+</hub-ui-table>
+```
+
+This method is recommended as it prevents typos and keeps styling consistent with the library's design.
+
+#### List Example: Styling Folders and Files
+
+Similarly, for a `hub-ui-list`, you can differentiate item types.
+
+**1. Define the `rowClass` function:**
+
+```typescript
+export class FileListComponent {
+  items = signal([
+    { name: 'Documents', type: 'folder', children: [...] },
+    { name: 'report.pdf', type: 'file' },
+    { name: 'archive.zip', type: 'file' },
+  ]);
+
+  getItemClass = (item: { type: string }): string => {
+    if (item.type === 'folder') {
+      return 'list-item-folder';
+    }
+    return 'list-item-file';
+  };
+}
+```
+
+**2. Add custom styles:**
+
+```scss
+.tree-list__node.list-item-folder > div {
+  font-weight: bold;
+}
+
+.tree-list__node.list-item-file > div {
+  color: #555;
+}
+```
+
+**3. Bind the function to the list:**
+
+```html
+<hub-ui-list
+  [items]="items()"
+  [bindLabel]="'name'"
+  [rowClass]="getItemClass">
+</hub-ui-list>
+```
+
+This will make it easy to visually distinguish between folders and files in your list.
 
 ## ⚡ Performance Tips
 

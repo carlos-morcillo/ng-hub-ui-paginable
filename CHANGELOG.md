@@ -1,5 +1,18 @@
 # Changelog
 
+## [19.12.0] - 2026-01-03
+
+### Added
+
+*   **table:** added `rowClass` input to allow applying custom classes to rows based on data or a fixed string, enabling dynamic row styling.
+
+### Documentation
+
+*   **paginable:** add missing JSDoc documentation to `PaginatorComponent`, `PaginableTableRangeInputComponent`, `MenuFilterComponent`, `ResizableComponent`, and `PaginableTableDropdownComponent`.
+
+### Refactor
+
+*   **styles:** refactor row classes in `table.scss` to use `@each` loop for better maintainability and reduced code duplication.
 ## [19.11.5] - 2026-01-02
 
 ### Bug Fixes

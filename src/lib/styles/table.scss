@@ -44,6 +44,25 @@ $tablePrefix: hub- !default;
 	--#{$tablePrefix}icon-color: currentColor;
 	--#{$tablePrefix}icon-size: 1em;
 
+	// Row class variants
+	// These variables define the background and text colors for the different row states.
+	--#{$tablePrefix}success-bg-subtle: #d1e7dd;
+	--#{$tablePrefix}success-text-emphasis: #0a3622;
+	--#{$tablePrefix}danger-bg-subtle: #f8d7da;
+	--#{$tablePrefix}danger-text-emphasis: #58151c;
+	--#{$tablePrefix}warning-bg-subtle: #fff3cd;
+	--#{$tablePrefix}warning-text-emphasis: #664d03;
+	--#{$tablePrefix}info-bg-subtle: #cff4fc;
+	--#{$tablePrefix}info-text-emphasis: #055160;
+	--#{$tablePrefix}primary-bg-subtle: #cfe2ff;
+	--#{$tablePrefix}primary-text-emphasis: #032870;
+	--#{$tablePrefix}secondary-bg-subtle: #e2e3e5;
+	--#{$tablePrefix}secondary-text-emphasis: #2e3338;
+	--#{$tablePrefix}light-bg-subtle: #fcfcfd;
+	--#{$tablePrefix}light-text-emphasis: #495057;
+	--#{$tablePrefix}dark-bg-subtle: #ced4da;
+	--#{$tablePrefix}dark-text-emphasis: #141619;
+
 	// Layout
 	display: flex;
 	flex-direction: column;
@@ -575,3 +594,58 @@ $tablePrefix: hub- !default;
 	}
 }
 
+//
+// Row Class Variants
+//
+.hub-table__body-row,
+.tree-list__node {
+	@each $state in success, danger, warning, info, primary, secondary, light, dark {
+		&.row-#{$state} {
+			--#{$tablePrefix}table-bg-state: var(--#{$tablePrefix}#{$state}-bg-subtle);
+			--#{$tablePrefix}table-color-state: var(
+				--#{$tablePrefix}#{$state}-text-emphasis
+			);
+			--#{$tablePrefix}table-hover-bg: var(--#{$tablePrefix}#{$state}-bg-subtle);
+			--#{$tablePrefix}table-hover-color: var(
+				--#{$tablePrefix}#{$state}-text-emphasis
+			);
+		}
+	}
+}
+
+
+//
+// Tooltip
+//
+.ng-tooltip {
+  position: absolute;
+  z-index: 1070;
+  display: block;
+  margin: 0;
+  font-family: var(--bs-font-sans-serif);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-break: normal;
+  word-spacing: normal;
+  white-space: normal;
+  line-break: auto;
+  font-size: 0.875rem;
+  word-wrap: break-word;
+  opacity: 0;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  pointer-events: none;
+
+  &-show {
+    opacity: 0.9;
+  }
+}

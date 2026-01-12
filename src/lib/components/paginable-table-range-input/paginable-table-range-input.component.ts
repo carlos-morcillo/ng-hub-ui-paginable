@@ -1,8 +1,8 @@
 import { Component, forwardRef, input } from '@angular/core';
 import {
-	ControlValueAccessor,
-	FormsModule,
-	NG_VALUE_ACCESSOR
+    ControlValueAccessor,
+    FormsModule,
+    NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 
@@ -20,8 +20,21 @@ import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 		}
 	]
 })
+/**
+ * Component for inputting a range of values (number or date) in a table filter.
+ *
+ * @export
+ * @class PaginableTableRangeInputComponent
+ * @implements {ControlValueAccessor}
+ */
 export class PaginableTableRangeInputComponent implements ControlValueAccessor {
 	disabled = false;
+	/**
+	 * The type of input to display. Can be 'number' or 'date'.
+	 *
+	 * @type {('number' | 'date')}
+	 * @memberof PaginableTableRangeInputComponent
+	 */
 	readonly type = input<'number' | 'date'>('number');
 
 	onChange = (value: [string | number, string | number]) => {};

@@ -39,3 +39,4 @@ export { TableBreakpoint } from './constants/breakpoints';
 
 // Enums
 export { SelectionTypes } from './enums/selection-types';
+export { RowClass } from './enums/row-class.enum';

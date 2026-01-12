@@ -1,19 +1,19 @@
 import { NgClass, NgStyle } from '@angular/common';
 import {
-  Component,
-  ElementRef,
-  EmbeddedViewRef,
-  HostListener,
-  Input,
-  TemplateRef,
-  ViewContainerRef,
-  inject,
-  input,
-  viewChild
+    Component,
+    ElementRef,
+    EmbeddedViewRef,
+    HostListener,
+    Input,
+    TemplateRef,
+    ViewContainerRef,
+    inject,
+    input,
+    viewChild
 } from '@angular/core';
+import { UnwrapAsyncPipe } from 'ng-hub-ui-utils';
 import { TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
-import { UnwrapAsyncPipe } from 'ng-hub-ui-utils';
 import { HubIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -24,6 +24,13 @@ import { HubIconComponent } from '../icon/icon.component';
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })
+/**
+ * Component for displaying a dropdown menu within a paginable table row.
+ *
+ * @export
+ * @class PaginableTableDropdownComponent
+ * @template T
+ */
 export class PaginableTableDropdownComponent<T = any> {
 	#elementRef = inject(ElementRef);
 
@@ -33,12 +40,24 @@ export class PaginableTableDropdownComponent<T = any> {
 	private embeddedView: EmbeddedViewRef<any> | null = null;
 	private renderedElement: HTMLElement | null = null;
 
+	/**
+	 * The row data and event information associated with the dropdown.
+	 *
+	 * @type {(TableRowEvent<T> | undefined)}
+	 * @memberof PaginableTableDropdownComponent
+	 */
 	readonly row = input<TableRowEvent<T>>();
 
 	#options: PaginableTableDropdown = { buttons: [] };
 
 	// TODO: Skipped for migration because:
 	//  Accessor inputs cannot be migrated as they are too complex.
+	/**
+	 * Configuration options for the dropdown menu, including buttons and styling.
+	 *
+	 * @type {PaginableTableDropdown}
+	 * @memberof PaginableTableDropdownComponent
+	 */
 	@Input()
 	get options(): PaginableTableDropdown {
 		return this.#options;
@@ -61,8 +80,21 @@ export class PaginableTableDropdownComponent<T = any> {
 		}
 	}
 
+	/**
+	 * The element to append the dropdown to. Can be an HTMLElement, 'body', or null.
+	 * Defaults to 'body'.
+	 *
+	 * @type {(HTMLElement | 'body' | null)}
+	 * @memberof PaginableTableDropdownComponent
+	 */
 	readonly appendTo = input<HTMLElement | 'body' | null>('body');
 
+	/**
+	 * Whether the dropdown button is disabled.
+	 *
+	 * @type {boolean}
+	 * @memberof PaginableTableDropdownComponent
+	 */
 	readonly disabled = input<boolean>(false);
 
 	buttonClass: string | null = null;

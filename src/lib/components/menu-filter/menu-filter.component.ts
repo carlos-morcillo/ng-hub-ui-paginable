@@ -1,27 +1,27 @@
+import { UpperCasePipe } from '@angular/common';
 import { Component, Input, forwardRef, inject } from '@angular/core';
 import {
-	ControlValueAccessor,
-	FormArray,
-	FormBuilder,
-	FormGroup,
-	NG_VALUE_ACCESSOR,
-	ReactiveFormsModule
+    ControlValueAccessor,
+    FormArray,
+    FormBuilder,
+    FormGroup,
+    NG_VALUE_ACCESSOR,
+    ReactiveFormsModule
 } from '@angular/forms';
+import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 import {
-	BooleanMatchModes,
-	DateMatchModes,
-	MatchModes,
-	MenuFilterOperators,
-	MenuFilterRule,
-	MenuFilterValue,
-	NullMatchModes,
-	NumberMatchModes,
-	StringMatchModes
+    BooleanMatchModes,
+    DateMatchModes,
+    MatchModes,
+    MenuFilterOperators,
+    MenuFilterRule,
+    MenuFilterValue,
+    NullMatchModes,
+    NumberMatchModes,
+    StringMatchModes
 } from '../../interfaces/column-filter-event';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { DropdownComponent } from '../dropdown/dropdown.component';
-import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
-import { UpperCasePipe } from '@angular/common';
 
 @Component({
 	selector: 'menu-filter',
@@ -49,6 +49,12 @@ export class MenuFilterComponent implements ControlValueAccessor {
 	#header!: PaginableTableHeader;
 	// TODO: Skipped for migration because:
 	//  Accessor inputs cannot be migrated as they are too complex.
+	/**
+	 * The table header configuration associated with this filter.
+	 *
+	 * @type {PaginableTableHeader}
+	 * @memberof MenuFilterComponent
+	 */
 	@Input()
 	get header(): PaginableTableHeader {
 		return this.#header;

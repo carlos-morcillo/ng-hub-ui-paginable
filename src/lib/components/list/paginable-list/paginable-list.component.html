@@ -52,6 +52,7 @@
 		) {
 			<li
 				class="list-group-item tree-list__node"
+				[ngClass]="_getRowClass(items[index])"
 				[class.clickable-item]="clickFn()"
 				[formGroup]="formGroup"
 				(click)="
@@ -127,6 +128,13 @@
 		}
 	</ul>
 </ng-template>
+
+@if (paginate()) {
+	<hub-paginator
+		[(page)]="page"
+		[numberOfPages]="numberOfPages()"
+	></hub-paginator>
+}
 
 <ng-template #noDataRowTpt>
 	<li class="list-group-item">

@@ -1,17 +1,17 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
-	Component,
-	TemplateRef,
-	computed,
-	contentChild,
-	contentChildren,
-	effect,
-	forwardRef,
-	inject,
-	input,
-	model,
-	viewChildren
+    Component,
+    TemplateRef,
+    computed,
+    contentChild,
+    contentChildren,
+    effect,
+    forwardRef,
+    inject,
+    input,
+    model,
+    viewChildren
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
@@ -191,7 +191,7 @@ export class TableComponent<T = any> {
 			}
 			return !header.hidden;
 		}).length;
-		if ((this.selectable() && this.multiple()) || this.batchActions().length) {
+		if (this.selectable() || this.batchActions().length) {
 			count++;
 		}
 		if (
@@ -418,6 +418,16 @@ export class TableComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	readonly clickFn = input<(event: TableRowEvent<T>) => void | Promise<void>>();
+
+	/**
+	 * A string or function to apply a class to each row of the table.
+	 * If a string is provided, it is used as the class for all rows.
+	 * If a function is provided, it is called with the row data and should return a string representing the class.
+	 *
+	 * @type {(string | ((item: T) => string))}
+	 * @memberof TableComponent
+	 */
+	readonly rowClass = input<string | ((item: T) => string)>();
 
 	/** Responsive breakpoint configuration for table layout */
 	readonly responsive = input<TableBreakpoint | null>(null);
@@ -955,5 +965,22 @@ export class TableComponent<T = any> {
 				dropdown.closeDropdown();
 			}
 		});
+	}
+
+	/**
+	 * Returns the class for a given row.
+	 *
+	 * @param {TableRow<T>} row The row for which to get the class.
+	 * @returns {string} The class to apply to the row.
+	 * @memberof TableComponent
+	 */
+	_getRowClass(row: TableRow<T>): string {
+		const rowClass = this.rowClass();
+		if (typeof rowClass === 'function') {
+			return rowClass(row.data);
+		} else if (typeof rowClass === 'string') {
+			return rowClass;
+		}
+		return '';
 	}
 }

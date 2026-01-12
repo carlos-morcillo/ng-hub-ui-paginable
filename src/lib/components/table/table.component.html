@@ -66,6 +66,7 @@
 			<tr class="hub-table__head-row">
 				@if (selectable()) {
 				<th class="hub-table__header-cell hub-table__header-cell--actions sticky-start">
+					@if (multiple()) {
 					<input
 						type="checkbox"
 						[(ngModel)]="allRowsSelected"
@@ -73,6 +74,7 @@
 						(click)="toggleAll()"
 						[disabled]="disabled"
 					/>
+					}
 				</th>
 				} @for (header of fixedHeaders(); track header.property) { @if (!(isColumnHidden(header) | async)) {
 				<th
@@ -144,7 +146,7 @@
 			<!-- Filtering -->
 			@if (hasColumnFilters()) {
 			<tr class="hub-table__filter-row">
-				@if ((selectable() && multiple()) || batchActions.length) {
+				@if (selectable() || batchActions.length) {
 				<th class="hub-table__filter-cell sticky-start"></th>
 				} @for ( header of fixedHeaders(); track $index; let last = $last ) { @if (!(isColumnHidden(header) | async)) {
 				@let formControlName = header.filter?.key || header.property;
@@ -232,8 +234,9 @@
 		(click)="onItemClick($event, item)"
 		[class.hub-table__body-row--selected]="selectable() && item.selected"
 		[class.hub-table__body-row--clickable]="clickFn()"
+		[ngClass]="_getRowClass(item)"
 	>
-		@if ((selectable() && multiple()) || batchActions.length) {
+		@if (selectable() || batchActions.length) {
 		<td class="hub-table__cell hub-table__cell--select sticky-start">
 			<input
 				type="checkbox"

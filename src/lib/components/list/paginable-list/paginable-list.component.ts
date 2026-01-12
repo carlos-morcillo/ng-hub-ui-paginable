@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, Input, TemplateRef, inject, contentChild, input } from '@angular/core';
+import { Component, Input, TemplateRef, computed, contentChild, inject, input, model } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { UcfirstPipe } from 'ng-hub-ui-utils';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
@@ -28,6 +28,13 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 	imports: [ReactiveFormsModule, PaginatorComponent, PaginableTableNotFoundDirective, UcfirstPipe, NgTemplateOutlet, NgClass],
 	standalone: true
 })
+/**
+ * A component for displaying a paginable and selectable list of items.
+ *
+ * @export
+ * @class PaginableListComponent
+ * @template T The type of data for each item in the list.
+ */
 export class PaginableListComponent<T = any> {
 	#fb = inject(FormBuilder);
 
@@ -36,6 +43,18 @@ export class PaginableListComponent<T = any> {
 	readonly bindChildren = input<string>('children');
 
 	readonly selectable = input.required<string | null>();
+
+	readonly paginate = input<boolean>(false);
+	readonly page = model<number>(1);
+	readonly perPage = model<number>(10);
+	readonly totalItems = model<number>(0);
+
+	readonly numberOfPages = computed(() => {
+		if (this.perPage() && this.totalItems()) {
+			return Math.ceil(this.totalItems() / this.perPage());
+		}
+		return 1;
+	});
 
 	private _options: PaginableTableOptions = {
 		cursor: 'default',
@@ -65,7 +84,21 @@ export class PaginableListComponent<T = any> {
 		this.buildForm(this.form, this._items);
 	}
 
+	/**
+	 * A function that is called when an item in the list is clicked.
+	 * @type {() => (event: ListClickEvent<T>) => void | Promise<void>}
+	 * @memberof PaginableListComponent
+	 */
 	readonly clickFn = input<(event: ListClickEvent<T>) => void | Promise<void>>(() => { });
+
+	/**
+	 * A string or function to apply a class to each row of the list.
+	 * If a string is provided, it is used as the class for all rows.
+	 * If a function is provided, it is called with the item data and should return a string representing the class.
+	 * @type {(string | ((item: T) => string))}
+	 * @memberof PaginableListComponent
+	 */
+	readonly rowClass = input<string | ((item: T) => string)>();
 
 	form: FormArray = this.#fb.array([]);
 
@@ -199,7 +232,7 @@ export class PaginableListComponent<T = any> {
 	 */
 	onItemClick({ collapsed, selected, ...item }: any, depth: number, index: number, event: MouseEvent) {
 		const clickFn = this.clickFn();
-  if (!clickFn) {
+		if (!clickFn) {
 			return;
 		}
 
@@ -232,5 +265,22 @@ export class PaginableListComponent<T = any> {
 		// 	searchText: this.searchFG?.value ?? null,
 		// 	specificSearch: this.specificSearchFG?.value ?? null
 		// });
+	}
+
+	/**
+	 * Returns the class for a given row.
+	 *
+	 * @param {T} item The item for which to get the class.
+	 * @returns {string} The class to apply to the row.
+	 * @memberof PaginableListComponent
+	 */
+	_getRowClass(item: T): string {
+		const rowClass = this.rowClass();
+		if (typeof rowClass === 'function') {
+			return rowClass(item);
+		} else if (typeof rowClass === 'string') {
+			return rowClass;
+		}
+		return '';
 	}
 }
