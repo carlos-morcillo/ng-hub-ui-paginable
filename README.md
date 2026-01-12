@@ -732,13 +732,28 @@ Used internally for action buttons and filters:
 
 ```typescript
 interface PaginableTableDropdown {
-  title: string;
-  buttons: RowButton[];
-  fill?: string;
-  position?: 'start' | 'end';
+  title?: string | Observable<string>;    // Supports reactive translations
+  tooltip?: string | Observable<string>;  // Supports reactive translations
+  icon?: string;
   color?: string;
+  buttons: RowButton[];
+  position?: 'left' | 'right' | 'start' | 'end';
+  fill?: 'clear' | 'outline';
+}
+
+interface RowButton<T = any> {
+  title?: string | Observable<string>;    // Button text (supports Observable)
+  label?: string | Observable<string>;    // Display label (priority over title)
+  tooltip?: string | Observable<string>;  // Hover tooltip (supports Observable)
+  icon?: string | Icon;
+  color?: string;
+  handler?: (event: TableRowEvent<T>) => void;
+  hidden?: boolean | ((row: TableRow<T>) => boolean);
+  classlist?: string[] | string;
 }
 ```
+
+> **Tip**: Use `Observable<string>` for reactive translations with `HubTranslationService` or any i18n library.
 
 ### Range Input Component (`<hub-ui-range-input>`)
 
@@ -797,20 +812,58 @@ const headers: PaginableTableHeader[] = [
       {
         icon: 'fa-edit',
         title: 'Edit',
+        tooltip: 'Edit this record',
         color: 'primary',
         handler: (row) => this.editUser(row.data),
         hidden: (row) => !row.data.canEdit
       },
       {
         title: 'More Actions',
+        tooltip: 'Show more options',
         buttons: [
-          { title: 'Archive', handler: (row) => this.archiveUser(row.data) },
-          { title: 'Delete', handler: (row) => this.deleteUser(row.data) }
+          { label: 'Archive', tooltip: 'Archive item', handler: (row) => this.archiveUser(row.data) },
+          { label: 'Delete', tooltip: 'Delete item', handler: (row) => this.deleteUser(row.data) }
         ]
       }
     ]
   }
 ];
+```
+
+#### Action Buttons with Reactive Translations
+
+All button properties (`title`, `label`, `tooltip`) support `Observable<string>` for reactive internationalization:
+
+```typescript
+import { HubTranslationService } from 'ng-hub-ui-utils';
+
+@Component({...})
+export class MyComponent {
+  constructor(private translate: HubTranslationService) {}
+
+  headers: PaginableTableHeader[] = [
+    {
+      property: 'actions',
+      title: this.translate.get('TABLE.ACTIONS'),  // Observable<string>
+      onlyButtons: true,
+      buttons: [
+        {
+          icon: 'fa-edit',
+          label: this.translate.get('BUTTONS.EDIT'),      // Changes when language changes
+          tooltip: this.translate.get('TOOLTIPS.EDIT'),   // Changes when language changes
+          handler: (row) => this.edit(row.data)
+        },
+        {
+          title: this.translate.get('BUTTONS.MORE'),
+          tooltip: this.translate.get('TOOLTIPS.MORE_OPTIONS'),
+          buttons: [
+            { label: this.translate.get('BUTTONS.DELETE'), handler: (row) => this.delete(row.data) }
+          ]
+        }
+      ]
+    }
+  ];
+}
 ```
 
 ### Column Filters

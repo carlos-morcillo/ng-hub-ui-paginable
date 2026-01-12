@@ -1,5 +1,23 @@
 # Changelog
 
+## [19.13.0] - 2026-01-12
+
+### Added
+
+*   **interfaces:** added `tooltip` property to `RowButton` interface with Observable support for dynamic/translated content.
+*   **interfaces:** added Observable support for `title` and `tooltip` properties in `PaginableTableDropdown` interface.
+
+### Changed
+
+*   **table:** row buttons now prioritize `label` over `title` for display text.
+*   **table:** all button labels, titles and tooltips now support reactive Observable values via `unwrapAsync` pipe.
+
+### Documentation
+
+*   **interfaces:** added comprehensive JSDoc documentation to `PaginableTableDropdown` interface.
+*   **readme:** updated documentation for `RowButton` and `PaginableTableDropdown` interfaces with Observable support examples.
+*   **readme:** added "Action Buttons with Reactive Translations" section with i18n example.
+
 ## [19.12.0] - 2026-01-03
 
 ### Added
