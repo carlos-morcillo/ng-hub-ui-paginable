@@ -45,4 +45,10 @@ export interface RowButton<T = any> {
 	 * Additional CSS classes to be applied to the button.
 	 */
 	classlist?: string[] | string;
+
+	/**
+	 * Tooltip text displayed on hover.
+	 * Can be a static string or an Observable for dynamic/translated content.
+	 */
+	tooltip?: string | Observable<string>;
 }
