@@ -20,8 +20,8 @@
 		"test:watch": "ng test paginable --watch",
 		"test:coverage": "ng test paginable --code-coverage",
 		"lint": "ng lint paginable",
-		"pack": "npm pack",
-		"publish:npm": "npm publish"
+		"pack": "cd ../../dist/paginable && npm pack",
+		"publish:npm": "cd ../../dist/paginable && npm publish"
 	},
 	"files": [
 		"**/*",

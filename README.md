@@ -1,10 +1,27 @@
 # ng-hub-ui-paginable
 
+## 🧩 Library Family `ng-hub-ui`
+
+This library is part of the **ng-hub-ui** ecosystem:
+
+- [**ng-hub-ui-accordion**](https://www.npmjs.com/package/ng-hub-ui-accordion)
+- [**ng-hub-ui-action-sheet**](https://www.npmjs.com/package/ng-hub-ui-action-sheet)
+- [**ng-hub-ui-avatar**](https://www.npmjs.com/package/ng-hub-ui-avatar)
+- [**ng-hub-ui-board**](https://www.npmjs.com/package/ng-hub-ui-board)
+- [**ng-hub-ui-breadcrumbs**](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
+- [**ng-hub-ui-calendar**](https://www.npmjs.com/package/ng-hub-ui-calendar)
+- [**ng-hub-ui-modal**](https://www.npmjs.com/package/ng-hub-ui-modal)
+- [**ng-hub-ui-paginable**](https://www.npmjs.com/package/ng-hub-ui-paginable) ← You are here
+- [**ng-hub-ui-portal**](https://www.npmjs.com/package/ng-hub-ui-portal)
+- [**ng-hub-ui-stepper**](https://www.npmjs.com/package/ng-hub-ui-stepper)
+- [**ng-hub-ui-utils**](https://www.npmjs.com/package/ng-hub-ui-utils)
+
+---
+
 ## 📋 Table of Contents
 
 - [🚀 Quick Start](#-quick-start)
 - [✨ Inspiration](#-inspiration)
-- [🧩 Library Family](#-library-family-ng-hub-ui)
 - [📦 Description](#-description)
 - [🎯 Features](#-features)
 - [🏗️ Component Architecture](#️-component-architecture)
@@ -80,10 +97,6 @@ import { TableComponent } from 'ng-hub-ui-paginable';
 ## ✨ Inspiration
 
 This library arises from the need to offer highly configurable, accessible, and modern data visualization components for Angular applications, enabling integrated lists, tables, and pagination with full support for signals, reactive forms, and complete render customization.
-
-## 🧩 Library Family `ng-hub-ui`
-
-`ng-hub-ui-paginable` is part of the `ng-hub-ui` ecosystem, a family of modern Angular components focused on user experience, productivity, and compatibility with Angular Signals. Each package solves a specific interface problem without overloading business logic.
 
 ## 📦 Description
 

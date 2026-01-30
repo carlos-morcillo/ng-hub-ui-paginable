@@ -1,10 +1,27 @@
 # ng-hub-ui-paginable
 
+## 🧩 Familia de bibliotecas `ng-hub-ui`
+
+Esta biblioteca forma parte del ecosistema **ng-hub-ui**:
+
+- [**ng-hub-ui-accordion**](https://www.npmjs.com/package/ng-hub-ui-accordion)
+- [**ng-hub-ui-action-sheet**](https://www.npmjs.com/package/ng-hub-ui-action-sheet)
+- [**ng-hub-ui-avatar**](https://www.npmjs.com/package/ng-hub-ui-avatar)
+- [**ng-hub-ui-board**](https://www.npmjs.com/package/ng-hub-ui-board)
+- [**ng-hub-ui-breadcrumbs**](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
+- [**ng-hub-ui-calendar**](https://www.npmjs.com/package/ng-hub-ui-calendar)
+- [**ng-hub-ui-modal**](https://www.npmjs.com/package/ng-hub-ui-modal)
+- [**ng-hub-ui-paginable**](https://www.npmjs.com/package/ng-hub-ui-paginable) ← Estás aquí
+- [**ng-hub-ui-portal**](https://www.npmjs.com/package/ng-hub-ui-portal)
+- [**ng-hub-ui-stepper**](https://www.npmjs.com/package/ng-hub-ui-stepper)
+- [**ng-hub-ui-utils**](https://www.npmjs.com/package/ng-hub-ui-utils)
+
+---
+
 ## 📋 Índice
 
 - [🚀 Inicio rápido](#-inicio-rápido)
 - [✨ Inspiración](#-inspiración)
-- [🧩 Familia de bibliotecas](#-familia-de-bibliotecas-ng-hub-ui)
 - [📦 Descripción](#-descripción)
 - [🎯 Funcionalidades](#-funcionalidades)
 - [🏗️ Arquitectura de componentes](#️-arquitectura-de-componentes)
@@ -80,10 +97,6 @@ import { TableComponent } from 'ng-hub-ui-paginable';
 ## ✨ Inspiración
 
 Esta biblioteca nace de la necesidad de ofrecer componentes de visualización de datos altamente configurables, accesibles y modernos para aplicaciones Angular, permitiendo listas, tablas y paginación integradas con soporte completo para señales, formularios reactivos y personalización total del renderizado.
-
-## 🧩 Familia de bibliotecas `ng-hub-ui`
-
-`ng-hub-ui-paginable` forma parte del ecosistema `ng-hub-ui`, una familia de componentes Angular modernos orientados a la experiencia de usuario, productividad y compatibilidad con Angular Signals. Cada paquete resuelve un problema específico de interfaz sin sobrecargar la lógica de negocio.
 
 ## 📦 Descripción
 
