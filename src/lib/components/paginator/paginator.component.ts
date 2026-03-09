@@ -3,8 +3,7 @@ import { Component, input, model } from '@angular/core';
 @Component({
 	selector: 'hub-paginator, paginable-table-paginator',
 	standalone: true,
-	templateUrl: './paginator.component.html',
-	styleUrls: ['./paginator.component.scss']
+	templateUrl: './paginator.component.html'
 })
 /**
  * Component for handling pagination controls in a table or list throughout the library.

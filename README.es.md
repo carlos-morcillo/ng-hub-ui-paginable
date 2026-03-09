@@ -56,11 +56,13 @@ Esta biblioteca forma parte del ecosistema **ng-hub-ui**:
 Arranca con ng-hub-ui-paginable en menos de 5 minutos:
 
 ### 1. Instalar
+
 ```bash
 npm install ng-hub-ui-paginable
 ```
 
 ### 2. Importar
+
 ```typescript
 import { TableComponent } from 'ng-hub-ui-paginable';
 
@@ -71,22 +73,26 @@ import { TableComponent } from 'ng-hub-ui-paginable';
 ```
 
 ### 3. Usar
+
 ```html
 <hub-ui-table
-  [headers]="[{property: 'name', title: 'Name'}, {property: 'email', title: 'Email'}]"
-  [data]="[{name: 'John', email: 'john@example.com'}]">
+	[headers]="[{property: 'name', title: 'Name'}, {property: 'email', title: 'Email'}]"
+	[data]="[{name: 'John', email: 'john@example.com'}]"
+>
 </hub-ui-table>
 ```
 
 ### 4. Funcionalidades avanzadas
+
 ```html
 <hub-ui-table
-  [headers]="headers"
-  [data]="data"
-  [searchable]="true"
-  [selectable]="true"
-  [(searchTerm)]="searchTerm"
-  [(page)]="currentPage">
+	[headers]="headers"
+	[data]="data"
+	[searchable]="true"
+	[selectable]="true"
+	[(searchTerm)]="searchTerm"
+	[(page)]="currentPage"
+>
 </hub-ui-table>
 ```
 
@@ -103,7 +109,7 @@ Esta biblioteca nace de la necesidad de ofrecer componentes de visualización de
 `ng-hub-ui-paginable` proporciona tres componentes principales que trabajan juntos de manera fluida:
 
 - **Componente Tabla** (`<hub-ui-table>` o `<hub-table>`): Tabla de datos avanzada con paginación, filtros, ordenación y selección
-- **Componente Lista** (`<hub-ui-list>` o `<hub-list>`): Lista jerárquica con elementos expandibles, selección y plantillas personalizadas  
+- **Componente Lista** (`<hub-ui-list>` o `<hub-list>`): Lista jerárquica con elementos expandibles, selección y plantillas personalizadas
 - **Componente Paginador** (`<hub-ui-paginator>` o `<hub-paginator>`): Controles de paginación independientes
 - **Componentes Adicionales**: Iconos, dropdowns, columnas redimensionables, inputs de rango y menús de filtro
 
@@ -114,6 +120,7 @@ Todos los componentes están construidos como componentes standalone de Angular 
 ## 🎯 Funcionalidades
 
 ### Funcionalidades centrales
+
 - **🔄 Soporte completo para Angular Signals**: Arquitectura moderna con `model()`, `input()`, `computed()` y `effect()`
 - **📊 Entrada de datos flexible**: Compatible con entradas separadas o agrupadas mediante `PaginationState`
 - **🔍 Filtros avanzados**: Filtros por columna con múltiples tipos (texto, dropdown, booleano, rango de fechas, rango numérico)
@@ -128,6 +135,7 @@ Todos los componentes están construidos como componentes standalone de Angular 
 - **🌍 Internacionalización**: i18n completo con traducciones personalizables (inglés/español)
 
 ### Funcionalidades avanzadas
+
 - **🔧 Columnas redimensionables**: Ajuste interactivo de ancho
 - **📌 Columnas fijas**: Anclar columnas al inicio o fin
 - **🎭 Visibilidad dinámica de columnas**: Mostrar/ocultar por condiciones o permisos
@@ -148,7 +156,7 @@ ng-hub-ui-paginable/
 │   ├── TableComponent        - Main data table with all features
 │   ├── PaginatorComponent    - Standalone pagination controls
 │   └── PaginableListComponent - Hierarchical list with tree structure
-├── 🎨 UI Components  
+├── 🎨 UI Components
 │   ├── HubIconComponent      - Multi-library icon support
 │   ├── DropdownComponent     - Action dropdowns and menus
 │   ├── MenuFilterComponent   - Advanced filtering interfaces
@@ -251,34 +259,32 @@ ordination = signal<PaginableTableOrdination>();
 
 // Computed derived state
 filteredData = computed(() => {
-  let result = this.data();
-  
-  // Apply search
-  if (this.searchTerm()) {
-    result = result.filter(item => 
-      item.name.toLowerCase().includes(this.searchTerm().toLowerCase())
-    );
-  }
-  
-  // Apply filters
-  const filters = this.filters();
-  Object.keys(filters).forEach(key => {
-    if (filters[key]) {
-      result = result.filter(item => item[key] === filters[key]);
-    }
-  });
-  
-  // Apply sorting
-  const sort = this.ordination();
-  if (sort) {
-    result.sort((a, b) => {
-      const aVal = a[sort.property];
-      const bVal = b[sort.property];
-      return sort.direction === 'asc' ? aVal - bVal : bVal - aVal;
-    });
-  }
-  
-  return result;
+	let result = this.data();
+
+	// Apply search
+	if (this.searchTerm()) {
+		result = result.filter((item) => item.name.toLowerCase().includes(this.searchTerm().toLowerCase()));
+	}
+
+	// Apply filters
+	const filters = this.filters();
+	Object.keys(filters).forEach((key) => {
+		if (filters[key]) {
+			result = result.filter((item) => item[key] === filters[key]);
+		}
+	});
+
+	// Apply sorting
+	const sort = this.ordination();
+	if (sort) {
+		result.sort((a, b) => {
+			const aVal = a[sort.property];
+			const bVal = b[sort.property];
+			return sort.direction === 'asc' ? aVal - bVal : bVal - aVal;
+		});
+	}
+
+	return result;
 });
 ```
 
@@ -297,63 +303,64 @@ import { Component, signal } from '@angular/core';
 import { HubUITableModule } from 'ng-hub-ui-paginable';
 
 @Component({
-  selector: 'app-example',
-  standalone: true,
-  imports: [HubUITableModule],
-  template: `
-    <hub-ui-table
-      [headers]="headers()"
-      [data]="data()"
-      [(page)]="page"
-      [totalItems]="totalItems"
-      [loading]="loading"
-      [searchable]="true"
-      [selectable]="true"
-      [multiple]="true"
-      [(searchTerm)]="searchTerm"
-      [(ordination)]="ordination"
-      [(filters)]="filters"
-      [debounce]="300">
-    </hub-ui-table>
-  `
+	selector: 'app-example',
+	standalone: true,
+	imports: [HubUITableModule],
+	template: `
+		<hub-ui-table
+			[headers]="headers()"
+			[data]="data()"
+			[(page)]="page"
+			[totalItems]="totalItems"
+			[loading]="loading"
+			[searchable]="true"
+			[selectable]="true"
+			[multiple]="true"
+			[(searchTerm)]="searchTerm"
+			[(ordination)]="ordination"
+			[(filters)]="filters"
+			[debounce]="300"
+		>
+		</hub-ui-table>
+	`
 })
 export class ExampleComponent {
-  // Data and pagination
-  data = signal<User[]>([]);
-  page = signal(1);
-  totalItems = signal(0);
-  loading = signal(false);
-  
-  // Search and filtering
-  searchTerm = signal('');
-  filters = signal({});
-  
-  // Sorting
-  ordination = signal<PaginableTableOrdination>();
-  
-  // Column configuration
-  headers = signal<PaginableTableHeader[]>([
-    {
-      property: 'name',
-      title: 'User Name',
-      sortable: true,
-      filter: { type: 'text', placeholder: 'Search by name...' }
-    },
-    {
-      property: 'email',
-      title: 'Email',
-      align: 'center'
-    },
-    {
-      property: 'status',
-      title: 'Status',
-      filter: {
-        type: 'dropdown',
-        options: ['Active', 'Inactive'],
-        placeholder: 'Select status...'
-      }
-    }
-  ]);
+	// Data and pagination
+	data = signal<User[]>([]);
+	page = signal(1);
+	totalItems = signal(0);
+	loading = signal(false);
+
+	// Search and filtering
+	searchTerm = signal('');
+	filters = signal({});
+
+	// Sorting
+	ordination = signal<PaginableTableOrdination>();
+
+	// Column configuration
+	headers = signal<PaginableTableHeader[]>([
+		{
+			property: 'name',
+			title: 'User Name',
+			sortable: true,
+			filter: { type: 'text', placeholder: 'Search by name...' }
+		},
+		{
+			property: 'email',
+			title: 'Email',
+			align: 'center'
+		},
+		{
+			property: 'status',
+			title: 'Status',
+			filter: {
+				type: 'dropdown',
+				options: ['Active', 'Inactive'],
+				placeholder: 'Select status...'
+			}
+		}
+	]);
 }
 ```
 
@@ -361,34 +368,27 @@ export class ExampleComponent {
 
 ```html
 <hub-ui-list
-  [items]="items()"
-  [selectable]="true"
-  [bindLabel]="'name'"
-  [bindChildren]="'children'"
-  [options]="{ collapsed: false, searchable: true }"
-  [clickFn]="onItemClick">
-  
-  <!-- Custom item template -->
-  <ng-template listItem let-data="data" let-depth="depth">
-    <div class="d-flex align-items-center">
-      <span [style.margin-left.px]="depth * 20">
-        {{ data.name }}
-      </span>
-      <span class="badge bg-secondary ms-auto">
-        {{ data.type }}
-      </span>
-    </div>
-  </ng-template>
+	[items]="items()"
+	[selectable]="true"
+	[bindLabel]="'name'"
+	[bindChildren]="'children'"
+	[options]="{ collapsed: false, searchable: true }"
+	[clickFn]="onItemClick"
+>
+	<!-- Custom item template -->
+	<ng-template listItem let-data="data" let-depth="depth">
+		<div class="d-flex align-items-center">
+			<span [style.margin-left.px]="depth * 20"> {{ data.name }} </span>
+			<span class="badge bg-secondary ms-auto"> {{ data.type }} </span>
+		</div>
+	</ng-template>
 </hub-ui-list>
 ```
 
 ### Paginador independiente
 
 ```html
-<hub-ui-paginator
-  [(page)]="currentPage"
-  [numberOfPages]="totalPages()">
-</hub-ui-paginator>
+<hub-ui-paginator [(page)]="currentPage" [numberOfPages]="totalPages()"> </hub-ui-paginator>
 ```
 
 ## 🏗️ Configuración de cabeceras de tabla (`PaginableTableHeader`)
@@ -399,41 +399,41 @@ export class ExampleComponent {
 
 ```typescript
 const headers: PaginableTableHeader[] = [
-  {
-    property: 'name',
-    title: 'User Name',
-    sortable: true,
-    align: 'start'
-  },
-  {
-    property: 'email',
-    title: 'Email Address',
-    align: 'center',
-    wrapping: 'nowrap'
-  },
-  {
-    property: 'status',
-    title: 'Status',
-    align: 'end'
-  }
+	{
+		property: 'name',
+		title: 'User Name',
+		sortable: true,
+		align: 'start'
+	},
+	{
+		property: 'email',
+		title: 'Email Address',
+		align: 'center',
+		wrapping: 'nowrap'
+	},
+	{
+		property: 'status',
+		title: 'Status',
+		align: 'end'
+	}
 ];
 ```
 
 ### Referencia de propiedades de cabecera
 
-| Propiedad | Tipo | Descripción | Por defecto | Ejemplo |
-|-----------|------|-------------|------------|---------|
-| `property` | `string` | **Obligatoria.** Propiedad del dato a mostrar en esta columna | - | `'name'`, `'user.email'` |
-| `title` | `string \| Observable<string>` | Título de cabecera. Puede ser estático o reactivo | valor de `property` | `'User Name'`, `this.translate.get('user.name')` |
-| `icon` | `string \| Icon` | Icono a mostrar en la cabecera | - | `'fa-user'`, `{ type: 'material', value: 'person' }` |
-| `align` | `'start' \| 'end' \| 'center'` | Alineación de texto de la columna | `'start'` | `'center'` para números |
-| `sortable` | `boolean` | Habilita la ordenación en esta columna | `false` | `true` |
-| `wrapping` | `'wrap' \| 'nowrap'` | Comportamiento de salto de línea | `'wrap'` | `'nowrap'` para IDs |
-| `sticky` | `'start' \| 'end'` | Fija la columna durante el scroll | - | `'end'` para acciones |
-| `buttons` | `Array<RowButton \| PaginableTableDropdown>` | Botones de acción en esta columna | - | Ver [Botones de acción](#botones-de-accion) |
-| `filter` | `InputFilter \| DropdownFilter \| BooleanFilter` | Configuración del filtro | - | Ver [Filtros de columna](#filtros-de-columna) |
-| `onlyButtons` | `boolean` | Optimiza el layout para columnas solo de botones | `false` | `true` para columnas de acción |
-| `hidden` | `boolean \| Function` | Controla la visibilidad de la columna | `false` | Ver [Visibilidad de columnas](#control-de-visibilidad-de-columnas-hidden-) |
+| Propiedad     | Tipo                                             | Descripción                                                   | Por defecto         | Ejemplo                                                                    |
+| ------------- | ------------------------------------------------ | ------------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------- |
+| `property`    | `string`                                         | **Obligatoria.** Propiedad del dato a mostrar en esta columna | -                   | `'name'`, `'user.email'`                                                   |
+| `title`       | `string \| Observable<string>`                   | Título de cabecera. Puede ser estático o reactivo             | valor de `property` | `'User Name'`, `this.translate.get('user.name')`                           |
+| `icon`        | `string \| Icon`                                 | Icono a mostrar en la cabecera                                | -                   | `'fa-user'`, `{ type: 'material', value: 'person' }`                       |
+| `align`       | `'start' \| 'end' \| 'center'`                   | Alineación de texto de la columna                             | `'start'`           | `'center'` para números                                                    |
+| `sortable`    | `boolean`                                        | Habilita la ordenación en esta columna                        | `false`             | `true`                                                                     |
+| `wrapping`    | `'wrap' \| 'nowrap'`                             | Comportamiento de salto de línea                              | `'wrap'`            | `'nowrap'` para IDs                                                        |
+| `sticky`      | `'start' \| 'end'`                               | Fija la columna durante el scroll                             | -                   | `'end'` para acciones                                                      |
+| `buttons`     | `Array<RowButton \| PaginableTableDropdown>`     | Botones de acción en esta columna                             | -                   | Ver [Botones de acción](#botones-de-accion)                                |
+| `filter`      | `InputFilter \| DropdownFilter \| BooleanFilter` | Configuración del filtro                                      | -                   | Ver [Filtros de columna](#filtros-de-columna)                              |
+| `onlyButtons` | `boolean`                                        | Optimiza el layout para columnas solo de botones              | `false`             | `true` para columnas de acción                                             |
+| `hidden`      | `boolean \| Function`                            | Controla la visibilidad de la columna                         | `false`             | Ver [Visibilidad de columnas](#control-de-visibilidad-de-columnas-hidden-) |
 
 ### Control de visibilidad de columnas (`hidden`) 🆕
 
@@ -443,16 +443,16 @@ La propiedad `hidden` permite controlar la visibilidad de columnas de forma flex
 
 ```typescript
 const headers: PaginableTableHeader[] = [
-  {
-    property: 'id',
-    title: 'ID',
-    hidden: false // Siempre visible
-  },
-  {
-    property: 'internal_notes',
-    title: 'Internal Notes',
-    hidden: true // Siempre oculta
-  }
+	{
+		property: 'id',
+		title: 'ID',
+		hidden: false // Siempre visible
+	},
+	{
+		property: 'internal_notes',
+		title: 'Internal Notes',
+		hidden: true // Siempre oculta
+	}
 ];
 ```
 
@@ -460,35 +460,35 @@ const headers: PaginableTableHeader[] = [
 
 ```typescript
 export class UsersComponent {
-  showAdvancedColumns = signal(false);
-  userRole = signal<'admin' | 'user'>('user');
+	showAdvancedColumns = signal(false);
+	userRole = signal<'admin' | 'user'>('user');
 
-  headers: PaginableTableHeader[] = [
-    {
-      property: 'name',
-      title: 'Name',
-      // Siempre visible
-    },
-    {
-      property: 'email',
-      title: 'Email',
-      hidden: () => !this.showAdvancedColumns() // Reactivo a cambios en signals
-    },
-    {
-      property: 'salary',
-      title: 'Salary',
-      hidden: () => this.userRole() !== 'admin' // Visibilidad basada en permisos
-    },
-    {
-      property: 'last_login',
-      title: 'Last Login',
-      hidden: () => this.userRole() !== 'admin' && !this.showAdvancedColumns()
-    }
-  ];
+	headers: PaginableTableHeader[] = [
+		{
+			property: 'name',
+			title: 'Name'
+			// Siempre visible
+		},
+		{
+			property: 'email',
+			title: 'Email',
+			hidden: () => !this.showAdvancedColumns() // Reactivo a cambios en signals
+		},
+		{
+			property: 'salary',
+			title: 'Salary',
+			hidden: () => this.userRole() !== 'admin' // Visibilidad basada en permisos
+		},
+		{
+			property: 'last_login',
+			title: 'Last Login',
+			hidden: () => this.userRole() !== 'admin' && !this.showAdvancedColumns()
+		}
+	];
 
-  toggleAdvancedColumns() {
-    this.showAdvancedColumns.update(show => !show);
-  }
+	toggleAdvancedColumns() {
+		this.showAdvancedColumns.update((show) => !show);
+	}
 }
 ```
 
@@ -496,27 +496,25 @@ export class UsersComponent {
 
 ```typescript
 export class UsersComponent {
-  constructor(
-    private permissionService: PermissionService,
-    private configService: ConfigService
-  ) {}
+	constructor(
+		private permissionService: PermissionService,
+		private configService: ConfigService
+	) {}
 
-  headers: PaginableTableHeader[] = [
-    {
-      property: 'sensitive_data',
-      title: 'Sensitive Information',
-      // Comprobar permisos de forma asíncrona
-      hidden: () => this.permissionService.checkPermission('view.sensitive.data')
-        .then(hasPermission => !hasPermission)
-    },
-    {
-      property: 'feature_column',
-      title: 'Feature Data',
-      // Comprobar feature flags
-      hidden: () => this.configService.getFeatureFlag('show_feature_column')
-        .then(enabled => !enabled)
-    }
-  ];
+	headers: PaginableTableHeader[] = [
+		{
+			property: 'sensitive_data',
+			title: 'Sensitive Information',
+			// Comprobar permisos de forma asíncrona
+			hidden: () => this.permissionService.checkPermission('view.sensitive.data').then((hasPermission) => !hasPermission)
+		},
+		{
+			property: 'feature_column',
+			title: 'Feature Data',
+			// Comprobar feature flags
+			hidden: () => this.configService.getFeatureFlag('show_feature_column').then((enabled) => !enabled)
+		}
+	];
 }
 ```
 
@@ -524,15 +522,14 @@ export class UsersComponent {
 
 ```typescript
 export class UsersComponent {
-  headers: PaginableTableHeader[] = [
-    {
-      property: 'premium_data',
-      title: 'Premium Data',
-      // Usar Observable para visibilidad reactiva
-      hidden: () => this.userSubscriptionService.hasPremiumAccess$
-        .pipe(map(hasAccess => !hasAccess))
-    }
-  ];
+	headers: PaginableTableHeader[] = [
+		{
+			property: 'premium_data',
+			title: 'Premium Data',
+			// Usar Observable para visibilidad reactiva
+			hidden: () => this.userSubscriptionService.hasPremiumAccess$.pipe(map((hasAccess) => !hasAccess))
+		}
+	];
 }
 ```
 
@@ -540,28 +537,25 @@ export class UsersComponent {
 
 ```typescript
 export class UsersComponent {
-  headers: PaginableTableHeader[] = [
-    {
-      property: 'advanced_metrics',
-      title: 'Advanced Metrics',
-      hidden: () => {
-        const isAdmin = this.userRole() === 'admin';
-        const hasFeature = this.features().includes('advanced_metrics');
-        const hasData = this.dataLoaded();
-        return !(isAdmin && hasFeature && hasData);
-      }
-    }
-  ];
+	headers: PaginableTableHeader[] = [
+		{
+			property: 'advanced_metrics',
+			title: 'Advanced Metrics',
+			hidden: () => {
+				const isAdmin = this.userRole() === 'admin';
+				const hasFeature = this.features().includes('advanced_metrics');
+				const hasData = this.dataLoaded();
+				return !(isAdmin && hasFeature && hasData);
+			}
+		}
+	];
 }
 ```
 
 #### Ejemplo de uso en plantilla
 
 ```html
-<hub-ui-table
-  [headers]="headers"
-  [data]="users()">
-</hub-ui-table>
+<hub-ui-table [headers]="headers" [data]="users()"> </hub-ui-table>
 ```
 
 ### Gestión dinámica de columnas
@@ -570,23 +564,21 @@ Usa arrays dinámicos para añadir o quitar columnas en tiempo de ejecución:
 
 ```typescript
 export class DynamicColumnsComponent {
-  baseHeaders: PaginableTableHeader[] = [
-    { property: 'name', title: 'Name' },
-    { property: 'email', title: 'Email' }
-  ];
+	baseHeaders: PaginableTableHeader[] = [
+		{ property: 'name', title: 'Name' },
+		{ property: 'email', title: 'Email' }
+	];
 
-  optionalHeaders: PaginableTableHeader[] = [
-    { property: 'phone', title: 'Phone' },
-    { property: 'address', title: 'Address' }
-  ];
+	optionalHeaders: PaginableTableHeader[] = [
+		{ property: 'phone', title: 'Phone' },
+		{ property: 'address', title: 'Address' }
+	];
 
-  showOptionalColumns = signal(false);
+	showOptionalColumns = signal(false);
 
-  headers = computed(() => {
-    return this.showOptionalColumns()
-      ? [...this.baseHeaders, ...this.optionalHeaders]
-      : this.baseHeaders;
-  });
+	headers = computed(() => {
+		return this.showOptionalColumns() ? [...this.baseHeaders, ...this.optionalHeaders] : this.baseHeaders;
+	});
 }
 ```
 
@@ -599,6 +591,7 @@ export class DynamicColumnsComponent {
 ## 🔧 Columnas redimensionables
 
 ### Funcionalidades de redimensionado
+
 - **Redimensionado interactivo**: Arrastra los bordes para ajustar el ancho
 - **Ancho mínimo**: Evita que las columnas queden demasiado estrechas
 - **Persistencia**: Los anchos se pueden guardar y restaurar
@@ -627,11 +620,11 @@ Usado internamente para acciones y filtros:
 
 ```typescript
 interface PaginableTableDropdown {
-  title: string;
-  buttons: RowButton[];
-  fill?: string;
-  position?: 'start' | 'end';
-  color?: string;
+	title: string;
+	buttons: RowButton[];
+	fill?: string;
+	position?: 'start' | 'end';
+	color?: string;
 }
 ```
 
@@ -640,11 +633,7 @@ interface PaginableTableDropdown {
 Componente especializado para rangos numéricos y de fecha:
 
 ```html
-<hub-ui-range-input
-  [type]="'number'"
-  [placeholder]="'Min - Max'"
-  [formControl]="rangeControl">
-</hub-ui-range-input>
+<hub-ui-range-input [type]="'number'" [placeholder]="'Min - Max'" [formControl]="rangeControl"> </hub-ui-range-input>
 ```
 
 ### Filtros de menú (automáticos en `mode: 'menu'`)
@@ -656,20 +645,18 @@ No es necesario instanciar un componente específico.
 import { MenuFilterOperators, StringMatchModes } from 'ng-hub-ui-paginable';
 
 const headers: PaginableTableHeader[] = [
-  {
-    property: 'name',
-    title: 'Name',
-    filter: { type: 'text', mode: 'menu' }
-  }
+	{
+		property: 'name',
+		title: 'Name',
+		filter: { type: 'text', mode: 'menu' }
+	}
 ];
 
 filters = signal({
-  name: {
-    operator: MenuFilterOperators.And,
-    rules: [
-      { value: 'john', matchMode: StringMatchModes.Contains }
-    ]
-  }
+	name: {
+		operator: MenuFilterOperators.And,
+		rules: [{ value: 'john', matchMode: StringMatchModes.Contains }]
+	}
 });
 ```
 
@@ -679,34 +666,35 @@ Nota: Las comprobaciones nulas usan `NullMatchModes.IsNull` / `NullMatchModes.Is
 
 ```typescript
 const headers: PaginableTableHeader[] = [
-  {
-    property: 'actions',
-    title: 'Actions',
-    onlyButtons: true,
-    sticky: 'end',
-    buttons: [
-      {
-        icon: 'fa-edit',
-        title: 'Edit',
-        color: 'primary',
-        handler: (row) => this.editUser(row.data),
-        hidden: (row) => !row.data.canEdit
-      },
-      {
-        title: 'More Actions',
-        buttons: [
-          { title: 'Archive', handler: (row) => this.archiveUser(row.data) },
-          { title: 'Delete', handler: (row) => this.deleteUser(row.data) }
-        ]
-      }
-    ]
-  }
+	{
+		property: 'actions',
+		title: 'Actions',
+		onlyButtons: true,
+		sticky: 'end',
+		buttons: [
+			{
+				icon: 'fa-edit',
+				title: 'Edit',
+				color: 'primary',
+				handler: (row) => this.editUser(row.data),
+				hidden: (row) => !row.data.canEdit
+			},
+			{
+				title: 'More Actions',
+				buttons: [
+					{ title: 'Archive', handler: (row) => this.archiveUser(row.data) },
+					{ title: 'Delete', handler: (row) => this.deleteUser(row.data) }
+				]
+			}
+		]
+	}
 ];
 ```
 
 ### Filtros de columna
 
 #### Filtro de texto
+
 ```typescript
 {
   property: 'name',
@@ -720,6 +708,7 @@ const headers: PaginableTableHeader[] = [
 ```
 
 #### Filtro desplegable
+
 ```typescript
 {
   property: 'status',
@@ -734,6 +723,7 @@ const headers: PaginableTableHeader[] = [
 ```
 
 #### Filtro booleano
+
 ```typescript
 {
   property: 'verified',
@@ -748,6 +738,7 @@ const headers: PaginableTableHeader[] = [
 ```
 
 #### Filtro de rango de fechas
+
 ```typescript
 {
   property: 'created_at',
@@ -761,6 +752,7 @@ const headers: PaginableTableHeader[] = [
 ```
 
 #### Filtro de rango numérico
+
 ```typescript
 {
   property: 'price',
@@ -788,26 +780,24 @@ En `mode: 'menu'`, el valor de `filters` es un `MenuFilterValue` estructurado (o
 import { MenuFilterOperators, StringMatchModes } from 'ng-hub-ui-paginable';
 
 filters = signal({
-  name: {
-    operator: MenuFilterOperators.And,
-    rules: [
-      { value: 'john', matchMode: StringMatchModes.Contains }
-    ]
-  }
+	name: {
+		operator: MenuFilterOperators.And,
+		rules: [{ value: 'john', matchMode: StringMatchModes.Contains }]
+	}
 });
 ```
 
 ### Tipos de filtro disponibles
 
-| Tipo             | Descripción                           | Controles de entrada              |
-|------------------|---------------------------------------|-----------------------------------|
-| `text`           | Filtro de búsqueda de texto           | Un input de texto                 |
-| `number`         | Filtro de valor numérico              | Un input numérico                 |
-| `number-range`   | Rango de valores numéricos            | Dos inputs numéricos (min/max)    |
-| `date`           | Filtro de fecha única                 | Selector de fecha                 |
-| `date-range`     | Filtro de rango de fechas             | Dos selectores de fecha (desde/hasta) |
-| `boolean`        | Filtro verdadero/falso                | Dropdown con etiquetas personalizadas |
-| `dropdown`       | Selección de opciones predefinidas    | Control tipo dropdown/select      |
+| Tipo           | Descripción                        | Controles de entrada                  |
+| -------------- | ---------------------------------- | ------------------------------------- |
+| `text`         | Filtro de búsqueda de texto        | Un input de texto                     |
+| `number`       | Filtro de valor numérico           | Un input numérico                     |
+| `number-range` | Rango de valores numéricos         | Dos inputs numéricos (min/max)        |
+| `date`         | Filtro de fecha única              | Selector de fecha                     |
+| `date-range`   | Filtro de rango de fechas          | Dos selectores de fecha (desde/hasta) |
+| `boolean`      | Filtro verdadero/falso             | Dropdown con etiquetas personalizadas |
+| `dropdown`     | Selección de opciones predefinidas | Control tipo dropdown/select          |
 
 ## 🪄 Referencia de API
 
@@ -815,32 +805,32 @@ filters = signal({
 
 #### Inputs
 
-| Nombre              | Tipo                             | Por defecto | Descripción                                                               |
-|---------------------|----------------------------------|-------------|---------------------------------------------------------------------------|
-| `headers`           | `PaginableTableHeader[]`         | `[]`        | Definición de columnas con títulos, ordenación, filtros y acciones.       |
-| `data` / `rows`     | `T[]` o `PaginationState<T>`     | `[]`        | Datos de tabla; array plano u objeto paginado con metadatos.              |
-| `page`              | `number`                         | `null`      | Número de página actual (1-based, señal model).                           |
-| `perPage`           | `number`                         | `null`      | Número de elementos por página.                                           |
-| `perPageOptions`    | `number[]`                       | `[20, 50, 100]` | Opciones disponibles de elementos por página.                          |
-| `totalItems`        | `number`                         | `null`      | Total de elementos en todas las páginas.                                  |
-| `searchable`        | `boolean`                        | `true`      | Si se muestra el input de búsqueda global.                                |
-| `searchTerm`        | `string`                         | `''`        | Término de búsqueda actual (señal model).                                 |
-| `searchFn`          | `(a: T, b: T) => boolean`        | `null`      | Función de búsqueda personalizada para filtrar.                           |
-| `selectable`        | `boolean`                        | `false`     | Si las filas son seleccionables.                                          |
-| `multiple`          | `boolean`                        | `false`     | Si se permite la selección múltiple.                                      |
-| `bindValue`         | `string`                         | `null`      | Propiedad para identificar de forma única los elementos seleccionados.    |
-| `ordination`        | `PaginableTableOrdination`       | `null`      | Configuración actual de ordenación (señal model).                         |
-| `filters`           | `Record<string, any>`            | `{}`        | Filtros de columna activos (señal model).                                 |
-| `debounce`          | `number`                         | `0`         | Tiempo de debounce en ms para inputs de búsqueda y filtros.               |
-| `loading`           | `boolean`                        | `false`     | Indicador de estado de carga (señal model).                               |
-| `paginate`          | `boolean`                        | `true`      | Si se habilita la paginación.                                             |
-| `paginationPosition`| `'top' \| 'bottom' \| 'both'`    | `'bottom'`  | Dónde mostrar los controles de paginación.                                |
-| `paginationInfo`    | `boolean`                        | `true`      | Si se muestra info de paginación (p. ej. "Mostrando 1 a 10 de 100").        |
-| `stickyActions`     | `boolean`                        | `false`     | Si los botones de acción quedan fijos durante el scroll.                  |
-| `batchActions`      | `Array<PaginableTableDropdown \| ListButton>` | `[]` | Acciones disponibles para filas seleccionadas.                         |
-| `responsive`        | `TableBreakpoint`                | `null`      | Breakpoint responsive para el layout de la tabla.                         |
-| `options`           | `PaginableTableOptions`          | `{}`        | Configuración visual (cursor, hover, striped, variant).                   |
-| `clickFn`           | `(event: TableRowEvent<T>) => void` | `null`   | Manejador para eventos de click en fila.                                  |
+| Nombre               | Tipo                                          | Por defecto     | Descripción                                                            |
+| -------------------- | --------------------------------------------- | --------------- | ---------------------------------------------------------------------- |
+| `headers`            | `PaginableTableHeader[]`                      | `[]`            | Definición de columnas con títulos, ordenación, filtros y acciones.    |
+| `data` / `rows`      | `T[]` o `PaginationState<T>`                  | `[]`            | Datos de tabla; array plano u objeto paginado con metadatos.           |
+| `page`               | `number`                                      | `null`          | Número de página actual (1-based, señal model).                        |
+| `perPage`            | `number`                                      | `null`          | Número de elementos por página.                                        |
+| `perPageOptions`     | `number[]`                                    | `[20, 50, 100]` | Opciones disponibles de elementos por página.                          |
+| `totalItems`         | `number`                                      | `null`          | Total de elementos en todas las páginas.                               |
+| `searchable`         | `boolean`                                     | `true`          | Si se muestra el input de búsqueda global.                             |
+| `searchTerm`         | `string`                                      | `''`            | Término de búsqueda actual (señal model).                              |
+| `searchFn`           | `(a: T, b: T) => boolean`                     | `null`          | Función de búsqueda personalizada para filtrar.                        |
+| `selectable`         | `boolean`                                     | `false`         | Si las filas son seleccionables.                                       |
+| `multiple`           | `boolean`                                     | `false`         | Si se permite la selección múltiple.                                   |
+| `bindValue`          | `string`                                      | `null`          | Propiedad para identificar de forma única los elementos seleccionados. |
+| `ordination`         | `PaginableTableOrdination`                    | `null`          | Configuración actual de ordenación (señal model).                      |
+| `filters`            | `Record<string, any>`                         | `{}`            | Filtros de columna activos (señal model).                              |
+| `debounce`           | `number`                                      | `0`             | Tiempo de debounce en ms para inputs de búsqueda y filtros.            |
+| `loading`            | `boolean`                                     | `false`         | Indicador de estado de carga (señal model).                            |
+| `paginate`           | `boolean`                                     | `true`          | Si se habilita la paginación.                                          |
+| `paginationPosition` | `'top' \| 'bottom' \| 'both'`                 | `'bottom'`      | Dónde mostrar los controles de paginación.                             |
+| `paginationInfo`     | `boolean`                                     | `true`          | Si se muestra info de paginación (p. ej. "Mostrando 1 a 10 de 100").   |
+| `stickyActions`      | `boolean`                                     | `false`         | Si los botones de acción quedan fijos durante el scroll.               |
+| `batchActions`       | `Array<PaginableTableDropdown \| ListButton>` | `[]`            | Acciones disponibles para filas seleccionadas.                         |
+| `responsive`         | `TableBreakpoint`                             | `null`          | Breakpoint responsive para el layout de la tabla.                      |
+| `options`            | `PaginableTableOptions`                       | `{}`            | Configuración visual (cursor, hover, striped, variant).                |
+| `clickFn`            | `(event: TableRowEvent<T>) => void`           | `null`          | Manejador para eventos de click en fila.                               |
 
 #### Outputs y eventos
 
@@ -848,25 +838,23 @@ El componente implementa `ControlValueAccessor` para usar `[(ngModel)]` o formul
 
 ```html
 <!-- Con ngModel -->
-<hub-ui-table [(ngModel)]="selectedItems" [multiple]="true">
-</hub-ui-table>
+<hub-ui-table [(ngModel)]="selectedItems" [multiple]="true"> </hub-ui-table>
 
 <!-- Con formularios reactivos -->
-<hub-ui-table [formControl]="selectedItemsControl">
-</hub-ui-table>
+<hub-ui-table [formControl]="selectedItemsControl"> </hub-ui-table>
 
 <!-- Eventos de click en fila -->
-<hub-ui-table [clickFn]="handleRowClick">
-</hub-ui-table>
+<hub-ui-table [clickFn]="handleRowClick"> </hub-ui-table>
 ```
 
 **Evento de click en fila (`TableRowEvent<T>`):**
+
 ```typescript
 interface TableRowEvent<T> {
-  data: T;           // Datos de la fila
-  selected: boolean; // Estado de selección
-  collapsed: boolean; // Estado de expansión
-  event: MouseEvent;  // Evento original del ratón
+	data: T; // Datos de la fila
+	selected: boolean; // Estado de selección
+	collapsed: boolean; // Estado de expansión
+	event: MouseEvent; // Evento original del ratón
 }
 ```
 
@@ -874,27 +862,28 @@ interface TableRowEvent<T> {
 
 #### Inputs
 
-| Nombre           | Tipo                                         | Por defecto | Descripción                                                   |
-|------------------|----------------------------------------------|-------------|---------------------------------------------------------------|
-| `items`          | `T[]`                                        | `[]`        | Datos de lista jerárquica.                                    |
-| `bindValue`      | `string`                                     | `null`      | Propiedad para identificación única de ítems.                 |
-| `bindLabel`      | `string`                                     | `'label'`   | Propiedad a mostrar como etiqueta del ítem.                   |
-| `bindChildren`   | `string`                                     | `'children'`| Propiedad que contiene los hijos.                             |
-| `selectable`     | `string`                                     | `null`      | Configuración del modo de selección.                          |
-| `options`        | `PaginableTableOptions`                      | `{}`        | Opciones visuales y de comportamiento.                        |
-| `batchActions`   | `Array<PaginableTableDropdown \| ListButton>` | `[]`        | Acciones para ítems seleccionados.                            |
-| `clickFn`        | `(event: ListClickEvent<T>) => void`         | `null`      | Manejador para eventos de click en ítems.                     |
+| Nombre         | Tipo                                          | Por defecto  | Descripción                                   |
+| -------------- | --------------------------------------------- | ------------ | --------------------------------------------- |
+| `items`        | `T[]`                                         | `[]`         | Datos de lista jerárquica.                    |
+| `bindValue`    | `string`                                      | `null`       | Propiedad para identificación única de ítems. |
+| `bindLabel`    | `string`                                      | `'label'`    | Propiedad a mostrar como etiqueta del ítem.   |
+| `bindChildren` | `string`                                      | `'children'` | Propiedad que contiene los hijos.             |
+| `selectable`   | `string`                                      | `null`       | Configuración del modo de selección.          |
+| `options`      | `PaginableTableOptions`                       | `{}`         | Opciones visuales y de comportamiento.        |
+| `batchActions` | `Array<PaginableTableDropdown \| ListButton>` | `[]`         | Acciones para ítems seleccionados.            |
+| `clickFn`      | `(event: ListClickEvent<T>) => void`          | `null`       | Manejador para eventos de click en ítems.     |
 
 **Evento de click en lista (`ListClickEvent<T>`):**
+
 ```typescript
 interface ListClickEvent<T> {
-  depth: number;        // Nivel de anidamiento
-  index: number;        // Posición del ítem
-  selected: boolean;    // Estado de selección
-  collapsed: boolean;   // Estado de expansión
-  value: any;          // Valor del ítem (según bindLabel)
-  item: T;             // Datos completos del ítem
-  mouseEvent: MouseEvent; // Evento original del ratón
+	depth: number; // Nivel de anidamiento
+	index: number; // Posición del ítem
+	selected: boolean; // Estado de selección
+	collapsed: boolean; // Estado de expansión
+	value: any; // Valor del ítem (según bindLabel)
+	item: T; // Datos completos del ítem
+	mouseEvent: MouseEvent; // Evento original del ratón
 }
 ```
 
@@ -902,10 +891,10 @@ interface ListClickEvent<T> {
 
 #### Inputs
 
-| Nombre         | Tipo     | Por defecto | Descripción                 |
-|----------------|----------|-------------|-----------------------------|
-| `page`         | `number` | `1`         | Página actual (señal model). |
-| `numberOfPages`| `number` | `null`      | Número total de páginas.     |
+| Nombre          | Tipo     | Por defecto | Descripción                  |
+| --------------- | -------- | ----------- | ---------------------------- |
+| `page`          | `number` | `1`         | Página actual (señal model). |
+| `numberOfPages` | `number` | `null`      | Número total de páginas.     |
 
 ---
 
@@ -917,35 +906,29 @@ El componente `hub-ui-table` permite sobrescribir prácticamente cualquier secci
 
 ```html
 <ng-template headerTpt header="name">
-  <span class="text-primary fw-bold">Nombre completo</span>
+	<span class="text-primary fw-bold">Nombre completo</span>
 </ng-template>
 ```
 
 ```html
-<ng-template headerTpt header="birthday">
-  <i class="fa-solid fa-cake-candles me-2"></i> Fecha de nacimiento
-</ng-template>
+<ng-template headerTpt header="birthday"> <i class="fa-solid fa-cake-candles me-2"></i> Fecha de nacimiento </ng-template>
 ```
 
 ### 📄 cellTpt (celda de columna)
 
 ```html
-<ng-template cellTpt header="name" let-data="data">
-  {{ data.name.toUpperCase() }}
-</ng-template>
+<ng-template cellTpt header="name" let-data="data"> {{ data.name.toUpperCase() }} </ng-template>
 ```
 
 ```html
 <ng-template cellTpt header="age" let-data="data">
-  <span [class.text-success]="data.age >= 18"> {{ data.age }} años </span>
+	<span [class.text-success]="data.age >= 18"> {{ data.age }} años </span>
 </ng-template>
 ```
 
 ```html
 <ng-template cellTpt header="adult" let-data="data">
-  <hub-ui-icon
-    [config]="{ type: 'material', value: data.adult ? 'check' : 'close' }"
-  ></hub-ui-icon>
+	<hub-ui-icon [config]="{ type: 'material', value: data.adult ? 'check' : 'close' }"></hub-ui-icon>
 </ng-template>
 ```
 
@@ -953,10 +936,10 @@ El componente `hub-ui-table` permite sobrescribir prácticamente cualquier secci
 
 ```html
 <ng-template notFoundTpt>
-  <div class="alert alert-info text-center">
-    <i class="fa-solid fa-circle-info me-2"></i>
-    No se encontraron resultados para tu búsqueda.
-  </div>
+	<div class="alert alert-info text-center">
+		<i class="fa-solid fa-circle-info me-2"></i>
+		No se encontraron resultados para tu búsqueda.
+	</div>
 </ng-template>
 ```
 
@@ -964,10 +947,10 @@ El componente `hub-ui-table` permite sobrescribir prácticamente cualquier secci
 
 ```html
 <ng-template loadingTpt>
-  <div class="text-center p-4">
-    <div class="spinner-border text-primary" role="status"></div>
-    <p>Cargando datos, espera un momento...</p>
-  </div>
+	<div class="text-center p-4">
+		<div class="spinner-border text-primary" role="status"></div>
+		<p>Cargando datos, espera un momento...</p>
+	</div>
 </ng-template>
 ```
 
@@ -975,10 +958,10 @@ El componente `hub-ui-table` permite sobrescribir prácticamente cualquier secci
 
 ```html
 <ng-template errorTpt>
-  <div class="alert alert-danger text-center">
-    <i class="fa-solid fa-triangle-exclamation me-2"></i>
-    Ha ocurrido un error inesperado. Prueba a recargar la tabla.
-  </div>
+	<div class="alert alert-danger text-center">
+		<i class="fa-solid fa-triangle-exclamation me-2"></i>
+		Ha ocurrido un error inesperado. Prueba a recargar la tabla.
+	</div>
 </ng-template>
 ```
 
@@ -986,11 +969,11 @@ El componente `hub-ui-table` permite sobrescribir prácticamente cualquier secci
 
 ```html
 <ng-template tableRow let-item>
-  <tr>
-    <td>{{ item.name }}</td>
-    <td>{{ item.lastname }}</td>
-    <td>{{ item.age }} años</td>
-  </tr>
+	<tr>
+		<td>{{ item.name }}</td>
+		<td>{{ item.lastname }}</td>
+		<td>{{ item.age }} años</td>
+	</tr>
 </ng-template>
 ```
 
@@ -1000,111 +983,34 @@ También puedes usar `tableRowTpt` con componentes expandibles.
 
 ## 🧩 Estilos
 
-La librería `ng-hub-ui-paginable` es totalmente configurable mediante **CSS custom properties**.
+La librería `ng-hub-ui-paginable` es totalmente configurable mediante **CSS custom properties** para **Table**, **List** y **Paginator**.
 
-### 🌱 Estilos base e integración
-
-```scss
-// projects/paginable/src/lib/styles/table.scss
-$tablePrefix: hub- !default;
-
-.hub-table {
-  --#{$tablePrefix}body-color: #212529;
-  --#{$tablePrefix}body-bg: #fff;
-  --#{$tablePrefix}border-width: 1px;
-  --#{$tablePrefix}border-color: #dee2e6;
-  --#{$tablePrefix}border-radius: 0.375rem;
-}
-```
+Para el catálogo completo y actualizado de tokens, consulta [CSS Variables Reference](./docs/css-variables-reference.es.md).
 
 ### 🔗 Cómo incluir los estilos en tu aplicación
 
 ```scss
 @use 'bootstrap'; // Opcional pero recomendado
-@use 'ng-hub-ui-paginable/src/lib/styles/table.scss';
+@use 'ng-hub-ui-paginable/src/lib/styles/paginable.scss';
 ```
 
-### 🎛 Personalización con variables CSS
+### 🎛 Ejemplo rápido de personalización
 
 ```scss
 .hub-table {
-  --hub-body-color: #343a40;
-  --hub-body-bg: #f8f9fa;
-  --hub-border-color: #ced4da;
-  --hub-border-radius: 0.5rem;
+	--hub-table-border-radius: 0.5rem;
+	--hub-table-cell-vertical-align: middle;
+	--hub-table-hover-bg: rgba(13, 110, 253, 0.08);
 }
-```
 
-```scss
-.hub-table__search-input {
-  --hub-body-color: #0d6efd;
-  --hub-border-color: #0d6efd;
+.hub-list {
+	--hub-list-item-border-radius: 0.5rem;
+	--hub-list-item-hover-bg: rgba(13, 110, 253, 0.08);
 }
-```
 
-### 🧩 Tokens de personalización adicionales
-
-```scss
-.hub-table {
-  --hub-table-cell-vertical-align: middle;
-  --hub-icon-color: currentColor;
-  --hub-icon-size: 1em;
-}
-```
-
-```scss
-/* Botón de filtro y contador */
-.hub-table__filter-button {
-  /* estilos base */
-}
-.hub-table__filter-button--active {
-  /* estado activo */
-}
-.hub-table__filter-count {
-  /* estilos del badge */
-}
-```
-
-```scss
-/* Helpers de iconos */
-.hub-table__icon {
-  /* icono base */
-}
-.hub-table__icon--sm {
-  --hub-icon-size: 0.875em;
-}
-.hub-table__icon--lg {
-  --hub-icon-size: 1.33em;
-}
-```
-
-### ⚙️ Integración con Bootstrap
-
-Ejemplo de override con Bootstrap:
-
-```scss
-.hub-table__pagination-info {
-  color: var(--bs-secondary);
-}
-.hub-table__search-button {
-  border-color: var(--bs-border-color);
-}
-```
-
-### 🎨 Temas y escalabilidad
-
-```scss
-.dark-theme .hub-table {
-  --hub-body-bg: #1e1e1e;
-  --hub-body-color: #f1f1f1;
-  --hub-border-color: #444;
-}
-```
-
-```scss
-.table-compact .hub-table {
-  --hub-border-radius: 0.2rem;
-  font-size: 0.875rem;
+.hub-paginator {
+	--hub-paginator-link-active-bg: #0d6efd;
+	--hub-paginator-link-active-color: #fff;
 }
 ```
 
@@ -1113,29 +1019,24 @@ Ejemplo de override con Bootstrap:
 ### Debounce en búsqueda y filtros
 
 ```html
-<hub-ui-table
-  [debounce]="300"
-  [searchable]="true">
-</hub-ui-table>
+<hub-ui-table [debounce]="300" [searchable]="true"> </hub-ui-table>
 ```
 
 ### Uso de Angular Signals para datos reactivos
 
 ```typescript
 export class MyComponent {
-  // Datos reactivos con signals
-  data = signal<User[]>([]);
-  filteredData = computed(() => 
-    this.data().filter(user => user.active)
-  );
-  
-  // Paginación en servidor
-  paginationState = computed(() => ({
-    page: this.currentPage(),
-    perPage: this.pageSize(),
-    totalItems: this.totalCount(),
-    data: this.filteredData()
-  }));
+	// Datos reactivos con signals
+	data = signal<User[]>([]);
+	filteredData = computed(() => this.data().filter((user) => user.active));
+
+	// Paginación en servidor
+	paginationState = computed(() => ({
+		page: this.currentPage(),
+		perPage: this.pageSize(),
+		totalItems: this.totalCount(),
+		data: this.filteredData()
+	}));
 }
 ```
 
@@ -1199,8 +1100,8 @@ Asegúrate de tener `strict` habilitado y compatibilidad con Angular 19+.
 
 ```typescript
 it('should render table headers', () => {
-  const headers = fixture.nativeElement.querySelectorAll('th');
-  expect(headers.length).toBeGreaterThan(0);
+	const headers = fixture.nativeElement.querySelectorAll('th');
+	expect(headers.length).toBeGreaterThan(0);
 });
 ```
 
@@ -1208,7 +1109,7 @@ it('should render table headers', () => {
 
 ```typescript
 const filtersForm = new FormGroup({
-  name: new FormControl('test')
+	name: new FormControl('test')
 });
 ```
 
@@ -1216,7 +1117,7 @@ const filtersForm = new FormGroup({
 
 ```typescript
 const mockService = {
-  getData: () => of([{ id: 1 }])
+	getData: () => of([{ id: 1 }])
 };
 ```
 
@@ -1298,41 +1199,26 @@ Estas plantillas se renderizan para filtros `mode: 'row'`. Los filtros de `mode:
 
 ```html
 <ng-template filterTpt header="birthday" let-formControl="formControl">
-  <input
-    type="date"
-    class="form-control"
-    [formControl]="formControl"
-    placeholder="Filtrar por fecha"
-  />
+	<input type="date" class="form-control" [formControl]="formControl" placeholder="Filtrar por fecha" />
 </ng-template>
 ```
 
 ```html
 <ng-template filterTpt header="age" let-formControl="formControl">
-  <div class="d-flex gap-2">
-    <input
-      type="number"
-      class="form-control"
-      [formControl]="formControl.controls.start"
-      placeholder="Min."
-    />
-    <input
-      type="number"
-      class="form-control"
-      [formControl]="formControl.controls.end"
-      placeholder="Max."
-    />
-  </div>
+	<div class="d-flex gap-2">
+		<input type="number" class="form-control" [formControl]="formControl.controls.start" placeholder="Min." />
+		<input type="number" class="form-control" [formControl]="formControl.controls.end" placeholder="Max." />
+	</div>
 </ng-template>
 ```
 
 ```html
 <ng-template filterTpt header="adult" let-formControl="formControl">
-  <select class="form-select" [formControl]="formControl">
-    <option [ngValue]="null">Todos</option>
-    <option [ngValue]="true">Sí</option>
-    <option [ngValue]="false">No</option>
-  </select>
+	<select class="form-select" [formControl]="formControl">
+		<option [ngValue]="null">Todos</option>
+		<option [ngValue]="true">Sí</option>
+		<option [ngValue]="false">No</option>
+	</select>
 </ng-template>
 ```
 
@@ -1344,7 +1230,7 @@ Esto permite adaptar cualquier filtro visual sin perder reactividad.
 
 ```html
 <hub-ui-table
-  [data]="{
+	[data]="{
     page: page(),
     perPage: perPage(),
     totalItems: totalItems(),
@@ -1356,22 +1242,17 @@ Esto permite adaptar cualquier filtro visual sin perder reactividad.
 #### 2. Forma separada (inputs individuales)
 
 ```html
-<hub-ui-table
-  [data]="data()"
-  [page]="page()"
-  [perPage]="perPage()"
-  [totalItems]="totalItems()"
-></hub-ui-table>
+<hub-ui-table [data]="data()" [page]="page()" [perPage]="perPage()" [totalItems]="totalItems()"></hub-ui-table>
 ```
 
 ## 🧬 Interfaz `PaginationState<T>`
 
 ```ts
 export interface PaginationState<T = any> {
-  page: number | null;
-  perPage: number | null;
-  totalItems: number | null;
-  data: ReadonlyArray<T> | null;
+	page: number | null;
+	perPage: number | null;
+	totalItems: number | null;
+	data: ReadonlyArray<T> | null;
 }
 ```
 
@@ -1381,18 +1262,18 @@ export interface PaginationState<T = any> {
 
 ```typescript
 this.translateService.setTranslation(lang, {
-  PAGINABLE: {
-    search: 'Search...',
-    noResults: 'No results found'
-  }
+	PAGINABLE: {
+		search: 'Search...',
+		noResults: 'No results found'
+	}
 });
 ```
 
 ### Uso con ngx-translate
 
 ```typescript
-this.translate.get('PAGINABLE').subscribe(translations => {
-  this.hubTranslationSvc.setTranslations(translations);
+this.translate.get('PAGINABLE').subscribe((translations) => {
+	this.hubTranslationSvc.setTranslations(translations);
 });
 ```
 
@@ -1400,21 +1281,21 @@ this.translate.get('PAGINABLE').subscribe(translations => {
 
 ```json
 {
-  "PAGINABLE": {
-    "search": "Search...",
-    "noResults": "No results found",
-    "loading": "Loading...",
-    "itemsPerPage": "Items per page",
-    "page": "Page",
-    "of": "of",
-    "first": "First",
-    "previous": "Previous",
-    "next": "Next",
-    "last": "Last",
-    "showing": "Showing",
-    "to": "to",
-    "entries": "entries"
-  }
+	"PAGINABLE": {
+		"search": "Search...",
+		"noResults": "No results found",
+		"loading": "Loading...",
+		"itemsPerPage": "Items per page",
+		"page": "Page",
+		"of": "of",
+		"first": "First",
+		"previous": "Previous",
+		"next": "Next",
+		"last": "Last",
+		"showing": "Showing",
+		"to": "to",
+		"entries": "entries"
+	}
 }
 ```
 
@@ -1422,29 +1303,33 @@ this.translate.get('PAGINABLE').subscribe(translations => {
 
 ```typescript
 export class AppComponent {
-  #hubTranslationSvc = inject(HubTranslationService);
+	#hubTranslationSvc = inject(HubTranslationService);
 
-  constructor() {
-    this.#hubTranslationSvc.setTranslations({
-      search: 'Buscar...',
-      noResults: 'No se encontraron resultados',
-      loading: 'Cargando...'
-    });
-  }
+	constructor() {
+		this.#hubTranslationSvc.setTranslations({
+			search: 'Buscar...',
+			noResults: 'No se encontraron resultados',
+			loading: 'Cargando...'
+		});
+	}
 }
 ```
 
 ## 📊 Changelog
 
 ## [19.10.2] - 2025-12-23
+
 ### Añadido
+
 - Tokens de personalización `--hub-table-cell-vertical-align`, `--hub-icon-color` y `--hub-icon-size`.
 
 ### Cambiado
+
 - Las utilidades de overlay se movieron a `ng-hub-ui-utils` y la integración de dropdown ahora depende de ese paquete.
 - La alineación vertical de celdas por defecto es `middle` vía variable CSS.
 
 ### Corregido
+
 - Las opciones de modos de coincidencia en filtros de menú ahora renderizan correctamente sus etiquetas traducidas.
 - Se añadieron traducciones faltantes para los modos `IsNull` y `IsNotNull`.
 
@@ -1491,6 +1376,7 @@ npm run build:paginable
 ### Reporte de issues
 
 Al reportar bugs, incluye:
+
 - Versión de Angular
 - Navegador y versión
 - Pasos para reproducir
@@ -1506,7 +1392,7 @@ Al reportar bugs, incluye:
 
 Gracias a todas las personas que han ayudado a mejorar esta librería.
 
-- **Carlos Morcillo Fernández** - *Creator & Maintainer* - [@carlos-morcillo](https://github.com/carlos-morcillo)
+- **Carlos Morcillo Fernández** - _Creator & Maintainer_ - [@carlos-morcillo](https://github.com/carlos-morcillo)
 
 ## 📄 Licencia
 

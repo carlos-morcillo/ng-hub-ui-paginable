@@ -1,67 +1,332 @@
+// ==========================================================================
+// Paginable Components Exports
+// ==========================================================================
+// This file aggregates all the SCSS stylesheets for the components
+// within the `paginable` project, making them easy to import globally.
+
+:root,
+:host {
+	// Base System Properties Fallbacks
+	--hub-sys-surface-page: #ffffff;
+	--hub-sys-border-color-default: #dee2e6;
+	--hub-sys-color-primary: #0d6efd;
+	--hub-sys-text-primary: #212529;
+	--hub-sys-text-muted: #6c757d;
+	--hub-sys-state-active-bg: rgba(0, 0, 0, 0.1);
+	--hub-sys-state-hover-bg: rgba(0, 0, 0, 0.075);
+	--hub-sys-state-striped-bg: rgba(0, 0, 0, 0.05);
+	--hub-ref-surface-2: #f8f9fa;
+	--hub-ref-color-white: #fff;
+	--hub-ref-border-width: 1px;
+	--hub-ref-radius-sm: 0.25rem;
+	--hub-ref-radius-md: 0.375rem;
+	--hub-ref-space-1: 0.25rem;
+	--hub-ref-space-2: 0.5rem;
+	--hub-ref-space-3: 1rem;
+	--hub-ref-icon-size: 1em;
+	--hub-ref-font-size-base: 1rem;
+}
+
+.hub-paginator-container {
+	display: flex;
+	align-items: center;
+}
+
+.hub-paginator {
+	// Paginator Properties
+	--hub-paginator-font-size: var(--hub-ref-font-size-base);
+	--hub-paginator-gap: var(--hub-ref-space-1);
+	--hub-paginator-icon-color: var(--hub-sys-text-primary);
+	--hub-paginator-icon-size: 1em;
+	--hub-paginator-info-color: var(--hub-sys-text-muted);
+	--hub-paginator-label-color: var(--hub-sys-text-muted);
+	--hub-paginator-link-active-bg: var(--hub-sys-color-primary);
+	--hub-paginator-link-active-border-color: var(--hub-sys-color-primary);
+	--hub-paginator-link-active-color: var(--hub-ref-color-white);
+	--hub-paginator-link-bg: var(--hub-sys-surface-page);
+	--hub-paginator-link-border-color: var(--hub-sys-border-color-default);
+	--hub-paginator-link-border-radius: var(--hub-ref-radius-sm);
+	--hub-paginator-link-color: var(--hub-sys-color-primary);
+	--hub-paginator-link-disabled-bg: var(--hub-ref-surface-2);
+	--hub-paginator-link-disabled-border-color: var(--hub-sys-border-color-default);
+	--hub-paginator-link-disabled-color: var(--hub-sys-text-muted);
+	--hub-paginator-link-hover-bg: var(--hub-ref-surface-2);
+	--hub-paginator-link-hover-border-color: var(--hub-sys-border-color-default);
+	--hub-paginator-link-hover-color: var(--hub-sys-color-primary);
+	--hub-paginator-select-bg: var(--hub-sys-surface-page);
+	--hub-paginator-select-border-color: var(--hub-sys-border-color-default);
+	--hub-paginator-select-border-radius: var(--hub-ref-radius-sm);
+	--hub-paginator-select-color: var(--hub-sys-text-primary);
+	--hub-paginator-select-padding-x: var(--hub-ref-space-2);
+	--hub-paginator-select-padding-y: var(--hub-ref-space-1);
+	--hub-paginator-settings-gap: var(--hub-ref-space-2);
+	// Reuse generic table icon helpers inside paginator icon elements.
+	--hub-table-icon-color: var(--hub-paginator-icon-color);
+	--hub-table-icon-size: var(--hub-paginator-icon-size);
+
+	display: flex;
+	padding-left: 0;
+	list-style: none;
+	margin-bottom: 0;
+	gap: var(--hub-paginator-gap);
+
+	&__item {
+		display: list-item;
+
+		&--active {
+			.hub-paginator__link {
+				z-index: 3;
+				color: var(--hub-paginator-link-active-color);
+				background-color: var(--hub-paginator-link-active-bg);
+				border-color: var(--hub-paginator-link-active-border-color);
+			}
+		}
+
+		&--disabled {
+			.hub-paginator__link {
+				pointer-events: none;
+				color: var(--hub-paginator-link-disabled-color);
+				background-color: var(--hub-paginator-link-disabled-bg);
+				border-color: var(--hub-paginator-link-disabled-border-color);
+			}
+		}
+	}
+
+	&__link {
+		position: relative;
+		display: block;
+		padding: 0.375rem 0.75rem;
+		text-decoration: none;
+		color: var(--hub-paginator-link-color);
+		background-color: var(--hub-paginator-link-bg);
+		border: 1px solid var(--hub-paginator-link-border-color);
+		border-radius: var(--hub-paginator-link-border-radius);
+		transition:
+			color 0.15s ease-in-out,
+			background-color 0.15s ease-in-out,
+			border-color 0.15s ease-in-out,
+			box-shadow 0.15s ease-in-out;
+
+		&:hover {
+			z-index: 2;
+			color: var(--hub-paginator-link-hover-color);
+			background-color: var(--hub-paginator-link-hover-bg);
+			border-color: var(--hub-paginator-link-hover-border-color);
+		}
+
+		&:focus {
+			z-index: 3;
+			outline: 0;
+			box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+		}
+	}
+
+	&__icon {
+		color: var(--hub-paginator-icon-color);
+		font-size: var(--hub-paginator-icon-size);
+	}
+
+	&__settings {
+		display: flex;
+		align-items: center;
+		gap: var(--hub-paginator-settings-gap, 0.5rem);
+		margin: auto;
+	}
+
+	&__label {
+		color: var(--hub-paginator-label-color);
+		margin-bottom: 0;
+	}
+
+	&__select {
+		background-color: var(--hub-paginator-select-bg);
+		border: 1px solid var(--hub-paginator-select-border-color);
+		border-radius: var(--hub-paginator-select-border-radius);
+		color: var(--hub-paginator-select-color);
+		padding: var(--hub-paginator-select-padding-y) var(--hub-paginator-select-padding-x);
+	}
+
+	&__info {
+		color: var(--hub-paginator-info-color);
+		margin-bottom: 0;
+	}
+}
+
+.hub-list {
+	// List Properties
+	--hub-list-checkbox-size: 1rem;
+	--hub-list-chevron-size: var(--hub-ref-icon-size);
+	--hub-list-container-bg: var(--hub-sys-surface-page);
+	--hub-list-container-border-radius: var(--hub-ref-radius-md);
+	--hub-list-container-gap: var(--hub-ref-space-2);
+	--hub-list-container-padding-x: var(--hub-ref-space-3);
+	--hub-list-container-padding-y: var(--hub-ref-space-3);
+	--hub-list-empty-bg: var(--hub-ref-surface-2);
+	--hub-list-empty-border-color: var(--hub-sys-border-color-default);
+	--hub-list-empty-color: var(--hub-sys-text-muted);
+	--hub-list-empty-padding: var(--hub-ref-space-3);
+	--hub-list-item-active-bg: var(--hub-sys-color-primary);
+	--hub-list-item-border-color: var(--hub-sys-border-color-default);
+	--hub-list-item-border-radius: var(--hub-ref-radius-sm);
+	--hub-list-item-color: var(--hub-sys-text-primary);
+	--hub-list-item-gap: var(--hub-ref-space-2);
+	--hub-list-item-hover-bg: var(--hub-ref-surface-2);
+	--hub-list-item-padding-x: var(--hub-ref-space-3);
+	--hub-list-item-padding-y: var(--hub-ref-space-2);
+	--hub-list-item-selected-bg: var(--hub-sys-color-primary);
+	--hub-list-item-selected-color: var(--hub-ref-color-white);
+	--hub-list-search-btn-bg: var(--hub-ref-surface-2);
+	--hub-list-search-btn-color: var(--hub-sys-text-primary);
+	--hub-list-search-input-bg: var(--hub-sys-surface-page);
+	--hub-list-search-input-border-color: var(--hub-sys-border-color-default);
+	--hub-list-search-input-border-radius: var(--hub-ref-radius-sm);
+	--hub-list-search-input-color: var(--hub-sys-text-primary);
+
+	display: flex;
+	flex-direction: column;
+	gap: var(--hub-list-container-gap);
+	padding: var(--hub-list-container-padding-y) var(--hub-list-container-padding-x);
+	background-color: var(--hub-list-container-bg);
+	border-radius: var(--hub-list-container-border-radius);
+	list-style: none;
+	margin-bottom: 0;
+
+	// For tree-like structures, remove container padding for children lists
+	.hub-list {
+		padding-left: var(--hub-list-item-padding-x);
+		padding-right: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+		border-radius: 0;
+	}
+
+	&__search {
+		&-input {
+			background-color: var(--hub-list-search-input-bg);
+			border-color: var(--hub-list-search-input-border-color) !important;
+			color: var(--hub-list-search-input-color);
+			border-radius: var(--hub-list-search-input-border-radius) 0 0 var(--hub-list-search-input-border-radius) !important;
+		}
+
+		&-btn {
+			background-color: var(--hub-list-search-btn-bg) !important;
+			color: var(--hub-list-search-btn-color) !important;
+			border-color: var(--hub-list-search-input-border-color) !important;
+			border-radius: 0 var(--hub-list-search-input-border-radius) var(--hub-list-search-input-border-radius) 0 !important;
+		}
+
+		&-icon {
+			font-size: var(--hub-ref-icon-size);
+		}
+	}
+
+	&__item {
+		display: flex;
+		flex-direction: column;
+		padding: var(--hub-list-item-padding-y) var(--hub-list-item-padding-x);
+		background-color: transparent;
+		color: var(--hub-list-item-color);
+		border-radius: var(--hub-list-item-border-radius);
+		transition: background-color 0.15s ease-in-out;
+		position: relative;
+		border: 1px solid var(--hub-list-item-border-color);
+
+		&--clickable {
+			cursor: pointer;
+
+			&:hover {
+				background-color: var(--hub-list-item-hover-bg);
+			}
+		}
+
+		&--selected {
+			background-color: var(--hub-list-item-selected-bg) !important;
+			color: var(--hub-list-item-selected-color);
+			border-color: var(--hub-list-item-selected-bg);
+
+			.hub-list__label {
+				color: var(--hub-list-item-selected-color);
+			}
+
+			.hub-list__actions button {
+				color: var(--hub-list-item-selected-color);
+			}
+		}
+
+		&--empty {
+			background-color: var(--hub-list-empty-bg);
+			color: var(--hub-list-empty-color);
+			padding: var(--hub-list-empty-padding);
+			border-color: var(--hub-list-empty-border-color);
+			text-align: center;
+		}
+	}
+
+	&__label {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		flex-grow: 1;
+	}
+
+	&__checkbox {
+		width: var(--hub-list-checkbox-size);
+		height: var(--hub-list-checkbox-size);
+	}
+
+	&__actions {
+		gap: var(--hub-ref-space-2);
+	}
+
+	&__chevron {
+		padding: 0;
+		font-size: var(--hub-list-chevron-size);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none;
+	}
+}
 //
 // Base tokens
 //
-$tablePrefix: hub- !default;
 
 .hub-table {
-	// Core colors and borders
-	--#{$tablePrefix}body-color: #212529;
-	--#{$tablePrefix}body-bg: #fff;
-	--#{$tablePrefix}border-width: 1px;
-	--#{$tablePrefix}border-color: #dee2e6;
-	--#{$tablePrefix}border-radius: 0.375rem;
-
-	// Reset values for nested tables
-	--#{$tablePrefix}table-color-type: initial;
-	--#{$tablePrefix}table-bg-type: initial;
-	--#{$tablePrefix}table-color-state: initial;
-	--#{$tablePrefix}table-bg-state: initial;
-
-	// Table tokens
-	--#{$tablePrefix}table-color: #212529;
-	--#{$tablePrefix}table-bg: #ffffff;
-	--#{$tablePrefix}table-border-width: 1px;
-	--#{$tablePrefix}table-border-color: #dee2e6;
-	--#{$tablePrefix}table-accent-bg: transparent;
-	--#{$tablePrefix}table-striped-color: #212529;
-	--#{$tablePrefix}table-striped-bg: rgba(0, 0, 0, 0.05);
-	--#{$tablePrefix}table-active-color: #212529;
-	--#{$tablePrefix}table-active-bg: rgba(0, 0, 0, 0.1);
-	--#{$tablePrefix}table-hover-color: #212529;
-	--#{$tablePrefix}table-hover-bg: rgba(0, 0, 0, 0.075);
-	--#{$tablePrefix}table-cell-padding-x: 1rem;
-	--#{$tablePrefix}table-cell-padding-y: 0.5rem;
-	--#{$tablePrefix}table-cell-vertical-align: middle;
-
-	// Breakpoints
-	--#{$tablePrefix}breakpoint-sm: 576px;
-	--#{$tablePrefix}breakpoint-md: 768px;
-	--#{$tablePrefix}breakpoint-lg: 992px;
-	--#{$tablePrefix}breakpoint-xl: 1200px;
-	--#{$tablePrefix}breakpoint-xxl: 1400px;
-
-	// Icon variables
-	--#{$tablePrefix}icon-color: currentColor;
-	--#{$tablePrefix}icon-size: 1em;
-
-	// Row class variants
-	// These variables define the background and text colors for the different row states.
-	--#{$tablePrefix}success-bg-subtle: #d1e7dd;
-	--#{$tablePrefix}success-text-emphasis: #0a3622;
-	--#{$tablePrefix}danger-bg-subtle: #f8d7da;
-	--#{$tablePrefix}danger-text-emphasis: #58151c;
-	--#{$tablePrefix}warning-bg-subtle: #fff3cd;
-	--#{$tablePrefix}warning-text-emphasis: #664d03;
-	--#{$tablePrefix}info-bg-subtle: #cff4fc;
-	--#{$tablePrefix}info-text-emphasis: #055160;
-	--#{$tablePrefix}primary-bg-subtle: #cfe2ff;
-	--#{$tablePrefix}primary-text-emphasis: #032870;
-	--#{$tablePrefix}secondary-bg-subtle: #e2e3e5;
-	--#{$tablePrefix}secondary-text-emphasis: #2e3338;
-	--#{$tablePrefix}light-bg-subtle: #fcfcfd;
-	--#{$tablePrefix}light-text-emphasis: #495057;
-	--#{$tablePrefix}dark-bg-subtle: #ced4da;
-	--#{$tablePrefix}dark-text-emphasis: #141619;
+	// Table Properties
+	--hub-table-container-bg: var(--hub-ref-color-white);
+	--hub-table-container-color: var(--hub-sys-text-primary);
+	--hub-table-border-color: var(--hub-sys-border-color-default);
+	--hub-table-border-radius: var(--hub-ref-radius-md);
+	--hub-table-border-width: var(--hub-ref-border-width);
+	--hub-table-breakpoint-lg: 992px;
+	--hub-table-breakpoint-md: 768px;
+	--hub-table-breakpoint-sm: 576px;
+	--hub-table-breakpoint-xl: 1200px;
+	--hub-table-breakpoint-xxl: 1400px;
+	--hub-table-icon-color: currentColor;
+	--hub-table-icon-size: 1em;
+	--hub-table-table-accent-bg: transparent;
+	--hub-table-table-active-bg: var(--hub-sys-state-active-bg);
+	--hub-table-table-active-color: var(--hub-sys-text-primary);
+	--hub-table-table-bg: var(--hub-ref-color-white);
+	--hub-table-table-bg-state: initial;
+	--hub-table-table-bg-type: initial;
+	--hub-table-table-border-color: var(--hub-sys-border-color-default);
+	--hub-table-table-border-width: var(--hub-ref-border-width);
+	--hub-table-table-cell-padding-x: var(--hub-ref-space-3);
+	--hub-table-table-cell-padding-x-sm: var(--hub-ref-space-2);
+	--hub-table-table-cell-padding-y: var(--hub-ref-space-2);
+	--hub-table-table-cell-padding-y-sm: var(--hub-ref-space-1);
+	--hub-table-table-cell-vertical-align: middle;
+	--hub-table-table-color: var(--hub-sys-text-primary);
+	--hub-table-table-color-state: initial;
+	--hub-table-table-color-type: initial;
+	--hub-table-table-group-separator-color: var(--hub-sys-border-color-default);
+	--hub-table-table-hover-bg: var(--hub-sys-state-hover-bg);
+	--hub-table-table-hover-color: var(--hub-sys-text-primary);
+	--hub-table-table-striped-bg: var(--hub-sys-state-striped-bg);
+	--hub-table-table-striped-color: var(--hub-sys-text-primary);
 
 	// Layout
 	display: flex;
@@ -103,13 +368,15 @@ $tablePrefix: hub- !default;
 			font-size: 1rem;
 			font-weight: 400;
 			line-height: 1.5;
-			color: var(--#{$tablePrefix}body-color);
+			color: var(--hub-table-container-color);
 			appearance: none;
-			background-color: var(--#{$tablePrefix}body-bg);
+			background-color: var(--hub-table-container-bg);
 			background-clip: padding-box;
-			border: var(--#{$tablePrefix}border-width) solid var(--#{$tablePrefix}border-color);
-			border-radius: var(--#{$tablePrefix}border-radius);
-			transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+			border: var(--hub-table-border-width) solid var(--hub-table-border-color);
+			border-radius: var(--hub-table-border-radius);
+			transition:
+				border-color 0.15s ease-in-out,
+				box-shadow 0.15s ease-in-out;
 			border-top-right-radius: 0;
 			border-bottom-right-radius: 0;
 			border-color: #777;
@@ -139,19 +406,6 @@ $tablePrefix: hub- !default;
 	// Paginator
 	&__paginator {
 		overflow: auto;
-		margin: auto;
-	}
-
-	// Pagination settings
-	&__pagination-settings {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		margin: auto;
-	}
-
-	// Pagination info
-	&__pagination-info {
 		margin: auto;
 	}
 
@@ -221,9 +475,9 @@ $tablePrefix: hub- !default;
 	// Base icon class
 	&__icon {
 		display: inline-block;
-		width: var(--#{$tablePrefix}icon-size);
-		height: var(--#{$tablePrefix}icon-size);
-		background-color: var(--#{$tablePrefix}icon-color);
+		width: var(--hub-table-icon-size);
+		height: var(--hub-table-icon-size);
+		background-color: var(--hub-table-icon-color);
 		-webkit-mask-size: contain;
 		mask-size: contain;
 		-webkit-mask-repeat: no-repeat;
@@ -234,31 +488,31 @@ $tablePrefix: hub- !default;
 
 		// Size modifiers
 		&--xs {
-			--#{$tablePrefix}icon-size: 0.75em;
+			--hub-table-icon-size: 0.75em;
 		}
 
 		&--sm {
-			--#{$tablePrefix}icon-size: 0.875em;
+			--hub-table-icon-size: 0.875em;
 		}
 
 		&--lg {
-			--#{$tablePrefix}icon-size: 1.33em;
+			--hub-table-icon-size: 1.33em;
 		}
 
 		&--2x {
-			--#{$tablePrefix}icon-size: 2em;
+			--hub-table-icon-size: 2em;
 		}
 
 		&--3x {
-			--#{$tablePrefix}icon-size: 3em;
+			--hub-table-icon-size: 3em;
 		}
 
 		&--4x {
-			--#{$tablePrefix}icon-size: 4em;
+			--hub-table-icon-size: 4em;
 		}
 
 		&--5x {
-			--#{$tablePrefix}icon-size: 5em;
+			--hub-table-icon-size: 5em;
 		}
 
 		// Search icon
@@ -385,9 +639,9 @@ $tablePrefix: hub- !default;
 	&__table {
 		position: relative;
 		width: 100%;
-		margin-bottom: var(--#{$tablePrefix}table-cell-padding-y);
-		vertical-align: var(--#{$tablePrefix}table-cell-vertical-align);
-		border-color: var(--#{$tablePrefix}table-border-color);
+		margin-bottom: var(--hub-table-table-cell-padding-y);
+		vertical-align: var(--hub-table-table-cell-vertical-align);
+		border-color: var(--hub-table-table-border-color);
 
 		// Sticky header for scrollable tables
 		&--scrollable {
@@ -429,17 +683,14 @@ $tablePrefix: hub- !default;
 		// The universal selectors reduce selector count and specificity for easier overrides.
 		// stylelint-disable-next-line selector-max-universal
 		> :not(caption) > * > * {
-			padding: var(--#{$tablePrefix}table-cell-padding-y) var(--#{$tablePrefix}table-cell-padding-x);
-			vertical-align: var(--#{$tablePrefix}table-cell-vertical-align);
+			padding: var(--hub-table-table-cell-padding-y) var(--hub-table-table-cell-padding-x);
+			vertical-align: var(--hub-table-table-cell-vertical-align);
 			// Following the cascade pattern: https://codepen.io/miriamsuzanne/full/vYNgodb
-			color: var(
-				--#{$tablePrefix}table-color-state,
-				var(--#{$tablePrefix}table-color-type, var(--#{$tablePrefix}table-color))
-			);
-			background-color: var(--#{$tablePrefix}table-bg);
-			border-bottom-width: var(--#{$tablePrefix}table-border-width);
+			color: var(--hub-table-table-color-state, var(--hub-table-table-color-type, var(--hub-table-table-color)));
+			background-color: var(--hub-table-table-bg);
+			border-bottom-width: var(--hub-table-table-border-width);
 			box-shadow: inset 0 0 0 9999px
-				var(--#{$tablePrefix}table-bg-state, var(--#{$tablePrefix}table-bg-type, var(--#{$tablePrefix}table-accent-bg)));
+				var(--hub-table-table-bg-state, var(--hub-table-table-bg-type, var(--hub-table-table-accent-bg)));
 		}
 
 		> tbody {
@@ -452,25 +703,24 @@ $tablePrefix: hub- !default;
 
 		// Group divider
 		&-group-divider {
-			border-top: calc(var(--#{$tablePrefix}table-border-width) * 2) solid
-				var(--#{$tablePrefix}table-group-separator-color);
+			border-top: calc(var(--hub-table-table-border-width) * 2) solid var(--hub-table-table-group-separator-color);
 		}
 
 		// Small table
 		&-sm {
 			// stylelint-disable-next-line selector-max-universal
 			> :not(caption) > * > * {
-				padding: var(--#{$tablePrefix}table-cell-padding-y-sm) var(--#{$tablePrefix}table-cell-padding-x-sm);
+				padding: var(--hub-table-table-cell-padding-y-sm) var(--hub-table-table-cell-padding-x-sm);
 			}
 		}
 
 		// Bordered table
 		&-bordered {
 			> :not(caption) > * {
-				border-width: var(--#{$tablePrefix}table-border-width) 0;
+				border-width: var(--hub-table-table-border-width) 0;
 				// stylelint-disable-next-line selector-max-universal
 				> * {
-					border-width: 0 var(--#{$tablePrefix}table-border-width);
+					border-width: 0 var(--hub-table-table-border-width);
 				}
 			}
 		}
@@ -490,46 +740,46 @@ $tablePrefix: hub- !default;
 		// Striped rows (odd)
 		&-striped-odd {
 			> tbody > tr:nth-of-type(odd) > * {
-				color: var(--#{$tablePrefix}table-striped-color);
-				background-color: var(--#{$tablePrefix}table-striped-bg);
+				color: var(--hub-table-table-striped-color);
+				background-color: var(--hub-table-table-striped-bg);
 			}
 		}
 
 		// Striped rows (even)
 		&-striped-even {
 			> tbody > tr:nth-of-type(even) > * {
-				color: var(--#{$tablePrefix}table-striped-color);
-				background-color: var(--#{$tablePrefix}table-striped-bg);
+				color: var(--hub-table-table-striped-color);
+				background-color: var(--hub-table-table-striped-bg);
 			}
 		}
 
 		// Striped columns (odd)
 		&-striped-columns-odd {
 			> :not(caption) > tr > :nth-child(odd) {
-				color: var(--#{$tablePrefix}table-striped-color);
-				background-color: var(--#{$tablePrefix}table-striped-bg);
+				color: var(--hub-table-table-striped-color);
+				background-color: var(--hub-table-table-striped-bg);
 			}
 		}
 
 		// Striped columns (even)
 		&-striped-columns-even {
 			> :not(caption) > tr > :nth-child(even) {
-				color: var(--#{$tablePrefix}table-striped-color);
-				background-color: var(--#{$tablePrefix}table-striped-bg);
+				color: var(--hub-table-table-striped-color);
+				background-color: var(--hub-table-table-striped-bg);
 			}
 		}
 
 		// Active table
 		&-active {
-			--#{$tablePrefix}table-color-state: var(--#{$tablePrefix}table-active-color);
-			--#{$tablePrefix}table-bg-state: var(--#{$tablePrefix}table-active-bg);
+			--hub-table-table-color-state: var(--hub-table-table-active-color);
+			--hub-table-table-bg-state: var(--hub-table-table-active-bg);
 		}
 
 		// Hover effect
 		&-hover {
 			> tbody > tr:hover > * {
-				--#{$tablePrefix}table-color-state: var(--#{$tablePrefix}table-hover-color);
-				--#{$tablePrefix}table-bg-state: var(--#{$tablePrefix}table-hover-bg);
+				--hub-table-table-color-state: var(--hub-table-table-hover-color);
+				--hub-table-table-bg-state: var(--hub-table-table-hover-bg);
 			}
 		}
 
@@ -538,14 +788,6 @@ $tablePrefix: hub- !default;
 			overflow-x: auto;
 			-webkit-overflow-scrolling: touch;
 		}
-	}
-}
-
-// Local overrides for read-only inputs rendered inside the table
-::ng-deep {
-	.form-control:read-only {
-		background-color: var(--#{$tablePrefix}secondary-bg);
-		opacity: 1;
 	}
 }
 
@@ -599,21 +841,6 @@ $tablePrefix: hub- !default;
 	to {
 		opacity: 1;
 		transform: scale(1);
-	}
-}
-
-//
-// Row Class Variants
-//
-.hub-table__body-row,
-.tree-list__node {
-	@each $state in success, danger, warning, info, primary, secondary, light, dark {
-		&.row-#{$state} {
-			--#{$tablePrefix}table-bg-state: var(--#{$tablePrefix}#{$state}-bg-subtle);
-			--#{$tablePrefix}table-color-state: var(--#{$tablePrefix}#{$state}-text-emphasis);
-			--#{$tablePrefix}table-hover-bg: var(--#{$tablePrefix}#{$state}-bg-subtle);
-			--#{$tablePrefix}table-hover-color: var(--#{$tablePrefix}#{$state}-text-emphasis);
-		}
 	}
 }
 

@@ -1,131 +1,80 @@
-<nav class="pager" aria-label="Page navigation">
-	<ul class="pager pagination pager__list">
-		<li
-			class="page-item pager__item"
-			[class.pager__item--disabled]="page() === 1"
-			[class.disabled]="page() === 1"
-		>
-			<a
-				role="button"
-				class="page-link pager__link"
-				href="javascript:{}"
-				(click)="page.set(1)"
-			>
-				<i class="pager__icon hub-table__icon hub-table__icon--angle-double-left"></i>
+<nav class="hub-paginator-container" aria-label="Page navigation">
+	<ul class="hub-paginator">
+		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() === 1">
+			<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(1)">
+				<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-double-left"></i>
 			</a>
 		</li>
-		<li
-			class="page-item pager__item"
-			[class.pager__item--disabled]="page() <= 1"
-			[class.disabled]="page() <= 1"
-		>
+		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() <= 1">
 			<a
 				role="button"
-				class="page-link pager__link"
+				class="hub-paginator__link"
 				href="javascript:{}"
 				aria-label="Previous"
 				(click)="page.set(page() - 1)"
 			>
-				<span class="pager__icon-wrapper" aria-hidden="true">
-					<i class="pager__icon hub-table__icon hub-table__icon--angle-left"></i>
+				<span class="hub-paginator__icon-wrapper" aria-hidden="true">
+					<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-left"></i>
 				</span>
 			</a>
 		</li>
 		@if (page() - 1 > 1) {
-			<li class="page-item pager__item pager__item--disabled disabled">
-				<a
-					role="button"
-					class="page-link pager__link"
-					href="javascript:{}"
-					>...</a
-				>
+			<li class="hub-paginator__item hub-paginator__item--disabled">
+				<a role="button" class="hub-paginator__link" href="javascript:{}">...</a>
 			</li>
 		}
-		<li class="page-item pager__item">
+		<li class="hub-paginator__item">
 			@if (page() - 1 >= 1) {
-				<a
-					role="button"
-					class="page-link pager__link"
-					href="javascript:{}"
-					(click)="page.set(page() - 1)"
-					>{{ page() - 1 }}</a
-				>
+				<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(page() - 1)">{{
+					page() - 1
+				}}</a>
 			}
 		</li>
-		<li class="page-item pager__item pager__item--active active">
-			<a
-				role="button"
-				class="page-link pager__link"
-				href="javascript:{}"
-				>{{ page() }}</a
-			>
+		<li class="hub-paginator__item hub-paginator__item--active">
+			<a role="button" class="hub-paginator__link" href="javascript:{}">{{ page() }}</a>
 		</li>
 		@if (numberOfPages()) {
-			<li class="page-item pager__item">
+			<li class="hub-paginator__item">
 				@if (page() + 1 <= numberOfPages()!) {
-					<a
-						role="button"
-						class="page-link pager__link"
-						href="javascript:{}"
-						(click)="page.set(page() + 1)"
-						>{{ page() + 1 }}</a
-					>
+					<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(page() + 1)">{{
+						page() + 1
+					}}</a>
 				}
 			</li>
 			@if (page() + 1 < numberOfPages()!) {
-				<li
-					class="page-item pager__item pager__item--disabled disabled"
-				>
-					<a
-						role="button"
-						class="page-link pager__link"
-						href="javascript:{}"
-						>...</a
-					>
+				<li class="hub-paginator__item hub-paginator__item--disabled">
+					<a role="button" class="hub-paginator__link" href="javascript:{}">...</a>
 				</li>
 			}
-			<li
-				class="page-item pager__item"
-				[class.pager__item--disabled]="page() >= numberOfPages()!"
-				[class.disabled]="page() >= numberOfPages()!"
-			>
+			<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() >= numberOfPages()!">
 				<a
 					role="button"
-					class="page-link pager__link"
+					class="hub-paginator__link"
 					href="javascript:{}"
 					aria-label="Next"
 					(click)="page.set(page() + 1)"
 				>
-					<span class="pager__icon-wrapper" aria-hidden="true">
-						<i class="pager__icon hub-table__icon hub-table__icon--angle-right"></i>
+					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
+						<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-right"></i>
 					</span>
 				</a>
 			</li>
-			<li
-				class="page-item pager__item"
-				[class.pager__item--disabled]="page() === numberOfPages()"
-				[class.disabled]="page() === numberOfPages()"
-			>
-				<a
-					role="button"
-					class="page-link pager__link"
-					href="javascript:{}"
-					(click)="page.set(numberOfPages() ?? 1)"
-				>
-					<i class="pager__icon hub-table__icon hub-table__icon--angle-double-right"></i>
+			<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() === numberOfPages()">
+				<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(numberOfPages() ?? 1)">
+					<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-double-right"></i>
 				</a>
 			</li>
 		} @else {
-			<li class="page-item pager__item">
+			<li class="hub-paginator__item">
 				<a
 					role="button"
-					class="page-link pager__link"
+					class="hub-paginator__link"
 					href="javascript:{}"
 					aria-label="Next"
 					(click)="page.set(page() + 1)"
 				>
-					<span class="pager__icon-wrapper" aria-hidden="true">
-						<i class="pager__icon hub-table__icon hub-table__icon--angle-right"></i>
+					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
+						<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-right"></i>
 					</span>
 				</a>
 			</li>

@@ -1,6 +1,6 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, Input, TemplateRef, computed, contentChild, inject, input, model } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { UcfirstPipe } from 'ng-hub-ui-utils';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
 import { PaginableTableNotFoundDirective } from '../../../directives/paginable-table-not-found.directive';
@@ -14,7 +14,6 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 @Component({
 	selector: 'hub-list, hub-ui-list, hub-paginable-list',
 	templateUrl: './paginable-list.component.html',
-	styleUrls: ['./paginable-list.component.scss'],
 	host: {
 		class: 'd-flex flex-column gap-4'
 	},
@@ -47,11 +46,15 @@ export class PaginableListComponent<T = any> {
 	readonly paginate = input<boolean>(false);
 	readonly page = model<number>(1);
 	readonly perPage = model<number>(10);
+	readonly perPageOptions = input<Array<number>>([10, 20, 50]);
 	readonly totalItems = model<number>(0);
 
 	readonly numberOfPages = computed(() => {
-		if (this.perPage() && this.totalItems()) {
-			return Math.ceil(this.totalItems() / this.perPage());
+		const perPage = this.perPage();
+		const totalItems = this.totalItems() || this._items.length;
+
+		if (perPage && totalItems) {
+			return Math.ceil(totalItems / perPage);
 		}
 		return 1;
 	});
@@ -82,6 +85,7 @@ export class PaginableListComponent<T = any> {
 		this._items = v ?? [];
 		this.form.clear();
 		this.buildForm(this.form, this._items);
+		this.onSelectionChange();
 	}
 
 	/**
@@ -89,7 +93,7 @@ export class PaginableListComponent<T = any> {
 	 * @type {() => (event: ListClickEvent<T>) => void | Promise<void>}
 	 * @memberof PaginableListComponent
 	 */
-	readonly clickFn = input<(event: ListClickEvent<T>) => void | Promise<void>>(() => { });
+	readonly clickFn = input<(event: ListClickEvent<T>) => void | Promise<void>>(() => {});
 
 	/**
 	 * A string or function to apply a class to each row of the list.
@@ -102,7 +106,7 @@ export class PaginableListComponent<T = any> {
 
 	form: FormArray = this.#fb.array([]);
 
-	value: Array<T & { collapsed: boolean }> = [];
+	value: Array<any> = [];
 
 	// NOTE: Templates
 
@@ -144,7 +148,8 @@ export class PaginableListComponent<T = any> {
 	// NOTE: Control access value
 
 	writeValue(value: Array<T> = []): void {
-		// this.value = this.buildValue(value);
+		this.value = Array.isArray(value) ? [...value] : [];
+		this.applySelectionFromValue(this.form.controls, this.value);
 	}
 
 	registerOnChange(fn: any): void {
@@ -176,7 +181,7 @@ export class PaginableListComponent<T = any> {
 				const item = items[index];
 
 				const group = this.#fb.group({
-					selected: [true],
+					selected: [false],
 					collapsed: [this.options.collapsed],
 					data: [item],
 					children: this.#fb.array([])
@@ -191,6 +196,54 @@ export class PaginableListComponent<T = any> {
 				form.push(group);
 			}
 		}
+	}
+
+	/**
+	 * Returns the visible controls for the current page in root level.
+	 * Nested controls are intentionally not paginated.
+	 */
+	getVisibleControls(controls: ReadonlyArray<AbstractControl>, isRoot: boolean): ReadonlyArray<AbstractControl> {
+		if (!isRoot || !this.paginate()) {
+			return controls;
+		}
+		const { start, end } = this.getSliceRange(controls.length);
+		return controls.slice(start, end);
+	}
+
+	/**
+	 * Returns the visible items for the current page in root level.
+	 * Nested items are intentionally not paginated.
+	 */
+	getVisibleItems(items: ReadonlyArray<any>, isRoot: boolean): ReadonlyArray<any> {
+		if (!isRoot || !this.paginate()) {
+			return items;
+		}
+		const { start, end } = this.getSliceRange(items.length);
+		return items.slice(start, end);
+	}
+
+	/**
+	 * Handles item selection changes and propagates selected values through ControlValueAccessor.
+	 */
+	onSelectionChange(): void {
+		this.value = this.collectSelectedValues(this.form.controls);
+		this.onChange(this.value);
+		this.onTouch();
+	}
+
+	/**
+	 * Handles per-page changes and resets pagination to the first page.
+	 */
+	onPerPageChange(event: Event): void {
+		const target = event.target as HTMLSelectElement | null;
+		const value = Number(target?.value);
+
+		if (!Number.isFinite(value) || value <= 0) {
+			return;
+		}
+
+		this.perPage.set(value);
+		this.page.set(1);
 	}
 
 	buildValue(items: ReadonlyArray<T>): Array<T & { collapsed: boolean }> {
@@ -265,6 +318,73 @@ export class PaginableListComponent<T = any> {
 		// 	searchText: this.searchFG?.value ?? null,
 		// 	specificSearch: this.specificSearchFG?.value ?? null
 		// });
+	}
+
+	/**
+	 * Returns the total amount of items considering explicit totalItems or local items length.
+	 */
+	getEffectiveTotalItems(): number {
+		return this.totalItems() || this._items.length;
+	}
+
+	private getSliceRange(total: number): { start: number; end: number } {
+		const perPage = Math.max(1, this.perPage() || total || 1);
+		const page = Math.max(1, this.page() || 1);
+		const start = (page - 1) * perPage;
+		const end = start + perPage;
+		return { start, end };
+	}
+
+	private collectSelectedValues(controls: ReadonlyArray<AbstractControl>): Array<any> {
+		const selectedValues: Array<any> = [];
+
+		for (const control of controls) {
+			const group = control as any;
+			const isSelected = !!group.get('selected')?.value;
+			const data = group.get('data')?.value;
+
+			if (isSelected) {
+				selectedValues.push(this.resolveValue(data));
+			}
+
+			const children = (group.get('children') as FormArray | null)?.controls ?? [];
+			if (children.length) {
+				selectedValues.push(...this.collectSelectedValues(children));
+			}
+		}
+
+		return selectedValues;
+	}
+
+	private applySelectionFromValue(controls: ReadonlyArray<AbstractControl>, selectedValues: ReadonlyArray<any>): void {
+		for (const control of controls) {
+			const group = control as any;
+			const data = group.get('data')?.value;
+			const value = this.resolveValue(data);
+			const selected = selectedValues.some((selectedValue) => this.isEqual(selectedValue, value));
+
+			group.get('selected')?.setValue(selected, { emitEvent: false });
+
+			const children = (group.get('children') as FormArray | null)?.controls ?? [];
+			if (children.length) {
+				this.applySelectionFromValue(children, selectedValues);
+			}
+		}
+	}
+
+	private resolveValue(data: any): any {
+		const bindValue = this.bindValue();
+		return bindValue ? getValue(data, bindValue) : data;
+	}
+
+	private isEqual(a: any, b: any): boolean {
+		if (a === b) {
+			return true;
+		}
+		if (typeof a === 'object' && typeof b === 'object' && a !== null && b !== null) {
+			return JSON.stringify(a) === JSON.stringify(b);
+		}
+		return false;
 	}
 
 	/**

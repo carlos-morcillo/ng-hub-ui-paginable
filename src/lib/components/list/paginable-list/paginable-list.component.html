@@ -3,21 +3,18 @@
 		<div class="ms-auto">
 			<div class="d-flex justify-content-end gap-2">
 				@if (options.searchable) {
-					<div class="tree-list__search input-group">
+					<div class="hub-list__search input-group">
 						<input
 							type="text"
-							class="tree-list__search-input form-control border border-light"
+							class="hub-list__search-input form-control border border-light"
 							[formControl]="searchFG"
 							[placeholder]="'SEARCH' | ucfirst"
+							(click)="$event.stopPropagation()"
 							(keyup.enter)="filter()"
 						/>
 						<div class="input-group-append">
-							<button
-								class="tree-list__search-button btn btn-light"
-								type="button"
-								(click)="filter()"
-							>
-								<i class="tree-list__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
+							<button class="hub-list__search-btn btn btn-light" type="button" (click)="filter()">
+								<i class="hub-list__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
 							</button>
 						</div>
 					</div>
@@ -30,73 +27,54 @@
 <ng-container
 	[ngTemplateOutlet]="containerTpt"
 	[ngTemplateOutletContext]="{
-		formArray: form,
+		controls: getVisibleControls(form.controls, true),
 		isRoot: true,
-		items: items,
+		items: getVisibleItems(items, true),
 		depth: 0
 	}"
 ></ng-container>
 
-<ng-template
-	#containerTpt
-	let-formArray="formArray"
-	let-isRoot="isRoot"
-	let-items="items"
-	let-depth="depth"
->
-	<ul class="list-group list-group-flush tree-list" [class.root]="isRoot">
-		@for (
-			formGroup of formArray.controls;
-			track formGroup;
-			let index = $index
-		) {
+<ng-template #containerTpt let-controls="controls" let-isRoot="isRoot" let-items="items" let-depth="depth">
+	<ul class="hub-list" [class.hub-list--root]="isRoot">
+		@for (formGroup of controls; track formGroup; let index = $index) {
 			<li
-				class="list-group-item tree-list__node"
+				class="hub-list__item"
 				[ngClass]="_getRowClass(items[index])"
-				[class.clickable-item]="clickFn()"
+				[class.hub-list__item--clickable]="clickFn()"
+				[class.hub-list__item--selected]="formGroup.get('selected')?.value"
 				[formGroup]="formGroup"
-				(click)="
-					onItemClick(formGroup.value, depth, index, $event);
-					$event.preventDefault();
-					$event.stopPropagation()
-				"
+				(click)="onItemClick(formGroup.value, depth, index, $event); $event.preventDefault(); $event.stopPropagation()"
 			>
 				@if (formGroup.value; as item) {
-					<div
-						class="d-flex justify-content-between align-items-center gap-2"
-					>
+					<div class="d-flex justify-content-between align-items-center gap-2 w-100">
 						@if (selectable() === 'multiple') {
 							<input
-								class="form-check-input tree-list__node-checkbox"
+								class="form-check-input hub-list__checkbox"
 								type="checkbox"
 								formControlName="selected"
+								(change)="onSelectionChange()"
 								(click)="$event.stopPropagation()"
 							/>
 						}
-						<div class="tree-list__node-label">
+						<div class="hub-list__label">
 							<ng-container
 								[ngTemplateOutlet]="itemTpt() || defaultItemtTpt"
 								[ngTemplateOutletContext]="{
 									data: items[index],
 									depth,
 									index,
-									collapsed:
-										!!formGroup.get('collapsed').value,
+									collapsed: !!formGroup.get('collapsed').value,
 									selected: formGroup.get('selected').value
 								}"
 							>
 							</ng-container>
 						</div>
-						<div
-							class="tree-list__node-buttons d-flex align-items-center gap-2"
-						>
+						<div class="hub-list__actions d-flex align-items-center gap-2">
 							@if (item[bindChildren()]?.length) {
 								<button
-									class="btn"
+									class="btn hub-list__chevron"
 									(click)="
-										toggleCollapsed(
-											formGroup.get('collapsed')
-										);
+										toggleCollapsed(formGroup.get('collapsed'));
 										$event.preventDefault();
 										$event.stopPropagation()
 									"
@@ -104,9 +82,7 @@
 									<i
 										class="hub-table__icon"
 										[ngClass]="
-											item.collapsed
-												? 'hub-table__icon--chevron-down'
-												: 'hub-table__icon--chevron-up'
+											item.collapsed ? 'hub-table__icon--chevron-down' : 'hub-table__icon--chevron-up'
 										"
 									></i>
 								</button>
@@ -117,8 +93,9 @@
 						<ng-container
 							[ngTemplateOutlet]="containerTpt"
 							[ngTemplateOutletContext]="{
-								formArray: formGroup.get('children'),
+								controls: formGroup.get('children')?.controls,
 								items: items[index][bindChildren()],
+								isRoot: false,
 								depth: depth + 1
 							}"
 						></ng-container>
@@ -130,16 +107,23 @@
 </ng-template>
 
 @if (paginate()) {
-	<hub-paginator
-		[(page)]="page"
-		[numberOfPages]="numberOfPages()"
-	></hub-paginator>
+	<hub-paginator [(page)]="page" [numberOfPages]="numberOfPages()"></hub-paginator>
+	<div class="hub-paginator__settings">
+		<label class="hub-paginator__label"> Rows per page: </label>
+		<select class="hub-paginator__select" [value]="perPage()" (change)="onPerPageChange($event)">
+			@for (option of perPageOptions(); track option) {
+				<option [value]="option" class="hub-paginator__select-option">
+					{{ option }}
+				</option>
+			}
+		</select>
+	</div>
+	<p class="hub-paginator__info">Showing {{ getVisibleItems(items, true).length }} of {{ getEffectiveTotalItems() }} rows</p>
 }
 
 <ng-template #noDataRowTpt>
-	<li class="list-group-item">
-		<ng-container [ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt">
-		</ng-container>
+	<li class="hub-list__item hub-list__item--empty">
+		<ng-container [ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt"> </ng-container>
 	</li>
 </ng-template>
 

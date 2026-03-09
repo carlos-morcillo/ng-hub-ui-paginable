@@ -1,17 +1,17 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
-    Component,
-    TemplateRef,
-    computed,
-    contentChild,
-    contentChildren,
-    effect,
-    forwardRef,
-    inject,
-    input,
-    model,
-    viewChildren
+	Component,
+	TemplateRef,
+	computed,
+	contentChild,
+	contentChildren,
+	effect,
+	forwardRef,
+	inject,
+	input,
+	model,
+	viewChildren
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
@@ -263,7 +263,7 @@ export class TableComponent<T = any> {
 		transform: (v: Array<T> | PaginationState | null | undefined): Array<TableRow<T>> => {
 			if (!v) return [];
 
-			const items = Array.isArray(v) ? v : (v.data as Array<T>) ?? [];
+			const items = Array.isArray(v) ? v : ((v.data as Array<T>) ?? []);
 
 			if (!Array.isArray(v)) {
 				this.page.set(v.page);

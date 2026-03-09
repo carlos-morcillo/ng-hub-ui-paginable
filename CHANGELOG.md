@@ -1,5 +1,28 @@
 # Changelog
 
+## [19.14.0] - 2026-03-09
+
+### Added
+
+-   **list:** added per-page selector and pagination info in `PaginableListComponent`.
+-   **docs:** added `docs/css-variables-reference.es.md` and linked styling docs from README files.
+
+### Changed
+
+-   **styles:** consolidated paginable styles around `src/lib/styles/paginable.scss`.
+-   **docs:** simplified styling sections in `README.md` and `README.es.md` to avoid duplication and point to CSS variables reference.
+
+### Fixed
+
+-   **list:** fixed ControlValueAccessor propagation so `ngModel` selected items now match visual selection state.
+-   **list:** fixed root-level pagination to render only the current page slice.
+-   **paginator:** fixed missing pagination arrow icons by mapping paginator icon tokens to shared icon variables.
+
+### Removed
+
+-   **styles:** removed legacy `src/lib/styles/table.scss`.
+-   **styles:** removed component-local SCSS files for list and paginator after style consolidation.
+
 ## [19.13.0] - 2026-01-12
 
 ### Added
