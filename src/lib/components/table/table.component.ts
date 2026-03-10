@@ -24,7 +24,7 @@ import { PaginableTableExpandingRowDirective } from '../../directives/paginable-
 import { PaginableTableFilterDirective } from '../../directives/paginable-table-filter.directive';
 import { PaginableTableHeaderDirective } from '../../directives/paginable-table-header.directive';
 import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
-import { PaginableTableNotFoundDirective } from '../../directives/paginable-table-not-found.directive';
+import { PaginableNoResultsDirective } from '../../directives/paginable-no-results.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
 import { ListButton, RowButton, TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
@@ -33,6 +33,7 @@ import { PaginableTableOptions } from '../../interfaces/paginable-table-options'
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
 import { PaginationState } from '../../interfaces/pagination-state';
 import { TableRow } from '../../interfaces/table-row';
+import { SelectionTypes } from '../../enums/selection-types';
 import { debouncedSignal, generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { HubIconComponent } from '../icon/icon.component';
@@ -364,7 +365,17 @@ export class TableComponent<T = any> {
 	});
 
 	/** Whether rows can be selected by clicking on them */
-	readonly selectable = input<boolean>(false);
+	readonly selectable = input<SelectionTypes | boolean | null, SelectionTypes | boolean | null>(null, {
+		transform: (value) => {
+			if (value === true) {
+				return SelectionTypes.Single;
+			}
+			if (value === false || value == null) {
+				return null;
+			}
+			return value;
+		}
+	});
 
 	/**
 	 * Set whether the selectable can be multiple
@@ -373,6 +384,10 @@ export class TableComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	readonly multiple = input<boolean>(false);
+
+	readonly multipleSelectable = computed(() => {
+		return this.selectable() === SelectionTypes.Multiple || this.multiple();
+	});
 
 	/**
 	 * Set whether the rows are selectable
@@ -452,8 +467,8 @@ export class TableComponent<T = any> {
 	readonly headerTpts = contentChildren(PaginableTableHeaderDirective);
 	/** Collection of custom cell templates for specific columns */
 	readonly templateCells = contentChildren(PaginableTableCellDirective);
-	/** Template to display when no data is available */
-	readonly noDataTpt = contentChild(PaginableTableNotFoundDirective, {
+	/** Template to display when the table has no rows to render. */
+	readonly noResultsTpt = contentChild(PaginableNoResultsDirective, {
 		read: TemplateRef
 	});
 	/** Template to display during loading state */
@@ -841,7 +856,7 @@ export class TableComponent<T = any> {
 			row.selected = true;
 		}
 
-		if (!this.multiple()) {
+		if (!this.multipleSelectable()) {
 			this.value = row.selected ? [needle] : [];
 			rows.forEach((o) => {
 				const needle = bindValue ? (o.data as Record<string, any>)[bindValue] : o.data;
@@ -885,7 +900,7 @@ export class TableComponent<T = any> {
 	 * Handles both single and multiple selection modes appropriately.
 	 */
 	emitValue() {
-		this.onChange(this.multiple() ? this.value : this.value[0]);
+		this.onChange(this.multipleSelectable() ? this.value : this.value[0]);
 	}
 
 	/**

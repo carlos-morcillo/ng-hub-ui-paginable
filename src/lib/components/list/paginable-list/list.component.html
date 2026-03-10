@@ -47,7 +47,7 @@
 			>
 				@if (formGroup.value; as item) {
 					<div class="d-flex justify-content-between align-items-center gap-2 w-100">
-						@if (selectable() === 'multiple') {
+						@if (multipleSelectable()) {
 							<input
 								class="form-check-input hub-list__checkbox"
 								type="checkbox"
@@ -123,11 +123,11 @@
 
 <ng-template #noDataRowTpt>
 	<li class="hub-list__item hub-list__item--empty">
-		<ng-container [ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt"> </ng-container>
+		<ng-container [ngTemplateOutlet]="noResultsTpt() || defaultNoResultsTpt"> </ng-container>
 	</li>
 </ng-template>
 
-<ng-template #defaultNoDataTpt>
+<ng-template #defaultNoResultsTpt>
 	<div class="alert alert-info d-flex align-items-center m-4" role="alert">
 		<i class="hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
 		{{ 'NO_RESULTS_FOUND' | ucfirst }}

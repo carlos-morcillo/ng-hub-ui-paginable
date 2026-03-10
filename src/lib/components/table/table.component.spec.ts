@@ -501,7 +501,7 @@ describe('TableComponent', () => {
 		 */
 		it('should apply a string rowClass', () => {
 			const row: TableRow = { data: { id: 1, name: 'John' }, selected: false, collapsed: true };
-			component.rowClass.set('my-class');
+			fixture.componentRef.setInput('rowClass', 'my-class');
 			const rowClass = component._getRowClass(row);
 			expect(rowClass).toBe('my-class');
 		});
@@ -511,7 +511,10 @@ describe('TableComponent', () => {
 		 */
 		it('should apply a function rowClass', () => {
 			const row: TableRow = { data: { id: 1, name: 'John' }, selected: false, collapsed: true };
-			component.rowClass.set((item: any) => (item.id === 1 ? 'first-row' : 'other-row'));
+			fixture.componentRef.setInput(
+				'rowClass',
+				(item: any) => (item.id === 1 ? 'first-row' : 'other-row')
+			);
 			const rowClass = component._getRowClass(row);
 			expect(rowClass).toBe('first-row');
 		});

@@ -155,7 +155,7 @@ ng-hub-ui-paginable/
 ├── 📦 Core Components
 │   ├── TableComponent        - Main data table with all features
 │   ├── PaginatorComponent    - Standalone pagination controls
-│   └── PaginableListComponent - Hierarchical list with tree structure
+│   └── ListComponent - Hierarchical list with tree structure
 ├── 🎨 UI Components
 │   ├── HubIconComponent      - Multi-library icon support
 │   ├── DropdownComponent     - Action dropdowns and menus
@@ -171,7 +171,7 @@ ng-hub-ui-paginable/
 │   ├── PaginableTableExpandingRowDirective - Expandable content
 │   ├── PaginableTableLoadingDirective   - Loading states
 │   ├── PaginableTableErrorDirective     - Error states
-│   └── PaginableTableNotFoundDirective  - Empty states
+│   └── PaginableNoResultsDirective     - Empty states
 ├── ⚙️ Services
 │   ├── PaginableService             - Core configuration
 │   ├── HubTranslationService  - i18n management
@@ -203,7 +203,7 @@ ng-hub-ui-paginable/
 │  │ State Templates                                         │
 │  │ ├── PaginableTableLoadingDirective                    │
 │  │ ├── PaginableTableErrorDirective                      │
-│  │ └── PaginableTableNotFoundDirective                   │
+│  │ └── PaginableNoResultsDirective                      │
 │  └─────────────────────────────────────────────────────────┤
 │                    PaginatorComponent                      │
 └─────────────────────────────────────────────────────────────┘
@@ -1444,7 +1444,7 @@ export class MyComponent implements OnDestroy {
 import { HubUITableModule } from 'ng-hub-ui-paginable';
 
 // Or import individual components
-import { TableComponent, PaginatorComponent, PaginableListComponent } from 'ng-hub-ui-paginable';
+import { TableComponent, PaginatorComponent, ListComponent } from 'ng-hub-ui-paginable';
 
 @Component({
 	standalone: true,

@@ -3,45 +3,56 @@ import { Component, Input, TemplateRef, computed, contentChild, inject, input, m
 import { AbstractControl, FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { UcfirstPipe } from 'ng-hub-ui-utils';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
-import { PaginableTableNotFoundDirective } from '../../../directives/paginable-table-not-found.directive';
+import { PaginableNoResultsDirective } from '../../../directives/paginable-no-results.directive';
 import { ListClickEvent } from '../../../interfaces/item-click-event';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
 import { RowButton } from '../../../interfaces/row-button';
 import { getValue } from '../../../utils';
+import { SelectionTypes } from '../../../enums/selection-types';
 import { PaginatorComponent } from '../../paginator/paginator.component';
 
 @Component({
 	selector: 'hub-list, hub-ui-list, hub-paginable-list',
-	templateUrl: './paginable-list.component.html',
+	templateUrl: './list.component.html',
 	host: {
 		class: 'd-flex flex-column gap-4'
 	},
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
-			useExisting: PaginableListComponent,
+			useExisting: ListComponent,
 			multi: true
 		}
 	],
-	imports: [ReactiveFormsModule, PaginatorComponent, PaginableTableNotFoundDirective, UcfirstPipe, NgTemplateOutlet, NgClass],
+	imports: [ReactiveFormsModule, PaginatorComponent, UcfirstPipe, NgTemplateOutlet, NgClass],
 	standalone: true
 })
 /**
  * A component for displaying a paginable and selectable list of items.
  *
  * @export
- * @class PaginableListComponent
+ * @class ListComponent
  * @template T The type of data for each item in the list.
  */
-export class PaginableListComponent<T = any> {
+export class ListComponent<T = any> {
 	#fb = inject(FormBuilder);
 
 	readonly bindValue = input<string>();
 	readonly bindLabel = input<string>('label');
 	readonly bindChildren = input<string>('children');
 
-	readonly selectable = input.required<string | null>();
+	readonly selectable = input<SelectionTypes | boolean | null, SelectionTypes | boolean | null>(null, {
+		transform: (value) => {
+			if (value === true) {
+				return SelectionTypes.Single;
+			}
+			if (value === false || value == null) {
+				return null;
+			}
+			return value;
+		}
+	});
 
 	readonly paginate = input<boolean>(false);
 	readonly page = model<number>(1);
@@ -58,6 +69,8 @@ export class PaginableListComponent<T = any> {
 		}
 		return 1;
 	});
+
+	readonly multipleSelectable = computed(() => this.selectable() === SelectionTypes.Multiple);
 
 	private _options: PaginableTableOptions = {
 		cursor: 'default',
@@ -91,7 +104,7 @@ export class PaginableListComponent<T = any> {
 	/**
 	 * A function that is called when an item in the list is clicked.
 	 * @type {() => (event: ListClickEvent<T>) => void | Promise<void>}
-	 * @memberof PaginableListComponent
+	 * @memberof ListComponent
 	 */
 	readonly clickFn = input<(event: ListClickEvent<T>) => void | Promise<void>>(() => {});
 
@@ -100,7 +113,7 @@ export class PaginableListComponent<T = any> {
 	 * If a string is provided, it is used as the class for all rows.
 	 * If a function is provided, it is called with the item data and should return a string representing the class.
 	 * @type {(string | ((item: T) => string))}
-	 * @memberof PaginableListComponent
+	 * @memberof ListComponent
 	 */
 	readonly rowClass = input<string | ((item: T) => string)>();
 
@@ -111,7 +124,11 @@ export class PaginableListComponent<T = any> {
 	// NOTE: Templates
 
 	readonly itemTpt = contentChild(PaginableListItemDirective, { read: TemplateRef });
-	readonly noDataTpt = contentChild(PaginableTableNotFoundDirective, { read: TemplateRef });
+
+	/**
+	 * Custom template rendered when the list has no visible items to display.
+	 */
+	readonly noResultsTpt = contentChild(PaginableNoResultsDirective, { read: TemplateRef });
 
 	// NOTE: Otros
 	isDisabled: boolean = false;
@@ -392,7 +409,7 @@ export class PaginableListComponent<T = any> {
 	 *
 	 * @param {T} item The item for which to get the class.
 	 * @returns {string} The class to apply to the row.
-	 * @memberof PaginableListComponent
+	 * @memberof ListComponent
 	 */
 	_getRowClass(item: T): string {
 		const rowClass = this.rowClass();
@@ -404,3 +421,5 @@ export class PaginableListComponent<T = any> {
 		return '';
 	}
 }
+
+export { ListComponent as PaginableListComponent };

@@ -75,7 +75,7 @@
 			<tr class="hub-table__head-row">
 				@if (selectable()) {
 					<th class="hub-table__header-cell hub-table__header-cell--actions sticky-start">
-						@if (multiple()) {
+						@if (multipleSelectable()) {
 							<input
 								type="checkbox"
 								[(ngModel)]="allRowsSelected"
@@ -215,7 +215,7 @@
 			} @else {
 				<tr>
 					<td [attr.colspan]="headersCount()">
-						<ng-container [ngTemplateOutlet]="noDataTpt() || defaultNoDataTpt"> </ng-container>
+						<ng-container [ngTemplateOutlet]="noResultsTpt() || defaultNoResultsTpt"> </ng-container>
 					</td>
 				</tr>
 			}
@@ -322,7 +322,7 @@
 	}
 </ng-template>
 
-<ng-template #defaultNoDataTpt>
+<ng-template #defaultNoResultsTpt>
 	<div class="hub-table__no-data alert alert-info d-flex align-items-center m-4" role="alert">
 		<i class="hub-table__no-data-icon hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
 		{{ 'NO_RESULTS_FOUND' | translate | ucfirst }}
