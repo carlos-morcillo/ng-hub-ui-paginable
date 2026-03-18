@@ -1,5 +1,24 @@
 # Changelog
 
+## [21.1.0] - 2026-03-18
+
+### Added
+
+- **i18n:** added additional locale dictionaries and updated table/list examples to switch languages dynamically.
+- **examples:** added a dedicated bottom bar ordering example for paginable (`table` + `list`).
+
+### Changed
+
+- **bottom bar:** aligned table and list bottom bar structure and behavior (`paginator`, `settings`, `info`) with matching CSS APIs.
+- **styling:** introduced mirrored bottom bar layout tokens for table and list, including ordering and flex control.
+- **pagination theming:** added context pagination tokens (`--hub-table-pagination-*`, `--hub-list-pagination-*`) and mapped them to paginator styles.
+- **docs:** updated README EN/ES styling guidance for context pagination theming and bottom bar layout tokens.
+
+### Fixed
+
+- **list pagination:** normalized per-page handler to support both numeric and event-based updates.
+- **examples:** normalized table server-side example snippets to follow the standard tab format used in other paginable examples.
+
 ## [21.0.0] - 2026-03-10
 
 ### Changed

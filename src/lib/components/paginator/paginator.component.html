@@ -1,8 +1,14 @@
-<nav class="hub-paginator-container" aria-label="Page navigation">
+<nav class="hub-paginator-container" [attr.aria-label]="'PAGINATION' | translate | ucfirst">
 	<ul class="hub-paginator">
 		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() === 1">
-			<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(1)">
-				<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-double-left"></i>
+			<a
+				role="button"
+				class="hub-paginator__link"
+				href="javascript:{}"
+				[attr.aria-label]="'FIRST' | translate | ucfirst"
+				(click)="page.set(1)"
+			>
+				<i class="hub-paginator__icon hub-paginator__icon--angle-double-left"></i>
 			</a>
 		</li>
 		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() <= 1">
@@ -10,11 +16,11 @@
 				role="button"
 				class="hub-paginator__link"
 				href="javascript:{}"
-				aria-label="Previous"
+				[attr.aria-label]="'PREVIOUS' | translate | ucfirst"
 				(click)="page.set(page() - 1)"
 			>
 				<span class="hub-paginator__icon-wrapper" aria-hidden="true">
-					<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-left"></i>
+					<i class="hub-paginator__icon hub-paginator__icon--angle-left"></i>
 				</span>
 			</a>
 		</li>
@@ -23,24 +29,24 @@
 				<a role="button" class="hub-paginator__link" href="javascript:{}">...</a>
 			</li>
 		}
-		<li class="hub-paginator__item">
-			@if (page() - 1 >= 1) {
+		@if (page() - 1 >= 1) {
+			<li class="hub-paginator__item">
 				<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(page() - 1)">{{
 					page() - 1
 				}}</a>
-			}
-		</li>
+			</li>
+		}
 		<li class="hub-paginator__item hub-paginator__item--active">
 			<a role="button" class="hub-paginator__link" href="javascript:{}">{{ page() }}</a>
 		</li>
 		@if (numberOfPages()) {
-			<li class="hub-paginator__item">
-				@if (page() + 1 <= numberOfPages()!) {
+			@if (page() + 1 <= numberOfPages()!) {
+				<li class="hub-paginator__item">
 					<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(page() + 1)">{{
 						page() + 1
 					}}</a>
-				}
-			</li>
+				</li>
+			}
 			@if (page() + 1 < numberOfPages()!) {
 				<li class="hub-paginator__item hub-paginator__item--disabled">
 					<a role="button" class="hub-paginator__link" href="javascript:{}">...</a>
@@ -51,17 +57,23 @@
 					role="button"
 					class="hub-paginator__link"
 					href="javascript:{}"
-					aria-label="Next"
+					[attr.aria-label]="'NEXT' | translate | ucfirst"
 					(click)="page.set(page() + 1)"
 				>
 					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
-						<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-right"></i>
+						<i class="hub-paginator__icon hub-paginator__icon--angle-right"></i>
 					</span>
 				</a>
 			</li>
 			<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() === numberOfPages()">
-				<a role="button" class="hub-paginator__link" href="javascript:{}" (click)="page.set(numberOfPages() ?? 1)">
-					<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-double-right"></i>
+				<a
+					role="button"
+					class="hub-paginator__link"
+					href="javascript:{}"
+					[attr.aria-label]="'LAST' | translate | ucfirst"
+					(click)="page.set(numberOfPages() ?? 1)"
+				>
+					<i class="hub-paginator__icon hub-paginator__icon--angle-double-right"></i>
 				</a>
 			</li>
 		} @else {
@@ -70,11 +82,11 @@
 					role="button"
 					class="hub-paginator__link"
 					href="javascript:{}"
-					aria-label="Next"
+					[attr.aria-label]="'NEXT' | translate | ucfirst"
 					(click)="page.set(page() + 1)"
 				>
 					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
-						<i class="hub-paginator__icon hub-table__icon hub-table__icon--angle-right"></i>
+						<i class="hub-paginator__icon hub-paginator__icon--angle-right"></i>
 					</span>
 				</a>
 			</li>

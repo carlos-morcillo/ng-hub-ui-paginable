@@ -145,6 +145,8 @@ Todos los componentes están construidos como componentes standalone de Angular 
 - **🔍 Filtros de menú**: Paneles de filtro dedicados
 - **🧩 Filtros de menú con reglas múltiples**: Operadores AND/OR, validaciones nulas y modos por regla
 - **📋 Listas jerárquicas**: Estructuras tipo árbol
+- **🎛 Tematización contextual de paginación**: El paginador hereda tokens de Table/List sin duplicar variables de paginador
+- **↔️ Tokens de layout de barra inferior**: Permite reordenar y alinear paginador/settings/info en Table y List mediante variables CSS
 
 ## 🏗️ Arquitectura de componentes
 
@@ -985,7 +987,8 @@ También puedes usar `tableRowTpt` con componentes expandibles.
 
 La librería `ng-hub-ui-paginable` es totalmente configurable mediante **CSS custom properties** para **Table**, **List** y **Paginator**.
 
-Para el catálogo completo y actualizado de tokens, consulta [CSS Variables Reference](./docs/css-variables-reference.es.md).
+Para el catálogo completo y actualizado de tokens, consulta [CSS Variables Reference](./docs/css-variables-reference.md).
+Table y List también exponen tokens contextuales de paginación (`--hub-table-pagination-*`, `--hub-list-pagination-*`) para que el paginador embebido siga el tema del componente.
 
 ### 🔗 Cómo incluir los estilos en tu aplicación
 

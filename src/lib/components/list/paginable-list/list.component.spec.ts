@@ -51,4 +51,13 @@ describe('ListComponent', () => {
 		expect(component.multipleSelectable()).toBeTrue();
 		expect(fixture.nativeElement.querySelectorAll('.hub-list__checkbox').length).toBe(2);
 	});
+
+	it('should render the initial per-page value in the selector', () => {
+		fixture.componentRef.setInput('paginate', true);
+		fixture.detectChanges();
+
+		const select = fixture.nativeElement.querySelector('.hub-paginator__select') as HTMLSelectElement;
+		expect(select).toBeTruthy();
+		expect(select.value).toBe('10');
+	});
 });

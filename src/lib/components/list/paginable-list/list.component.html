@@ -107,18 +107,39 @@
 </ng-template>
 
 @if (paginate()) {
-	<hub-paginator [(page)]="page" [numberOfPages]="numberOfPages()"></hub-paginator>
-	<div class="hub-paginator__settings">
-		<label class="hub-paginator__label"> Rows per page: </label>
-		<select class="hub-paginator__select" [value]="perPage()" (change)="onPerPageChange($event)">
-			@for (option of perPageOptions(); track option) {
-				<option [value]="option" class="hub-paginator__select-option">
-					{{ option }}
-				</option>
-			}
-		</select>
+	<div class="hub-list__bottom-bar">
+		<hub-paginator
+			class="hub-list__bottom-bar-paginator"
+			[(page)]="page"
+			[numberOfPages]="numberOfPages()"
+		></hub-paginator>
+		<div class="hub-list__bottom-bar-settings hub-paginator__settings">
+			<label class="hub-paginator__label"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
+			<select
+				class="hub-paginator__select"
+				[ngModel]="perPage()"
+				(ngModelChange)="onPerPageChange($event)"
+				[ngModelOptions]="{ standalone: true }"
+			>
+				@for (option of perPageOptions(); track option) {
+					<option [ngValue]="option" class="hub-paginator__select-option">
+						{{ option }}
+					</option>
+				}
+			</select>
+		</div>
+		<p class="hub-list__bottom-bar-info hub-paginator__info">
+			{{
+				'SHOWING_X_OF_Y_ROWS'
+					| translate
+						: {
+								amount: getVisibleItems(items, true).length,
+								total: getEffectiveTotalItems()
+						  }
+					| ucfirst
+			}}
+		</p>
 	</div>
-	<p class="hub-paginator__info">Showing {{ getVisibleItems(items, true).length }} of {{ getEffectiveTotalItems() }} rows</p>
 }
 
 <ng-template #noDataRowTpt>

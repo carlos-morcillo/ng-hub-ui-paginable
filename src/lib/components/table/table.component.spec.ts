@@ -174,6 +174,17 @@ describe('TableComponent', () => {
 			component.totalItems.set(25);
 			expect(component.numberOfPages()).toBeNull();
 		});
+
+		it('should render the initial per-page value in the selector', () => {
+			component.page.set(1);
+			component.perPage.set(50);
+			component.totalItems.set(100);
+			fixture.detectChanges();
+
+			const select = fixture.nativeElement.querySelector('.hub-paginator__select') as HTMLSelectElement;
+			expect(select).toBeTruthy();
+			expect(select.value).toBe('50');
+		});
 	});
 
 	describe('Filtering System', () => {

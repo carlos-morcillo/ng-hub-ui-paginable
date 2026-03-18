@@ -1,13 +1,20 @@
+/** English dictionary for paginable UI labels. */
 export const locale = {
 	lang: 'en',
 	data: {
 		LOADING: 'loading',
 		SEARCH: 'search',
+		SEARCH_PLACEHOLDER: 'Search...',
+		PAGINATION: 'pagination',
 		ROWS_PER_PAGE: 'rows per page',
 		SHOWING_X_OF_Y_ROWS: 'Showing {{ amount }} of {{ total }} rows',
 		NO_RESULTS_FOUND: 'No results found',
 		BATCH_ACTIONS: 'Batch actions',
 		APPLY: 'Apply',
+		FIRST: 'first',
+		PREVIOUS: 'previous',
+		NEXT: 'next',
+		LAST: 'last',
 		ERROR_OCURRED: 'Error ocurred getting data.',
 		FROM: 'from',
 		TO: 'to',
@@ -22,6 +29,7 @@ export const locale = {
 		SELECT_VIEW: 'Select a view',
 		CLEAN_FILTERS: 'Clean filters',
 		NAME: 'name',
+		SELECT_ONE: 'Select one',
 		A_VIEW_WILL_BE_CREATED:
 			'A view will be created with the following configuration',
 		MUST_PROVIDE_A_VIEW_NAME: 'Must provide a view name.',

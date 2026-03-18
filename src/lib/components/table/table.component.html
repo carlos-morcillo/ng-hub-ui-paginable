@@ -35,9 +35,14 @@
 					class="hub-table__search-input"
 					(input)="searchProxy$.next($any($event.target).value)"
 					[value]="searchTerm()"
-					aria-label="Search"
+					[attr.placeholder]="'SEARCH_PLACEHOLDER' | translate"
+					[attr.aria-label]="'SEARCH' | translate | ucfirst"
 				/>
-				<button class="hub-table__search-button btn btn-outline-dark" type="button">
+				<button
+					class="hub-table__search-button btn btn-outline-dark"
+					type="button"
+					[attr.aria-label]="'SEARCH' | translate | ucfirst"
+				>
 					<i class="hub-table__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
 				</button>
 			</div>
@@ -58,18 +63,18 @@
 	</div>
 }
 
-<div class="hub-table__table-container {{ responsiveCSSClass() }}" [class.hub-table__table-responsive]="responsiveCSSClass()">
+<div class="hub-table__container {{ responsiveCSSClass() }}" [class.hub-table__responsive]="responsiveCSSClass()">
 	@let striped = options().striped;
 	<table
-		class="hub-table__table"
-		[class.hub-table__table-hover]="(options().hoverableRows || selectable()) && !loading()"
-		[class.hub-table__table-striped-odd]="striped === 'rows-odd'"
-		[class.hub-table__table-striped-even]="striped === 'rows-even'"
-		[class.hub-table__table-striped-columns-odd]="striped === 'columns-odd'"
-		[class.hub-table__table-striped-columns-even]="striped === 'columns-even'"
-		[class.hub-table__table-selectable]="selectable()"
-		[class.hub-table__table--scrollable]="options().scrollable"
-		[ngClass]="options().variant ? 'hub-table__table-' + options().variant : null"
+		class="hub-table__element"
+		[class.hub-table__hover]="(options().hoverableRows || selectable()) && !loading()"
+		[class.hub-table__striped-odd]="striped === 'rows-odd'"
+		[class.hub-table__striped-even]="striped === 'rows-even'"
+		[class.hub-table__striped-columns-odd]="striped === 'columns-odd'"
+		[class.hub-table__striped-columns-even]="striped === 'columns-even'"
+		[class.hub-table__selectable]="selectable()"
+		[class.hub-table__scrollable]="options().scrollable"
+		[ngClass]="options().variant ? 'hub-table__' + options().variant : null"
 	>
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
@@ -227,24 +232,29 @@
 	@if (page() !== undefined && page() !== null) {
 		@if (paginationPosition() == 'bottom' || paginationPosition() === 'both') {
 			<hub-paginator
-				class="hub-table__paginator pager-container__paginator"
+				class="hub-table__paginator hub-table__bottom-bar-paginator"
 				[(page)]="$any(page)"
 				[numberOfPages]="numberOfPages()"
 			>
 			</hub-paginator>
 		}
-		<div class="hub-paginator__settings">
+		<div class="hub-table__bottom-bar-settings hub-paginator__settings">
 			<label class="hub-paginator__label"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
-			<select class="hub-paginator__select" [(ngModel)]="perPage" [ngModelOptions]="{ standalone: true }">
+			<select
+				class="hub-paginator__select"
+				[ngModel]="perPage()"
+				(ngModelChange)="perPage.set($event)"
+				[ngModelOptions]="{ standalone: true }"
+			>
 				@for (option of perPageOptions(); track option) {
-					<option [value]="option" class="hub-paginator__select-option">
+					<option [ngValue]="option" class="hub-paginator__select-option">
 						{{ option }}
 					</option>
 				}
 			</select>
 		</div>
 		@if (totalItems() !== null && totalItems() !== undefined) {
-			<p class="hub-paginator__info">
+			<p class="hub-table__bottom-bar-info hub-paginator__info">
 				{{
 					'SHOWING_X_OF_Y_ROWS'
 						| translate
@@ -412,7 +422,7 @@
 
 <ng-template #defaultHeaderTpt let-header="header" let-property="property">
 	@if (header.icon) {
-		<i class="hub-table__header-icon hub-table__icon hub-table__icon--{{ header.icon }}" aria-hidden="true"></i>
+		<i class="hub-table__header-icon {{ header.icon }}" aria-hidden="true"></i>
 	}
 	<div
 		class="hub-table__header-title"

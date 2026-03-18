@@ -1,20 +1,21 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, Input, TemplateRef, computed, contentChild, inject, input, model } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { UcfirstPipe } from 'ng-hub-ui-utils';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
 import { PaginableNoResultsDirective } from '../../../directives/paginable-no-results.directive';
+import { SelectionTypes } from '../../../enums/selection-types';
 import { ListClickEvent } from '../../../interfaces/item-click-event';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
 import { RowButton } from '../../../interfaces/row-button';
 import { getValue } from '../../../utils';
-import { SelectionTypes } from '../../../enums/selection-types';
 import { PaginatorComponent } from '../../paginator/paginator.component';
 
 @Component({
 	selector: 'hub-list, hub-ui-list, hub-paginable-list',
 	templateUrl: './list.component.html',
+	styleUrl: './list.component.scss',
 	host: {
 		class: 'd-flex flex-column gap-4'
 	},
@@ -25,7 +26,7 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 			multi: true
 		}
 	],
-	imports: [ReactiveFormsModule, PaginatorComponent, UcfirstPipe, NgTemplateOutlet, NgClass],
+	imports: [ReactiveFormsModule, FormsModule, PaginatorComponent, TranslatePipe, UcfirstPipe, NgTemplateOutlet, NgClass],
 	standalone: true
 })
 /**
@@ -251,15 +252,14 @@ export class ListComponent<T = any> {
 	/**
 	 * Handles per-page changes and resets pagination to the first page.
 	 */
-	onPerPageChange(event: Event): void {
-		const target = event.target as HTMLSelectElement | null;
-		const value = Number(target?.value);
+	onPerPageChange(event: Event | number): void {
+		const normalizedValue = typeof event === 'number' ? event : Number((event.target as HTMLSelectElement | null)?.value);
 
-		if (!Number.isFinite(value) || value <= 0) {
+		if (!Number.isFinite(normalizedValue) || normalizedValue <= 0) {
 			return;
 		}
 
-		this.perPage.set(value);
+		this.perPage.set(normalizedValue);
 		this.page.set(1);
 	}
 

@@ -3,8 +3,45 @@ import {
   ElementRef,
   HostListener,
   Renderer2,
+  inject,
   input
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+
+/** Unique ID for the injected tooltip stylesheet. */
+const TOOLTIP_STYLE_ID = 'hub-tooltip-styles';
+
+/** Base styles for the tooltip element, injected once into <head>. */
+const TOOLTIP_STYLES = `
+.ng-tooltip {
+  position: absolute;
+  z-index: 1070;
+  display: block;
+  margin: 0;
+  font-family: var(--hub-ref-font-family, inherit);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-break: normal;
+  word-spacing: normal;
+  white-space: normal;
+  line-break: auto;
+  font-size: 0.875rem;
+  word-wrap: break-word;
+  opacity: 0;
+  background-color: #000;
+  color: #fff;
+  border-radius: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  pointer-events: none;
+}
+.ng-tooltip-show { opacity: 0.9; }
+`;
 
 @Directive({
 	selector: '[tooltip]'
@@ -16,7 +53,25 @@ export class TooltipDirective {
 	tooltip!: HTMLElement | null;
 	offset = 8;
 
-	constructor(private el: ElementRef, private renderer: Renderer2) {}
+	private readonly document = inject(DOCUMENT);
+
+	constructor(private el: ElementRef, private renderer: Renderer2) {
+		this.ensureStyles();
+	}
+
+	/**
+	 * Injects the tooltip stylesheet into <head> once per document.
+	 * Subsequent instances reuse the same <style> tag.
+	 */
+	private ensureStyles(): void {
+		if (this.document.getElementById(TOOLTIP_STYLE_ID)) {
+			return;
+		}
+		const style = this.renderer.createElement('style') as HTMLStyleElement;
+		style.id = TOOLTIP_STYLE_ID;
+		style.textContent = TOOLTIP_STYLES;
+		this.renderer.appendChild(this.document.head, style);
+	}
 
 	@HostListener('mouseenter') onMouseEnter() {
 		if (!this.tooltip) {

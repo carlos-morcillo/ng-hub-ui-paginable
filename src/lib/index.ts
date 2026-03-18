@@ -44,3 +44,16 @@ export { TableBreakpoint } from './constants/breakpoints';
 // Enums
 export { SelectionTypes } from './enums/selection-types';
 export { RowClass } from './enums/row-class.enum';
+
+// i18n dictionaries
+export { locale as enLocale } from './assets/i18n/en';
+export { locale as esLocale } from './assets/i18n/es';
+export { locale as caLocale } from './assets/i18n/ca';
+export { locale as euLocale } from './assets/i18n/eu';
+export { locale as glLocale } from './assets/i18n/gl';
+export { locale as astLocale } from './assets/i18n/ast';
+export { locale as anLocale } from './assets/i18n/an';
+export { locale as deLocale } from './assets/i18n/de';
+export { locale as zhLocale } from './assets/i18n/zh';
+export { locale as arLocale } from './assets/i18n/ar';
+export { locale as ruLocale } from './assets/i18n/ru';

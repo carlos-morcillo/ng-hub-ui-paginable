@@ -1,13 +1,20 @@
+/** Castilian dictionary for paginable UI labels. */
 export const locale = {
 	lang: 'es',
 	data: {
 		LOADING: 'cargando',
 		SEARCH: 'buscar',
+		SEARCH_PLACEHOLDER: 'Buscar...',
+		PAGINATION: 'paginación',
 		ROWS_PER_PAGE: 'Filas por página',
 		SHOWING_X_OF_Y_ROWS: 'Mostrando {{ amount }} de {{ total }} resultados',
 		NO_RESULTS_FOUND: 'No se han encontrado resultados',
 		BATCH_ACTIONS: 'Acciones en lote',
 		APPLY: 'Aplicar',
+		FIRST: 'primera',
+		PREVIOUS: 'anterior',
+		NEXT: 'siguiente',
+		LAST: 'última',
 		ERROR_OCURRED: 'Ha ocurrido un error obteniendo los datos.',
 		FROM: 'desde',
 		TO: 'hasta',
@@ -22,6 +29,7 @@ export const locale = {
 		SELECT_VIEW: 'Selecciona una vista',
 		CLEAN_FILTERS: 'Limpiar filtros',
 		NAME: 'Nombre',
+		SELECT_ONE: 'Selecciona una opción',
 		A_VIEW_WILL_BE_CREATED:
 			'La vista se creará con las siguientes condiciones',
 		MUST_PROVIDE_A_VIEW_NAME: 'El nombre de la vista es requerido.',

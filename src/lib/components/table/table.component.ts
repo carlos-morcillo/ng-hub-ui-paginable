@@ -18,14 +18,15 @@ import { FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, Untyped
 import { GetPipe, IsObservablePipe, TranslatePipe, UcfirstPipe, UnwrapAsyncPipe } from 'ng-hub-ui-utils';
 import { BehaviorSubject, Observable, debounceTime, distinctUntilChanged, isObservable, of } from 'rxjs';
 import { TableBreakpoint } from '../../constants/breakpoints';
+import { PaginableNoResultsDirective } from '../../directives/paginable-no-results.directive';
 import { PaginableTableCellDirective } from '../../directives/paginable-table-cell.directive';
 import { PaginableTableErrorDirective } from '../../directives/paginable-table-error.directive';
 import { PaginableTableExpandingRowDirective } from '../../directives/paginable-table-expanding-row.directive';
 import { PaginableTableFilterDirective } from '../../directives/paginable-table-filter.directive';
 import { PaginableTableHeaderDirective } from '../../directives/paginable-table-header.directive';
 import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
-import { PaginableNoResultsDirective } from '../../directives/paginable-no-results.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
+import { SelectionTypes } from '../../enums/selection-types';
 import { ListButton, RowButton, TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
@@ -33,7 +34,6 @@ import { PaginableTableOptions } from '../../interfaces/paginable-table-options'
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
 import { PaginationState } from '../../interfaces/pagination-state';
 import { TableRow } from '../../interfaces/table-row';
-import { SelectionTypes } from '../../enums/selection-types';
 import { debouncedSignal, generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { HubIconComponent } from '../icon/icon.component';
@@ -46,6 +46,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 	selector: 'hub-table, hub-ui-table',
 	standalone: true,
 	templateUrl: './table.component.html',
+	styleUrl: './table.component.scss',
 	imports: [
 		NgClass,
 		NgTemplateOutlet,
@@ -300,11 +301,11 @@ export class TableComponent<T = any> {
 	}
 
 	/** Available options for number of items per page */
-	readonly perPageOptions = input<Array<number>>([20, 50, 100]);
+	readonly perPageOptions = input<Array<number>>([10, 20, 50, 100]);
 	/** Current page number (1-based) */
 	readonly page = model<number | null>(null);
 	/** Number of items to display per page */
-	readonly perPage = model<number | null>(null);
+	readonly perPage = model<number | null>(10);
 	/** Total number of items available across all pages */
 	readonly totalItems = model<number | null>(null);
 

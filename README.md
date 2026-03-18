@@ -145,6 +145,8 @@ All components are built as standalone Angular components with full Angular Sign
 - **🔍 Menu Filters**: Advanced filtering with dedicated filter panels
 - **🧩 Multi-rule Menu Filters**: AND/OR operators, null checks, and match modes per rule
 - **📋 Hierarchical Lists**: Tree-like data structures with expandable/collapsible nodes
+- **🎛 Context-aware Pagination Theming**: Paginator styles can inherit Table/List theme tokens without duplicating paginator variables
+- **↔️ Bottom Bar Layout Tokens**: Reorder and align paginator/settings/info blocks in both Table and List using CSS variables
 
 ## 🏗️ Component Architecture
 
@@ -1163,6 +1165,7 @@ You can also use `tableRowTpt` with expandable components.
 The `ng-hub-ui-paginable` library is fully style-configurable through **CSS custom properties (CSS variables)** for **Table**, **List**, and **Paginator**.
 
 For a complete and up-to-date token catalog, see [CSS Variables Reference](./docs/css-variables-reference.md).
+Table and List also expose context pagination tokens (`--hub-table-pagination-*`, `--hub-list-pagination-*`) so embedded paginators follow component themes by default.
 
 ### 🔗 Import styles
 

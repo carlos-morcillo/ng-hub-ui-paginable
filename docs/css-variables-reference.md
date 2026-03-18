@@ -84,6 +84,8 @@ Defined on `:root, :host`. These provide **sensible defaults** for the entire sy
 
 Defined on `.hub-paginator`. Control the appearance of pagination controls used by both the standalone `<hub-ui-paginator>` and the paginator embedded in `<hub-ui-table>`.
 
+> Embedded paginators can also be themed contextually via `--hub-table-pagination-*` and `--hub-list-pagination-*` tokens defined on table/list hosts.
+
 ### Layout
 
 | Variable | Default | Description |
@@ -151,6 +153,33 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 
 Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component (hierarchical/tree lists).
 
+### Bottom Bar Layout (List)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-list-bottom-bar-gap` | `var(--hub-ref-space-3)` | Gap between bottom bar blocks |
+| `--hub-list-bottom-bar-justify-content` | `space-around` | Main axis distribution of bottom bar blocks |
+| `--hub-list-bottom-bar-align-items` | `center` | Cross-axis alignment of bottom bar blocks |
+| `--hub-list-bottom-bar-wrap` | `wrap` | Wrapping behavior for bottom bar blocks |
+| `--hub-list-bottom-bar-paginator-order` | `1` | Order of paginator block |
+| `--hub-list-bottom-bar-settings-order` | `2` | Order of rows-per-page block |
+| `--hub-list-bottom-bar-info-order` | `3` | Order of info block |
+| `--hub-list-bottom-bar-paginator-flex` | `0 0 auto` | Flex value for paginator block |
+| `--hub-list-bottom-bar-settings-flex` | `0 0 auto` | Flex value for settings block |
+| `--hub-list-bottom-bar-info-flex` | `0 0 auto` | Flex value for info block |
+
+### Context Pagination Tokens (List)
+
+These tokens style the embedded paginator from the list host:
+
+- `--hub-list-pagination-font-size`, `--hub-list-pagination-gap`
+- `--hub-list-pagination-icon-color`, `--hub-list-pagination-icon-size`
+- `--hub-list-pagination-label-color`, `--hub-list-pagination-info-color`
+- `--hub-list-pagination-link-color`, `--hub-list-pagination-link-bg`, `--hub-list-pagination-link-border-color`, `--hub-list-pagination-link-border-radius`
+- `--hub-list-pagination-link-hover-*`, `--hub-list-pagination-link-active-*`, `--hub-list-pagination-link-disabled-*`
+- `--hub-list-pagination-select-bg`, `--hub-list-pagination-select-border-color`, `--hub-list-pagination-select-border-radius`, `--hub-list-pagination-select-color`, `--hub-list-pagination-select-padding-x`, `--hub-list-pagination-select-padding-y`
+- `--hub-list-pagination-settings-gap`
+
 ### Container
 
 | Variable | Default | Description |
@@ -213,6 +242,33 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 ## Table Variables
 
 Defined on `.hub-table`. Control the appearance of the `<hub-ui-table>` component.
+
+### Bottom Bar Layout (Table)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-table-bottom-bar-gap` | `var(--hub-ref-space-3)` | Gap between bottom bar blocks |
+| `--hub-table-bottom-bar-justify-content` | `space-around` | Main axis distribution of bottom bar blocks |
+| `--hub-table-bottom-bar-align-items` | `center` | Cross-axis alignment of bottom bar blocks |
+| `--hub-table-bottom-bar-wrap` | `wrap` | Wrapping behavior for bottom bar blocks |
+| `--hub-table-bottom-bar-paginator-order` | `1` | Order of paginator block |
+| `--hub-table-bottom-bar-settings-order` | `2` | Order of rows-per-page block |
+| `--hub-table-bottom-bar-info-order` | `3` | Order of info block |
+| `--hub-table-bottom-bar-paginator-flex` | `0 0 auto` | Flex value for paginator block |
+| `--hub-table-bottom-bar-settings-flex` | `0 0 auto` | Flex value for settings block |
+| `--hub-table-bottom-bar-info-flex` | `0 0 auto` | Flex value for info block |
+
+### Context Pagination Tokens (Table)
+
+These tokens style the embedded paginator from the table host:
+
+- `--hub-table-pagination-font-size`, `--hub-table-pagination-gap`
+- `--hub-table-pagination-icon-color`, `--hub-table-pagination-icon-size`
+- `--hub-table-pagination-label-color`, `--hub-table-pagination-info-color`
+- `--hub-table-pagination-link-color`, `--hub-table-pagination-link-bg`, `--hub-table-pagination-link-border-color`, `--hub-table-pagination-link-border-radius`
+- `--hub-table-pagination-link-hover-*`, `--hub-table-pagination-link-active-*`, `--hub-table-pagination-link-disabled-*`
+- `--hub-table-pagination-select-bg`, `--hub-table-pagination-select-border-color`, `--hub-table-pagination-select-border-radius`, `--hub-table-pagination-select-color`, `--hub-table-pagination-select-padding-x`, `--hub-table-pagination-select-padding-y`
+- `--hub-table-pagination-settings-gap`
 
 ### Container
 
