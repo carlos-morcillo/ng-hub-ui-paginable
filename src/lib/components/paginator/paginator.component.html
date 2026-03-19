@@ -1,23 +1,23 @@
 <nav class="hub-paginator-container" [attr.aria-label]="'PAGINATION' | translate | ucfirst">
 	<ul class="hub-paginator">
-		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() === 1">
+		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="isFirstControlDisabled()">
 			<a
 				role="button"
 				class="hub-paginator__link"
 				href="javascript:{}"
 				[attr.aria-label]="'FIRST' | translate | ucfirst"
-				(click)="page.set(1)"
+				(click)="page.set(getFirstControlTarget())"
 			>
 				<i class="hub-paginator__icon hub-paginator__icon--angle-double-left"></i>
 			</a>
 		</li>
-		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() <= 1">
+		<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="isPreviousControlDisabled()">
 			<a
 				role="button"
 				class="hub-paginator__link"
 				href="javascript:{}"
 				[attr.aria-label]="'PREVIOUS' | translate | ucfirst"
-				(click)="page.set(page() - 1)"
+				(click)="page.set(getPreviousControlTarget())"
 			>
 				<span class="hub-paginator__icon-wrapper" aria-hidden="true">
 					<i class="hub-paginator__icon hub-paginator__icon--angle-left"></i>
@@ -52,26 +52,26 @@
 					<a role="button" class="hub-paginator__link" href="javascript:{}">...</a>
 				</li>
 			}
-			<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() >= numberOfPages()!">
+			<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="isNextControlDisabled()">
 				<a
 					role="button"
 					class="hub-paginator__link"
 					href="javascript:{}"
 					[attr.aria-label]="'NEXT' | translate | ucfirst"
-					(click)="page.set(page() + 1)"
+					(click)="page.set(getNextControlTarget())"
 				>
 					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
 						<i class="hub-paginator__icon hub-paginator__icon--angle-right"></i>
 					</span>
 				</a>
 			</li>
-			<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="page() === numberOfPages()">
+			<li class="hub-paginator__item" [class.hub-paginator__item--disabled]="isLastControlDisabled()">
 				<a
 					role="button"
 					class="hub-paginator__link"
 					href="javascript:{}"
 					[attr.aria-label]="'LAST' | translate | ucfirst"
-					(click)="page.set(numberOfPages() ?? 1)"
+					(click)="page.set(getLastControlTarget())"
 				>
 					<i class="hub-paginator__icon hub-paginator__icon--angle-double-right"></i>
 				</a>
@@ -83,7 +83,7 @@
 					class="hub-paginator__link"
 					href="javascript:{}"
 					[attr.aria-label]="'NEXT' | translate | ucfirst"
-					(click)="page.set(page() + 1)"
+					(click)="page.set(getNextControlTarget())"
 				>
 					<span class="hub-paginator__icon-wrapper" aria-hidden="true">
 						<i class="hub-paginator__icon hub-paginator__icon--angle-right"></i>

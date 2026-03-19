@@ -1,8 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { Subject } from 'rxjs';
+import { HubTranslationService } from 'ng-hub-ui-utils';
 
 import { PaginatorComponent } from './paginator.component';
+
+class MockHubTranslationService {
+	private readonly translationSource = new Subject<any>();
+	readonly translationObserver = this.translationSource.asObservable();
+
+	getTranslation(key: string) {
+		const translations: Record<string, string> = {
+			PAGINATION: 'pagination',
+			FIRST: 'first',
+			PREVIOUS: 'previous',
+			NEXT: 'next',
+			LAST: 'last'
+		};
+		return translations[key] || key;
+	}
+
+	setTranslations() {}
+	initialize() {}
+}
 
 /**
  * Test host component for testing paginator integration
@@ -38,7 +59,13 @@ describe('PaginatorComponent', () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [PaginatorComponent, TestHostComponent]
+			imports: [PaginatorComponent, TestHostComponent],
+			providers: [
+				{
+					provide: HubTranslationService,
+					useClass: MockHubTranslationService
+				}
+			]
 		}).compileComponents();
 
 		// Create standalone component fixture
@@ -125,6 +152,52 @@ describe('PaginatorComponent', () => {
 				By.directive(PaginatorComponent)
 			).componentInstance;
 			expect(paginatorInstance.numberOfPages()).toBe(1000);
+		});
+
+		it('should accept rtl input value', () => {
+			fixture.componentRef.setInput('rtl', true);
+			fixture.detectChanges();
+
+			expect(component.rtl()).toBeTrue();
+			expect(component.isRtl()).toBeTrue();
+		});
+	});
+
+	describe('RTL Navigation Behavior', () => {
+		it('should compute mirrored targets in rtl mode', () => {
+			fixture.componentRef.setInput('rtl', true);
+			component.page.set(5);
+			fixture.componentRef.setInput('numberOfPages', 10);
+			fixture.detectChanges();
+
+			expect(component.getFirstControlTarget()).toBe(10);
+			expect(component.getPreviousControlTarget()).toBe(6);
+			expect(component.getNextControlTarget()).toBe(4);
+			expect(component.getLastControlTarget()).toBe(1);
+		});
+
+		it('should disable right-side controls at first page in rtl mode', () => {
+			fixture.componentRef.setInput('rtl', true);
+			component.page.set(1);
+			fixture.componentRef.setInput('numberOfPages', 10);
+			fixture.detectChanges();
+
+			expect(component.isFirstControlDisabled()).toBeFalse();
+			expect(component.isPreviousControlDisabled()).toBeFalse();
+			expect(component.isNextControlDisabled()).toBeTrue();
+			expect(component.isLastControlDisabled()).toBeTrue();
+		});
+
+		it('should disable left-side controls at last page in rtl mode', () => {
+			fixture.componentRef.setInput('rtl', true);
+			component.page.set(10);
+			fixture.componentRef.setInput('numberOfPages', 10);
+			fixture.detectChanges();
+
+			expect(component.isFirstControlDisabled()).toBeTrue();
+			expect(component.isPreviousControlDisabled()).toBeTrue();
+			expect(component.isNextControlDisabled()).toBeFalse();
+			expect(component.isLastControlDisabled()).toBeFalse();
 		});
 	});
 

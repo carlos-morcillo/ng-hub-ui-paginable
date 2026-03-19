@@ -13,7 +13,11 @@
 	--hub-table-breakpoint-xxl: 1400px;
 	--hub-table-container-gap: var(--hub-ref-space-3, 1rem);
 	--hub-table-top-bar-gap: var(--hub-ref-space-3, 1rem);
+	--hub-table-top-bar-justify-content: end;
+	--hub-table-top-bar-align-items: center;
+	--hub-table-top-bar-wrap: wrap;
 	--hub-table-batch-actions-gap: var(--hub-ref-space-2, 0.5rem);
+	--hub-table-batch-actions-margin-inline-end: auto;
 	--hub-table-bottom-bar-gap: var(--hub-ref-space-3, 1rem);
 	--hub-table-bottom-bar-justify-content: space-around;
 	--hub-table-bottom-bar-align-items: center;
@@ -48,9 +52,15 @@
 	--hub-table-search-button-bg: var(--hub-table-container-bg);
 	--hub-table-search-button-border-color: var(--hub-table-border-color);
 	--hub-table-search-button-color: var(--hub-table-container-color);
+	--hub-table-search-button-min-width: 2.75rem;
 	--hub-table-search-input-bg: var(--hub-table-container-bg);
 	--hub-table-search-input-border-color: var(--hub-table-border-color);
 	--hub-table-search-input-color: var(--hub-table-container-color);
+	--hub-table-search-border-width: var(--hub-table-border-width);
+	--hub-table-search-border-radius: var(--hub-table-border-radius);
+	--hub-table-search-input-padding-x: 0.75rem;
+	--hub-table-search-input-padding-y: 0.375rem;
+	--hub-table-search-input-font-size: 1rem;
 	--hub-table-filter-button-active-bg: rgba(25, 135, 84, 0.1);
 	--hub-table-filter-button-active-border-color: var(--bs-success, #198754);
 	--hub-table-filter-button-hover-bg: rgba(0, 0, 0, 0.05);
@@ -73,9 +83,9 @@
 	// Top bar (actions and filters)
 	.hub-table__top-bar {
 		display: flex;
-		justify-content: end;
-		align-items: center;
-		flex-wrap: wrap;
+		justify-content: var(--hub-table-top-bar-justify-content);
+		align-items: var(--hub-table-top-bar-align-items);
+		flex-wrap: var(--hub-table-top-bar-wrap);
 		gap: var(--hub-table-top-bar-gap);
 	}
 
@@ -84,11 +94,17 @@
 		display: flex;
 		align-items: center;
 		gap: var(--hub-table-batch-actions-gap);
-		margin-right: auto;
+		margin-inline-end: var(--hub-table-batch-actions-margin-inline-end);
 
 		&-btn-icon {
 			margin-right: 0.25rem;
 		}
+	}
+
+	.hub-table__batch-actions-btn--default,
+	.hub-table__cell-btn--default {
+		border: var(--hub-table-border-width) solid var(--hub-table-border-color);
+		border-radius: var(--hub-table-border-radius);
 	}
 
 	// Search
@@ -105,16 +121,16 @@
 			min-width: 0;
 			display: block;
 			width: 100%;
-			padding: 0.375rem 0.75rem;
-			font-size: 1rem;
+			padding: var(--hub-table-search-input-padding-y) var(--hub-table-search-input-padding-x);
+			font-size: var(--hub-table-search-input-font-size);
 			font-weight: 400;
 			line-height: 1.5;
 			color: var(--hub-table-search-input-color);
 			appearance: none;
 			background-color: var(--hub-table-search-input-bg);
 			background-clip: padding-box;
-			border: var(--hub-table-border-width) solid var(--hub-table-search-input-border-color);
-			border-radius: var(--hub-table-border-radius) 0 0 var(--hub-table-border-radius);
+			border: var(--hub-table-search-border-width) solid var(--hub-table-search-input-border-color);
+			border-radius: var(--hub-table-search-border-radius) 0 0 var(--hub-table-search-border-radius);
 			transition:
 				border-color 0.15s ease-in-out,
 				box-shadow 0.15s ease-in-out;
@@ -124,11 +140,11 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			min-width: 2.75rem;
+			min-width: var(--hub-table-search-button-min-width);
 			color: var(--hub-table-search-button-color);
 			background-color: var(--hub-table-search-button-bg);
 			border-color: var(--hub-table-search-button-border-color);
-			border-radius: 0 var(--hub-table-border-radius) var(--hub-table-border-radius) 0;
+			border-radius: 0 var(--hub-table-search-border-radius) var(--hub-table-search-border-radius) 0;
 		}
 	}
 
@@ -547,6 +563,54 @@
 	.hub-table__responsive {
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
+	}
+}
+
+/* Right-to-left layout support for table content and controls. */
+:host.hub-table--rtl {
+	direction: rtl;
+
+	.hub-table__top-bar {
+		direction: ltr;
+	}
+
+	.hub-table__batch-actions {
+		order: 2;
+		flex-direction: row-reverse;
+		margin-inline-end: 0;
+		margin-inline-start: auto;
+
+		&-btn-icon {
+			margin-right: 0;
+			margin-left: 0.25rem;
+		}
+	}
+
+	.hub-table__search {
+		order: 1;
+		margin-inline-end: auto;
+		margin-inline-start: 0;
+		direction: ltr;
+
+		&-input {
+			direction: ltr;
+			text-align: right;
+			border-radius: 0 var(--hub-table-search-border-radius) var(--hub-table-search-border-radius) 0;
+		}
+
+		&-button {
+			border-radius: var(--hub-table-search-border-radius) 0 0 var(--hub-table-search-border-radius);
+		}
+	}
+
+	.hub-table__no-data-icon {
+		margin-right: 0;
+		margin-left: 1.5rem;
+	}
+
+	.hub-table__header-icon {
+		margin-right: 0;
+		margin-left: 0.5rem;
 	}
 }
 

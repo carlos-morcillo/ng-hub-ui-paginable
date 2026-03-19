@@ -1,26 +1,56 @@
 @if (batchActions.length || options.searchable) {
-	<div class="d-flex justify-content-between gap-3">
-		<div class="ms-auto">
-			<div class="d-flex justify-content-end gap-2">
-				@if (options.searchable) {
-					<div class="hub-list__search input-group">
-						<input
-							type="text"
-							class="hub-list__search-input form-control border border-light"
-							[formControl]="searchFG"
-							[placeholder]="'SEARCH' | ucfirst"
-							(click)="$event.stopPropagation()"
-							(keyup.enter)="filter()"
-						/>
-						<div class="input-group-append">
-							<button class="hub-list__search-btn btn btn-light" type="button" (click)="filter()">
-								<i class="hub-list__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
-							</button>
-						</div>
-					</div>
+	<div class="hub-list__top-bar">
+		@if (batchActions.length) {
+			<div class="hub-list__batch-actions">
+				@for (action of batchActions; track $index) {
+					@if (!$any(action).buttons?.length) {
+						<button
+							class="hub-list__batch-action-btn"
+							[ngClass]="getBatchActionClassList(action)"
+							type="button"
+							(click)="handleBatchAction(action)"
+							[disabled]="!value.length"
+						>
+							@if (action.icon) {
+								<i class="{{ action.icon }}"></i>
+							}
+							{{ action.title }}
+						</button>
+					}
 				}
 			</div>
-		</div>
+		}
+		@if (options.searchable) {
+			<div class="hub-list__search">
+				@if (isRtl()) {
+					<button class="hub-list__search-btn btn btn-light" type="button" (click)="filter()">
+						<i class="hub-list__search-icon" aria-hidden="true"></i>
+					</button>
+					<input
+						type="text"
+						class="hub-list__search-input"
+						[formControl]="searchFG"
+						[placeholder]="'SEARCH' | translate | ucfirst"
+						[attr.aria-label]="'SEARCH' | translate | ucfirst"
+						(click)="$event.stopPropagation()"
+						(keyup.enter)="filter()"
+					/>
+				} @else {
+					<input
+						type="text"
+						class="hub-list__search-input"
+						[formControl]="searchFG"
+						[placeholder]="'SEARCH' | translate | ucfirst"
+						[attr.aria-label]="'SEARCH' | translate | ucfirst"
+						(click)="$event.stopPropagation()"
+						(keyup.enter)="filter()"
+					/>
+					<button class="hub-list__search-btn btn btn-light" type="button" (click)="filter()">
+						<i class="hub-list__search-icon" aria-hidden="true"></i>
+					</button>
+				}
+			</div>
+		}
 	</div>
 }
 
@@ -112,6 +142,7 @@
 			class="hub-list__bottom-bar-paginator"
 			[(page)]="page"
 			[numberOfPages]="numberOfPages()"
+			[rtl]="isRtl()"
 		></hub-paginator>
 		<div class="hub-list__bottom-bar-settings hub-paginator__settings">
 			<label class="hub-paginator__label"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
@@ -151,7 +182,7 @@
 <ng-template #defaultNoResultsTpt>
 	<div class="alert alert-info d-flex align-items-center m-4" role="alert">
 		<i class="hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
-		{{ 'NO_RESULTS_FOUND' | ucfirst }}
+		{{ 'NO_RESULTS_FOUND' | translate | ucfirst }}
 	</div>
 </ng-template>
 

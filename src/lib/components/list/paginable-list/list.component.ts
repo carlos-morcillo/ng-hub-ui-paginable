@@ -6,9 +6,9 @@ import { PaginableListItemDirective } from '../../../directives/paginable-list-i
 import { PaginableNoResultsDirective } from '../../../directives/paginable-no-results.directive';
 import { SelectionTypes } from '../../../enums/selection-types';
 import { ListClickEvent } from '../../../interfaces/item-click-event';
+import { PaginableActionButton } from '../../../interfaces/paginable-action-button';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
-import { RowButton } from '../../../interfaces/row-button';
 import { getValue } from '../../../utils';
 import { PaginatorComponent } from '../../paginator/paginator.component';
 
@@ -17,7 +17,8 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 	templateUrl: './list.component.html',
 	styleUrl: './list.component.scss',
 	host: {
-		class: 'd-flex flex-column gap-4'
+		class: 'd-flex flex-column gap-4',
+		'[class.hub-list--rtl]': 'isRtl()'
 	},
 	providers: [
 		{
@@ -74,6 +75,7 @@ export class ListComponent<T = any> {
 	readonly multipleSelectable = computed(() => this.selectable() === SelectionTypes.Multiple);
 
 	private _options: PaginableTableOptions = {
+		rtl: false,
 		cursor: 'default',
 		hoverableRows: false,
 		striped: null,
@@ -86,8 +88,20 @@ export class ListComponent<T = any> {
 	}
 	@Input()
 	set options(v: PaginableTableOptions) {
-		this._options = v;
+		this._options = {
+			...this._options,
+			...(v ?? {})
+		};
 		this.buildForm(this.form, this._items);
+	}
+
+	/**
+	 * Returns whether right-to-left mode is enabled.
+	 *
+	 * @returns `true` when RTL mode is active for the list.
+	 */
+	isRtl(): boolean {
+		return this.options.rtl === true;
 	}
 
 	private _items: any = [];
@@ -139,7 +153,7 @@ export class ListComponent<T = any> {
 
 	// NOTE: Filters
 
-	searchFG = this.#fb.control({});
+	searchFG = this.#fb.control('');
 
 	// NOTE: Batch actions
 
@@ -149,12 +163,12 @@ export class ListComponent<T = any> {
 	 * @type {PaginableTableRowAction[]}
 	 * @memberof PaginableTableComponent
 	 */
-	private _batchActions: Array<PaginableTableDropdown | RowButton> = [];
+	private _batchActions: Array<PaginableTableDropdown | PaginableActionButton> = [];
 	@Input()
-	get batchActions(): Array<PaginableTableDropdown | RowButton> {
+	get batchActions(): Array<PaginableTableDropdown | PaginableActionButton> {
 		return this._batchActions;
 	}
-	set batchActions(v: Array<PaginableTableDropdown | RowButton>) {
+	set batchActions(v: Array<PaginableTableDropdown | PaginableActionButton>) {
 		this._batchActions = v.map((b) => {
 			if ((b as PaginableTableDropdown).buttons) {
 				b = { fill: null, position: 'start', color: 'light', ...b };
@@ -189,7 +203,23 @@ export class ListComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	handleBatchAction(event: any) {
-		event.handler(this.value);
+		const handler = event.handler as ((items: ReadonlyArray<T>) => void) | undefined;
+		handler?.(this.value);
+	}
+
+	/**
+	 * Returns normalized CSS classes for list batch action buttons.
+	 * Ensures a default BEM class is present when no list-specific class is provided.
+	 *
+	 * @param action Batch action button definition.
+	 * @returns List of CSS class names to bind in template.
+	 */
+	getBatchActionClassList(action: PaginableActionButton): Array<string> {
+		const normalized = this.normalizeClassList(action.classlist);
+		if (!normalized.some((item) => item.startsWith('hub-list__'))) {
+			return ['hub-list__batch-action-btn--default', ...normalized];
+		}
+		return normalized;
 	}
 
 	buildForm(form: FormArray, items: ReadonlyArray<any>) {
@@ -419,6 +449,21 @@ export class ListComponent<T = any> {
 			return rowClass;
 		}
 		return '';
+	}
+
+	/**
+	 * Converts a class list input into a flat, deduplicated string array.
+	 *
+	 * @param classList Action `classlist` value.
+	 * @returns Normalized class name array.
+	 */
+	private normalizeClassList(classList: string | Array<string> | undefined): Array<string> {
+		const tokens = Array.isArray(classList)
+			? classList
+			: typeof classList === 'string'
+				? classList.split(/\s+/)
+				: [];
+		return [...new Set(tokens.map((item) => item.trim()).filter(Boolean))];
 	}
 }
 

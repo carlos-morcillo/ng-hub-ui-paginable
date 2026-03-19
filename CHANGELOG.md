@@ -1,5 +1,27 @@
 # Changelog
 
+## [21.2.0] - 2026-03-19
+
+### Added
+
+- **actions:** added library default BEM classes for table/list/dropdown action buttons when no custom class list is provided.
+- **styling:** added list action button and top bar CSS variables for consistent customization with table/list layouts.
+
+### Changed
+
+- **api:** removed `color` from `PaginableActionButton` to keep action button configuration CSS-framework agnostic.
+- **api:** unified table/list action styling through `classlist` and class normalization helpers.
+- **docs:** updated README EN/ES type references from legacy `RowButton`/`ListButton` to `PaginableActionButton`.
+
+### Fixed
+
+- **examples:** migrated table/list action examples to `classlist` instead of implicit Bootstrap classes generated from `color`.
+- **rtl:** preserved RTL action ordering behavior while using normalized action class handling.
+
+### Removed
+
+- **interfaces:** removed legacy `row-button.ts` and `list-button.ts` in favor of the unified `PaginableActionButton`.
+
 ## [21.1.0] - 2026-03-18
 
 ### Added

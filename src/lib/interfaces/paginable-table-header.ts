@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { PaginableTableDropdown } from './paginable-table-dropdown';
-import { RowButton } from './row-button';
+import { PaginableActionButton } from './paginable-action-button';
 
 /**
  * Represents the configuration for a table header column in a paginable table.
@@ -154,7 +154,7 @@ export interface PaginableTableHeader {
 	 * ]
 	 * ```
 	 */
-	buttons?: Array<RowButton | PaginableTableDropdown>;
+	buttons?: Array<PaginableActionButton | PaginableTableDropdown>;
 
 	/**
 	 * Filter configuration for the column.

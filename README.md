@@ -115,6 +115,10 @@ This library arises from the need to offer highly configurable, accessible, and 
 
 All components are built as standalone Angular components with full Angular Signals support.
 
+> ⚠️ **Breaking changes in v21.2.0**
+> This major release removes the `color` property from `PaginableActionButton` and unifies action button contracts.
+> Review migration steps in [BREAKING_CHANGES.md](./BREAKING_CHANGES.md) before upgrading.
+
 ---
 
 ## 🎯 Features
@@ -443,7 +447,7 @@ const headers: PaginableTableHeader[] = [
 | `sortable`    | `boolean`                                        | Enable sorting for this column                        | `false`          | `true`                                               |
 | `wrapping`    | `'wrap' \| 'nowrap'`                             | Text wrapping behavior                                | `'wrap'`         | `'nowrap'` for IDs                                   |
 | `sticky`      | `'start' \| 'end'`                               | Make column sticky during scroll                      | -                | `'end'` for actions                                  |
-| `buttons`     | `Array<RowButton \| PaginableTableDropdown>`     | Action buttons in this column                         | -                | See [Action Buttons](#action-buttons)                |
+| `buttons`     | `Array<PaginableActionButton \| PaginableTableDropdown>` | Action buttons in this column                         | -                | See [Action Buttons](#action-buttons)                |
 | `filter`      | `InputFilter \| DropdownFilter \| BooleanFilter` | Filter configuration                                  | -                | See [Column Filters](#column-filters)                |
 | `onlyButtons` | `boolean`                                        | Optimize layout for button-only columns               | `false`          | `true` for action columns                            |
 | `hidden`      | `boolean \| Function`                            | Control column visibility                             | `false`          | See [Column Visibility](#column-visibility)          |
@@ -727,17 +731,16 @@ interface PaginableTableDropdown {
 	tooltip?: string | Observable<string>; // Supports reactive translations
 	icon?: string;
 	color?: string;
-	buttons: RowButton[];
+	buttons: PaginableActionButton[];
 	position?: 'left' | 'right' | 'start' | 'end';
 	fill?: 'clear' | 'outline';
 }
 
-interface RowButton<T = any> {
+interface PaginableActionButton<T = any> {
 	title?: string | Observable<string>; // Button text (supports Observable)
 	label?: string | Observable<string>; // Display label (priority over title)
 	tooltip?: string | Observable<string>; // Hover tooltip (supports Observable)
 	icon?: string | Icon;
-	color?: string;
 	handler?: (event: TableRowEvent<T>) => void;
 	hidden?: boolean | ((row: TableRow<T>) => boolean);
 	classlist?: string[] | string;
@@ -991,7 +994,7 @@ filters = signal({
 | `paginationPosition` | `'top' \| 'bottom' \| 'both'`                 | `'bottom'`      | Where to display pagination controls.                                                                    |
 | `paginationInfo`     | `boolean`                                     | `true`          | Whether to show pagination info (e.g., "Showing 1 to 10 of 100").                                        |
 | `stickyActions`      | `boolean`                                     | `false`         | Whether action buttons should stick during scrolling.                                                    |
-| `batchActions`       | `Array<PaginableTableDropdown \| ListButton>` | `[]`            | Actions available for selected rows.                                                                     |
+| `batchActions`       | `Array<PaginableTableDropdown \| PaginableActionButton>` | `[]`            | Actions available for selected rows.                                                                     |
 | `responsive`         | `TableBreakpoint`                             | `null`          | Responsive breakpoint for table layout.                                                                  |
 | `options`            | `PaginableTableOptions`                       | `{}`            | Visual configuration (cursor, hover, striped, variant).                                                  |
 | `clickFn`            | `(event: TableRowEvent<T>) => void`           | `null`          | Handler for row click events.                                                                            |
@@ -1035,7 +1038,7 @@ interface TableRowEvent<T> {
 | `bindChildren` | `string`                                      | `'children'` | Property containing child items.                                                                               |
 | `selectable`   | `string`                                      | `null`       | Selection mode configuration.                                                                                  |
 | `options`      | `PaginableTableOptions`                       | `{}`         | Visual and behavioral options.                                                                                 |
-| `batchActions` | `Array<PaginableTableDropdown \| ListButton>` | `[]`         | Actions for selected items.                                                                                    |
+| `batchActions` | `Array<PaginableTableDropdown \| PaginableActionButton>` | `[]`         | Actions for selected items.                                                                                    |
 | `clickFn`      | `(event: ListClickEvent<T>) => void`          | `null`       | Handler for item click events.                                                                                 |
 | `rowClass`     | `string \| ((item: T) => string)`             | `null`       | Custom CSS class for a list item. Can be a fixed string or a function that returns a class based on item data. |
 

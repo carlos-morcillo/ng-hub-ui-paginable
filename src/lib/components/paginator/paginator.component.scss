@@ -157,3 +157,21 @@
 	}
 
 }
+
+/* Mirrors paginator navigation in RTL containers while preserving semantic controls. */
+:where(.hub-table--rtl, .hub-list--rtl, [dir='rtl']) .hub-paginator {
+	flex-direction: row-reverse;
+}
+
+:where(.hub-table--rtl, .hub-list--rtl, [dir='rtl']) .hub-paginator__settings {
+	direction: rtl;
+}
+
+:where(.hub-table--rtl, .hub-list--rtl, [dir='rtl']) .hub-paginator__label {
+	text-align: right;
+}
+
+:where(.hub-table--rtl, .hub-list--rtl, [dir='rtl']) .hub-paginator__select {
+	direction: rtl;
+	text-align: right;
+}

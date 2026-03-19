@@ -6,6 +6,11 @@
 	&__menu {
 		max-width: 10rem;
 	}
+
+	// Default visual treatment for dropdown action items when consumer does not provide custom dropdown BEM classes.
+	&__item--default {
+		color: inherit;
+	}
 }
 
 // Legacy support for dropdown-toggle class

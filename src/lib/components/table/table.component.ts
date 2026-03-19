@@ -27,7 +27,7 @@ import { PaginableTableHeaderDirective } from '../../directives/paginable-table-
 import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
 import { SelectionTypes } from '../../enums/selection-types';
-import { ListButton, RowButton, TableRowEvent } from '../../interfaces';
+import { PaginableActionButton, TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { PaginableTableHeader } from '../../interfaces/paginable-table-header';
 import { PaginableTableOptions } from '../../interfaces/paginable-table-options';
@@ -81,7 +81,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		}
 	],
 	host: {
-		class: 'hub-table'
+		class: 'hub-table',
+		'[class.hub-table--rtl]': 'isRtl()'
 	}
 })
 /**
@@ -131,6 +132,15 @@ export class TableComponent<T = any> {
 		striped: null,
 		variant: null
 	});
+
+	/**
+	 * Returns whether right-to-left mode is enabled.
+	 *
+	 * @returns `true` when RTL mode is active for the table.
+	 */
+	isRtl(): boolean {
+		return this.options()?.rtl === true;
+	}
 
 	/**
 	 * Collection of selected rows
@@ -349,8 +359,11 @@ export class TableComponent<T = any> {
 	readonly stickyActions = input<boolean>(false);
 
 	/** Actions that can be performed on multiple selected rows */
-	readonly batchActions = input<Array<PaginableTableDropdown | ListButton>, Array<PaginableTableDropdown | ListButton>>([], {
-		transform: (value: Array<PaginableTableDropdown | ListButton>) => {
+	readonly batchActions = input<
+		Array<PaginableTableDropdown | PaginableActionButton>,
+		Array<PaginableTableDropdown | PaginableActionButton>
+	>([], {
+		transform: (value: Array<PaginableTableDropdown | PaginableActionButton>) => {
 			return value.map((item) => {
 				if ((item as PaginableTableDropdown).buttons) {
 					item = {
@@ -710,15 +723,16 @@ export class TableComponent<T = any> {
 	 * @param handler The action handler function to execute
 	 * @param row The table row context for the action
 	 */
-	handleAction(event: Event, handler: (row: TableRow) => void, row: TableRow) {
+	handleAction(event: Event, button: PaginableActionButton, row: TableRow) {
 		event.stopPropagation();
-		handler(row);
+		const handler = button.handler as ((row: TableRow) => void) | undefined;
+		handler?.(row);
 	}
 
 	/**
 	 * Handles the action to be executed in a batch
 	 *
-	 * @param {ListButton} button
+	 * @param {PaginableActionButton} button
 	 * @memberof PaginableTableComponent
 	 */
 	/**
@@ -727,10 +741,31 @@ export class TableComponent<T = any> {
 	 *
 	 * @param button The batch action button configuration with handler
 	 */
-	handleBatchAction(button: ListButton) {
-		if (button.handler) {
-			button.handler(this.value);
-		}
+	handleBatchAction(button: PaginableActionButton) {
+		const handler = button.handler as ((items: ReadonlyArray<T>) => void) | undefined;
+		handler?.(this.value);
+	}
+
+	/**
+	 * Returns normalized CSS classes for toolbar batch action buttons.
+	 * Ensures a default BEM class is always present when no explicit variant class is provided.
+	 *
+	 * @param button Batch action button definition.
+	 * @returns List of CSS class names to bind in template.
+	 */
+	getBatchActionClassList(button: PaginableActionButton): Array<string> {
+		return this.withDefaultActionClass(button.classlist, 'hub-table__batch-actions-btn--default');
+	}
+
+	/**
+	 * Returns normalized CSS classes for row action buttons.
+	 * Ensures a default BEM class is always present when no explicit variant class is provided.
+	 *
+	 * @param button Row action button definition.
+	 * @returns List of CSS class names to bind in template.
+	 */
+	getRowActionClassList(button: PaginableActionButton): Array<string> {
+		return this.withDefaultActionClass(button.classlist, 'hub-table__cell-btn--default');
 	}
 
 	/**
@@ -742,7 +777,7 @@ export class TableComponent<T = any> {
 	 * @returns Observable<boolean> indicating if button should be hidden
 	 * @todo Implement this logic for all columns, not just buttons
 	 */
-	isHidden(button: RowButton, row: TableRow): Observable<boolean> {
+	isHidden(button: PaginableActionButton, row: TableRow): Observable<boolean> {
 		if (typeof button.hidden === 'function') {
 			const result = button.hidden(row);
 			return isObservable(result) ? (result as Observable<boolean>) : of(result);
@@ -999,4 +1034,35 @@ export class TableComponent<T = any> {
 		}
 		return '';
 	}
+
+	/**
+	 * Ensures the action button has a default BEM class when no custom BEM variant is provided.
+	 *
+	 * @param classList Raw `classlist` value from action configuration.
+	 * @param defaultClass Default BEM class name for library styling.
+	 * @returns Normalized class list with deduplicated entries.
+	 */
+	private withDefaultActionClass(classList: string | Array<string> | undefined, defaultClass: string): Array<string> {
+		const normalized = this.normalizeClassList(classList);
+		if (!normalized.some((item) => item.startsWith('hub-table__'))) {
+			return [defaultClass, ...normalized];
+		}
+		return normalized;
+	}
+
+	/**
+	 * Converts a class list input into a flat, deduplicated string array.
+	 *
+	 * @param classList Action `classlist` value.
+	 * @returns Normalized class name array.
+	 */
+	private normalizeClassList(classList: string | Array<string> | undefined): Array<string> {
+		const tokens = Array.isArray(classList)
+			? classList
+			: typeof classList === 'string'
+				? classList.split(/\s+/)
+				: [];
+		return [...new Set(tokens.map((item) => item.trim()).filter(Boolean))];
+	}
+
 }

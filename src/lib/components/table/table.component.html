@@ -12,7 +12,8 @@
 						</hub-table-dropdown>
 					} @else {
 						<button
-							class="hub-table__batch-actions-btn btn {{ button.color ? 'btn-' + button.color : 'btn-light' }}"
+							class="hub-table__batch-actions-btn"
+							[ngClass]="getBatchActionClassList(button)"
 							role="button"
 							(click)="handleBatchAction(button)"
 							[disabled]="!value.length"
@@ -30,21 +31,39 @@
 		}
 		@if (searchable()) {
 			<div class="hub-table__search">
-				<input
-					type="text"
-					class="hub-table__search-input"
-					(input)="searchProxy$.next($any($event.target).value)"
-					[value]="searchTerm()"
-					[attr.placeholder]="'SEARCH_PLACEHOLDER' | translate"
-					[attr.aria-label]="'SEARCH' | translate | ucfirst"
-				/>
-				<button
-					class="hub-table__search-button btn btn-outline-dark"
-					type="button"
-					[attr.aria-label]="'SEARCH' | translate | ucfirst"
-				>
-					<i class="hub-table__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
-				</button>
+				@if (isRtl()) {
+					<button
+						class="hub-table__search-button btn btn-outline-dark"
+						type="button"
+						[attr.aria-label]="'SEARCH' | translate | ucfirst"
+					>
+						<i class="hub-table__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
+					</button>
+					<input
+						type="text"
+						class="hub-table__search-input"
+						(input)="searchProxy$.next($any($event.target).value)"
+						[value]="searchTerm()"
+						[attr.placeholder]="'SEARCH' | translate | ucfirst"
+						[attr.aria-label]="'SEARCH' | translate | ucfirst"
+					/>
+				} @else {
+					<input
+						type="text"
+						class="hub-table__search-input"
+						(input)="searchProxy$.next($any($event.target).value)"
+						[value]="searchTerm()"
+						[attr.placeholder]="'SEARCH' | translate | ucfirst"
+						[attr.aria-label]="'SEARCH' | translate | ucfirst"
+					/>
+					<button
+						class="hub-table__search-button btn btn-outline-dark"
+						type="button"
+						[attr.aria-label]="'SEARCH' | translate | ucfirst"
+					>
+						<i class="hub-table__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
+					</button>
+				}
 			</div>
 		}
 		@if (headerFilters().length) {
@@ -235,6 +254,7 @@
 				class="hub-table__paginator hub-table__bottom-bar-paginator"
 				[(page)]="$any(page)"
 				[numberOfPages]="numberOfPages()"
+				[rtl]="isRtl()"
 			>
 			</hub-paginator>
 		}
@@ -502,15 +522,12 @@
 					@if (!(isHidden(button, row) | async)) {
 						<button
 							type="button"
-							class="hub-table__cell-btn btn px-1"
+							class="hub-table__cell-btn"
 							[attr.title]="button.tooltip | unwrapAsync"
-							(click)="handleAction($event, button.handler, row)"
-							[ngClass]="button.classlist ?? []"
+							(click)="handleAction($event, button, row)"
+							[ngClass]="getRowActionClassList(button)"
 						>
-							<div
-								class="hub-table__cell-btn-content d-flex flex-nowrap align-items-center gap-1"
-								[ngClass]="button.color ? 'text-' + button.color : ''"
-							>
+							<div class="hub-table__cell-btn-content d-flex flex-nowrap align-items-center gap-1">
 								<ng-hub-ui-icon [config]="button.icon"></ng-hub-ui-icon>
 								@if (button.label) {
 									<span class="hub-table__cell-btn-label">{{ button.label | unwrapAsync }}</span>

@@ -32,16 +32,8 @@
 						class="table-dropdown__item dropdown-item"
 						type="button"
 						[attr.title]="dropdownItem.title | unwrapAsync"
-						[ngClass]="
-							dropdownItem.color
-								? 'text-' + dropdownItem.color
-								: 'text-dark'
-						"
-						(click)="
-							row() &&
-								dropdownItem.handler &&
-								dropdownItem.handler(row())
-						"
+						[ngClass]="getDropdownItemClassList(dropdownItem)"
+						(click)="executeDropdownAction(dropdownItem)"
 					>
 						<div class="table-dropdown__item-content d-flex align-items-center gap-2">
 							<ng-hub-ui-icon

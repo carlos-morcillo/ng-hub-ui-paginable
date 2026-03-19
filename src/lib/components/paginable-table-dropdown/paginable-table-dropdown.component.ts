@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { UnwrapAsyncPipe } from 'ng-hub-ui-utils';
 import { TableRowEvent } from '../../interfaces';
+import { PaginableActionButton } from '../../interfaces/paginable-action-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { HubIconComponent } from '../icon/icon.component';
 
@@ -170,5 +171,49 @@ export class PaginableTableDropdownComponent<T = any> {
 			);
 			this.renderedElement = null;
 		}
+	}
+
+	/**
+	 * Executes a dropdown action in row context when a handler is available.
+	 *
+	 * @param action Action button configuration from dropdown options.
+	 */
+	executeDropdownAction(action: PaginableActionButton<T>): void {
+		const row = this.row();
+		const handler = action.handler as ((event: TableRowEvent<T>) => void) | undefined;
+		if (!row || !handler) {
+			return;
+		}
+		handler(row);
+	}
+
+	/**
+	 * Returns normalized CSS classes for dropdown action items.
+	 * Ensures a default BEM class is present when no dropdown-specific class is provided.
+	 *
+	 * @param action Dropdown action button definition.
+	 * @returns List of CSS class names to bind in template.
+	 */
+	getDropdownItemClassList(action: PaginableActionButton<T>): Array<string> {
+		const normalized = this.normalizeClassList(action.classlist);
+		if (!normalized.some((item) => item.startsWith('table-dropdown__'))) {
+			return ['table-dropdown__item--default', ...normalized];
+		}
+		return normalized;
+	}
+
+	/**
+	 * Converts a class list input into a flat, deduplicated string array.
+	 *
+	 * @param classList Action `classlist` value.
+	 * @returns Normalized class name array.
+	 */
+	private normalizeClassList(classList: string | Array<string> | undefined): Array<string> {
+		const tokens = Array.isArray(classList)
+			? classList
+			: typeof classList === 'string'
+				? classList.split(/\s+/)
+				: [];
+		return [...new Set(tokens.map((item) => item.trim()).filter(Boolean))];
 	}
 }

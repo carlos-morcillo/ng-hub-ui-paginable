@@ -168,6 +168,16 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-bottom-bar-settings-flex` | `0 0 auto` | Flex value for settings block |
 | `--hub-list-bottom-bar-info-flex` | `0 0 auto` | Flex value for info block |
 
+### Top Bar Layout (List)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-list-top-bar-gap` | `var(--hub-ref-space-2)` | Gap between top bar blocks |
+| `--hub-list-top-bar-justify-content` | `end` | Main axis distribution for top bar blocks |
+| `--hub-list-top-bar-align-items` | `center` | Cross-axis alignment for top bar blocks |
+| `--hub-list-top-bar-wrap` | `wrap` | Wrapping behavior for top bar blocks |
+| `--hub-list-batch-actions-gap` | `var(--hub-ref-space-2)` | Gap between list batch action buttons |
+
 ### Context Pagination Tokens (List)
 
 These tokens style the embedded paginator from the list host:
@@ -229,6 +239,28 @@ These tokens style the embedded paginator from the list host:
 | `--hub-list-search-input-color` | `var(--hub-sys-text-primary)` | Text color of the search input |
 | `--hub-list-search-btn-bg` | `var(--hub-ref-surface-2)` | Background of the search button |
 | `--hub-list-search-btn-color` | `var(--hub-sys-text-primary)` | Text/icon color of the search button |
+| `--hub-list-search-button-bg` | `var(--hub-list-search-btn-bg)` | Alias for search button background |
+| `--hub-list-search-button-color` | `var(--hub-list-search-btn-color)` | Alias for search button color |
+| `--hub-list-search-button-min-width` | `2.75rem` | Minimum width of the search button |
+| `--hub-list-search-border-color` | `var(--hub-list-search-input-border-color)` | Shared border color for search input/button |
+| `--hub-list-search-border-width` | `1px` | Shared border width for search input/button |
+| `--hub-list-search-border-radius` | `var(--hub-list-search-input-border-radius)` | Shared border radius for search input/button |
+| `--hub-list-search-input-padding-x` | `0.75rem` | Horizontal padding of the search input |
+| `--hub-list-search-input-padding-y` | `0.375rem` | Vertical padding of the search input |
+| `--hub-list-search-input-font-size` | `1rem` | Font size of the search input |
+
+### Action Buttons (List)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-list-action-btn-bg` | `var(--hub-list-container-bg)` | Background of list action buttons |
+| `--hub-list-action-btn-color` | `var(--hub-list-item-color)` | Text color of list action buttons |
+| `--hub-list-action-btn-border-color` | `var(--hub-list-item-border-color)` | Border color of list action buttons |
+| `--hub-list-action-btn-border-radius` | `var(--hub-list-item-border-radius)` | Border radius of list action buttons |
+| `--hub-list-action-btn-padding-x` | `0.75rem` | Horizontal padding of list action buttons |
+| `--hub-list-action-btn-padding-y` | `0.375rem` | Vertical padding of list action buttons |
+| `--hub-list-action-btn-hover-bg` | `var(--hub-list-item-hover-bg)` | Hover background of list action buttons |
+
 
 ### Misc
 
@@ -257,6 +289,17 @@ Defined on `.hub-table`. Control the appearance of the `<hub-ui-table>` componen
 | `--hub-table-bottom-bar-paginator-flex` | `0 0 auto` | Flex value for paginator block |
 | `--hub-table-bottom-bar-settings-flex` | `0 0 auto` | Flex value for settings block |
 | `--hub-table-bottom-bar-info-flex` | `0 0 auto` | Flex value for info block |
+
+### Top Bar Layout (Table)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-table-top-bar-gap` | `var(--hub-ref-space-3)` | Gap between top bar blocks |
+| `--hub-table-top-bar-justify-content` | `end` | Main axis distribution for top bar blocks |
+| `--hub-table-top-bar-align-items` | `center` | Cross-axis alignment for top bar blocks |
+| `--hub-table-top-bar-wrap` | `wrap` | Wrapping behavior for top bar blocks |
+| `--hub-table-batch-actions-gap` | `var(--hub-ref-space-2)` | Gap between table batch action buttons |
+| `--hub-table-batch-actions-margin-inline-end` | `auto` | Push batch actions to inline start/end depending on direction |
 
 ### Context Pagination Tokens (Table)
 

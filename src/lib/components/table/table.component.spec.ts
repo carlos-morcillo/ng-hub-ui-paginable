@@ -91,6 +91,35 @@ describe('TableComponent', () => {
 			expect(typeof id).toBe('string');
 			expect(id.length).toBe(16);
 		});
+
+		it('should apply rtl host class when options.rtl is enabled', () => {
+			fixture.componentRef.setInput('options', {
+				cursor: 'default',
+				hoverableRows: false,
+				striped: null,
+				variant: null,
+				rtl: true
+			});
+			fixture.detectChanges();
+
+			expect(fixture.nativeElement.classList.contains('hub-table--rtl')).toBeTrue();
+		});
+
+		it('should render search button before input when rtl is enabled', () => {
+			fixture.componentRef.setInput('options', {
+				cursor: 'default',
+				hoverableRows: false,
+				striped: null,
+				variant: null,
+				rtl: true
+			});
+			fixture.componentRef.setInput('searchable', true);
+			fixture.detectChanges();
+
+			const searchElement = fixture.nativeElement.querySelector('.hub-table__search') as HTMLElement;
+			expect(searchElement).toBeTruthy();
+			expect(searchElement.firstElementChild?.classList.contains('hub-table__search-button')).toBeTrue();
+		});
 	});
 
 	describe('Headers Configuration', () => {
@@ -183,7 +212,7 @@ describe('TableComponent', () => {
 
 			const select = fixture.nativeElement.querySelector('.hub-paginator__select') as HTMLSelectElement;
 			expect(select).toBeTruthy();
-			expect(select.value).toBe('50');
+			expect(select.selectedOptions[0]?.textContent?.trim()).toBe('50');
 		});
 	});
 

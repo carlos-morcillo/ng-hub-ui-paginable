@@ -3,6 +3,11 @@
  */
 export interface PaginableTableOptions {
 	/**
+	 * Enables right-to-left visual direction for table/list layouts and paginator controls.
+	 */
+	rtl?: boolean;
+
+	/**
 	 * Enables server-side pagination instead of client-side.
 	 */
 	serverSidePagination?: boolean;

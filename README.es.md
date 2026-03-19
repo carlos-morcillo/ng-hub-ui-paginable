@@ -115,6 +115,10 @@ Esta biblioteca nace de la necesidad de ofrecer componentes de visualización de
 
 Todos los componentes están construidos como componentes standalone de Angular con soporte completo para Angular Signals.
 
+> ⚠️ **Cambios breaking en v21.2.0**
+> Esta versión major elimina la propiedad `color` de `PaginableActionButton` y unifica los contratos de botones de acción.
+> Revisa la migración en [BREAKING_CHANGES.md](./BREAKING_CHANGES.md) antes de actualizar.
+
 ---
 
 ## 🎯 Funcionalidades
@@ -432,7 +436,7 @@ const headers: PaginableTableHeader[] = [
 | `sortable`    | `boolean`                                        | Habilita la ordenación en esta columna                        | `false`             | `true`                                                                     |
 | `wrapping`    | `'wrap' \| 'nowrap'`                             | Comportamiento de salto de línea                              | `'wrap'`            | `'nowrap'` para IDs                                                        |
 | `sticky`      | `'start' \| 'end'`                               | Fija la columna durante el scroll                             | -                   | `'end'` para acciones                                                      |
-| `buttons`     | `Array<RowButton \| PaginableTableDropdown>`     | Botones de acción en esta columna                             | -                   | Ver [Botones de acción](#botones-de-accion)                                |
+| `buttons`     | `Array<PaginableActionButton \| PaginableTableDropdown>` | Botones de acción en esta columna                             | -                   | Ver [Botones de acción](#botones-de-accion)                                |
 | `filter`      | `InputFilter \| DropdownFilter \| BooleanFilter` | Configuración del filtro                                      | -                   | Ver [Filtros de columna](#filtros-de-columna)                              |
 | `onlyButtons` | `boolean`                                        | Optimiza el layout para columnas solo de botones              | `false`             | `true` para columnas de acción                                             |
 | `hidden`      | `boolean \| Function`                            | Controla la visibilidad de la columna                         | `false`             | Ver [Visibilidad de columnas](#control-de-visibilidad-de-columnas-hidden-) |
@@ -623,7 +627,7 @@ Usado internamente para acciones y filtros:
 ```typescript
 interface PaginableTableDropdown {
 	title: string;
-	buttons: RowButton[];
+	buttons: PaginableActionButton[];
 	fill?: string;
 	position?: 'start' | 'end';
 	color?: string;
@@ -829,7 +833,7 @@ filters = signal({
 | `paginationPosition` | `'top' \| 'bottom' \| 'both'`                 | `'bottom'`      | Dónde mostrar los controles de paginación.                             |
 | `paginationInfo`     | `boolean`                                     | `true`          | Si se muestra info de paginación (p. ej. "Mostrando 1 a 10 de 100").   |
 | `stickyActions`      | `boolean`                                     | `false`         | Si los botones de acción quedan fijos durante el scroll.               |
-| `batchActions`       | `Array<PaginableTableDropdown \| ListButton>` | `[]`            | Acciones disponibles para filas seleccionadas.                         |
+| `batchActions`       | `Array<PaginableTableDropdown \| PaginableActionButton>` | `[]`            | Acciones disponibles para filas seleccionadas.                         |
 | `responsive`         | `TableBreakpoint`                             | `null`          | Breakpoint responsive para el layout de la tabla.                      |
 | `options`            | `PaginableTableOptions`                       | `{}`            | Configuración visual (cursor, hover, striped, variant).                |
 | `clickFn`            | `(event: TableRowEvent<T>) => void`           | `null`          | Manejador para eventos de click en fila.                               |
@@ -872,7 +876,7 @@ interface TableRowEvent<T> {
 | `bindChildren` | `string`                                      | `'children'` | Propiedad que contiene los hijos.             |
 | `selectable`   | `string`                                      | `null`       | Configuración del modo de selección.          |
 | `options`      | `PaginableTableOptions`                       | `{}`         | Opciones visuales y de comportamiento.        |
-| `batchActions` | `Array<PaginableTableDropdown \| ListButton>` | `[]`         | Acciones para ítems seleccionados.            |
+| `batchActions` | `Array<PaginableTableDropdown \| PaginableActionButton>` | `[]`         | Acciones para ítems seleccionados.            |
 | `clickFn`      | `(event: ListClickEvent<T>) => void`          | `null`       | Manejador para eventos de click en ítems.     |
 
 **Evento de click en lista (`ListClickEvent<T>`):**

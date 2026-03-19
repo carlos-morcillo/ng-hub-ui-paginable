@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { RowButton } from './row-button';
+import { PaginableActionButton } from './paginable-action-button';
 
 /**
  * Represents a dropdown menu containing multiple action buttons.
@@ -31,7 +31,7 @@ export interface PaginableTableDropdown {
 	/**
 	 * Array of action buttons contained within the dropdown menu.
 	 */
-	buttons: ReadonlyArray<RowButton>;
+	buttons: ReadonlyArray<PaginableActionButton>;
 
 	/**
 	 * Position of the dropdown menu relative to the toggle button.
