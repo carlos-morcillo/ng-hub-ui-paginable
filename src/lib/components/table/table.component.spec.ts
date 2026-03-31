@@ -392,6 +392,7 @@ describe('TableComponent', () => {
 		it('should handle action button clicks', () => {
 			const mockHandler = jasmine.createSpy('handler');
 			const mockEvent = new MouseEvent('click');
+			const button = { title: 'Edit', handler: mockHandler };
 			const row: TableRow = {
 				data: { id: 1, name: 'John' },
 				selected: false,
@@ -400,7 +401,7 @@ describe('TableComponent', () => {
 
 			spyOn(mockEvent, 'stopPropagation');
 
-			component.handleAction(mockEvent, mockHandler, row);
+			component.handleAction(mockEvent, button, row);
 
 			expect(mockEvent.stopPropagation).toHaveBeenCalled();
 			expect(mockHandler).toHaveBeenCalledWith(row);

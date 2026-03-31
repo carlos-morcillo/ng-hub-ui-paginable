@@ -1,5 +1,22 @@
 # Changelog
 
+## [21.3.0] - 2026-03-31
+
+### Added
+
+- **list:** added `options.display = 'cards'` to render root list items using a card grid layout.
+- **styling:** added list card layout tokens for column sizing and card spacing.
+
+### Changed
+
+- **list:** switched root list rendering to a stable tracking key based on `bindValue`, `id`, or index fallback.
+- **list:** normalized internal list markup and state classes to support both standard list and card layouts.
+
+### Fixed
+
+- **table:** render the bottom pagination bar only when pagination is enabled, avoiding an empty wrapper.
+- **tests:** aligned table action button specs with the unified `PaginableActionButton` contract.
+
 ## [21.2.0] - 2026-03-19
 
 ### Added

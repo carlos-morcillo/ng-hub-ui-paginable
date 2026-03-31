@@ -402,6 +402,24 @@ export class ExampleComponent {
 </hub-ui-list>
 ```
 
+### List Component as Cards
+
+Use the same component with `options.display = 'cards'` when you want a card-based root layout while keeping nested children rendered as a regular hierarchical list.
+
+```html
+<hub-ui-list
+	[items]="products()"
+	[bindLabel]="'name'"
+	[bindChildren]="'children'"
+	[options]="{
+		display: 'cards',
+		searchable: true,
+		collapsed: true
+	}"
+>
+</hub-ui-list>
+```
+
 ### Standalone Paginator
 
 ```html
@@ -1055,6 +1073,8 @@ interface ListClickEvent<T> {
 	mouseEvent: MouseEvent; // Original mouse event
 }
 ```
+
+`options.display` accepts `'list' | 'cards'`. The `cards` mode only affects the root level of the list component.
 
 ### Paginator Component (`<hub-ui-paginator>`)
 

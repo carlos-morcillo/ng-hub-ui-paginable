@@ -3,6 +3,12 @@
  */
 export interface PaginableTableOptions {
 	/**
+	 * Defines the visual presentation used by list-based views.
+	 * Table components ignore this option.
+	 */
+	display?: 'list' | 'cards';
+
+	/**
 	 * Enables right-to-left visual direction for table/list layouts and paginator controls.
 	 */
 	rtl?: boolean;

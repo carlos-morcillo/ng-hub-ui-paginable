@@ -23,7 +23,7 @@
 		@if (options.searchable) {
 			<div class="hub-list__search">
 				@if (isRtl()) {
-					<button class="hub-list__search-btn btn btn-light" type="button" (click)="filter()">
+					<button class="hub-list__search-btn" type="button" (click)="filter()">
 						<i class="hub-list__search-icon" aria-hidden="true"></i>
 					</button>
 					<input
@@ -45,7 +45,7 @@
 						(click)="$event.stopPropagation()"
 						(keyup.enter)="filter()"
 					/>
-					<button class="hub-list__search-btn btn btn-light" type="button" (click)="filter()">
+					<button class="hub-list__search-btn" type="button" (click)="filter()">
 						<i class="hub-list__search-icon" aria-hidden="true"></i>
 					</button>
 				}
@@ -65,8 +65,8 @@
 ></ng-container>
 
 <ng-template #containerTpt let-controls="controls" let-isRoot="isRoot" let-items="items" let-depth="depth">
-	<ul class="hub-list" [class.hub-list--root]="isRoot">
-		@for (formGroup of controls; track formGroup; let index = $index) {
+	<ul class="hub-list" [class.hub-list--root]="isRoot" [class.hub-list--cards]="isRoot && isCardsDisplay()">
+		@for (formGroup of controls; track getTrackKey(formGroup.get('data')?.value, $index); let index = $index) {
 			<li
 				class="hub-list__item"
 				[ngClass]="_getRowClass(items[index])"
@@ -76,10 +76,10 @@
 				(click)="onItemClick(formGroup.value, depth, index, $event); $event.preventDefault(); $event.stopPropagation()"
 			>
 				@if (formGroup.value; as item) {
-					<div class="d-flex justify-content-between align-items-center gap-2 w-100">
+					<div class="hub-list__item-content">
 						@if (multipleSelectable()) {
 							<input
-								class="form-check-input hub-list__checkbox"
+								class="hub-list__checkbox"
 								type="checkbox"
 								formControlName="selected"
 								(change)="onSelectionChange()"
@@ -99,10 +99,10 @@
 							>
 							</ng-container>
 						</div>
-						<div class="hub-list__actions d-flex align-items-center gap-2">
-							@if (item[bindChildren()]?.length) {
+						@if (item[bindChildren()]?.length) {
+							<div class="hub-list__actions">
 								<button
-									class="btn hub-list__chevron"
+									class="hub-list__chevron"
 									(click)="
 										toggleCollapsed(formGroup.get('collapsed'));
 										$event.preventDefault();
@@ -116,8 +116,8 @@
 										"
 									></i>
 								</button>
-							}
-						</div>
+							</div>
+						}
 					</div>
 					@if (item[bindChildren()]?.length && !item.collapsed) {
 						<ng-container
@@ -180,7 +180,7 @@
 </ng-template>
 
 <ng-template #defaultNoResultsTpt>
-	<div class="alert alert-info d-flex align-items-center m-4" role="alert">
+	<div class="hub-list__no-results" role="alert">
 		<i class="hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
 		{{ 'NO_RESULTS_FOUND' | translate | ucfirst }}
 	</div>

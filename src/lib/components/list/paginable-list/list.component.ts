@@ -75,6 +75,7 @@ export class ListComponent<T = any> {
 	readonly multipleSelectable = computed(() => this.selectable() === SelectionTypes.Multiple);
 
 	private _options: PaginableTableOptions = {
+		display: 'list',
 		rtl: false,
 		cursor: 'default',
 		hoverableRows: false,
@@ -102,6 +103,15 @@ export class ListComponent<T = any> {
 	 */
 	isRtl(): boolean {
 		return this.options.rtl === true;
+	}
+
+	/**
+	 * Returns whether the root list should render using card layout.
+	 *
+	 * @returns `true` when the configured display mode is `cards`.
+	 */
+	isCardsDisplay(): boolean {
+		return this.options.display === 'cards';
 	}
 
 	private _items: any = [];
@@ -380,6 +390,33 @@ export class ListComponent<T = any> {
 		const start = (page - 1) * perPage;
 		const end = start + perPage;
 		return { start, end };
+	}
+
+	/**
+	 * Returns a stable tracking key for list rendering.
+	 *
+	 * @param item Current rendered item.
+	 * @param index Positional fallback when no stable key exists.
+	 * @returns Tracking key used by Angular control flow.
+	 */
+	protected getTrackKey(item: any, index: number): string | number {
+		if (!item) {
+			return index;
+		}
+
+		const bindValue = this.bindValue();
+		if (bindValue) {
+			const resolved = getValue(item, bindValue);
+			if (resolved != null) {
+				return resolved;
+			}
+		}
+
+		if (item.id != null) {
+			return item.id;
+		}
+
+		return index;
 	}
 
 	private collectSelectedValues(controls: ReadonlyArray<AbstractControl>): Array<any> {

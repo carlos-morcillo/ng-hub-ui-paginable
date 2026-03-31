@@ -246,9 +246,10 @@
 		</tbody>
 	</table>
 </div>
-<div class="hub-table__bottom-bar">
-	<!-- Pagination -->
-	@if (page() !== undefined && page() !== null) {
+
+<!-- Pagination -->
+@if (page() !== undefined && page() !== null) {
+	<div class="hub-table__bottom-bar">
 		@if (paginationPosition() == 'bottom' || paginationPosition() === 'both') {
 			<hub-paginator
 				class="hub-table__paginator hub-table__bottom-bar-paginator"
@@ -286,8 +287,8 @@
 				}}
 			</p>
 		}
-	}
-</div>
+	</div>
+}
 <ng-template #defaultRowTemplate let-item>
 	<tr
 		class="hub-table__body-row"

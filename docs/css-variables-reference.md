@@ -200,6 +200,13 @@ These tokens style the embedded paginator from the list host:
 | `--hub-list-container-padding-x` | `var(--hub-ref-space-3)` | Horizontal padding of the container |
 | `--hub-list-container-padding-y` | `var(--hub-ref-space-3)` | Vertical padding of the container |
 
+### Cards Layout
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-list-cards-min-column-width` | `18rem` | Minimum width used by each root-level card column |
+| `--hub-list-cards-gap` | `var(--hub-list-container-gap)` | Gap between cards when `options.display = 'cards'` |
+
 ### Items
 
 | Variable | Default | Description |
@@ -218,7 +225,6 @@ These tokens style the embedded paginator from the list host:
 |----------|---------|-------------|
 | `--hub-list-item-selected-bg` | `var(--hub-sys-color-primary)` | Background of selected items |
 | `--hub-list-item-selected-color` | `var(--hub-ref-color-white)` | Text color of selected items |
-| `--hub-list-item-active-bg` | `var(--hub-sys-color-primary)` | Background of active items |
 
 ### Empty State
 
@@ -239,8 +245,6 @@ These tokens style the embedded paginator from the list host:
 | `--hub-list-search-input-color` | `var(--hub-sys-text-primary)` | Text color of the search input |
 | `--hub-list-search-btn-bg` | `var(--hub-ref-surface-2)` | Background of the search button |
 | `--hub-list-search-btn-color` | `var(--hub-sys-text-primary)` | Text/icon color of the search button |
-| `--hub-list-search-button-bg` | `var(--hub-list-search-btn-bg)` | Alias for search button background |
-| `--hub-list-search-button-color` | `var(--hub-list-search-btn-color)` | Alias for search button color |
 | `--hub-list-search-button-min-width` | `2.75rem` | Minimum width of the search button |
 | `--hub-list-search-border-color` | `var(--hub-list-search-input-border-color)` | Shared border color for search input/button |
 | `--hub-list-search-border-width` | `1px` | Shared border width for search input/button |

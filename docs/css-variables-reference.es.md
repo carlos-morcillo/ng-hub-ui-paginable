@@ -161,6 +161,13 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 | `--hub-list-container-padding-x` | `var(--hub-ref-space-3)` | Horizontal padding of the container |
 | `--hub-list-container-padding-y` | `var(--hub-ref-space-3)` | Vertical padding of the container |
 
+### Cards Layout
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-list-cards-min-column-width` | `18rem` | Minimum width used by each root-level card column |
+| `--hub-list-cards-gap` | `var(--hub-list-container-gap)` | Gap between cards when `options.display = 'cards'` |
+
 ### Items
 
 | Variable | Default | Description |
@@ -179,7 +186,6 @@ Defined on `.hub-list`. Control the appearance of the `<hub-ui-list>` component 
 |----------|---------|-------------|
 | `--hub-list-item-selected-bg` | `var(--hub-sys-color-primary)` | Background of selected items |
 | `--hub-list-item-selected-color` | `var(--hub-ref-color-white)` | Text color of selected items |
-| `--hub-list-item-active-bg` | `var(--hub-sys-color-primary)` | Background of active items |
 
 ### Empty State
 

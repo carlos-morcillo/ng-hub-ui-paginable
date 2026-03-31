@@ -104,6 +104,7 @@ describe('ListComponent', () => {
 
 	it('should render search button before input when rtl is enabled', () => {
 		fixture.componentRef.setInput('options', {
+			display: 'list',
 			cursor: 'default',
 			hoverableRows: false,
 			striped: null,
@@ -117,5 +118,22 @@ describe('ListComponent', () => {
 		const searchElement = fixture.nativeElement.querySelector('.hub-list__search') as HTMLElement;
 		expect(searchElement).toBeTruthy();
 		expect(searchElement.firstElementChild?.classList.contains('hub-list__search-btn')).toBeTrue();
+	});
+
+	it('should enable cards layout when options.display is cards', () => {
+		fixture.componentRef.setInput('options', {
+			display: 'cards',
+			cursor: 'default',
+			hoverableRows: false,
+			striped: null,
+			variant: null,
+			searchable: false,
+			collapsed: true,
+			rtl: false
+		});
+		fixture.detectChanges();
+
+		const rootList = fixture.nativeElement.querySelector('.hub-list--root') as HTMLElement;
+		expect(rootList.classList.contains('hub-list--cards')).toBeTrue();
 	});
 });

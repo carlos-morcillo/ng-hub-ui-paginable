@@ -149,8 +149,27 @@ Todos los componentes están construidos como componentes standalone de Angular 
 - **🔍 Filtros de menú**: Paneles de filtro dedicados
 - **🧩 Filtros de menú con reglas múltiples**: Operadores AND/OR, validaciones nulas y modos por regla
 - **📋 Listas jerárquicas**: Estructuras tipo árbol
+- **🃏 Modo cards para listas**: El componente de lista puede renderizar el nivel raíz como una rejilla de tarjetas mediante `options.display = 'cards'`
 - **🎛 Tematización contextual de paginación**: El paginador hereda tokens de Table/List sin duplicar variables de paginador
 - **↔️ Tokens de layout de barra inferior**: Permite reordenar y alinear paginador/settings/info en Table y List mediante variables CSS
+
+### Uso del componente lista como cards
+
+```html
+<hub-ui-list
+	[items]="products()"
+	[bindLabel]="'name'"
+	[bindChildren]="'children'"
+	[options]="{
+		display: 'cards',
+		searchable: true,
+		collapsed: true
+	}"
+>
+</hub-ui-list>
+```
+
+`options.display` acepta `'list' | 'cards'`. El modo `cards` solo afecta al nivel raíz del componente de lista.
 
 ## 🏗️ Arquitectura de componentes
 
