@@ -1,5 +1,15 @@
 # ng-hub-ui-paginable
 
+**Español** | [English](./README.md)
+
+## Documentación y ejemplos en vivo
+
+Este paquete forma parte de [Hub UI](https://hubui.dev/), una colección de bibliotecas de componentes Angular para aplicaciones standalone.
+
+- Documentación: https://hubui.dev/paginable/overview/
+- Ejemplos en vivo: https://hubui.dev/paginable/examples/
+- Hub UI: https://hubui.dev/
+
 ## 🧩 Familia de bibliotecas `ng-hub-ui`
 
 Esta biblioteca forma parte del ecosistema **ng-hub-ui**:
@@ -10,9 +20,13 @@ Esta biblioteca forma parte del ecosistema **ng-hub-ui**:
 - [**ng-hub-ui-board**](https://www.npmjs.com/package/ng-hub-ui-board)
 - [**ng-hub-ui-breadcrumbs**](https://www.npmjs.com/package/ng-hub-ui-breadcrumbs)
 - [**ng-hub-ui-calendar**](https://www.npmjs.com/package/ng-hub-ui-calendar)
+- [**ng-hub-ui-dropdown**](https://www.npmjs.com/package/ng-hub-ui-dropdown)
+- [**ng-hub-ui-history**](https://www.npmjs.com/package/ng-hub-ui-history)
 - [**ng-hub-ui-modal**](https://www.npmjs.com/package/ng-hub-ui-modal)
+- [**ng-hub-ui-nav**](https://www.npmjs.com/package/ng-hub-ui-nav)
 - [**ng-hub-ui-paginable**](https://www.npmjs.com/package/ng-hub-ui-paginable) ← Estás aquí
 - [**ng-hub-ui-portal**](https://www.npmjs.com/package/ng-hub-ui-portal)
+- [**ng-hub-ui-sortable**](https://www.npmjs.com/package/ng-hub-ui-sortable)
 - [**ng-hub-ui-stepper**](https://www.npmjs.com/package/ng-hub-ui-stepper)
 - [**ng-hub-ui-utils**](https://www.npmjs.com/package/ng-hub-ui-utils)
 
