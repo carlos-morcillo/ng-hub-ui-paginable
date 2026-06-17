@@ -1,4 +1,4 @@
-import { Component, TemplateRef, viewChild } from '@angular/core';
+import { Component, TemplateRef, signal, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableHeaderDirective } from './paginable-table-header.directive';
 
@@ -7,7 +7,7 @@ import { PaginableTableHeaderDirective } from './paginable-table-header.directiv
  */
 @Component({
 	template: `
-		<ng-template paginableTableHeader [header]="headerName">
+		<ng-template paginableTableHeader [header]="headerName()">
 			<div class="custom-header">{{ headerTitle }}</div>
 		</ng-template>
 	`,
@@ -17,7 +17,7 @@ import { PaginableTableHeaderDirective } from './paginable-table-header.directiv
 class TestHeaderDirectiveComponent {
 	readonly directive = viewChild.required(PaginableTableHeaderDirective);
 
-	headerName = 'testColumn';
+	headerName = signal('testColumn');
 	headerTitle = 'Test Header';
 }
 
@@ -55,7 +55,7 @@ describe('PaginableTableHeaderDirective', () => {
 	});
 
 	it('should update header input', () => {
-		component.headerName = 'newColumn';
+		component.headerName.set('newColumn');
 		fixture.detectChanges();
 
 		expect(directive.header()).toBe('newColumn');

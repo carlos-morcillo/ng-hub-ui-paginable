@@ -1,4 +1,4 @@
-import { Component, TemplateRef, viewChild } from '@angular/core';
+import { Component, TemplateRef, signal, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PaginableTableFilterDirective } from './paginable-table-filter.directive';
 
@@ -7,7 +7,7 @@ import { PaginableTableFilterDirective } from './paginable-table-filter.directiv
  */
 @Component({
 	template: `
-		<ng-template paginableTableFilter [header]="filterHeader">
+		<ng-template paginableTableFilter [header]="filterHeader()">
 			<input type="text" placeholder="Filter..." />
 		</ng-template>
 	`,
@@ -17,7 +17,7 @@ import { PaginableTableFilterDirective } from './paginable-table-filter.directiv
 class TestFilterDirectiveComponent {
 	readonly directive = viewChild.required(PaginableTableFilterDirective);
 
-	filterHeader = 'filterColumn';
+	filterHeader = signal('filterColumn');
 }
 
 /**
@@ -54,7 +54,7 @@ describe('PaginableTableFilterDirective', () => {
 	});
 
 	it('should update header input', () => {
-		component.filterHeader = 'newFilterColumn';
+		component.filterHeader.set('newFilterColumn');
 		fixture.detectChanges();
 
 		expect(directive.header()).toBe('newFilterColumn');
