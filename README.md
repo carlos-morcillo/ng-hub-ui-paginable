@@ -129,8 +129,8 @@ This library arises from the need to offer highly configurable, accessible, and 
 
 All components are built as standalone Angular components with full Angular Signals support.
 
-> ⚠️ **Breaking changes in v21.2.0**
-> This major release removes the `color` property from `PaginableActionButton` and unifies action button contracts.
+> ⚠️ **Breaking changes in v22.0.0**
+> This major release restructures the List CSS API (the `.hub-list` block moves to the host, the `<ul>` becomes `.hub-list__items`), renames the `--hub-list-container-*` variables, and removes the non-functional `--hub-table-breakpoint-*` variables. `peerDependencies` stays at `>=18.0.0`, so Angular 18–22 remain supported.
 > Review migration steps in [BREAKING_CHANGES.md](./BREAKING_CHANGES.md) before upgrading.
 
 ---

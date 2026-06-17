@@ -129,8 +129,8 @@ Esta biblioteca nace de la necesidad de ofrecer componentes de visualización de
 
 Todos los componentes están construidos como componentes standalone de Angular con soporte completo para Angular Signals.
 
-> ⚠️ **Cambios breaking en v21.2.0**
-> Esta versión major elimina la propiedad `color` de `PaginableActionButton` y unifica los contratos de botones de acción.
+> ⚠️ **Cambios breaking en v22.0.0**
+> Esta versión major reestructura la API CSS de List (el bloque `.hub-list` pasa al host y el `<ul>` se convierte en `.hub-list__items`), renombra las variables `--hub-list-container-*` y elimina las variables `--hub-table-breakpoint-*` no funcionales. El `peerDependencies` se mantiene en `>=18.0.0`, así que Angular 18–22 siguen soportados.
 > Revisa la migración en [BREAKING_CHANGES.md](./BREAKING_CHANGES.md) antes de actualizar.
 
 ---

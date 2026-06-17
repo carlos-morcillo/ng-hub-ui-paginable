@@ -1,5 +1,31 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## v22.0.0
+
+This release aligns the major with Angular 22 and restructures the List component's CSS API. `peerDependencies` stays at `>=18.0.0`, so Angular 18–22 remain supported.
+
+### 1. List BEM structure moved to the host element
+
+- **Change**: the `.hub-list` block class now lives on the host element (`<hub-list>`); the inner `<ul>` is now `.hub-list__items`. The root/cards modifiers were renamed from `.hub-list--root` / `.hub-list--cards` to `.hub-list__items--root` / `.hub-list__items--cards`.
+- **Impact**: CSS targeting `.hub-list` as the `<ul>`, or the `.hub-list--root` / `.hub-list--cards` selectors, no longer matches.
+- **Migration**: target `.hub-list__items` (and `--root` / `--cards`) for the items collection; `.hub-list` now refers to the component host.
+
+### 2. List CSS variables renamed
+
+- **Change**:
+    - `--hub-list-container-bg` → `--hub-list-bg`
+    - `--hub-list-container-border-radius` → `--hub-list-border-radius`
+    - `--hub-list-container-padding-x` / `-y` → `--hub-list-padding-x` / `-y`
+    - `--hub-list-container-gap` → `--hub-list-items-gap`
+- **Impact**: overrides using the old `--hub-list-container-*` names have no effect.
+- **Migration**: rename the variables in your overrides. The background model also changed: `--hub-list-bg` (host) and `--hub-list-item-bg` (items) now control backgrounds; the host is transparent and items use the page surface by default.
+
+### 3. Table responsive breakpoint variables removed
+
+- **Change**: `--hub-table-breakpoint-sm` / `-md` / `-lg` / `-xl` / `-xxl` were removed.
+- **Impact**: none in practice — they never had any effect, because CSS custom properties cannot be read inside `@media` conditions.
+- **Migration**: none. The responsive variants (`.hub-table__responsive-*`) still trigger at the fixed `576px` / `768px` / `992px` / `1200px` / `1400px` breakpoints.
+
 ## v21.2.0
 
 This major release removes framework-specific styling assumptions from action buttons and unifies the action button contract.
