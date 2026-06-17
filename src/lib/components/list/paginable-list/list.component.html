@@ -65,7 +65,11 @@
 ></ng-container>
 
 <ng-template #containerTpt let-controls="controls" let-isRoot="isRoot" let-items="items" let-depth="depth">
-	<ul class="hub-list" [class.hub-list--root]="isRoot" [class.hub-list--cards]="isRoot && isCardsDisplay()">
+	<ul
+		class="hub-list__items"
+		[class.hub-list__items--root]="isRoot"
+		[class.hub-list__items--cards]="isRoot && isCardsDisplay()"
+	>
 		@for (formGroup of controls; track getTrackKey(formGroup.get('data')?.value, $index); let index = $index) {
 			<li
 				class="hub-list__item"

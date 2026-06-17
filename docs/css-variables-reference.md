@@ -101,7 +101,12 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 | `--hub-paginator-link-color` | `var(--hub-sys-color-primary)` | Text color of page links |
 | `--hub-paginator-link-bg` | `var(--hub-sys-surface-page)` | Background of page links |
 | `--hub-paginator-link-border-color` | `var(--hub-sys-border-color-default)` | Border color of page links |
+| `--hub-paginator-link-border-width` | `1px` | Border width of page links |
 | `--hub-paginator-link-border-radius` | `var(--hub-ref-radius-sm)` | Border radius of page links |
+| `--hub-paginator-link-padding-x` | `0.75rem` | Horizontal padding of page links |
+| `--hub-paginator-link-padding-y` | `0.375rem` | Vertical padding of page links |
+| `--hub-paginator-link-focus-shadow` | `0 0 0 var(--hub-sys-focus-ring-width) var(--hub-sys-focus-ring-color)` | Focus ring of page links |
+| `--hub-paginator-transition` | `color/background/border/box-shadow 0.15s ease-in-out` | Transition applied to page links |
 
 ### Page Links — Hover
 
@@ -134,6 +139,7 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 | `--hub-paginator-select-color` | `var(--hub-sys-text-primary)` | Text color of the per-page select |
 | `--hub-paginator-select-bg` | `var(--hub-sys-surface-page)` | Background of the per-page select |
 | `--hub-paginator-select-border-color` | `var(--hub-sys-border-color-default)` | Border of the per-page select |
+| `--hub-paginator-select-border-width` | `1px` | Border width of the per-page select |
 | `--hub-paginator-select-border-radius` | `var(--hub-ref-radius-sm)` | Border radius of the per-page select |
 | `--hub-paginator-select-padding-x` | `var(--hub-ref-space-2)` | Horizontal padding of the select |
 | `--hub-paginator-select-padding-y` | `var(--hub-ref-space-1)` | Vertical padding of the select |
@@ -146,6 +152,10 @@ Defined on `.hub-paginator`. Control the appearance of pagination controls used 
 | `--hub-paginator-icon-size` | `1em` | Size of navigation icons |
 | `--hub-paginator-info-color` | `var(--hub-sys-text-muted)` | Color of pagination info text ("Showing 1 to 10 of 100") |
 | `--hub-paginator-label-color` | `var(--hub-sys-text-muted)` | Color of labels (e.g., "Items per page") |
+| `--hub-paginator-icon-angle-left` | `url("…")` (SVG) | Glyph for the previous-page arrow |
+| `--hub-paginator-icon-angle-right` | `url("…")` (SVG) | Glyph for the next-page arrow |
+| `--hub-paginator-icon-angle-double-left` | `url("…")` (SVG) | Glyph for the first-page arrow |
+| `--hub-paginator-icon-angle-double-right` | `url("…")` (SVG) | Glyph for the last-page arrow |
 
 ---
 
@@ -194,25 +204,43 @@ These tokens style the embedded paginator from the list host:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-list-container-bg` | `var(--hub-sys-surface-page)` | Background of the list container |
-| `--hub-list-container-border-radius` | `var(--hub-ref-radius-md)` | Border radius of the list container |
-| `--hub-list-container-gap` | `var(--hub-ref-space-2)` | Gap between list items |
-| `--hub-list-container-padding-x` | `var(--hub-ref-space-3)` | Horizontal padding of the container |
-| `--hub-list-container-padding-y` | `var(--hub-ref-space-3)` | Vertical padding of the container |
+| `--hub-list-bg` | `transparent` | Background of the whole list component (host element); transparent by default so the page shows through |
+| `--hub-list-border-radius` | `var(--hub-ref-radius-md)` | Border radius of the list component surface |
+| `--hub-list-padding-x` | `var(--hub-ref-space-0)` | Horizontal padding of the list component surface |
+| `--hub-list-padding-y` | `var(--hub-ref-space-0)` | Vertical padding of the list component surface |
+| `--hub-list-gap` | `var(--hub-ref-space-4)` | Gap between the top bar, items collection and bottom bar |
+| `--hub-list-items-bg` | `transparent` | Background of the items collection (`<ul>`); transparent so the surface shows through |
+| `--hub-list-items-gap` | `var(--hub-ref-space-2)` | Gap between list items |
 
 ### Cards Layout
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `--hub-list-cards-min-column-width` | `18rem` | Minimum width used by each root-level card column |
-| `--hub-list-cards-gap` | `var(--hub-list-container-gap)` | Gap between cards when `options.display = 'cards'` |
+| `--hub-list-cards-gap` | `var(--hub-list-items-gap)` | Gap between cards when `options.display = 'cards'` |
+| `--hub-list-cards-columns` | `auto-fit` | Column track count for the card grid; set a number to fix the column count |
+| `--hub-list-cards-row-gap` | `var(--hub-list-cards-gap)` | Vertical gap between card rows |
+| `--hub-list-cards-column-gap` | `var(--hub-list-cards-gap)` | Horizontal gap between card columns |
+| `--hub-list-cards-bg` | `var(--hub-list-item-bg, transparent)` | Background color of a card |
+| `--hub-list-cards-color` | `var(--hub-list-item-color)` | Text color of a card |
+| `--hub-list-cards-padding-x` | `var(--hub-list-item-padding-x)` | Horizontal padding of a card |
+| `--hub-list-cards-padding-y` | `var(--hub-list-item-padding-y)` | Vertical padding of a card |
+| `--hub-list-cards-border-color` | `var(--hub-list-item-border-color)` | Border color of a card |
+| `--hub-list-cards-border-width` | `var(--hub-list-item-border-width, 1px)` | Border width of a card |
+| `--hub-list-cards-border-radius` | `var(--hub-list-item-border-radius)` | Border radius of a card |
+| `--hub-list-cards-shadow` | `none` | Box shadow of a card (e.g. `var(--hub-sys-shadow-sm)`) |
+| `--hub-list-cards-hover-bg` | `var(--hub-list-item-hover-bg)` | Background color of a clickable card on hover |
+| `--hub-list-cards-hover-shadow` | `var(--hub-list-cards-shadow)` | Box shadow of a clickable card on hover |
+| `--hub-list-cards-transition` | `background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out` | Transition applied to cards |
 
 ### Items
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `--hub-list-item-color` | `var(--hub-sys-text-primary)` | Text color of list items |
+| `--hub-list-item-bg` | `var(--hub-sys-surface-page)` | Background of list items; defaults to the page surface so items read as solid like table rows |
 | `--hub-list-item-border-color` | `var(--hub-sys-border-color-default)` | Border color of list items |
+| `--hub-list-item-border-width` | `1px` | Border width of list items |
 | `--hub-list-item-border-radius` | `var(--hub-ref-radius-sm)` | Border radius of list items |
 | `--hub-list-item-gap` | `var(--hub-ref-space-2)` | Internal gap within items |
 | `--hub-list-item-padding-x` | `var(--hub-ref-space-3)` | Horizontal padding of items |
@@ -257,7 +285,7 @@ These tokens style the embedded paginator from the list host:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-list-action-btn-bg` | `var(--hub-list-container-bg)` | Background of list action buttons |
+| `--hub-list-action-btn-bg` | `var(--hub-list-bg)` | Background of list action buttons |
 | `--hub-list-action-btn-color` | `var(--hub-list-item-color)` | Text color of list action buttons |
 | `--hub-list-action-btn-border-color` | `var(--hub-list-item-border-color)` | Border color of list action buttons |
 | `--hub-list-action-btn-border-radius` | `var(--hub-list-item-border-radius)` | Border radius of list action buttons |
@@ -326,37 +354,55 @@ These tokens style the embedded paginator from the table host:
 | `--hub-table-border-color` | `var(--hub-sys-border-color-default)` | Border color used in the table wrapper |
 | `--hub-table-border-radius` | `var(--hub-ref-radius-md)` | Border radius of the table container |
 | `--hub-table-border-width` | `var(--hub-ref-border-width)` | Border width of the table container |
+| `--hub-table-container-gap` | `var(--hub-ref-space-3)` | Gap between the top bar, table and bottom bar |
+
+### Search (Table)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-table-search-input-bg` | `var(--hub-table-container-bg)` | Background of the search input |
+| `--hub-table-search-input-border-color` | `var(--hub-table-border-color)` | Border color of the search input |
+| `--hub-table-search-input-color` | `var(--hub-table-container-color)` | Text color of the search input |
+| `--hub-table-search-input-padding-x` | `0.75rem` | Horizontal padding of the search input |
+| `--hub-table-search-input-padding-y` | `0.375rem` | Vertical padding of the search input |
+| `--hub-table-search-input-font-size` | `1rem` | Font size of the search input |
+| `--hub-table-search-button-bg` | `var(--hub-table-container-bg)` | Background of the search button |
+| `--hub-table-search-button-border-color` | `var(--hub-table-border-color)` | Border color of the search button |
+| `--hub-table-search-button-color` | `var(--hub-table-container-color)` | Text/icon color of the search button |
+| `--hub-table-search-button-min-width` | `2.75rem` | Minimum width of the search button |
+| `--hub-table-search-border-width` | `var(--hub-table-border-width)` | Shared border width for search input/button |
+| `--hub-table-search-border-radius` | `var(--hub-table-border-radius)` | Shared border radius for search input/button |
 
 ### Table Element
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-table-table-bg` | `var(--hub-ref-color-white)` | Background of the `<table>` element |
-| `--hub-table-table-color` | `var(--hub-sys-text-primary)` | Text color inside the table |
-| `--hub-table-table-border-color` | `var(--hub-sys-border-color-default)` | Border color of table rows and cells |
-| `--hub-table-table-border-width` | `var(--hub-ref-border-width)` | Border width of table rows and cells |
-| `--hub-table-table-group-separator-color` | `var(--hub-sys-border-color-default)` | Color of the separator between thead and tbody |
+| `--hub-table-bg` | `var(--hub-ref-color-white)` | Background of the `<table>` element |
+| `--hub-table-color` | `var(--hub-sys-text-primary)` | Text color inside the table |
+| `--hub-table-border-color` | `var(--hub-sys-border-color-default)` | Border color of table rows and cells |
+| `--hub-table-border-width` | `var(--hub-ref-border-width)` | Border width of table rows and cells |
+| `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default)` | Color of the separator between thead and tbody |
 
 ### Cell Spacing
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-table-table-cell-padding-x` | `var(--hub-ref-space-3)` | Horizontal cell padding (normal) |
-| `--hub-table-table-cell-padding-y` | `var(--hub-ref-space-2)` | Vertical cell padding (normal) |
-| `--hub-table-table-cell-padding-x-sm` | `var(--hub-ref-space-2)` | Horizontal cell padding (compact/small) |
-| `--hub-table-table-cell-padding-y-sm` | `var(--hub-ref-space-1)` | Vertical cell padding (compact/small) |
-| `--hub-table-table-cell-vertical-align` | `middle` | Vertical alignment of cell content |
+| `--hub-table-cell-padding-x` | `var(--hub-ref-space-3)` | Horizontal cell padding (normal) |
+| `--hub-table-cell-padding-y` | `var(--hub-ref-space-2)` | Vertical cell padding (normal) |
+| `--hub-table-cell-padding-x-sm` | `var(--hub-ref-space-2)` | Horizontal cell padding (compact/small) |
+| `--hub-table-cell-padding-y-sm` | `var(--hub-ref-space-1)` | Vertical cell padding (compact/small) |
+| `--hub-table-cell-vertical-align` | `middle` | Vertical alignment of cell content |
 
 ### Row States
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-table-table-hover-bg` | `var(--hub-sys-state-hover-bg)` | Background on row hover |
-| `--hub-table-table-hover-color` | `var(--hub-sys-text-primary)` | Text color on row hover |
-| `--hub-table-table-active-bg` | `var(--hub-sys-state-active-bg)` | Background for active rows |
-| `--hub-table-table-active-color` | `var(--hub-sys-text-primary)` | Text color for active rows |
-| `--hub-table-table-striped-bg` | `var(--hub-sys-state-striped-bg)` | Background for striped rows |
-| `--hub-table-table-striped-color` | `var(--hub-sys-text-primary)` | Text color for striped rows |
+| `--hub-table-hover-bg` | `var(--hub-sys-state-hover-bg)` | Background on row hover |
+| `--hub-table-hover-color` | `var(--hub-sys-text-primary)` | Text color on row hover |
+| `--hub-table-active-bg` | `var(--hub-sys-state-active-bg)` | Background for active rows |
+| `--hub-table-active-color` | `var(--hub-sys-text-primary)` | Text color for active rows |
+| `--hub-table-striped-bg` | `var(--hub-sys-state-striped-bg)` | Background for striped rows |
+| `--hub-table-striped-color` | `var(--hub-sys-text-primary)` | Text color for striped rows |
 
 ### Accent Layer (Advanced)
 
@@ -364,11 +410,36 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-table-table-accent-bg` | `transparent` | Base accent background |
-| `--hub-table-table-bg-type` | `initial` | Background set by variant type (striped) |
-| `--hub-table-table-bg-state` | `initial` | Background set by interaction state (hover, active) |
-| `--hub-table-table-color-type` | `initial` | Color set by variant type |
-| `--hub-table-table-color-state` | `initial` | Color set by interaction state |
+| `--hub-table-accent-bg` | `transparent` | Base accent background |
+| `--hub-table-bg-type` | `initial` | Background set by variant type (striped) |
+| `--hub-table-bg-state` | `initial` | Background set by interaction state (hover, active) |
+| `--hub-table-color-type` | `initial` | Color set by variant type |
+| `--hub-table-color-state` | `initial` | Color set by interaction state |
+
+### Filter Button & Count Badge
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-table-filter-button-gap` | `var(--hub-ref-space-2)` | Gap between filter button icon and text |
+| `--hub-table-filter-button-padding-x` | `0.75rem` | Horizontal padding of the filter button |
+| `--hub-table-filter-button-padding-y` | `0.375rem` | Vertical padding of the filter button |
+| `--hub-table-filter-button-border-width` | `1px` | Border width of the filter button |
+| `--hub-table-filter-button-border-color` | `transparent` | Border color of the filter button |
+| `--hub-table-filter-button-border-radius` | `var(--hub-ref-radius-sm)` | Border radius of the filter button |
+| `--hub-table-filter-button-transition` | `all 0.2s ease` | Transition applied to the filter button |
+| `--hub-table-filter-button-hover-bg` | `rgba(0, 0, 0, 0.05)` | Background of the filter button on hover |
+| `--hub-table-filter-button-active-bg` | `rgba(25, 135, 84, 0.1)` | Background when filters are applied |
+| `--hub-table-filter-button-active-border-color` | `var(--hub-sys-color-success)` | Border color when filters are applied |
+| `--hub-table-filter-button-icon-color` | `var(--hub-sys-text-muted)` | Filter button icon color |
+| `--hub-table-filter-button-icon-active-color` | `var(--hub-sys-color-success)` | Filter button icon color when active |
+| `--hub-table-filter-count-bg` | `var(--hub-sys-color-success)` | Background of the active-filter count badge |
+| `--hub-table-filter-count-color` | `var(--hub-ref-color-white)` | Text color of the count badge |
+| `--hub-table-filter-count-size` | `1.25rem` | Min width and height of the count badge |
+| `--hub-table-filter-count-padding-x` | `0.4em` | Horizontal padding of the count badge |
+| `--hub-table-filter-count-font-size` | `0.7rem` | Font size of the count badge |
+| `--hub-table-filter-count-font-weight` | `700` | Font weight of the count badge |
+| `--hub-table-filter-count-border-radius` | `50rem` | Border radius of the count badge |
+| `--hub-table-batch-actions-btn-icon-gap` | `var(--hub-ref-space-1)` | Spacing between a batch action button's icon and text |
 
 ### Icons
 
@@ -376,16 +447,13 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 |----------|---------|-------------|
 | `--hub-table-icon-color` | `currentColor` | Color of table icons (sort, filter, etc.) |
 | `--hub-table-icon-size` | `1em` | Base size of table icons |
+| `--hub-table-icon-sort` | `url("…")` (SVG) | Glyph for the sortable (unsorted) indicator |
+| `--hub-table-icon-sort-up` | `url("…")` (SVG) | Glyph for the ascending sort indicator |
+| `--hub-table-icon-sort-down` | `url("…")` (SVG) | Glyph for the descending sort indicator |
 
 ### Responsive Breakpoints
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `--hub-table-breakpoint-sm` | `576px` | Small breakpoint |
-| `--hub-table-breakpoint-md` | `768px` | Medium breakpoint |
-| `--hub-table-breakpoint-lg` | `992px` | Large breakpoint |
-| `--hub-table-breakpoint-xl` | `1200px` | Extra large breakpoint |
-| `--hub-table-breakpoint-xxl` | `1400px` | Extra extra large breakpoint |
+The responsive table variants (`.hub-table__responsive-sm|md|lg|xl|xxl`) trigger at **fixed** breakpoints — `576px`, `768px`, `992px`, `1200px`, `1400px` — defined directly in the component's `@media` queries. These are **not** overridable via CSS variables, because CSS custom properties cannot be read inside `@media` conditions.
 
 ---
 
@@ -426,7 +494,7 @@ Override the system-level tokens to switch all three components to dark mode at 
 /* Optional: override table-specific tokens for dark */
 .dark-theme .hub-table {
   --hub-table-container-bg: #1e1e1e;
-  --hub-table-table-bg: #1e1e1e;
+  --hub-table-bg: #1e1e1e;
 }
 ```
 
@@ -436,8 +504,8 @@ Reduce spacing for a denser data display:
 
 ```scss
 .compact-table .hub-table {
-  --hub-table-table-cell-padding-x: 0.5rem;
-  --hub-table-table-cell-padding-y: 0.25rem;
+  --hub-table-cell-padding-x: 0.5rem;
+  --hub-table-cell-padding-y: 0.25rem;
   --hub-table-border-radius: 0.2rem;
   font-size: 0.875rem;
 }
@@ -491,8 +559,8 @@ Wrap a specific table in a class to override its styles without affecting others
 
 ```scss
 .finance-table .hub-table {
-  --hub-table-table-striped-bg: rgba(25, 135, 84, 0.05);
-  --hub-table-table-hover-bg: rgba(25, 135, 84, 0.1);
+  --hub-table-striped-bg: rgba(25, 135, 84, 0.05);
+  --hub-table-hover-bg: rgba(25, 135, 84, 0.1);
 }
 
 .finance-table .hub-paginator {
@@ -508,7 +576,7 @@ Wrap a specific table in a class to override its styles without affecting others
   --hub-list-item-selected-bg: #7c3aed;
   --hub-list-item-selected-color: #fff;
   --hub-list-item-hover-bg: rgba(124, 58, 237, 0.08);
-  --hub-list-container-border-radius: 0.5rem;
+  --hub-list-border-radius: 0.5rem;
 }
 ```
 
@@ -538,7 +606,7 @@ Wrap a specific table in a class to override its styles without affecting others
 ┌─────────────────────────────────────────────────────┐
 │  component layer                                    │
 │  --hub-paginator-link-bg: var(--hub-sys-surface-page)│
-│  --hub-table-table-color: var(--hub-sys-text-primary)│
+│  --hub-table-color: var(--hub-sys-text-primary)│
 │  --hub-list-item-hover-bg: var(--hub-ref-surface-2)  │
 └─────────────────────────────────────────────────────┘
 ```
@@ -559,6 +627,6 @@ Override at the **sys level** when you want consistent theming across components
 2. **Use component tokens for granular control**. If only the paginator needs a different active color, override `--hub-paginator-link-active-bg`.
 3. **Scope overrides with CSS classes**. Wrap components in containers and target `.my-context .hub-table { ... }` to avoid leaking styles.
 4. **Prefer `@use` over `@import`** when including the library's SCSS to avoid polluting the global namespace.
-5. **Do not override accent/state internal variables** (`--hub-table-table-bg-state`, `--hub-table-table-bg-type`) unless you fully understand the cascade pattern.
+5. **Do not override accent/state internal variables** (`--hub-table-bg-state`, `--hub-table-bg-type`) unless you fully understand the cascade pattern.
 6. **Test in both light and dark themes** if your application supports theming.
 7. **Persist user preferences** (e.g., compact vs. normal) in localStorage and apply the corresponding CSS class on load.

@@ -1,6 +1,14 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, Input, TemplateRef, computed, contentChild, inject, input, model } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import {
+	AbstractControl,
+	FormArray,
+	FormBuilder,
+	FormControl,
+	FormsModule,
+	NG_VALUE_ACCESSOR,
+	ReactiveFormsModule
+} from '@angular/forms';
 import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
 import { PaginableNoResultsDirective } from '../../../directives/paginable-no-results.directive';
@@ -17,7 +25,7 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 	templateUrl: './list.component.html',
 	styleUrl: './list.component.scss',
 	host: {
-		class: 'd-flex flex-column gap-4',
+		class: 'hub-list',
 		'[class.hub-list--rtl]': 'isRtl()'
 	},
 	providers: [
@@ -495,11 +503,7 @@ export class ListComponent<T = any> {
 	 * @returns Normalized class name array.
 	 */
 	private normalizeClassList(classList: string | Array<string> | undefined): Array<string> {
-		const tokens = Array.isArray(classList)
-			? classList
-			: typeof classList === 'string'
-				? classList.split(/\s+/)
-				: [];
+		const tokens = Array.isArray(classList) ? classList : typeof classList === 'string' ? classList.split(/\s+/) : [];
 		return [...new Set(tokens.map((item) => item.trim()).filter(Boolean))];
 	}
 }

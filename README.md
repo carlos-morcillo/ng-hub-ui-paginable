@@ -2243,6 +2243,27 @@ export class AppComponent {
 
 ## 📊 Changelog
 
+## [22.0.0] - 2026-06-17
+
+### Changed
+
+- **List:** the BEM block now lives on the host element. The host `hub-list` carries the `.hub-list` block class and the `<ul>` becomes the `.hub-list__items` element (modifiers `.hub-list__items--root` / `--cards`). Backgrounds are controlled via `--hub-list-bg` (host) and `--hub-list-item-bg` (items), both defaulting to a transparent host / surface items.
+
+### Added
+
+- **List:** `--hub-list-gap`, `--hub-list-items-bg` and `--hub-list-item-bg` CSS variables.
+
+### Fixed
+
+- **List:** the card CSS variables (`--hub-list-cards-*`) were documented and overridable but never applied — they now take effect.
+- **Paginator:** `--hub-paginator-font-size` is now actually applied.
+- **Docs:** CSS variables reference corrected (fixed the `--hub-table-table-*` doubled-prefix typo, documented the table search block) and brought to full EN/ES parity.
+
+### Removed
+
+- **Breaking — List:** renamed `--hub-list-container-*` variables to `--hub-list-bg` / `--hub-list-border-radius` / `--hub-list-padding-x/y` / `--hub-list-items-gap`, and the `.hub-list` / `.hub-list--root` / `.hub-list--cards` selectors were restructured (see the Changed note above).
+- **Table:** removed the non-functional `--hub-table-breakpoint-*` variables (responsive breakpoints are fixed and cannot be overridden via CSS variables).
+
 ## [19.10.2] - 2025-12-23
 
 ### Added
@@ -2320,7 +2341,7 @@ Do you like this library? You can support us by buying us a coffee ☕:
 
 Thanks to all contributors who have helped make this library better!
 
-- **Carlos Morcillo Fernández** - _Creator & Maintainer_ - [@carlos-morcillo](https://github.com/carlos-morcillo)
+- **[Carlos Morcillo Fernández](https://www.carlosmorcillo.com)** - _Creator & Maintainer_ - [@carlos-morcillo](https://github.com/carlos-morcillo)
 
 ## 📄 License
 

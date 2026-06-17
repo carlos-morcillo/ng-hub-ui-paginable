@@ -58,7 +58,7 @@ describe('ListComponent', () => {
 
 	it('should default selectable to null', () => {
 		expect(component.selectable()).toBeNull();
-		expect(component.multipleSelectable()).toBeFalse();
+		expect(component.multipleSelectable()).toBe(false);
 	});
 
 	it('should normalize boolean selectable values to single selection', () => {
@@ -66,7 +66,7 @@ describe('ListComponent', () => {
 		fixture.detectChanges();
 
 		expect(component.selectable()).toBe(SelectionTypes.Single);
-		expect(component.multipleSelectable()).toBeFalse();
+		expect(component.multipleSelectable()).toBe(false);
 	});
 
 	it('should support multiple selection through SelectionTypes', () => {
@@ -74,12 +74,15 @@ describe('ListComponent', () => {
 		fixture.detectChanges();
 
 		expect(component.selectable()).toBe(SelectionTypes.Multiple);
-		expect(component.multipleSelectable()).toBeTrue();
+		expect(component.multipleSelectable()).toBe(true);
 		expect(fixture.nativeElement.querySelectorAll('.hub-list__checkbox').length).toBe(2);
 	});
 
-	it('should render the initial per-page value in the selector', () => {
+	it('should render the initial per-page value in the selector', async () => {
 		fixture.componentRef.setInput('paginate', true);
+		fixture.detectChanges();
+		// Allow the NgModel value accessor to apply the selected option.
+		await fixture.whenStable();
 		fixture.detectChanges();
 
 		const select = fixture.nativeElement.querySelector('.hub-paginator__select') as HTMLSelectElement;
@@ -99,7 +102,7 @@ describe('ListComponent', () => {
 		});
 		fixture.detectChanges();
 
-		expect(fixture.nativeElement.classList.contains('hub-list--rtl')).toBeTrue();
+		expect(fixture.nativeElement.classList.contains('hub-list--rtl')).toBe(true);
 	});
 
 	it('should render search button before input when rtl is enabled', () => {
@@ -117,7 +120,7 @@ describe('ListComponent', () => {
 
 		const searchElement = fixture.nativeElement.querySelector('.hub-list__search') as HTMLElement;
 		expect(searchElement).toBeTruthy();
-		expect(searchElement.firstElementChild?.classList.contains('hub-list__search-btn')).toBeTrue();
+		expect(searchElement.firstElementChild?.classList.contains('hub-list__search-btn')).toBe(true);
 	});
 
 	it('should enable cards layout when options.display is cards', () => {
@@ -133,7 +136,7 @@ describe('ListComponent', () => {
 		});
 		fixture.detectChanges();
 
-		const rootList = fixture.nativeElement.querySelector('.hub-list--root') as HTMLElement;
-		expect(rootList.classList.contains('hub-list--cards')).toBeTrue();
+		const rootList = fixture.nativeElement.querySelector('.hub-list__items--root') as HTMLElement;
+		expect(rootList.classList.contains('hub-list__items--cards')).toBe(true);
 	});
 });

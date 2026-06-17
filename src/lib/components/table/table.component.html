@@ -152,7 +152,7 @@
 												<div
 													class="hub-table__filter-button button"
 													[class.hub-table__filter-button--active]="
-														filtersFG.get(header.filter?.key || header.property)?.value?.rules
+														filtersFG.get(header.filter.key || header.property)?.value?.rules
 															?.length
 													"
 												>
@@ -160,7 +160,7 @@
 														class="hub-table__filter-button-icon hub-table__icon hub-table__icon--filter"
 													></i>
 													@if (
-														filtersFG.get(header.filter?.key || header.property)?.value?.rules;
+														filtersFG.get(header.filter.key || header.property)?.value?.rules;
 														as rules
 													) {
 														@if (rules.length) {
@@ -174,7 +174,7 @@
 													<menu-filter
 														class="hub-table__filter-dropdown-content content"
 														[header]="header"
-														[formControlName]="header.filter?.key || header.property"
+														[formControlName]="header.filter.key || header.property"
 													>
 													</menu-filter>
 												}

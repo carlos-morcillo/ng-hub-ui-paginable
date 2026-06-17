@@ -1357,6 +1357,27 @@ export class AppComponent {
 
 ## 📊 Changelog
 
+## [22.0.0] - 2026-06-17
+
+### Cambiado
+
+- **List:** el bloque BEM ahora vive en el elemento host. El host `hub-list` lleva la clase de bloque `.hub-list` y el `<ul>` pasa a ser el elemento `.hub-list__items` (modificadores `.hub-list__items--root` / `--cards`). Los fondos se controlan con `--hub-list-bg` (host) y `--hub-list-item-bg` (ítems): host transparente y superficie en los ítems por defecto.
+
+### Añadido
+
+- **List:** variables CSS `--hub-list-gap`, `--hub-list-items-bg` y `--hub-list-item-bg`.
+
+### Corregido
+
+- **List:** las variables de tarjeta (`--hub-list-cards-*`) estaban documentadas y eran personalizables pero nunca se aplicaban — ahora surten efecto.
+- **Paginator:** `--hub-paginator-font-size` ahora se aplica realmente.
+- **Docs:** referencia de variables CSS corregida (arreglado el prefijo duplicado `--hub-table-table-*` y documentado el bloque de búsqueda de tabla) y con paridad total EN/ES.
+
+### Eliminado
+
+- **Ruptura — List:** renombradas las variables `--hub-list-container-*` a `--hub-list-bg` / `--hub-list-border-radius` / `--hub-list-padding-x/y` / `--hub-list-items-gap`, y reestructurados los selectores `.hub-list` / `.hub-list--root` / `.hub-list--cards` (ver la nota de Cambiado).
+- **Table:** eliminadas las variables `--hub-table-breakpoint-*` no funcionales (los breakpoints responsive son fijos y no se pueden sobrescribir vía variables CSS).
+
 ## [19.10.2] - 2025-12-23
 
 ### Añadido
@@ -1432,7 +1453,7 @@ Al reportar bugs, incluye:
 
 Gracias a todas las personas que han ayudado a mejorar esta librería.
 
-- **Carlos Morcillo Fernández** - _Creator & Maintainer_ - [@carlos-morcillo](https://github.com/carlos-morcillo)
+- **[Carlos Morcillo Fernández](https://www.carlosmorcillo.com)** - _Creator & Maintainer_ - [@carlos-morcillo](https://github.com/carlos-morcillo)
 
 ## 📄 Licencia
 

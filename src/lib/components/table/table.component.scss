@@ -6,11 +6,9 @@
 	--hub-table-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-table-border-radius: var(--hub-ref-radius-md, 0.375rem);
 	--hub-table-border-width: var(--hub-ref-border-width, 1px);
-	--hub-table-breakpoint-lg: 992px;
-	--hub-table-breakpoint-md: 768px;
-	--hub-table-breakpoint-sm: 576px;
-	--hub-table-breakpoint-xl: 1200px;
-	--hub-table-breakpoint-xxl: 1400px;
+	// NOTE: responsive breakpoints (576/768/992/1200/1400px) are fixed and live in the
+	// `@media` queries below. CSS custom properties cannot be read inside `@media`
+	// conditions, so they are intentionally NOT exposed as overridable variables.
 	--hub-table-container-gap: var(--hub-ref-space-3, 1rem);
 	--hub-table-top-bar-gap: var(--hub-ref-space-3, 1rem);
 	--hub-table-top-bar-justify-content: end;
@@ -62,10 +60,25 @@
 	--hub-table-search-input-padding-y: 0.375rem;
 	--hub-table-search-input-font-size: 1rem;
 	--hub-table-filter-button-active-bg: rgba(25, 135, 84, 0.1);
-	--hub-table-filter-button-active-border-color: var(--bs-success, #198754);
+	--hub-table-filter-button-active-border-color: var(--hub-sys-color-success, #198754);
 	--hub-table-filter-button-hover-bg: rgba(0, 0, 0, 0.05);
-	--hub-table-filter-button-icon-active-color: var(--bs-success, #198754);
-	--hub-table-filter-button-icon-color: #6c757d;
+	--hub-table-filter-button-icon-active-color: var(--hub-sys-color-success, #198754);
+	--hub-table-filter-button-icon-color: var(--hub-sys-text-muted, #6c757d);
+	--hub-table-filter-button-gap: var(--hub-ref-space-2, 0.5rem);
+	--hub-table-filter-button-padding-x: 0.75rem;
+	--hub-table-filter-button-padding-y: 0.375rem;
+	--hub-table-filter-button-border-width: 1px;
+	--hub-table-filter-button-border-color: transparent;
+	--hub-table-filter-button-border-radius: var(--hub-ref-radius-sm, 0.25rem);
+	--hub-table-filter-button-transition: all 0.2s ease;
+	--hub-table-filter-count-bg: var(--hub-sys-color-success, #198754);
+	--hub-table-filter-count-color: var(--hub-ref-color-white, #fff);
+	--hub-table-filter-count-size: 1.25rem;
+	--hub-table-filter-count-padding-x: 0.4em;
+	--hub-table-filter-count-font-size: 0.7rem;
+	--hub-table-filter-count-font-weight: 700;
+	--hub-table-filter-count-border-radius: 50rem;
+	--hub-table-batch-actions-btn-icon-gap: var(--hub-ref-space-1, 0.25rem);
 	--hub-table-hover-bg: var(--hub-sys-state-hover-bg, rgba(0, 0, 0, 0.075));
 	--hub-table-hover-color: var(--hub-sys-text-primary, #212529);
 	--hub-table-striped-bg: var(--hub-sys-state-striped-bg, rgba(0, 0, 0, 0.05));
@@ -97,7 +110,7 @@
 		margin-inline-end: var(--hub-table-batch-actions-margin-inline-end);
 
 		&-btn-icon {
-			margin-right: 0.25rem;
+			margin-right: var(--hub-table-batch-actions-btn-icon-gap);
 		}
 	}
 
@@ -185,12 +198,12 @@
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.375rem 0.75rem;
+		gap: var(--hub-table-filter-button-gap);
+		padding: var(--hub-table-filter-button-padding-y) var(--hub-table-filter-button-padding-x);
 		cursor: pointer;
-		border: 1px solid transparent;
-		border-radius: 0.25rem;
-		transition: all 0.2s ease;
+		border: var(--hub-table-filter-button-border-width) solid var(--hub-table-filter-button-border-color);
+		border-radius: var(--hub-table-filter-button-border-radius);
+		transition: var(--hub-table-filter-button-transition);
 
 		// Hover state
 		&:hover {
@@ -219,17 +232,17 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 1.25rem;
-		height: 1.25rem;
-		padding: 0 0.4em;
-		font-size: 0.7rem;
-		font-weight: 700;
+		min-width: var(--hub-table-filter-count-size);
+		height: var(--hub-table-filter-count-size);
+		padding: 0 var(--hub-table-filter-count-padding-x);
+		font-size: var(--hub-table-filter-count-font-size);
+		font-weight: var(--hub-table-filter-count-font-weight);
 		line-height: 1;
-		color: #fff;
+		color: var(--hub-table-filter-count-color);
 		text-align: center;
 		white-space: nowrap;
-		background-color: var(--bs-success, #198754);
-		border-radius: 50rem;
+		background-color: var(--hub-table-filter-count-bg);
+		border-radius: var(--hub-table-filter-count-border-radius);
 		animation: badge-appear 0.2s ease;
 	}
 
@@ -582,7 +595,7 @@
 
 		&-btn-icon {
 			margin-right: 0;
-			margin-left: 0.25rem;
+			margin-left: var(--hub-table-batch-actions-btn-icon-gap);
 		}
 	}
 

@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-paginable",
-	"version": "21.3.0",
+	"version": "22.0.0",
 	"description": "Highly customizable Angular table and list components with pagination, sorting and filtering support. Built with Angular 19+ and Signal-based architecture.",
 	"peerDependencies": {
 		"@angular/common": ">=18.0.0",
@@ -58,11 +58,7 @@
 		"ui-library",
 		"ng-hub-ui"
 	],
-	"author": {
-		"name": "Carlos Morcillo Fernández",
-		"email": "carlos.morcillo@me.com",
-		"url": "https://www.carlosmorcillo.com"
-	},
+	"author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
 	"maintainers": [
 		{
 			"name": "Carlos Morcillo Fernández",
@@ -70,7 +66,7 @@
 			"url": "https://www.carlosmorcillo.com"
 		}
 	],
-	"homepage": "https://github.com/carlos-morcillo/ng-hub-ui-paginable#readme",
+	"homepage": "https://hubui.dev/",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/carlos-morcillo/ng-hub-ui-paginable.git"

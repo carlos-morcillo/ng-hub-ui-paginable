@@ -1,4 +1,4 @@
-import { NgClass, NgStyle } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
     Component,
     ElementRef,
@@ -21,7 +21,7 @@ import { HubIconComponent } from '../icon/icon.component';
 	selector: 'hub-table-dropdown, paginable-table-dropdown',
 
 	standalone: true,
-	imports: [NgClass, NgStyle, HubIconComponent, UnwrapAsyncPipe],
+	imports: [NgClass, HubIconComponent, UnwrapAsyncPipe],
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })

@@ -1,5 +1,60 @@
 # Changelog
 
+## [22.0.0] - 2026-06-17
+
+### Changed
+
+- **list:** reworked the BEM structure so the block lives on the host element. The host `hub-list` now carries the `.hub-list` block class (replacing the `d-flex flex-column gap-4` utilities) and renders the surface background, while the `<ul>` is now the `.hub-list__items` element with a transparent background. Its modifiers were renamed from `.hub-list--root` / `.hub-list--cards` to `.hub-list__items--root` / `.hub-list__items--cards`.
+- **list:** the background now applies to the whole component (host) via `--hub-list-bg` instead of the items collection. Both `--hub-list-bg` (host) and `--hub-list-items-bg` (collection) default to `transparent`, so the list no longer paints a surface by default — each item defines itself with its own border. Set `--hub-list-bg` (e.g. `var(--hub-sys-surface-page)`) to render the component as a card.
+
+### Added
+
+- **list:** `--hub-list-gap` (spacing between the top bar, items collection and bottom bar) and `--hub-list-items-bg` (background of the items collection, transparent by default).
+- **list:** `--hub-list-item-bg` (defaults to `var(--hub-sys-surface-page)`) so items render as solid surfaces like table rows and adapt to the active theme. Previously the item background was hard-coded to `transparent`. This also wires the previously dangling `--hub-list-cards-bg` default.
+
+### Fixed
+
+- **docs:** corrected the CSS variables reference. Fixed a doubled-prefix typo (`--hub-table-table-*` → `--hub-table-*`) across ~19 table variables, documented the previously missing table search block (`--hub-table-search-*`) and `--hub-table-container-gap`, documented the icon-glyph variables (`--hub-paginator-icon-angle-*`, `--hub-table-icon-sort*`), and brought the Spanish reference (`README`/`css-variables-reference.es.md`) to full parity with the English one (the EN and ES references now document the exact same 207 variables).
+- **paginator:** `--hub-paginator-font-size` was defined, documented and overridden in the official examples but never applied. It is now used on the paginator root (`.hub-paginator-container`), so the documented font-size customization takes effect. The default (`var(--hub-ref-font-size-base)`) is unchanged.
+- **list:** the `--hub-list-cards-*` CSS variables (`bg`, `color`, `padding-x/y`, `border-color/width/radius`, `shadow`, `hover-bg`, `hover-shadow`, `transition`, `columns`, `row-gap`, `column-gap`) were documented and overridable but never applied — the card layout only honoured `min-column-width` and `gap`, and hard-coded `auto-fit` for the grid columns. They are now wired up on the card items, so the documented cards customization (including the official example) takes effect. Defaults are unchanged, so existing card rendering is identical unless these variables are overridden.
+
+### Removed
+
+- **table:** removed the `--hub-table-breakpoint-sm/md/lg/xl/xxl` CSS variables. They were documented as overridable but had no effect: the responsive variants (`.hub-table__responsive-*`) trigger from `@media` queries with hard-coded pixel values, and CSS custom properties cannot be read inside `@media` conditions. The breakpoints (576/768/992/1200/1400px) are unchanged and remain fixed; the docs now state this explicitly.
+- **list:** renamed CSS variables — `--hub-list-container-bg` → `--hub-list-bg`, `--hub-list-container-border-radius` → `--hub-list-border-radius`, `--hub-list-container-padding-x/y` → `--hub-list-padding-x/y`, and `--hub-list-container-gap` → `--hub-list-items-gap`. **Breaking:** update any consumer overrides that used the old `--hub-list-container-*` names or the `.hub-list` / `.hub-list--root` / `.hub-list--cards` selectors.
+
+## [21.5.0] - 2026-06-16
+
+### Added
+
+- **paginator:** exposed previously hard-coded styles as CSS variables: `--hub-paginator-link-padding-x/y`, `--hub-paginator-link-border-width`, `--hub-paginator-link-focus-shadow`, `--hub-paginator-transition` and `--hub-paginator-select-border-width`.
+- **table:** added CSS variables for the filter button geometry (`--hub-table-filter-button-gap`, `--hub-table-filter-button-padding-x/y`, `--hub-table-filter-button-border-width`, `--hub-table-filter-button-border-color`, `--hub-table-filter-button-border-radius`, `--hub-table-filter-button-transition`).
+- **table:** added CSS variables for the active-filter count badge (`--hub-table-filter-count-bg`, `--hub-table-filter-count-color`, `--hub-table-filter-count-size`, `--hub-table-filter-count-padding-x`, `--hub-table-filter-count-font-size`, `--hub-table-filter-count-font-weight`, `--hub-table-filter-count-border-radius`).
+- **table:** added `--hub-table-batch-actions-btn-icon-gap` for the batch action button icon spacing.
+
+### Changed
+
+- **paginator:** the link `:focus` ring now derives from the design-system tokens `--hub-sys-focus-ring-width` / `--hub-sys-focus-ring-color` instead of a hard-coded Bootstrap blue.
+- **table:** the filter button and count badge now read their colors from design-system tokens (`--hub-sys-color-success`, `--hub-sys-text-muted`) instead of the Bootstrap `--bs-success` variable and literal hex values, so they follow the active theme.
+
+## [21.4.0] - 2026-06-16
+
+### Added
+
+- **list:** added a dedicated set of `--hub-list-cards-*` CSS variables so the card layout can be styled independently from the list layout (`bg`, `color`, `padding-x/y`, `border-color`, `border-width`, `border-radius`, `shadow`, `hover-bg`, `hover-shadow`, `transition`).
+- **list:** added `--hub-list-cards-columns` (defaults to `auto-fit`) to allow fixing the number of card columns, plus `--hub-list-cards-row-gap` and `--hub-list-cards-column-gap` for independent grid gaps.
+- **list:** added `--hub-list-item-border-width` to expose the previously hard-coded list item border width.
+
+### Changed
+
+- **list:** card items now consume the new `--hub-list-cards-*` variables. Defaults inherit from the existing `--hub-list-item-*` values (and `shadow` defaults to `none`), so the rendered output is unchanged unless the new variables are overridden.
+
+## [21.3.1] - 2026-06-14
+
+### Changed
+
+- Replaced the deprecated `ngStyle` directive with the native `[style]` binding on the table dropdown menu (Angular soft-deprecated `ngStyle`/`ngClass` in November 2024 in favour of native bindings, for better performance and smaller bundles).
+
 ## [21.3.0] - 2026-03-31
 
 ### Added
