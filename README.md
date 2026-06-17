@@ -2243,6 +2243,12 @@ export class AppComponent {
 
 ## 📊 Changelog
 
+## [22.0.1] - 2026-06-17
+
+### Fixed
+
+- **List:** nested children lists no longer render flush against the parent item — a top margin (`--hub-list-children-gap`, default `var(--hub-list-item-padding-y)`) now separates them, in both the default and card layouts.
+
 ## [22.0.0] - 2026-06-17
 
 ### Changed

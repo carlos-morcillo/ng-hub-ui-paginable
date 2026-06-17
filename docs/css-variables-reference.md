@@ -246,6 +246,7 @@ These tokens style the embedded paginator from the list host:
 | `--hub-list-item-padding-x` | `var(--hub-ref-space-3)` | Horizontal padding of items |
 | `--hub-list-item-padding-y` | `var(--hub-ref-space-2)` | Vertical padding of items |
 | `--hub-list-item-hover-bg` | `var(--hub-ref-surface-2)` | Background color on item hover |
+| `--hub-list-children-gap` | `var(--hub-list-item-padding-y)` | Top margin separating a nested children list from its parent item content |
 
 ### Items — Selected
 

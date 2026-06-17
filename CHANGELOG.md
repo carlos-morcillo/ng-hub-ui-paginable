@@ -1,5 +1,15 @@
 # Changelog
 
+## [22.0.1] - 2026-06-17
+
+### Fixed
+
+- **list:** nested children lists were rendered flush against the parent item content. A top margin now separates a nested collection from its parent (in both the default list and card layouts).
+
+### Added
+
+- **list:** `--hub-list-children-gap` CSS variable (defaults to `var(--hub-list-item-padding-y)`) controlling the spacing between a nested children list and its parent item.
+
 ## [22.0.0] - 2026-06-17
 
 ### Changed

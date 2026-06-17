@@ -1357,6 +1357,12 @@ export class AppComponent {
 
 ## 📊 Changelog
 
+## [22.0.1] - 2026-06-17
+
+### Corregido
+
+- **List:** las listas de hijos anidadas ya no se pegan al contenido del ítem padre — un margen superior (`--hub-list-children-gap`, por defecto `var(--hub-list-item-padding-y)`) las separa, tanto en el layout por defecto como en cards.
+
 ## [22.0.0] - 2026-06-17
 
 ### Cambiado

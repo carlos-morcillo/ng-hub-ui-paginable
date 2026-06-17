@@ -23,6 +23,7 @@
 	--hub-list-item-hover-bg: var(--hub-ref-surface-2, #f8f9fa);
 	--hub-list-item-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-list-item-padding-y: var(--hub-ref-space-2, 0.5rem);
+	--hub-list-children-gap: var(--hub-list-item-padding-y);
 	--hub-list-item-selected-bg: var(--hub-sys-color-primary, #0d6efd);
 	--hub-list-item-selected-color: var(--hub-ref-color-white, #fff);
 	--hub-list-cards-min-column-width: 18rem;
@@ -214,8 +215,10 @@
 		margin: 0;
 		padding: 0;
 
-		// For tree-like structures, indent nested children collections.
+		// For tree-like structures, indent nested children collections and
+		// separate them from the parent item content with a top margin.
 		.hub-list__items {
+			margin-top: var(--hub-list-children-gap);
 			padding-left: var(--hub-list-item-padding-x);
 			padding-right: 0;
 			padding-top: 0;

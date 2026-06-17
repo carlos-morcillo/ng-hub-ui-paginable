@@ -244,6 +244,7 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 | `--hub-list-item-padding-x` | `var(--hub-ref-space-3)` | Horizontal padding of items |
 | `--hub-list-item-padding-y` | `var(--hub-ref-space-2)` | Vertical padding of items |
 | `--hub-list-item-hover-bg` | `var(--hub-ref-surface-2)` | Background color on item hover |
+| `--hub-list-children-gap` | `var(--hub-list-item-padding-y)` | Margen superior que separa la lista de hijos anidada del contenido del ítem padre |
 
 ### Items — Selected
 
