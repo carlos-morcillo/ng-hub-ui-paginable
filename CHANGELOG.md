@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Replaced the `--hub-list-empty-padding` shorthand with the canonical directional `--hub-list-empty-padding-x` / `-y` tokens. No visual change. **BREAKING**: set the `-x`/`-y` tokens instead of the removed shorthand.
+
 ## [22.0.1] - 2026-06-17
 
 ### Fixed
