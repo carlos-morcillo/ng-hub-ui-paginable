@@ -1,6 +1,6 @@
 # Changelog
 
-## [22.1.0] - 2026-06-18
+## [22.1.0] - 2026-06-23
 
 ### Added
 
@@ -14,6 +14,7 @@
 ### Changed
 
 - **config:** `PaginableTableConfig` gains an optional `states` section. `HubUITableModule.forRoot` now delegates to the shared `paginableCoreProviders` set (no behavioral change for existing consumers).
+- **tokens:** replaced the `--hub-list-empty-padding` shorthand with the canonical directional `--hub-list-empty-padding-x` / `-y` tokens. No visual change. **BREAKING**: set the `-x`/`-y` tokens instead of the removed shorthand.
 
 ## [22.0.1] - 2026-06-17
 

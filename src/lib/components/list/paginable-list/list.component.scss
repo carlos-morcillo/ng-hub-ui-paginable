@@ -13,7 +13,8 @@
 	--hub-list-empty-bg: var(--hub-ref-surface-2, #f8f9fa);
 	--hub-list-empty-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-list-empty-color: var(--hub-sys-text-muted, #6c757d);
-	--hub-list-empty-padding: var(--hub-ref-space-3, 1rem);
+	--hub-list-empty-padding-x: var(--hub-ref-space-3, 1rem);
+	--hub-list-empty-padding-y: var(--hub-ref-space-3, 1rem);
 	--hub-list-item-bg: var(--hub-sys-surface-page, #ffffff);
 	--hub-list-item-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-list-item-border-width: 1px;
@@ -317,7 +318,7 @@
 		&--empty {
 			background-color: var(--hub-list-empty-bg);
 			color: var(--hub-list-empty-color);
-			padding: var(--hub-list-empty-padding);
+			padding: var(--hub-list-empty-padding-y, var(--hub-ref-space-3, 1rem)) var(--hub-list-empty-padding-x, var(--hub-ref-space-3, 1rem));
 			border-color: var(--hub-list-empty-border-color);
 			text-align: center;
 		}
