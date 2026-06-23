@@ -36,6 +36,7 @@ export { TooltipDirective } from './directives/tooltip.directive';
 
 // Interfaces
 export * from './interfaces';
+export type { PaginableStateContext, PaginableStateComponent, PaginableStateDefault, PaginableStateComponentLoader, ResolvedStateDefault } from './interfaces/paginable-state';
 
 // Services
 export { PaginableDefaultsService } from './services/paginable-defaults.service';
