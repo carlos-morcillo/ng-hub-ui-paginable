@@ -56,6 +56,29 @@ describe('ListComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
+	it('should render the loading state when loading is set', () => {
+		fixture.componentRef.setInput('loading', true);
+		fixture.detectChanges();
+
+		expect(fixture.nativeElement.querySelector('.hub-list__loading')).toBeTruthy();
+		expect(fixture.nativeElement.querySelectorAll('.hub-list__item-content').length).toBe(0);
+	});
+
+	it('should render the error state when error is set', () => {
+		fixture.componentRef.setInput('error', new Error('boom'));
+		fixture.detectChanges();
+
+		expect(fixture.nativeElement.querySelector('.hub-list__error')).toBeTruthy();
+		expect(fixture.nativeElement.querySelectorAll('.hub-list__item-content').length).toBe(0);
+	});
+
+	it('should render the no-results state when there are no items', () => {
+		fixture.componentRef.setInput('items', []);
+		fixture.detectChanges();
+
+		expect(fixture.nativeElement.querySelector('.hub-list__no-results')).toBeTruthy();
+	});
+
 	it('should default selectable to null', () => {
 		expect(component.selectable()).toBeNull();
 		expect(component.multipleSelectable()).toBe(false);

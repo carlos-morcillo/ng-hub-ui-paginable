@@ -14,8 +14,7 @@ import {
 	ViewContainerRef
 } from '@angular/core';
 
-import { ConnectionPosition, OverlayRef, OverlayService } from 'ng-hub-ui-utils';
-import { generateUniqueId } from '../../utils';
+import { ConnectionPosition, generateUniqueId, OverlayRef, OverlayService } from 'ng-hub-ui-utils';
 
 /**
  * Event emitted when the dropdown state changes

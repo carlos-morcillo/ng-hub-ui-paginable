@@ -9,15 +9,19 @@ import {
 	NG_VALUE_ACCESSOR,
 	ReactiveFormsModule
 } from '@angular/forms';
-import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
+import { getValue, TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
+import { PaginableErrorDirective } from '../../../directives/paginable-error.directive';
 import { PaginableListItemDirective } from '../../../directives/paginable-list-item.directive';
+import { PaginableLoadingDirective } from '../../../directives/paginable-loading.directive';
 import { PaginableNoResultsDirective } from '../../../directives/paginable-no-results.directive';
 import { SelectionTypes } from '../../../enums/selection-types';
 import { ListClickEvent } from '../../../interfaces/item-click-event';
 import { PaginableActionButton } from '../../../interfaces/paginable-action-button';
 import { PaginableTableDropdown } from '../../../interfaces/paginable-table-dropdown';
+import { PaginableStateDefault } from '../../../interfaces/paginable-state';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
-import { getValue } from '../../../utils';
+import { PaginableDefaultsService } from '../../../services/paginable-defaults.service';
+import { PaginableStateOutlet } from '../../state-outlet/paginable-state-outlet.component';
 import { PaginatorComponent } from '../../paginator/paginator.component';
 
 @Component({
@@ -35,7 +39,16 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
 			multi: true
 		}
 	],
-	imports: [ReactiveFormsModule, FormsModule, PaginatorComponent, TranslatePipe, UcfirstPipe, NgTemplateOutlet, NgClass],
+	imports: [
+		ReactiveFormsModule,
+		FormsModule,
+		PaginatorComponent,
+		TranslatePipe,
+		UcfirstPipe,
+		NgTemplateOutlet,
+		NgClass,
+		PaginableStateOutlet
+	],
 	standalone: true
 })
 /**
@@ -47,6 +60,25 @@ import { PaginatorComponent } from '../../paginator/paginator.component';
  */
 export class ListComponent<T = any> {
 	#fb = inject(FormBuilder);
+
+	/** Resolved application-wide default state components. */
+	readonly defaults = inject(PaginableDefaultsService);
+
+	/** Loading state indicator for the list. Consumer-driven. */
+	readonly loading = model<boolean>(false);
+
+	/**
+	 * Error state holder. When set to a truthy value the list renders its error
+	 * state. Consumer-driven, mirroring {@link loading}.
+	 */
+	readonly error = model<unknown | null>(null);
+
+	/** Per-instance default component for the loading state. */
+	readonly loadingComponent = input<PaginableStateDefault | null>(null);
+	/** Per-instance default component for the error state. */
+	readonly errorComponent = input<PaginableStateDefault | null>(null);
+	/** Per-instance default component for the no-results state. */
+	readonly noResultsComponent = input<PaginableStateDefault | null>(null);
 
 	readonly bindValue = input<string>();
 	readonly bindLabel = input<string>('label');
@@ -162,6 +194,12 @@ export class ListComponent<T = any> {
 	 * Custom template rendered when the list has no visible items to display.
 	 */
 	readonly noResultsTpt = contentChild(PaginableNoResultsDirective, { read: TemplateRef });
+
+	/** Custom template rendered while the list is loading. */
+	readonly loadingTpt = contentChild(PaginableLoadingDirective, { read: TemplateRef });
+
+	/** Custom template rendered when the list is in an error state. */
+	readonly errorTpt = contentChild(PaginableErrorDirective, { read: TemplateRef });
 
 	// NOTE: Otros
 	isDisabled: boolean = false;

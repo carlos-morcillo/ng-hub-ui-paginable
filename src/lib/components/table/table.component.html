@@ -225,7 +225,25 @@
 			@if (loading()) {
 				<tr class="hub-table__body-row">
 					<td class="hub-table__cell" [attr.colspan]="headersCount()">
-						<ng-container [ngTemplateOutlet]="loadingTpt() || defaultLoadingTpt"> </ng-container>
+						<hub-state-outlet
+							[template]="loadingTpt()"
+							[instanceDefault]="loadingComponent()"
+							[globalDefault]="defaults.loading()"
+							[fallback]="defaultLoadingTpt"
+							[context]="{ colspan: headersCount() }"
+						/>
+					</td>
+				</tr>
+			} @else if (error()) {
+				<tr class="hub-table__body-row">
+					<td class="hub-table__cell" [attr.colspan]="headersCount()">
+						<hub-state-outlet
+							[template]="errorTpt()"
+							[instanceDefault]="errorComponent()"
+							[globalDefault]="defaults.error()"
+							[fallback]="defaultErrorTpt"
+							[context]="{ error: error(), colspan: headersCount() }"
+						/>
 					</td>
 				</tr>
 			} @else if (rows().length) {
@@ -239,7 +257,13 @@
 			} @else {
 				<tr>
 					<td [attr.colspan]="headersCount()">
-						<ng-container [ngTemplateOutlet]="noResultsTpt() || defaultNoResultsTpt"> </ng-container>
+						<hub-state-outlet
+							[template]="noResultsTpt()"
+							[instanceDefault]="noResultsComponent()"
+							[globalDefault]="defaults.noResults()"
+							[fallback]="defaultNoResultsTpt"
+							[context]="{ colspan: headersCount(), filters: filters() ?? undefined }"
+						/>
 					</td>
 				</tr>
 			}

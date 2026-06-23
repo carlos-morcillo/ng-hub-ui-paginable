@@ -54,15 +54,51 @@
 	</div>
 }
 
-<ng-container
-	[ngTemplateOutlet]="containerTpt"
-	[ngTemplateOutletContext]="{
-		controls: getVisibleControls(form.controls, true),
-		isRoot: true,
-		items: getVisibleItems(items, true),
-		depth: 0
-	}"
-></ng-container>
+@if (loading()) {
+	<ul class="hub-list__items hub-list__items--root">
+		<li class="hub-list__item hub-list__item--state">
+			<hub-state-outlet
+				[template]="loadingTpt()"
+				[instanceDefault]="loadingComponent()"
+				[globalDefault]="defaults.loading()"
+				[fallback]="defaultLoadingTpt"
+			/>
+		</li>
+	</ul>
+} @else if (error()) {
+	<ul class="hub-list__items hub-list__items--root">
+		<li class="hub-list__item hub-list__item--state">
+			<hub-state-outlet
+				[template]="errorTpt()"
+				[instanceDefault]="errorComponent()"
+				[globalDefault]="defaults.error()"
+				[fallback]="defaultErrorTpt"
+				[context]="{ error: error() }"
+			/>
+		</li>
+	</ul>
+} @else if (!getVisibleItems(items, true).length) {
+	<ul class="hub-list__items hub-list__items--root">
+		<li class="hub-list__item hub-list__item--empty">
+			<hub-state-outlet
+				[template]="noResultsTpt()"
+				[instanceDefault]="noResultsComponent()"
+				[globalDefault]="defaults.noResults()"
+				[fallback]="defaultNoResultsTpt"
+			/>
+		</li>
+	</ul>
+} @else {
+	<ng-container
+		[ngTemplateOutlet]="containerTpt"
+		[ngTemplateOutletContext]="{
+			controls: getVisibleControls(form.controls, true),
+			isRoot: true,
+			items: getVisibleItems(items, true),
+			depth: 0
+		}"
+	></ng-container>
+}
 
 <ng-template #containerTpt let-controls="controls" let-isRoot="isRoot" let-items="items" let-depth="depth">
 	<ul
@@ -177,16 +213,24 @@
 	</div>
 }
 
-<ng-template #noDataRowTpt>
-	<li class="hub-list__item hub-list__item--empty">
-		<ng-container [ngTemplateOutlet]="noResultsTpt() || defaultNoResultsTpt"> </ng-container>
-	</li>
-</ng-template>
-
 <ng-template #defaultNoResultsTpt>
 	<div class="hub-list__no-results" role="alert">
 		<i class="hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
 		{{ 'NO_RESULTS_FOUND' | translate | ucfirst }}
+	</div>
+</ng-template>
+
+<ng-template #defaultLoadingTpt>
+	<div class="hub-list__loading" role="status">
+		<i class="hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
+		{{ 'LOADING' | translate | ucfirst }}
+	</div>
+</ng-template>
+
+<ng-template #defaultErrorTpt>
+	<div class="hub-list__error text-danger" role="alert">
+		<i class="hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
+		{{ 'ERROR_OCURRED' | translate | ucfirst }}
 	</div>
 </ng-template>
 

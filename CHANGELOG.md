@@ -1,5 +1,20 @@
 # Changelog
 
+## [22.1.0] - 2026-06-18
+
+### Added
+
+- **states:** application-wide default components for the `loading`, `error` and `no-results` states. Register them through `providePaginable({ states: { loading, error, noResults } })` (or `HubUITableModule.forRoot`). Each accepts a component class, a lazy loader (`() => import(...).then(m => m.Cmp)`) or a full descriptor `{ component, inputs }` whose `inputs` factory maps the runtime context (`colspan`, `error`, `filters`) to the component's `@Input`s. Lazy defaults are pre-resolved at startup via an app initializer.
+- **states:** per-instance overrides `[loadingComponent]`, `[errorComponent]` and `[noResultsComponent]` on both `<hub-table>` and `<hub-list>`. Precedence: local directive template → instance `@Input` → global config default → built-in template.
+- **table:** consumer-driven `error` model input. When truthy the table renders its (previously dormant) error state.
+- **list:** consumer-driven `loading` and `error` model inputs with their own rendered states, plus the no-results state (previously declared but never rendered). The list now reuses the shared loading/error/no-results directives and supports the same default-component system as the table.
+- **directives:** the loading and error template directives are now element-agnostic. New generic selectors `paginableLoading` / `paginableError` (the `loadingTpt` / `errorTpt` and `paginableTableLoading` / `paginableTableError` selectors keep working). Classes renamed to `PaginableLoadingDirective` / `PaginableErrorDirective`; the old `PaginableTableLoadingDirective` / `PaginableTableErrorDirective` names remain exported as aliases.
+- **api:** `providePaginable`, `PaginableDefaultsService`, `PaginableStateOutlet` and the `PaginableStateDefault` / `PaginableStateComponent` / `PaginableStateContext` / `ResolvedStateDefault` interfaces are now exported.
+
+### Changed
+
+- **config:** `PaginableTableConfig` gains an optional `states` section. `HubUITableModule.forRoot` now delegates to the shared `paginableCoreProviders` set (no behavioral change for existing consumers).
+
 ## [22.0.1] - 2026-06-17
 
 ### Fixed

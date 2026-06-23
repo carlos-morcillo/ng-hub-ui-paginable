@@ -1,9 +1,9 @@
 import { Component, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PaginableTableLoadingDirective } from './paginable-table-loading.directive';
+import { PaginableLoadingDirective } from './paginable-loading.directive';
 
 /**
- * Test component for PaginableTableLoadingDirective
+ * Test component for PaginableLoadingDirective
  */
 @Component({
 	template: `
@@ -12,22 +12,22 @@ import { PaginableTableLoadingDirective } from './paginable-table-loading.direct
 		</ng-template>
 	`,
 	standalone: true,
-	imports: [PaginableTableLoadingDirective]
+	imports: [PaginableLoadingDirective]
 })
 class TestLoadingDirectiveComponent {
-	readonly directive = viewChild.required(PaginableTableLoadingDirective);
+	readonly directive = viewChild.required(PaginableLoadingDirective);
 
 	loadingMessage = 'Loading...';
 }
 
 /**
- * Test suite for PaginableTableLoadingDirective
+ * Test suite for PaginableLoadingDirective
  * Tests custom loading state template directive functionality
  */
-describe('PaginableTableLoadingDirective', () => {
+describe('PaginableLoadingDirective', () => {
 	let component: TestLoadingDirectiveComponent;
 	let fixture: ComponentFixture<TestLoadingDirectiveComponent>;
-	let directive: PaginableTableLoadingDirective;
+	let directive: PaginableLoadingDirective;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
@@ -57,10 +57,10 @@ describe('PaginableTableLoadingDirective', () => {
 				</ng-template>
 			`,
 			standalone: true,
-			imports: [PaginableTableLoadingDirective]
+			imports: [PaginableLoadingDirective]
 		})
 		class TestLoadingTptComponent {
-			readonly directive = viewChild.required(PaginableTableLoadingDirective);
+			readonly directive = viewChild.required(PaginableLoadingDirective);
 		}
 
 		const testFixture = TestBed.createComponent(TestLoadingTptComponent);

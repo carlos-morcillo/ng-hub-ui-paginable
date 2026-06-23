@@ -2,6 +2,9 @@
 export { HubUITableModule } from './paginable.module';
 export { HubUITableModule as TableModule } from './paginable.module';
 
+// Providers
+export { providePaginable, paginableCoreProviders } from './paginable.providers';
+
 // Components
 export { DropdownComponent } from './components/dropdown/dropdown.component';
 export type { DropdownEvent } from './components/dropdown/dropdown.component';
@@ -11,16 +14,17 @@ export { PaginableTableDropdownComponent } from './components/paginable-table-dr
 export { PaginableTableRangeInputComponent } from './components/paginable-table-range-input/paginable-table-range-input.component';
 export { PaginatorComponent } from './components/paginator/paginator.component';
 export { ResizableComponent } from './components/resizable/resizable.component';
+export { PaginableStateOutlet } from './components/state-outlet/paginable-state-outlet.component';
 export { TableComponent } from './components/table/table.component';
 
 // Directives
 export { PaginableListItemDirective } from './directives/paginable-list-item.directive';
 export { PaginableTableCellDirective } from './directives/paginable-table-cell.directive';
-export { PaginableTableErrorDirective } from './directives/paginable-table-error.directive';
+export { PaginableErrorDirective, PaginableTableErrorDirective } from './directives/paginable-error.directive';
 export { PaginableTableExpandingRowDirective } from './directives/paginable-table-expanding-row.directive';
 export { PaginableTableFilterDirective } from './directives/paginable-table-filter.directive';
 export { PaginableTableHeaderDirective } from './directives/paginable-table-header.directive';
-export { PaginableTableLoadingDirective } from './directives/paginable-table-loading.directive';
+export { PaginableLoadingDirective, PaginableTableLoadingDirective } from './directives/paginable-loading.directive';
 export {
 	PaginableNoResultsDirective,
 	PaginableEmptyStateDirective,
@@ -34,6 +38,7 @@ export { TooltipDirective } from './directives/tooltip.directive';
 export * from './interfaces';
 
 // Services
+export { PaginableDefaultsService } from './services/paginable-defaults.service';
 export { PaginableService } from './services/paginable.service';
 export { PaginationService } from './services/pagination.service';
 export { HubTranslationService } from 'ng-hub-ui-utils';

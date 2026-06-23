@@ -15,16 +15,19 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
-import { GetPipe, IsObservablePipe, TranslatePipe, UcfirstPipe, UnwrapAsyncPipe } from 'ng-hub-ui-utils';
+import { debouncedSignal, generateUniqueId, GetPipe, IsObservablePipe, TranslatePipe, UcfirstPipe, UnwrapAsyncPipe } from 'ng-hub-ui-utils';
 import { BehaviorSubject, Observable, debounceTime, distinctUntilChanged, isObservable, of } from 'rxjs';
 import { TableBreakpoint } from '../../constants/breakpoints';
+import { PaginableStateDefault } from '../../interfaces/paginable-state';
+import { PaginableDefaultsService } from '../../services/paginable-defaults.service';
+import { PaginableStateOutlet } from '../state-outlet/paginable-state-outlet.component';
 import { PaginableNoResultsDirective } from '../../directives/paginable-no-results.directive';
 import { PaginableTableCellDirective } from '../../directives/paginable-table-cell.directive';
-import { PaginableTableErrorDirective } from '../../directives/paginable-table-error.directive';
+import { PaginableErrorDirective } from '../../directives/paginable-error.directive';
 import { PaginableTableExpandingRowDirective } from '../../directives/paginable-table-expanding-row.directive';
 import { PaginableTableFilterDirective } from '../../directives/paginable-table-filter.directive';
 import { PaginableTableHeaderDirective } from '../../directives/paginable-table-header.directive';
-import { PaginableTableLoadingDirective } from '../../directives/paginable-table-loading.directive';
+import { PaginableLoadingDirective } from '../../directives/paginable-loading.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
 import { SelectionTypes } from '../../enums/selection-types';
 import { PaginableActionButton, TableRowEvent } from '../../interfaces';
@@ -34,7 +37,6 @@ import { PaginableTableOptions } from '../../interfaces/paginable-table-options'
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
 import { PaginationState } from '../../interfaces/pagination-state';
 import { TableRow } from '../../interfaces/table-row';
-import { debouncedSignal, generateUniqueId } from '../../utils';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { HubIconComponent } from '../icon/icon.component';
 import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
@@ -65,7 +67,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		PaginatorComponent,
 		PaginableTableRangeInputComponent,
 		AsyncPipe,
-		GetPipe
+		GetPipe,
+		PaginableStateOutlet
 	],
 	animations: [
 		trigger('fadeInOut', [
@@ -121,6 +124,9 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 export class TableComponent<T = any> {
 	/** Form builder service for creating reactive forms */
 	#fb = inject(UntypedFormBuilder);
+
+	/** Resolved application-wide default state components. */
+	readonly defaults = inject(PaginableDefaultsService);
 
 	/** Unique identifier for the table component instance */
 	id = input(generateUniqueId(16));
@@ -349,6 +355,19 @@ export class TableComponent<T = any> {
 	/** Loading state indicator for the table */
 	readonly loading = model<boolean>(false);
 
+	/**
+	 * Error state holder. When set to a truthy value the table renders its error
+	 * state. Consumer-driven, mirroring {@link loading}.
+	 */
+	readonly error = model<unknown | null>(null);
+
+	/** Per-instance default component for the loading state. */
+	readonly loadingComponent = input<PaginableStateDefault | null>(null);
+	/** Per-instance default component for the error state. */
+	readonly errorComponent = input<PaginableStateDefault | null>(null);
+	/** Per-instance default component for the no-results state. */
+	readonly noResultsComponent = input<PaginableStateDefault | null>(null);
+
 	/** Position where pagination controls should be displayed */
 	readonly paginationPosition = input<'bottom' | 'top' | 'both'>('bottom');
 
@@ -486,11 +505,11 @@ export class TableComponent<T = any> {
 		read: TemplateRef
 	});
 	/** Template to display during loading state */
-	readonly loadingTpt = contentChild(PaginableTableLoadingDirective, {
+	readonly loadingTpt = contentChild(PaginableLoadingDirective, {
 		read: TemplateRef
 	});
 	/** Template to display during error state */
-	readonly errorTpt = contentChild(PaginableTableErrorDirective, {
+	readonly errorTpt = contentChild(PaginableErrorDirective, {
 		read: TemplateRef
 	});
 	/** Collection of templates for expandable row content */
