@@ -1,6 +1,7 @@
 export * from './column-filter-event';
 export * from './filter-change-event';
 export * from './item-click-event';
+export * from './list-sort-event';
 export * from './paginable-state';
 export * from './paginable-action-button';
 export * from './paginable-table-config';

@@ -25,7 +25,10 @@
 	--hub-list-item-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-list-item-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-list-children-gap: var(--hub-list-item-padding-y);
-	--hub-list-item-selected-bg: var(--hub-sys-color-primary, #0d6efd);
+	// Semantic accent for the selected item — re-based per `variant`
+	// (applies to both the `list` and `cards` display modes).
+	--hub-list-accent: var(--hub-sys-color-primary, #0d6efd);
+	--hub-list-item-selected-bg: var(--hub-list-accent);
 	--hub-list-item-selected-color: var(--hub-ref-color-white, #fff);
 	--hub-list-cards-min-column-width: 18rem;
 	--hub-list-cards-gap: var(--hub-list-items-gap);
@@ -78,6 +81,22 @@
 	--hub-list-action-btn-padding-y: 0.375rem;
 	--hub-list-action-btn-padding-x: 0.75rem;
 	--hub-list-action-btn-hover-bg: var(--hub-list-item-hover-bg);
+	// Drag & drop reordering
+	--hub-list-drag-handle-color: var(--hub-sys-text-muted, #6c757d);
+	--hub-list-drag-handle-cursor: grab;
+	--hub-list-drag-handle-size: var(--hub-ref-icon-size, 1em);
+	--hub-list-item-dragging-opacity: 0.5;
+	--hub-list-item-dragging-cursor: grabbing;
+	--hub-list-drop-target-outline-color: var(--hub-list-accent);
+	--hub-list-drop-target-outline-width: 2px;
+	--hub-list-placeholder-bg: var(--hub-ref-surface-2, #f8f9fa);
+	--hub-list-placeholder-border-color: var(--hub-list-accent);
+	--hub-list-placeholder-border-width: 2px;
+	--hub-list-placeholder-border-style: dashed;
+	--hub-list-placeholder-border-radius: var(--hub-list-item-border-radius);
+	--hub-list-placeholder-min-height: 2.5rem;
+	--hub-list-ghost-opacity: 0.85;
+	--hub-list-ghost-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 // The host element carries the `.hub-list` block class, but Angular's emulated
@@ -402,5 +421,75 @@
 		display: flex;
 		align-items: center;
 		gap: var(--hub-ref-space-2, 0.5rem);
+	}
+
+	// Drag handle declared inside the projected item template.
+	&__drag-handle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-size: var(--hub-list-drag-handle-size);
+		color: var(--hub-list-drag-handle-color);
+		cursor: var(--hub-list-drag-handle-cursor);
+		// Prevents the browser from scrolling instead of dragging on touch devices.
+		touch-action: none;
+		user-select: none;
+	}
+
+	// Row currently being dragged (kept in place and dimmed while a ghost follows the pointer).
+	&__item--dragging {
+		opacity: var(--hub-list-item-dragging-opacity);
+		cursor: var(--hub-list-item-dragging-cursor);
+	}
+
+	// Row excluded from reordering via `sortDisabled`.
+	&__item--drag-disabled .hub-list__drag-handle {
+		cursor: not-allowed;
+		opacity: 0.4;
+	}
+
+	// Prospective drop position indicator. It must never intercept drag events: otherwise a
+	// pointer released over the placeholder (exactly the drop slot) would land on an element
+	// with no `dragover`/`drop` handler, the browser would reject the drop, and the item would
+	// snap back instead of staying put.
+	&__placeholder {
+		list-style: none;
+		pointer-events: none;
+		min-height: var(--hub-list-placeholder-min-height);
+		background-color: var(--hub-list-placeholder-bg);
+		border: var(--hub-list-placeholder-border-width) var(--hub-list-placeholder-border-style)
+			var(--hub-list-placeholder-border-color);
+		border-radius: var(--hub-list-placeholder-border-radius);
+	}
+
+	// In the cards grid the placeholder fills its grid cell.
+	&__items--cards > .hub-list__placeholder {
+		height: 100%;
+	}
+
+	// Visually hidden live region for keyboard reordering announcements.
+	&__sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+}
+
+// Semantic variant — `options.variant` is reflected as `[data-variant]` on the
+// host; it re-bases the single `--hub-list-accent`, and the selected-item colour
+// follows (in both `list` and `cards` display modes). Built-in variants pick up
+// the exact `--hub-sys-color-*` tints.
+$hub-list-variants: primary, success, danger, warning, info;
+
+@each $variant in $hub-list-variants {
+	:host([data-variant='#{$variant}']),
+	.hub-list[data-variant='#{$variant}'] {
+		--hub-list-accent: var(--hub-sys-color-#{$variant});
 	}
 }

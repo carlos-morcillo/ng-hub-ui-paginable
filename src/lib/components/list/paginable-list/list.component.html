@@ -93,27 +93,66 @@
 		[ngTemplateOutlet]="containerTpt"
 		[ngTemplateOutletContext]="{
 			controls: getVisibleControls(form.controls, true),
-			isRoot: true,
+			controlsForm: form,
+			itemsFull: items,
 			items: getVisibleItems(items, true),
+			parentItem: null,
+			isRoot: true,
 			depth: 0
 		}"
 	></ng-container>
 }
 
-<ng-template #containerTpt let-controls="controls" let-isRoot="isRoot" let-items="items" let-depth="depth">
+<ng-template
+	#containerTpt
+	let-controls="controls"
+	let-controlsForm="controlsForm"
+	let-itemsFull="itemsFull"
+	let-isRoot="isRoot"
+	let-items="items"
+	let-parentItem="parentItem"
+	let-depth="depth"
+>
+	@let containerRef = makeContainerRef(controlsForm, itemsFull, parentItem, depth);
 	<ul
 		class="hub-list__items"
 		[class.hub-list__items--root]="isRoot"
 		[class.hub-list__items--cards]="isRoot && isCardsDisplay()"
+		[attr.data-hub-container-key]="containerRef.key"
+		(dragover)="onContainerDragOver($event, containerRef)"
+		(drop)="onContainerDrop($event)"
 	>
 		@for (formGroup of controls; track getTrackKey(formGroup.get('data')?.value, $index); let index = $index) {
+			@let absIndex = absoluteIndex(index, isRoot);
+			@if (sortable() && showPlaceholderBefore(controlsForm, absIndex)) {
+				<li class="hub-list__placeholder" aria-hidden="true">
+					<ng-container
+						[ngTemplateOutlet]="placeholderTpt() || defaultPlaceholderTpt"
+						[ngTemplateOutletContext]="{ item: dragService.active()?.item }"
+					></ng-container>
+				</li>
+			}
 			<li
 				class="hub-list__item"
 				[ngClass]="_getRowClass(items[index])"
 				[class.hub-list__item--clickable]="clickFn()"
 				[class.hub-list__item--selected]="formGroup.get('selected')?.value"
+				[class.hub-list__item--dragging]="isRowDragging(items[index])"
+				[class.hub-list__item--drag-disabled]="sortable() && isRowDisabled(items[index])"
+				[attr.draggable]="isDragEnabled(items[index]) ? true : null"
+				[attr.data-hub-index]="absIndex"
+				[attr.tabindex]="keyboardSortable() && isDragEnabled(items[index]) ? 0 : null"
+				[attr.aria-roledescription]="sortable() ? ('DRAG_SORTABLE_ITEM' | translate) : null"
+				[attr.aria-grabbed]="sortable() ? isRowDragging(items[index]) : null"
 				[formGroup]="formGroup"
 				(click)="onItemClick(formGroup.value, depth, index, $event); $event.preventDefault(); $event.stopPropagation()"
+				(dragstart)="onDragStart($event, containerRef, absIndex, items[index])"
+				(dragenter)="onDragOver($event, containerRef, absIndex)"
+				(dragover)="onDragOver($event, containerRef, absIndex)"
+				(drop)="onDrop($event)"
+				(dragend)="onDragEnd()"
+				(pointerdown)="onPointerDown($event, containerRef, absIndex, items[index])"
+				(keydown)="onItemKeydown($event, containerRef, absIndex, items[index])"
 			>
 				@if (formGroup.value; as item) {
 					<div class="hub-list__item-content">
@@ -121,6 +160,7 @@
 							<input
 								class="hub-list__checkbox"
 								type="checkbox"
+								draggable="false"
 								formControlName="selected"
 								(change)="onSelectionChange()"
 								(click)="$event.stopPropagation()"
@@ -143,6 +183,8 @@
 							<div class="hub-list__actions">
 								<button
 									class="hub-list__chevron"
+									type="button"
+									draggable="false"
 									(click)="
 										toggleCollapsed(formGroup.get('collapsed'));
 										$event.preventDefault();
@@ -164,7 +206,10 @@
 							[ngTemplateOutlet]="containerTpt"
 							[ngTemplateOutletContext]="{
 								controls: formGroup.get('children')?.controls,
+								controlsForm: formGroup.get('children'),
+								itemsFull: items[index][bindChildren()],
 								items: items[index][bindChildren()],
+								parentItem: items[index],
 								isRoot: false,
 								depth: depth + 1
 							}"
@@ -173,8 +218,24 @@
 				}
 			</li>
 		}
+		@if (sortable() && showPlaceholderAtEnd(controlsForm, isRoot, controls.length)) {
+			<li class="hub-list__placeholder" aria-hidden="true">
+				<ng-container
+					[ngTemplateOutlet]="placeholderTpt() || defaultPlaceholderTpt"
+					[ngTemplateOutletContext]="{ item: dragService.active()?.item }"
+				></ng-container>
+			</li>
+		}
 	</ul>
 </ng-template>
+
+@if (sortable() && keyboardSortable()) {
+	<div class="hub-list__sr-only" role="status" aria-live="polite">
+		@if (announcement(); as message) {
+			{{ message.key | translate: message.params }}
+		}
+	</div>
+}
 
 @if (paginate()) {
 	<div class="hub-list__bottom-bar">
@@ -232,6 +293,10 @@
 		<i class="hub-table__icon hub-table__icon--info hub-table__icon--2x" aria-hidden="true"></i>
 		{{ 'ERROR_OCURRED' | translate | ucfirst }}
 	</div>
+</ng-template>
+
+<ng-template #defaultPlaceholderTpt>
+	<div class="hub-list__placeholder-inner" aria-hidden="true"></div>
 </ng-template>
 
 <ng-template #defaultItemtTpt let-data="data">

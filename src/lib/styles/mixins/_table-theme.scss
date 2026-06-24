@@ -1,0 +1,116 @@
+// ─────────────────────────────────────────────────────────────────────────
+// hub-table-theme — one-call theming for `<hub-table>`
+// ─────────────────────────────────────────────────────────────────────────
+//
+// Override any of the `--hub-table-*` design tokens in a single include. Every
+// parameter is OPTIONAL and defaults to `null`: only the parameters you pass
+// are emitted, so the rest keep the component's defaults. Token-based and
+// self-contained (no Bootstrap dependencies).
+//
+// Apply it inside any selector that wraps the table — the host element, a
+// container, a route, or `:root` for a global theme.
+//
+// @example — a compact, success-accented table with a rounded frame and a
+//            right-aligned footer:
+//
+//   @use 'ng-hub-ui-paginable/styles/mixins/table-theme' as *;
+//
+//   .invoices-table {
+//     @include hub-table-theme(
+//       $accent: var(--hub-sys-color-success),
+//       $border-radius: 0.5rem,
+//       $cell-padding-y: 0.375rem,
+//       $footer-justify: end
+//     );
+//   }
+//
+// scss-docs-start hub-table-theme
+@mixin hub-table-theme(
+	// ── Colour ──
+	$accent: null,            // semantic accent (drives the selected row)
+	$bg: null,                // table + container surface
+	$color: null,             // text colour
+	$border-color: null,
+	$hover-bg: null,
+	$hover-color: null,
+	$selected-bg: null,
+	$selected-color: null,
+	$striped-bg: null,
+	$striped-color: null,
+	// ── Border ──
+	$border-width: null,
+	$border-radius: null,
+	// ── Density / padding ──
+	$cell-padding-x: null,
+	$cell-padding-y: null,
+	// ── Footer (bottom bar: paginator · settings · info) ──
+	$footer-gap: null,
+	$footer-justify: null,    // justify-content of the footer row
+	$footer-align: null,      // align-items of the footer row
+	$footer-wrap: null        // flex-wrap of the footer row
+) {
+	// Colour
+	@if $accent != null {
+		--hub-table-accent: #{$accent};
+	}
+	@if $bg != null {
+		--hub-table-bg: #{$bg};
+		--hub-table-container-bg: #{$bg};
+	}
+	@if $color != null {
+		--hub-table-color: #{$color};
+		--hub-table-container-color: #{$color};
+	}
+	@if $border-color != null {
+		--hub-table-border-color: #{$border-color};
+	}
+	@if $hover-bg != null {
+		--hub-table-hover-bg: #{$hover-bg};
+	}
+	@if $hover-color != null {
+		--hub-table-hover-color: #{$hover-color};
+	}
+	@if $selected-bg != null {
+		--hub-table-selected-bg: #{$selected-bg};
+	}
+	@if $selected-color != null {
+		--hub-table-selected-color: #{$selected-color};
+	}
+	@if $striped-bg != null {
+		--hub-table-striped-bg: #{$striped-bg};
+	}
+	@if $striped-color != null {
+		--hub-table-striped-color: #{$striped-color};
+	}
+
+	// Border
+	@if $border-width != null {
+		--hub-table-border-width: #{$border-width};
+	}
+	@if $border-radius != null {
+		--hub-table-border-radius: #{$border-radius};
+	}
+
+	// Density / padding
+	@if $cell-padding-x != null {
+		--hub-table-cell-padding-x: #{$cell-padding-x};
+	}
+	@if $cell-padding-y != null {
+		--hub-table-cell-padding-y: #{$cell-padding-y};
+	}
+
+	// Footer (bottom bar)
+	@if $footer-gap != null {
+		--hub-table-bottom-bar-gap: #{$footer-gap};
+	}
+	@if $footer-justify != null {
+		--hub-table-bottom-bar-justify-content: #{$footer-justify};
+	}
+	@if $footer-align != null {
+		--hub-table-bottom-bar-align-items: #{$footer-align};
+	}
+	@if $footer-wrap != null {
+		--hub-table-bottom-bar-wrap: #{$footer-wrap};
+	}
+}
+// scss-docs-end hub-table-theme

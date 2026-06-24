@@ -292,6 +292,27 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 | `--hub-list-action-btn-padding-y` | `0.375rem` | Relleno vertical de los botones de acción |
 | `--hub-list-action-btn-hover-bg` | `var(--hub-list-item-hover-bg)` | Fondo de los botones de acción al pasar el ratón |
 
+### Drag & Drop (List)
+
+| Variable | Por defecto | Descripción |
+|----------|-------------|-------------|
+| `--hub-list-drag-handle-color` | `var(--hub-sys-text-muted)` | Color del tirador de arrastre |
+| `--hub-list-drag-handle-cursor` | `grab` | Cursor sobre el tirador de arrastre |
+| `--hub-list-drag-handle-size` | `var(--hub-ref-icon-size)` | Tamaño de fuente del tirador de arrastre |
+| `--hub-list-item-dragging-opacity` | `0.5` | Opacidad de la fila que se está arrastrando |
+| `--hub-list-item-dragging-cursor` | `grabbing` | Cursor mientras se arrastra una fila |
+| `--hub-list-drop-target-outline-color` | `var(--hub-list-accent)` | Color del contorno del destino de soltado |
+| `--hub-list-drop-target-outline-width` | `2px` | Grosor del contorno del destino de soltado |
+| `--hub-list-placeholder-bg` | `var(--hub-ref-surface-2)` | Fondo del marcador de posición de soltado |
+| `--hub-list-placeholder-border-color` | `var(--hub-list-accent)` | Color del borde del marcador de posición |
+| `--hub-list-placeholder-border-width` | `2px` | Grosor del borde del marcador de posición |
+| `--hub-list-placeholder-border-style` | `dashed` | Estilo del borde del marcador de posición |
+| `--hub-list-placeholder-border-radius` | `var(--hub-list-item-border-radius)` | Radio del borde del marcador de posición |
+| `--hub-list-placeholder-min-height` | `2.5rem` | Altura mínima del marcador de posición |
+| `--hub-list-ghost-opacity` | `0.85` | Opacidad del fantasma flotante de arrastre táctil |
+| `--hub-list-ghost-shadow` | `0 0.5rem 1rem rgba(0, 0, 0, 0.15)` | Sombra del fantasma flotante de arrastre táctil |
+
+
 ### Misc
 
 | Variable | Default | Description |

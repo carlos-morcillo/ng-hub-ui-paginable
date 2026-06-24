@@ -1,0 +1,139 @@
+// ─────────────────────────────────────────────────────────────────────────
+// hub-list-theme — one-call theming for `<hub-list>` (list & cards layouts)
+// ─────────────────────────────────────────────────────────────────────────
+//
+// Override any of the `--hub-list-*` design tokens in a single include. Every
+// parameter is OPTIONAL and defaults to `null`: only the parameters you pass
+// are emitted, so the rest keep the component's defaults. Token-based and
+// self-contained (no Bootstrap dependencies). Covers both the `list` and the
+// `cards` display modes.
+//
+// @example
+//
+//   @use 'ng-hub-ui-paginable/styles/mixins/list-theme' as *;
+//
+//   .team-list {
+//     @include hub-list-theme(
+//       $accent: var(--hub-sys-color-success),
+//       $item-border-radius: 0.75rem,
+//       $gap: 0.5rem,
+//       $cards-min-column-width: 16rem,
+//       $footer-justify: end
+//     );
+//   }
+//
+// scss-docs-start hub-list-theme
+@mixin hub-list-theme(
+	// ── Colour ──
+	$accent: null,             // semantic accent (drives the selected item)
+	$bg: null,                 // list container background
+	$item-bg: null,
+	$item-color: null,
+	$item-border-color: null,
+	$hover-bg: null,
+	$selected-bg: null,
+	$selected-color: null,
+	// ── Border / radius ──
+	$border-radius: null,      // list container radius
+	$item-border-radius: null,
+	// ── Density / spacing ──
+	$item-padding-x: null,
+	$item-padding-y: null,
+	$gap: null,                // gap between items
+	// ── Cards layout ──
+	$cards-bg: null,
+	$cards-border-color: null,
+	$cards-border-radius: null,
+	$cards-padding-x: null,
+	$cards-padding-y: null,
+	$cards-min-column-width: null,
+	$cards-gap: null,
+	// ── Footer (bottom bar: paginator · settings · info) ──
+	$footer-gap: null,
+	$footer-justify: null,
+	$footer-align: null,
+	$footer-wrap: null
+) {
+	// Colour
+	@if $accent != null {
+		--hub-list-accent: #{$accent};
+	}
+	@if $bg != null {
+		--hub-list-bg: #{$bg};
+	}
+	@if $item-bg != null {
+		--hub-list-item-bg: #{$item-bg};
+	}
+	@if $item-color != null {
+		--hub-list-item-color: #{$item-color};
+	}
+	@if $item-border-color != null {
+		--hub-list-item-border-color: #{$item-border-color};
+	}
+	@if $hover-bg != null {
+		--hub-list-item-hover-bg: #{$hover-bg};
+	}
+	@if $selected-bg != null {
+		--hub-list-item-selected-bg: #{$selected-bg};
+	}
+	@if $selected-color != null {
+		--hub-list-item-selected-color: #{$selected-color};
+	}
+
+	// Border / radius
+	@if $border-radius != null {
+		--hub-list-border-radius: #{$border-radius};
+	}
+	@if $item-border-radius != null {
+		--hub-list-item-border-radius: #{$item-border-radius};
+	}
+
+	// Density / spacing
+	@if $item-padding-x != null {
+		--hub-list-item-padding-x: #{$item-padding-x};
+	}
+	@if $item-padding-y != null {
+		--hub-list-item-padding-y: #{$item-padding-y};
+	}
+	@if $gap != null {
+		--hub-list-items-gap: #{$gap};
+	}
+
+	// Cards layout
+	@if $cards-bg != null {
+		--hub-list-cards-bg: #{$cards-bg};
+	}
+	@if $cards-border-color != null {
+		--hub-list-cards-border-color: #{$cards-border-color};
+	}
+	@if $cards-border-radius != null {
+		--hub-list-cards-border-radius: #{$cards-border-radius};
+	}
+	@if $cards-padding-x != null {
+		--hub-list-cards-padding-x: #{$cards-padding-x};
+	}
+	@if $cards-padding-y != null {
+		--hub-list-cards-padding-y: #{$cards-padding-y};
+	}
+	@if $cards-min-column-width != null {
+		--hub-list-cards-min-column-width: #{$cards-min-column-width};
+	}
+	@if $cards-gap != null {
+		--hub-list-cards-gap: #{$cards-gap};
+	}
+
+	// Footer (bottom bar)
+	@if $footer-gap != null {
+		--hub-list-bottom-bar-gap: #{$footer-gap};
+	}
+	@if $footer-justify != null {
+		--hub-list-bottom-bar-justify-content: #{$footer-justify};
+	}
+	@if $footer-align != null {
+		--hub-list-bottom-bar-align-items: #{$footer-align};
+	}
+	@if $footer-wrap != null {
+		--hub-list-bottom-bar-wrap: #{$footer-wrap};
+	}
+}
+// scss-docs-end hub-list-theme

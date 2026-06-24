@@ -35,6 +35,12 @@
 	--hub-table-accent-bg: transparent;
 	--hub-table-active-bg: var(--hub-sys-state-active-bg, rgba(0, 0, 0, 0.1));
 	--hub-table-active-color: var(--hub-sys-text-primary, #212529);
+	// Semantic accent for the selected-row state — re-based per `variant`
+	// (`options.variant`). The selected row reads as a soft accent tint.
+	--hub-table-accent: var(--hub-sys-color-primary, #0d6efd);
+	--hub-table-accent-subtle: color-mix(in srgb, var(--hub-table-accent) 12%, var(--hub-sys-surface-page, #fff));
+	--hub-table-selected-bg: var(--hub-table-accent-subtle);
+	--hub-table-selected-color: var(--hub-sys-text-primary, #212529);
 	--hub-table-bg: var(--hub-ref-color-white, #fff);
 	--hub-table-bg-state: initial;
 	--hub-table-bg-type: initial;
@@ -572,10 +578,30 @@
 		}
 	}
 
+	// Selected row — soft accent tint (persists over hover). Previously the
+	// `--selected` class carried no styling; it now reads as a themed row.
+	.hub-table__body-row--selected > *,
+	.hub-table__hover > tbody > tr.hub-table__body-row--selected:hover > * {
+		--hub-table-color-state: var(--hub-table-selected-color);
+		--hub-table-bg-state: var(--hub-table-selected-bg);
+	}
+
 	// Responsive table
 	.hub-table__responsive {
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
+	}
+}
+
+// Semantic variant — `options.variant` adds `.hub-table__<variant>` to the
+// table; it re-bases the single `--hub-table-accent`, and the selected-row tint
+// (and any future accent affordance) follows. Built-in variants pick up the
+// exact `--hub-sys-color-*` tints; a custom variant works via the host's token.
+$hub-table-variants: primary, success, danger, warning, info;
+
+@each $variant in $hub-table-variants {
+	.hub-table__#{$variant} {
+		--hub-table-accent: var(--hub-sys-color-#{$variant});
 	}
 }
 

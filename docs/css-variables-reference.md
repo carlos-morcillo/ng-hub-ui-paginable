@@ -294,6 +294,26 @@ These tokens style the embedded paginator from the list host:
 | `--hub-list-action-btn-padding-y` | `0.375rem` | Vertical padding of list action buttons |
 | `--hub-list-action-btn-hover-bg` | `var(--hub-list-item-hover-bg)` | Hover background of list action buttons |
 
+### Drag & Drop (List)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-list-drag-handle-color` | `var(--hub-sys-text-muted)` | Color of the drag handle |
+| `--hub-list-drag-handle-cursor` | `grab` | Cursor shown over the drag handle |
+| `--hub-list-drag-handle-size` | `var(--hub-ref-icon-size)` | Font size of the drag handle |
+| `--hub-list-item-dragging-opacity` | `0.5` | Opacity of the row being dragged |
+| `--hub-list-item-dragging-cursor` | `grabbing` | Cursor while a row is being dragged |
+| `--hub-list-drop-target-outline-color` | `var(--hub-list-accent)` | Outline color of the hovered drop target |
+| `--hub-list-drop-target-outline-width` | `2px` | Outline width of the hovered drop target |
+| `--hub-list-placeholder-bg` | `var(--hub-ref-surface-2)` | Background of the drop placeholder |
+| `--hub-list-placeholder-border-color` | `var(--hub-list-accent)` | Border color of the drop placeholder |
+| `--hub-list-placeholder-border-width` | `2px` | Border width of the drop placeholder |
+| `--hub-list-placeholder-border-style` | `dashed` | Border style of the drop placeholder |
+| `--hub-list-placeholder-border-radius` | `var(--hub-list-item-border-radius)` | Border radius of the drop placeholder |
+| `--hub-list-placeholder-min-height` | `2.5rem` | Minimum height of the drop placeholder |
+| `--hub-list-ghost-opacity` | `0.85` | Opacity of the floating touch drag ghost |
+| `--hub-list-ghost-shadow` | `0 0.5rem 1rem rgba(0, 0, 0, 0.15)` | Box shadow of the floating touch drag ghost |
+
 
 ### Misc
 

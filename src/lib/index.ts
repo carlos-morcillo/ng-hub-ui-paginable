@@ -18,6 +18,9 @@ export { PaginableStateOutlet } from './components/state-outlet/paginable-state-
 export { TableComponent } from './components/table/table.component';
 
 // Directives
+export { HubListDragHandleDirective } from './directives/list-drag-handle.directive';
+export { HubListDragPlaceholderDirective } from './directives/list-drag-placeholder.directive';
+export { HubListDragPreviewDirective } from './directives/list-drag-preview.directive';
 export { PaginableListItemDirective } from './directives/paginable-list-item.directive';
 export { PaginableTableCellDirective } from './directives/paginable-table-cell.directive';
 export { PaginableErrorDirective, PaginableTableErrorDirective } from './directives/paginable-error.directive';
@@ -40,6 +43,8 @@ export * from './interfaces';
 export type { PaginableStateContext, PaginableStateComponent, PaginableStateDefault, PaginableStateComponentLoader, ResolvedStateDefault } from './interfaces/paginable-state';
 
 // Services
+export { HubListDragService } from './services/hub-list-drag.service';
+export type { ActiveDrag, DragPointerMode, DragRegistration, DragTarget } from './services/hub-list-drag.service';
 export { PaginableDefaultsService } from './services/paginable-defaults.service';
 export { PaginableService } from './services/paginable.service';
 export { PaginationService } from './services/pagination.service';

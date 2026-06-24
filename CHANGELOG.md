@@ -2,9 +2,22 @@
 
 ## [22.1.1] - 2026-06-24
 
+### Added
+
+- **list:** native drag-and-drop reordering. Enable it with `[sortable]="true"` on `<hub-list>`; works in the `list` and `cards` layouts and in nested trees. Reorder within a list, between siblings of the same parent, and **between lists** that share a `[dragGroup]` (cross-list transfer). The list reorders its own view optimistically and emits a typed `(sorted)` event — `ListSortEvent<T>` (`{ previousIndex, currentIndex, item, items, isTransfer, previousGroup, group, previousItems?, depth, parentItem }`); only the destination list emits on a cross-list transfer. Built on the native HTML5 drag-and-drop API with a **Pointer Events fallback** for touch/pen devices (floating ghost + edge autoscroll), plus opt-in **keyboard reordering** via `[keyboardSortable]` (Space/Enter to grab and drop, arrows to move, Escape to cancel) with `aria-live` announcements.
+  - New projected directives: `HubListDragHandleDirective` (`[hubListDragHandle]` / `[listDragHandle]`) to restrict the drag start to a handle, `HubListDragPlaceholderDirective` (`[hubListDragPlaceholder]` / `[listDragPlaceholder]`) for a custom drop placeholder, and `HubListDragPreviewDirective` (`[hubListDragPreview]` / `[listDragPreview]`) for a custom drag image / touch ghost.
+  - New inputs `sortable`, `dragGroup`, `sortDisabled` and `keyboardSortable`; new output `sorted`. New public `HubListDragService` coordinator and `ListSortEvent<T>` interface.
+  - New CSS variables: `--hub-list-drag-handle-color/-cursor/-size`, `--hub-list-item-dragging-opacity`, `--hub-list-item-dragging-cursor`, `--hub-list-drop-target-outline-color/-width`, `--hub-list-placeholder-bg/-border-color/-border-width/-border-style/-border-radius/-min-height`, `--hub-list-ghost-opacity/-shadow`.
+- **`hub-table-theme()` Sass mixin** (`styles/mixins/table-theme`) — theme a `<hub-table>` in one call: colours (`$accent`, `$bg`, `$color`, `$hover-*`, `$selected-*`, `$striped-*`, `$border-color`), borders (`$border-width`, `$border-radius`), density (`$cell-padding-x/y`) and the footer/bottom-bar layout (`$footer-gap/justify/align/wrap`). Every parameter is optional and defaults to `null`, so only the ones you pass are emitted as `--hub-table-*` overrides; the rest keep their defaults. Token-based, no Bootstrap dependency.
+- **`hub-list-theme()` Sass mixin** (`styles/mixins/list-theme`) — the same one-call theming for `<hub-list>` (both `list` and `cards` layouts): colours (`$accent`, `$bg`, `$item-*`, `$hover-bg`, `$selected-*`), borders/radius, item density (`$item-padding-x/y`, `$gap`), the cards grid (`$cards-bg/border-color/border-radius/padding/min-column-width/gap`) and the footer layout. Optional params default to `null` — only the ones you pass are emitted.
+- **Semantic `variant` accent** for the table and list (incl. its `cards` display), mirroring panels/nav. Set `options.variant` (`primary` / `success` / `danger` / `warning` / `info`) and the component re-bases a single accent through a CSS loop over the `--hub-sys-color-<variant>` family.
+  - **Table**: the **selected row** is now styled (previously the `--selected` class carried no CSS) — it reads as a soft accent tint. New tokens `--hub-table-accent`, `--hub-table-accent-subtle`, `--hub-table-selected-bg`, `--hub-table-selected-color`. `options.variant` keeps applying the existing `.hub-table__<variant>` class, which now re-bases `--hub-table-accent`.
+  - **List / cards**: the selected item accent now resolves through the new `--hub-list-accent` (was hard-wired to `--hub-sys-color-primary`). `options.variant` is reflected as `[data-variant]` on the host and re-bases the accent; applies to both the `list` and `cards` display modes.
+
 ### Changed
 
 - **tooltip:** `TooltipDirective` moved to `ng-hub-ui-utils` so it can be reused across libraries. It is still re-exported from `ng-hub-ui-paginable` for backward compatibility, but new code should import it from `ng-hub-ui-utils`. The injected base class changed from `.ng-tooltip` to `.hub-tooltip` and tooltips are now themeable via `--hub-tooltip-*` variables.
+- **list:** the drag-and-drop engine now lives in the shared `ng-hub-ui-utils` native drag-and-drop core (`HubDragDropService`, array/geometry helpers, drag-image and the Pointer Events fallback). The list re-exports them under the historical names (`HubListDragService`, etc.), so the public API is unchanged; `ng-hub-ui-utils` (already a peer dependency) must be `>=22.3.0`.
 
 ## [22.1.0] - 2026-06-23
 
