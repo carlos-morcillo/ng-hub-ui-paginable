@@ -1,5 +1,11 @@
 # Changelog
 
+## [22.1.1] - 2026-06-24
+
+### Changed
+
+- **tooltip:** `TooltipDirective` moved to `ng-hub-ui-utils` so it can be reused across libraries. It is still re-exported from `ng-hub-ui-paginable` for backward compatibility, but new code should import it from `ng-hub-ui-utils`. The injected base class changed from `.ng-tooltip` to `.hub-tooltip` and tooltips are now themeable via `--hub-tooltip-*` variables.
+
 ## [22.1.0] - 2026-06-23
 
 ### Added

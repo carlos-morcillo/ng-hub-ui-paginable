@@ -1,5 +1,13 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## v22.1.1
+
+### Tooltip directive moved to `ng-hub-ui-utils`
+
+- **Change**: `TooltipDirective` now lives in `ng-hub-ui-utils`. It is still re-exported from `ng-hub-ui-paginable` for backward compatibility, so existing imports keep working. The injected base class changed from `.ng-tooltip` to `.hub-tooltip`.
+- **Impact**: any custom CSS targeting `.ng-tooltip` no longer applies.
+- **Migration**: import `TooltipDirective` from `ng-hub-ui-utils`, and restyle via the new `.hub-tooltip` class or the `--hub-tooltip-*` CSS variables. Requires `ng-hub-ui-utils >= 22.2.0`.
+
 ## v22.0.0
 
 This release aligns the major with Angular 22 and restructures the List component's CSS API. `peerDependencies` stays at `>=18.0.0`, so Angular 18–22 remain supported.
