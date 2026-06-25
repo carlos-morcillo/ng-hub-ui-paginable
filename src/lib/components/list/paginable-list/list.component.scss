@@ -262,8 +262,8 @@
 			width: 100%;
 			padding: var(--hub-list-search-input-padding-y) var(--hub-list-search-input-padding-x);
 			font-size: var(--hub-list-search-input-font-size);
-			font-weight: 400;
-			line-height: 1.5;
+			font-weight: var(--hub-ref-font-weight-base, 400);
+			line-height: var(--hub-ref-line-height-base, 1.5);
 			background-color: var(--hub-list-search-input-bg);
 			border-color: var(--hub-list-search-border-color) !important;
 			color: var(--hub-list-search-input-color);

@@ -21,7 +21,7 @@
     position: static !important;
     display: block;
     min-width: 160px;
-    z-index: 1000;
+    z-index: var(--hub-sys-zindex-dropdown, 1000);
   }
 }
 
