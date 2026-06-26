@@ -1,5 +1,14 @@
 # Changelog
 
+## [22.1.3] - 2026-06-26
+
+### Changed
+
+- **table / list:** migrated the semantic accent to the open-set "local accent slot" pattern, aligned with the `ng-hub-ui-ds` engine. `--hub-table-accent` / `--hub-list-accent` now derive a full role family on the spot — `-emphasis` (`color-mix(in oklch, accent 80%, ink)`), `-subtle` (`color-mix(in oklch, accent 12%, surface)`) and `-on` (a grayscale contrast flip via relative-colour syntax). Overriding the single slot at runtime recomputes the whole family with no recompilation, so any accent — including a user-defined one such as `brand` — works through the `hub-table-theme()` / `hub-list-theme()` mixins, a `:host` rule, or `--hub-*-accent: var(--hub-sys-color-brand)`.
+- **list:** the selected item now takes its text colour from the derived `--hub-list-accent-on` contrast token (was hard-wired to white), so a light or custom accent keeps the label legible.
+- **table / list:** the semantic `variant` set is now the open nine ng-hub-ui-ds variants (`primary`, `secondary`, `success`, `danger`, `warning`, `info`, `neutral`, `light`, `dark`); was five.
+- Migrated every `color-mix(in srgb, …)` to `color-mix(in oklch, …)` for perceptually even mixing (`--hub-table-accent-subtle`, `--hub-table-filter-button-active-bg`).
+
 ## [22.1.2] - 2026-06-25
 
 ### Fixed

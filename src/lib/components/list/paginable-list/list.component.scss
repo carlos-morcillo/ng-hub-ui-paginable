@@ -27,9 +27,20 @@
 	--hub-list-children-gap: var(--hub-list-item-padding-y);
 	// Semantic accent for the selected item — re-based per `variant`
 	// (applies to both the `list` and `cards` display modes).
+	//
+	// Local accent slot: defaults to the primary system accent but accepts ANY
+	// colour at runtime (built-in variant, theme override, or a user-defined
+	// accent such as `brand`). The role family is derived from this single slot
+	// with `color-mix(in oklch, …)` / relative-colour syntax, mirroring the ds
+	// engine; the selected item now reads its text colour from the derived
+	// `-on` contrast token, so a light accent keeps legible (dark) text.
 	--hub-list-accent: var(--hub-sys-color-primary, #0d6efd);
+	--hub-list-accent-emphasis: color-mix(in oklch, var(--hub-list-accent) 80%, var(--hub-sys-color-ink, #212529));
+	--hub-list-accent-subtle: color-mix(in oklch, var(--hub-list-accent) 12%, var(--hub-sys-surface-page, #ffffff));
+	// Contrast / on-color: grayscale flip driven by the accent's own lightness.
+	--hub-list-accent-on: oklch(from var(--hub-list-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
 	--hub-list-item-selected-bg: var(--hub-list-accent);
-	--hub-list-item-selected-color: var(--hub-ref-color-white, #fff);
+	--hub-list-item-selected-color: var(--hub-list-accent-on);
 	--hub-list-cards-min-column-width: 18rem;
 	--hub-list-cards-gap: var(--hub-list-items-gap);
 	--hub-list-cards-columns: auto-fit;
@@ -482,10 +493,19 @@
 }
 
 // Semantic variant — `options.variant` is reflected as `[data-variant]` on the
-// host; it re-bases the single `--hub-list-accent`, and the selected-item colour
-// follows (in both `list` and `cards` display modes). Built-in variants pick up
-// the exact `--hub-sys-color-*` tints.
-$hub-list-variants: primary, success, danger, warning, info;
+// host; it re-bases the single `--hub-list-accent`, and the selected-item bg +
+// its derived `-on` text colour follow (in both `list` and `cards` display
+// modes). Built-in variants pick up the exact `--hub-sys-color-*` accent.
+//
+// Open accent set — the loop enumerates the nine default ng-hub-ui-ds variants.
+// The set is intentionally OPEN: because `--hub-list-accent` is a live slot from
+// which the whole `-emphasis` / `-subtle` / `-on` family derives, any custom
+// accent works at pure runtime WITHOUT recompiling this library — the consumer
+// re-bases `--hub-list-accent` (e.g. with the `hub-list-theme($accent: …)`
+// mixin, a `:host` rule, or `--hub-list-accent: var(--hub-sys-color-brand)`) and
+// the family recomputes. The class loop below is the convenience binding for the
+// variants registered in the ds map.
+$hub-list-variants: primary, secondary, success, danger, warning, info, neutral, light, dark;
 
 @each $variant in $hub-list-variants {
 	:host([data-variant='#{$variant}']),
