@@ -11,6 +11,7 @@ import {
 	inject,
 	input,
 	model,
+	signal,
 	viewChildren
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -20,6 +21,8 @@ import { BehaviorSubject, Observable, debounceTime, distinctUntilChanged, isObse
 import { TableBreakpoint } from '../../constants/breakpoints';
 import { PaginableStateDefault } from '../../interfaces/paginable-state';
 import { PaginableDefaultsService } from '../../services/paginable-defaults.service';
+import { PaginableService } from '../../services/paginable.service';
+import { TableClientDataService } from '../../services/table-client-data.service';
 import { PaginableStateOutlet } from '../state-outlet/paginable-state-outlet.component';
 import { PaginableNoResultsDirective } from '../../directives/paginable-no-results.directive';
 import { PaginableTableCellDirective } from '../../directives/paginable-table-cell.directive';
@@ -37,6 +40,9 @@ import { PaginableTableOptions } from '../../interfaces/paginable-table-options'
 import { PaginableTableOrdination } from '../../interfaces/paginable-table-ordination';
 import { PaginationState } from '../../interfaces/pagination-state';
 import { TableRow } from '../../interfaces/table-row';
+import { HUB_PAGINABLE_FORM_CONTROLS } from '../../form-controls/form-controls.token';
+import { HubPaginableControlDirective } from '../../form-controls/form-controls.directive';
+import { HubPaginableControlOption } from '../../form-controls/form-controls.types';
 import { DropdownComponent } from '../dropdown/dropdown.component';
 import { HubIconComponent } from '../icon/icon.component';
 import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
@@ -68,7 +74,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		PaginableTableRangeInputComponent,
 		AsyncPipe,
 		GetPipe,
-		PaginableStateOutlet
+		PaginableStateOutlet,
+		HubPaginableControlDirective
 	],
 	animations: [
 		trigger('fadeInOut', [
@@ -128,6 +135,32 @@ export class TableComponent<T = any> {
 	/** Resolved application-wide default state components. */
 	readonly defaults = inject(PaginableDefaultsService);
 
+	/** In-memory data engine powering the automatic client-side pagination mode. */
+	readonly #clientData = inject(TableClientDataService);
+
+	/** Application-wide paginable configuration (holds the input defaults). */
+	readonly #config = inject(PaginableService);
+
+	/** Resolved default input values from {@link providePaginable}. */
+	get #defaults() {
+		return this.#config.config.defaults ?? {};
+	}
+
+	/**
+	 * Tracks whether the latest `[data]` binding was a plain array (as opposed to a
+	 * {@link PaginationState}). Together with `paginate` and an unset `totalItems`,
+	 * this drives the automatic client-side pagination mode.
+	 */
+	readonly #sourceIsArray = signal<boolean>(false);
+
+	/**
+	 * Optional adapter that renders the table's primitive controls (search, page
+	 * size…) with a richer component library. When absent (default), the table
+	 * falls back to native `<input>` / `<select>`. Wire it with
+	 * `provideHubPaginableFormControls(hubFormControlAdapter)`.
+	 */
+	protected readonly formControlsAdapter = inject(HUB_PAGINABLE_FORM_CONTROLS, { optional: true });
+
 	/** Unique identifier for the table component instance */
 	id = input(generateUniqueId(16));
 
@@ -170,7 +203,7 @@ export class TableComponent<T = any> {
 	 * @type {number}
 	 * @memberof PaginableTableComponent
 	 */
-	readonly debounce = input<number>(0);
+	readonly debounce = input<number>(this.#defaults.debounce ?? 0);
 
 	/** Column headers configuration. Can be strings for simple headers or PaginableTableHeader objects for advanced features */
 	readonly headers = model<Array<PaginableTableHeader | string>>([]);
@@ -279,11 +312,14 @@ export class TableComponent<T = any> {
 	readonly rows = input<Array<TableRow<T>>, Array<T> | PaginationState | null | undefined>([], {
 		alias: 'data',
 		transform: (v: Array<T> | PaginationState | null | undefined): Array<TableRow<T>> => {
+			const isArray = Array.isArray(v);
+			this.#sourceIsArray.set(isArray);
+
 			if (!v) return [];
 
-			const items = Array.isArray(v) ? v : ((v.data as Array<T>) ?? []);
+			const items = isArray ? v : ((v.data as Array<T>) ?? []);
 
-			if (!Array.isArray(v)) {
+			if (!isArray) {
 				this.page.set(v.page);
 				this.perPage.set(v.perPage);
 				this.totalItems.set(v.totalItems);
@@ -293,9 +329,9 @@ export class TableComponent<T = any> {
 		}
 	});
 
-	/** Effect that runs when rows data changes to update selection state */
+	/** Effect that runs when the visible rows change to update selection state */
 	rowsEffect = effect(() => {
-		const rows = this.rows();
+		this.displayedRows();
 		this.markSelected();
 	});
 
@@ -317,18 +353,35 @@ export class TableComponent<T = any> {
 	}
 
 	/** Available options for number of items per page */
-	readonly perPageOptions = input<Array<number>>([10, 20, 50, 100]);
+	readonly perPageOptions = input<Array<number>>(this.#defaults.perPageOptions ?? [10, 20, 50, 100]);
+
+	/** `perPageOptions` mapped to `{ value, label }` for the form-controls adapter. */
+	protected readonly perPageControlOptions = computed<HubPaginableControlOption[]>(() =>
+		this.perPageOptions().map((option) => ({ value: option, label: String(option) }))
+	);
 	/** Current page number (1-based) */
 	readonly page = model<number | null>(null);
 	/** Number of items to display per page */
-	readonly perPage = model<number | null>(10);
+	readonly perPage = model<number | null>(this.#defaults.perPage ?? 10);
 	/** Total number of items available across all pages */
 	readonly totalItems = model<number | null>(null);
 
-	/** Computed total number of pages based on perPage and totalItems */
+	/**
+	 * Computed total number of pages.
+	 *
+	 * In client mode it is derived from the filtered (pre-slice) row count; otherwise
+	 * it uses the consumer-provided `totalItems` exactly as before.
+	 */
 	readonly numberOfPages = computed((): number | null => {
-		if (this.perPage() && this.totalItems()) {
-			return Math.ceil(this.totalItems()! / this.perPage()!);
+		const perPage = this.perPage();
+		if (!perPage) {
+			return null;
+		}
+		if (this.clientMode()) {
+			return Math.ceil(this.clientFilteredRows().length / perPage);
+		}
+		if (this.totalItems()) {
+			return Math.ceil(this.totalItems()! / perPage);
 		}
 		return null;
 	});
@@ -337,12 +390,107 @@ export class TableComponent<T = any> {
 	readonly ordination = model<PaginableTableOrdination>();
 
 	/**
-	 * Set if the data must be paginated
+	 * Whether the table should paginate.
+	 *
+	 * When `true` (default) **and** `[data]` is a plain array **and** no `totalItems`
+	 * is provided, the table enters automatic client-side mode: it searches, filters,
+	 * sorts and slices the array in memory and computes the total itself
+	 * ({@link clientMode}). Passing a {@link PaginationState} — or setting `totalItems`
+	 * — keeps the table in server mode, rendering `[data]` as-is. Set `[paginate]="false"`
+	 * to render a plain array in full without any pagination.
 	 *
 	 * @type {boolean}
 	 * @memberof PaginableTableComponent
 	 */
-	readonly paginate = input<boolean>(true);
+	readonly paginate = input<boolean>(this.#defaults.paginate ?? true);
+
+	/**
+	 * Whether the table is running in automatic client-side pagination mode.
+	 *
+	 * Active when pagination is enabled, the consumer passed a plain array and no
+	 * `totalItems` was provided (which would otherwise signal a server-managed total).
+	 */
+	readonly clientMode = computed<boolean>(() => this.paginate() && this.#sourceIsArray() && this.totalItems() == null);
+
+	/** Data properties scanned by the global search box in client mode. */
+	readonly searchableKeys = computed<Array<string>>(() =>
+		this.fixedHeaders()
+			.filter((header) => header.property && !header.onlyButtons && !header.buttons)
+			.map((header) => header.property)
+	);
+
+	/**
+	 * Full set of rows after search, column filtering and sorting but **before**
+	 * slicing into a page. Its length is the real total used to drive the paginator.
+	 * In server mode it is just the rows the consumer supplied.
+	 */
+	readonly clientFilteredRows = computed<Array<TableRow<T>>>(() => {
+		const rows = this.rows();
+		if (!this.clientMode()) {
+			return rows;
+		}
+		return this.#clientData.process(rows, {
+			searchTerm: this.searchTerm(),
+			searchKeys: this.searchableKeys(),
+			headers: this.fixedHeaders(),
+			filters: this.filters(),
+			ordination: this.ordination() ?? null
+		});
+	});
+
+	/**
+	 * Rows actually rendered by the template. In client mode this is the current
+	 * page's slice of {@link clientFilteredRows}; in server mode it is the rows the
+	 * consumer supplied, untouched.
+	 */
+	readonly displayedRows = computed<Array<TableRow<T>>>(() => {
+		if (!this.clientMode()) {
+			return this.rows();
+		}
+		const rows = this.clientFilteredRows();
+		const perPage = this.perPage() || rows.length || 1;
+		const page = Math.max(1, this.page() ?? 1);
+		const start = (page - 1) * perPage;
+		return rows.slice(start, start + perPage);
+	});
+
+	/** Fingerprint of the last client-mode query, used to detect search/filter/sort changes. */
+	#lastQueryKey: string | null = null;
+
+	/**
+	 * Keeps the current page coherent in client mode: defaults to the first page,
+	 * resets to it whenever the search, filters or ordination change, and clamps it
+	 * to the available number of pages after the result set shrinks (e.g. when
+	 * `perPage` grows).
+	 */
+	pageEffect = effect(() => {
+		if (!this.clientMode()) {
+			this.#lastQueryKey = null;
+			return;
+		}
+
+		const key = JSON.stringify([this.searchTerm(), this.filters(), this.ordination() ?? null]);
+		const pages = this.numberOfPages();
+		const current = this.page();
+
+		// Snap back to the first page when the query changed (skip the very first pass).
+		if (this.#lastQueryKey !== null && this.#lastQueryKey !== key) {
+			this.#lastQueryKey = key;
+			if (current !== 1) {
+				this.page.set(1);
+			}
+			return;
+		}
+		this.#lastQueryKey = key;
+
+		if (current == null) {
+			this.page.set(1);
+			return;
+		}
+		if (pages != null && pages >= 1 && current > pages) {
+			this.page.set(pages);
+		}
+	});
 
 	/**
 	 * If set, it will be the property returned in the selected event
@@ -369,10 +517,10 @@ export class TableComponent<T = any> {
 	readonly noResultsComponent = input<PaginableStateDefault | null>(null);
 
 	/** Position where pagination controls should be displayed */
-	readonly paginationPosition = input<'bottom' | 'top' | 'both'>('bottom');
+	readonly paginationPosition = input<'bottom' | 'top' | 'both'>(this.#defaults.paginationPosition ?? 'bottom');
 
 	/** Whether to show pagination information (e.g., "Showing 1 to 10 of 100 entries") */
-	readonly paginationInfo = input<boolean>(true);
+	readonly paginationInfo = input<boolean>(this.#defaults.paginationInfo ?? true);
 
 	/** Whether action buttons should stick to viewport during scrolling */
 	readonly stickyActions = input<boolean>(false);
@@ -429,7 +577,7 @@ export class TableComponent<T = any> {
 	 * @memberof PaginableTableComponent
 	 */
 	/** Whether the table includes a search input field */
-	readonly searchable = input<boolean>(true);
+	readonly searchable = input<boolean>(this.#defaults.searchable ?? true);
 
 	/** Current search term for filtering table data */
 	readonly searchTerm = model<string>('');
@@ -862,7 +1010,7 @@ export class TableComponent<T = any> {
 	 */
 	toggleAll() {
 		this.allRowsSelected = !this.allRowsSelected;
-		const rows = this.rows();
+		const rows = this.displayedRows();
 		if (!rows) {
 			return;
 		}
@@ -894,7 +1042,7 @@ export class TableComponent<T = any> {
 	 * @param row The table row to toggle selection for
 	 */
 	toggle(row: TableRow<T>) {
-		const rows = this.rows();
+		const rows = this.displayedRows();
 		if (!rows) {
 			return;
 		}
@@ -935,7 +1083,7 @@ export class TableComponent<T = any> {
 	 * Respects the bindValue configuration for object property matching.
 	 */
 	markSelected() {
-		const rows = this.rows();
+		const rows = this.displayedRows();
 		if (!rows?.length) {
 			return;
 		}

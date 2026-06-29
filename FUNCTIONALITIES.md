@@ -1,61 +1,77 @@
 # Functionalities of Paginable Library
 
-This table details the functionalities of the `ng-hub-ui-paginable` library and indicates which ones are covered by interactive examples.
+This table lists the functionalities of the `ng-hub-ui-paginable` library:
+
+- **Implemented** — supported by the library code.
+- **Example** — a working interactive example exists in the main repo (`src/app/pages/examples`, shown at `/paginable`).
 
 ## Paginable Table (`hub-ui-table`)
 
-| Category | Functionality | Example Covered |
-| :--- | :--- | :---: |
-| **Basic Usage** | Simple Table: Data display with auto columns | ✅ |
-| | Striped & Hoverable Rows | ✅ |
-| | Client-Side Pagination | ✅ |
-| | Pagination Positioning (top, bottom, both) | ✅ |
-| | Server-Side Pagination (page, perPage, totalItems) | ❌ |
-| **Sorting & Filtering** | Column Sorting (ASC/DESC) | ✅ |
-| | Default Ordination | ✅ |
-| | Inline Global Searching (Searchable) | ✅ |
-| | Inline Column Text Filters | ✅ |
-| | Advanced Menu Filters (Operators) | ✅ |
-| | Date Range Filtering | ✅ |
-| | Number Range Filtering | ✅ |
-| | Custom Filter Templates | ❌ |
-| **Selection & Interaction** | Single Selection | ✅ |
-| | Multiple Selection | ✅ |
-| | Select All Functionality | ✅ |
-| | Row Click Handling | ❌ |
-| | Dynamic Row Styling (`rowClass`) | ✅ |
-| | Batch Actions (Processing selected items) | ✅ |
-| **Advanced Features** | Expandable Rows (Master-Detail) | ✅ |
-| | Sticky Columns (Start/End) | ✅ |
-| | Responsive Layouts & Breakpoints | ✅ |
-| | Loading & Empty/No Data States | ✅ |
-| | Resizable Columns | ❌ |
-| | Sticky Actions | ❌ |
-| | Error States & Templates | ❌ |
-| **Templates & Directives** | Custom Cell Templates (`paginableTableCell`) | ✅ |
-| | Custom Header Templates (`paginableTableHeader`) | ✅ |
-| | Custom Filter Templates (`paginableTableFilter`) | ❌ |
-| | Custom Row Template (`paginableTableRow`) | ❌ |
-| | Custom Expanding Row Template | ✅ |
-| | Custom Loading/Error/NotFound Templates | ❌ |
+| Category | Functionality | Implemented | Example |
+| :--- | :--- | :---: | :---: |
+| **Basic Usage** | Simple table (auto columns) | ✅ | ✅ |
+| | Striped & hoverable rows | ✅ | ✅ |
+| | Automatic client-side pagination (full array + `paginate`, in-memory search/filter/sort/slice) | ✅ | ✅ |
+| | Pagination positioning (top / bottom / both) | ✅ | ❌ |
+| | Server-side pagination (`page`, `perPage`, `totalItems`, `PaginationState`) | ✅ | ✅ |
+| **Sorting & Filtering** | Column sorting (ASC/DESC) | ✅ | ✅ |
+| | Default ordination | ✅ | ✅ |
+| | Global search (`searchable`) | ✅ | ✅ |
+| | Inline column text filters | ✅ | ✅ |
+| | Advanced menu filters (operators, AND/OR) | ✅ | ✅ |
+| | Date-range filtering | ✅ | ✅ |
+| | Number-range filtering | ✅ | ✅ |
+| | Custom filter templates (`hubTableFilter`) | ✅ | ✅ |
+| **Selection & Interaction** | Single selection | ✅ | ✅ |
+| | Multiple selection | ✅ | ✅ |
+| | Select-all | ✅ | ✅ |
+| | Row click handling (`clickFn`) | ✅ | ✅ |
+| | Dynamic row styling (`rowClass`) | ✅ | ✅ |
+| | Row action buttons (per-row `buttons`) | ✅ | ✅ |
+| | Batch actions (on selected items) | ✅ | ✅ |
+| **Advanced Features** | Expandable rows (master-detail) | ✅ | ✅ |
+| | Sticky columns (start/end) | ✅ | ✅ |
+| | Sticky actions (`stickyActions`) | ✅ | ❌ |
+| | Column visibility (`hidden`) | ✅ | ✅ |
+| | Responsive layouts & breakpoints | ✅ | ✅ |
+| | Resizable columns | ✅ | ✅ |
+| | Loading / empty / no-data states | ✅ | ✅ |
+| | Error state (`error`) | ✅ | ✅ |
+| **Templates & Directives** | Custom cell templates (`hubTableCell`) | ✅ | ✅ |
+| | Custom header templates (`hubTableHeader`) | ✅ | ✅ |
+| | Custom filter templates (`hubTableFilter`) | ✅ | ✅ |
+| | Custom row template (`hubTableRow`) | ✅ | ❌ |
+| | Custom expanding-row template | ✅ | ✅ |
+| | Custom loading / error / no-results templates (projected) | ✅ | ❌ |
+| | App-wide default state components (provider `states`) | ✅ | ✅ |
+| **Configuration** | App-wide input defaults (`providePaginable({ defaults })`) | ✅ | ❌ |
+| | Agnostic form-controls adapter (`provideHubPaginableFormControls`) | ✅ | ✅ |
+| | RTL layout | ✅ | ✅ |
+| | Internationalization (i18n) | ✅ | ✅ |
+| | CSS variables theming | ✅ | ✅ |
 
 ## Paginable List (`hub-ui-list`)
 
-| Feature | Description | Example Covered |
-| :--- | :--- | :---: |
-| **Paginated List** | List with full pagination support | ✅ |
-| **Selectable List** | Multiple selection support with checkboxes | ✅ |
-| **Custom List Items** | Flexible item templates for rich content | ✅ |
-| **Batch Actions** | Actions on selected list items | ✅ |
+| Feature | Implemented | Example |
+| :--- | :---: | :---: |
+| Client-side pagination (`paginate`) | ✅ | ✅ |
+| Selectable list (single / multiple, checkboxes) | ✅ | ✅ |
+| Custom item templates | ✅ | ✅ |
+| Cards layout | ✅ | ✅ |
+| Nested / tree lists | ✅ | ✅ |
+| Drag & drop reordering (incl. cross-list & keyboard) | ✅ | ✅ |
+| Batch actions | ✅ | ✅ |
+| Loading / error / empty states | ✅ | ✅ |
+| CSS variables theming | ✅ | ✅ |
 
-## Components & Directives
+## Standalone Components & Directives
 
-| Item | Usage | Covered |
-| :--- | :--- | :---: |
-| **Standalone Paginator** | Using `hub-paginator` independently | ❌ |
-| **Range Inputs** | Using `hub-table-range-input` standalone | ❌ |
-| **Tooltip Directive** | Contextual help on elements | ❌ |
-| **Ordinal Pipe** | Formatting ordinations | ❌ |
+| Item | Implemented | Example |
+| :--- | :---: | :---: |
+| Standalone paginator (`hub-paginator`) | ✅ | ❌ |
+| Range input (`hub-table-range-input`) | ✅ | ❌ *(used inside advanced filtering)* |
+| Tooltip directive (`TooltipDirective`, re-exported from `ng-hub-ui-utils`) | ✅ | ❌ |
 
 ---
-*Note: ✅ indicates an active interactive example is available in the documentation.*
+
+*Legend: **Implemented** = available in the library API. **Example** = a working interactive example exists in this repo and is shown in the documentation site.*

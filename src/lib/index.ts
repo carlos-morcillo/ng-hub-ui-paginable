@@ -5,6 +5,9 @@ export { HubUITableModule as TableModule } from './paginable.module';
 // Providers
 export { providePaginable, paginableCoreProviders } from './paginable.providers';
 
+// Form-controls integration (optional, agnostic)
+export * from './form-controls';
+
 // Components
 export { DropdownComponent } from './components/dropdown/dropdown.component';
 export type { DropdownEvent } from './components/dropdown/dropdown.component';

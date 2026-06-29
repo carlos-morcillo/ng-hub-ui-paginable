@@ -119,6 +119,31 @@ import { TableComponent } from 'ng-hub-ui-paginable';
 
 ---
 
+## Form-controls synergy (optional, agnostic)
+
+The table renders its primitive controls (global **search** input and the
+**rows-per-page** selector) as native `<input>` / `<select>` by default — `ng-hub-ui-paginable`
+has **no hard dependency** on a forms library. Provide the adapter shipped by
+`ng-hub-ui-forms` once and those controls upgrade to `hub-input` / `hub-select`
+automatically (dynamic component creation under the hood), with no template
+changes:
+
+```ts
+import { provideHubPaginableFormControls } from 'ng-hub-ui-paginable';
+import { hubFormControlAdapter } from 'ng-hub-ui-forms';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideHubPaginableFormControls(hubFormControlAdapter)]
+};
+```
+
+To limit it to one table, provide the `HUB_PAGINABLE_FORM_CONTROLS` token in that
+component's `providers` instead. Remove it and the table falls back to native
+controls. See the ecosystem-wide
+[Synergies & agnosticism](../../README.md#synergies--agnosticism) section.
+
+---
+
 ## ✨ Inspiration
 
 This library arises from the need to offer highly configurable, accessible, and modern data visualization components for Angular applications, enabling integrated lists, tables, and pagination with full support for signals, reactive forms, and complete render customization.
@@ -150,7 +175,7 @@ All components are built as standalone Angular components with full Angular Sign
 - **📋 Smart Sorting**: Ascending/descending column sorting with visual indicators
 - **☑️ Row Selection**: Single or multiple row selection with batch operations and ControlValueAccessor support
 - **📈 Expandable Content**: Collapsible row content for detailed views with custom templates
-- **📄 Dual Pagination**: Support for both local and remote pagination strategies
+- **📄 Dual Pagination**: Automatic **client-side** pagination for plain arrays (in-memory search, filter, sort & slice) or **server-side** via `PaginationState` / `totalItems`
 - **🎨 Template Customization**: Extensive custom templates for headers, cells, filters, states (empty, loading, error)
 - **📱 Responsive Design**: Configurable responsive breakpoints for optimal mobile experience
 - **♿ Accessibility Ready**: Built-in ARIA support and keyboard navigation
@@ -1012,11 +1037,11 @@ filters = signal({
 | Name                 | Type                                          | Default         | Description                                                                                              |
 | -------------------- | --------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------- |
 | `headers`            | `PaginableTableHeader[]`                      | `[]`            | Column definitions with titles, sorting, filtering, and actions.                                         |
-| `data` / `rows`      | `T[]` or `PaginationState<T>`                 | `[]`            | Table data - can be flat array or paginated object with metadata.                                        |
-| `page`               | `number`                                      | `null`          | Current page number (1-based, model signal).                                                             |
-| `perPage`            | `number`                                      | `null`          | Number of items per page.                                                                                |
-| `perPageOptions`     | `number[]`                                    | `[20, 50, 100]` | Available options for items per page.                                                                    |
-| `totalItems`         | `number`                                      | `null`          | Total number of items across all pages.                                                                  |
+| `data` / `rows`      | `T[]` or `PaginationState<T>`                 | `[]`            | Table data. A plain array → client-side mode (in-memory pagination); a `PaginationState` → server mode.   |
+| `page`               | `number`                                      | `null`          | Current page number (1-based, model signal). Defaulted to `1` automatically in client-side mode.          |
+| `perPage`            | `number`                                      | `10`            | Number of items per page (model signal).                                                                 |
+| `perPageOptions`     | `number[]`                                    | `[10, 20, 50, 100]` | Available options for items per page.                                                                |
+| `totalItems`         | `number`                                      | `null`          | Total items across all pages. Setting it selects **server mode** (the table renders `data` as-is).        |
 | `searchable`         | `boolean`                                     | `true`          | Whether to show the global search input.                                                                 |
 | `searchTerm`         | `string`                                      | `''`            | Current search term (model signal).                                                                      |
 | `searchFn`           | `(a: T, b: T) => boolean`                     | `null`          | Custom search function for filtering.                                                                    |
@@ -1027,7 +1052,7 @@ filters = signal({
 | `filters`            | `Record<string, any>`                         | `{}`            | Active column filters (model signal).                                                                    |
 | `debounce`           | `number`                                      | `0`             | Debounce time in ms for search and filter inputs.                                                        |
 | `loading`            | `boolean`                                     | `false`         | Loading state indicator (model signal).                                                                  |
-| `paginate`           | `boolean`                                     | `true`          | Whether to enable pagination.                                                                            |
+| `paginate`           | `boolean`                                     | `true`          | Enables pagination. With a plain array and no `totalItems`, this turns on automatic client-side mode. `false` renders the whole array unpaginated. |
 | `paginationPosition` | `'top' \| 'bottom' \| 'both'`                 | `'bottom'`      | Where to display pagination controls.                                                                    |
 | `paginationInfo`     | `boolean`                                     | `true`          | Whether to show pagination info (e.g., "Showing 1 to 10 of 100").                                        |
 | `stickyActions`      | `boolean`                                     | `false`         | Whether action buttons should stick during scrolling.                                                    |
@@ -2069,11 +2094,21 @@ This allows you to adapt any type of visual filter (date-range, boolean, dropdow
 
 ## 🧠 Pagination and Data Handling
 
-The `hub-ui-table` component can receive data in two different ways:
+The `hub-ui-table` component supports **three** data / pagination modes:
 
-#### 1. Grouped form (`PaginationState<T>`)
+#### 1. Client-side (automatic) — pass a plain array
 
-Ideal if you manage pagination outside the component. The `data` input can directly accept an object with the full pagination structure:
+Hand the table the **full array** and let it paginate, search, sort and filter **entirely in memory** — no parent wiring required. This is the default whenever `[data]` is a plain array, `paginate` is `true` (its default) and you do **not** provide `totalItems`; the table computes the total itself. It mirrors the client-side behaviour of `<hub-ui-list>`.
+
+```html
+<hub-ui-table [data]="allRows()" [headers]="headers" [(page)]="page" [perPage]="20" [searchable]="true"></hub-ui-table>
+```
+
+> The global search box, sortable headers and every per-column filter (inline "row" filters and the advanced "menu" rule engine) all resolve client-side, and the current page resets/clamps automatically as the result set changes. Set `[paginate]="false"` to render the whole array without any pagination.
+
+#### 2. Grouped form (`PaginationState<T>`) — server-side
+
+Ideal if you manage pagination outside the component (a service, store or `computed()`). Passing a `PaginationState` keeps the table in **server mode**: it renders `data` as-is and reads `page` / `perPage` / `totalItems` from the object. The `data` input accepts it directly:
 
 ```html
 <hub-ui-table
@@ -2088,17 +2123,17 @@ Ideal if you manage pagination outside the component. The `data` input can direc
 
 > This form is useful when you manage `PaginationState` in a single place (for example, from a service, `computed()`, or store).
 
-#### 2. Split form (individual inputs)
+#### 3. Split form (individual inputs) — server-side
 
-You can also pass each value separately:
+You can also pass each value separately, holding only the current page's rows in `data`:
 
 ```html
-<hub-ui-table [data]="data()" [page]="page()" [perPage]="perPage()" [totalItems]="totalItems()"></hub-ui-table>
+<hub-ui-table [data]="pageRows()" [page]="page()" [perPage]="perPage()" [totalItems]="totalItems()"></hub-ui-table>
 ```
 
-> It is important that if you choose this form, **all inputs are present**. If `page`, `perPage`, or `totalItems` are missing, the component will show an error in the console.
+> Set **`totalItems`** to opt into server mode — it tells the table you are managing the total yourself, so it renders `data` as-is instead of paginating it in memory. (If you pass a plain array **without** `totalItems`, the table assumes client-side mode #1 and paginates it for you.)
 
-Both forms are compatible with Signals and can be easily integrated with `model()` and `computed()`.
+All three modes are compatible with Signals and integrate cleanly with `model()` and `computed()`.
 
 ### Advanced Pagination Example
 

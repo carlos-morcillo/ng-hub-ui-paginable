@@ -561,4 +561,98 @@ describe('TableComponent', () => {
             expect(rowClass).toBe('');
         });
     });
+
+    /**
+     * Test suite for the automatic client-side pagination mode (array + paginate=true).
+     */
+    describe('Client-side pagination mode', () => {
+        const dataset = Array.from({ length: 25 }, (_, i) => ({
+            id: i + 1,
+            name: `User ${i + 1}`,
+            age: 20 + (i % 5)
+        }));
+
+        beforeEach(() => {
+            component.headers.set(['name', 'age']);
+        });
+
+        it('enters client mode with a plain array and paginate=true', () => {
+            fixture.componentRef.setInput('data', dataset);
+            component.perPage.set(10);
+            fixture.detectChanges();
+
+            expect(component.clientMode()).toBe(true);
+            expect(component.clientFilteredRows().length).toBe(25);
+            expect(component.displayedRows().length).toBe(10);
+            expect(component.numberOfPages()).toBe(3);
+            expect(component.page()).toBe(1);
+        });
+
+        it('slices the requested page from the array', () => {
+            fixture.componentRef.setInput('data', dataset);
+            component.perPage.set(10);
+            fixture.detectChanges();
+
+            component.page.set(2);
+            expect(component.displayedRows().map((r) => r.data.id)).toEqual([11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+        });
+
+        it('searches in memory and recomputes the total', () => {
+            fixture.componentRef.setInput('data', dataset);
+            component.perPage.set(10);
+            fixture.detectChanges();
+
+            // 'User 1' matches 'User 1' and 'User 10'..'User 19' => 11 rows.
+            component.searchTerm.set('User 1');
+            expect(component.clientFilteredRows().length).toBe(11);
+            expect(component.displayedRows().length).toBe(10);
+            expect(component.numberOfPages()).toBe(2);
+        });
+
+        it('sorts the array in memory', () => {
+            fixture.componentRef.setInput('data', dataset);
+            component.perPage.set(30);
+            fixture.detectChanges();
+
+            component.ordination.set({ property: 'id', direction: 'DESC' });
+            expect(component.displayedRows()[0].data.id).toBe(25);
+        });
+
+        it('renders the full array when paginate is false', () => {
+            fixture.componentRef.setInput('data', dataset);
+            fixture.componentRef.setInput('paginate', false);
+            component.perPage.set(10);
+            fixture.detectChanges();
+
+            expect(component.clientMode()).toBe(false);
+            expect(component.displayedRows().length).toBe(25);
+        });
+
+        it('stays in server mode when totalItems is provided', () => {
+            const firstPage = dataset.slice(0, 10);
+            fixture.componentRef.setInput('data', firstPage);
+            component.totalItems.set(25);
+            component.perPage.set(10);
+            fixture.detectChanges();
+
+            expect(component.clientMode()).toBe(false);
+            expect(component.displayedRows().length).toBe(10);
+            expect(component.numberOfPages()).toBe(3);
+        });
+
+        it('stays in server mode when given a PaginationState', () => {
+            fixture.componentRef.setInput('data', {
+                page: 2,
+                perPage: 10,
+                totalItems: 25,
+                data: dataset.slice(10, 20)
+            });
+            fixture.detectChanges();
+
+            expect(component.clientMode()).toBe(false);
+            expect(component.page()).toBe(2);
+            expect(component.totalItems()).toBe(25);
+            expect(component.displayedRows().length).toBe(10);
+        });
+    });
 });

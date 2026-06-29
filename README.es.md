@@ -150,7 +150,7 @@ Todos los componentes están construidos como componentes standalone de Angular 
 - **📋 Ordenación inteligente**: Ordenación ascendente/descendente con indicadores visuales
 - **☑️ Selección de filas**: Selección simple o múltiple con operaciones en lote y ControlValueAccessor
 - **📈 Contenido expandible**: Filas colapsables con plantillas personalizadas
-- **📄 Paginación dual**: Estrategias local y remota
+- **📄 Paginación dual**: Paginación **en cliente** automática para arrays (búsqueda, filtrado, orden y troceo en memoria) o **en servidor** vía `PaginationState` / `totalItems`
 - **🎨 Personalización de plantillas**: Cabeceras, celdas, filtros y estados (vacío, carga, error)
 - **📱 Diseño responsive**: Breakpoints configurables
 - **♿ Listo para accesibilidad**: Soporte ARIA y navegación por teclado
@@ -852,11 +852,11 @@ filters = signal({
 | Nombre               | Tipo                                          | Por defecto     | Descripción                                                            |
 | -------------------- | --------------------------------------------- | --------------- | ---------------------------------------------------------------------- |
 | `headers`            | `PaginableTableHeader[]`                      | `[]`            | Definición de columnas con títulos, ordenación, filtros y acciones.    |
-| `data` / `rows`      | `T[]` o `PaginationState<T>`                  | `[]`            | Datos de tabla; array plano u objeto paginado con metadatos.           |
-| `page`               | `number`                                      | `null`          | Número de página actual (1-based, señal model).                        |
-| `perPage`            | `number`                                      | `null`          | Número de elementos por página.                                        |
-| `perPageOptions`     | `number[]`                                    | `[20, 50, 100]` | Opciones disponibles de elementos por página.                          |
-| `totalItems`         | `number`                                      | `null`          | Total de elementos en todas las páginas.                               |
+| `data` / `rows`      | `T[]` o `PaginationState<T>`                  | `[]`            | Datos de tabla. Array plano → modo cliente (paginación en memoria); `PaginationState` → modo servidor. |
+| `page`               | `number`                                      | `null`          | Número de página actual (1-based, señal model). En modo cliente se pone a `1` automáticamente. |
+| `perPage`            | `number`                                      | `10`            | Número de elementos por página (señal model).                          |
+| `perPageOptions`     | `number[]`                                    | `[10, 20, 50, 100]` | Opciones disponibles de elementos por página.                      |
+| `totalItems`         | `number`                                      | `null`          | Total de elementos en todas las páginas. Indicarlo selecciona **modo servidor** (renderiza `data` tal cual). |
 | `searchable`         | `boolean`                                     | `true`          | Si se muestra el input de búsqueda global.                             |
 | `searchTerm`         | `string`                                      | `''`            | Término de búsqueda actual (señal model).                              |
 | `searchFn`           | `(a: T, b: T) => boolean`                     | `null`          | Función de búsqueda personalizada para filtrar.                        |
@@ -867,7 +867,7 @@ filters = signal({
 | `filters`            | `Record<string, any>`                         | `{}`            | Filtros de columna activos (señal model).                              |
 | `debounce`           | `number`                                      | `0`             | Tiempo de debounce en ms para inputs de búsqueda y filtros.            |
 | `loading`            | `boolean`                                     | `false`         | Indicador de estado de carga (señal model).                            |
-| `paginate`           | `boolean`                                     | `true`          | Si se habilita la paginación.                                          |
+| `paginate`           | `boolean`                                     | `true`          | Habilita la paginación. Con un array y sin `totalItems`, activa el modo cliente automático. `false` renderiza todo el array sin paginar. |
 | `paginationPosition` | `'top' \| 'bottom' \| 'both'`                 | `'bottom'`      | Dónde mostrar los controles de paginación.                             |
 | `paginationInfo`     | `boolean`                                     | `true`          | Si se muestra info de paginación (p. ej. "Mostrando 1 a 10 de 100").   |
 | `stickyActions`      | `boolean`                                     | `false`         | Si los botones de acción quedan fijos durante el scroll.               |
@@ -1271,7 +1271,21 @@ Esto permite adaptar cualquier filtro visual sin perder reactividad.
 
 ## 🧠 Paginación y gestión de datos
 
-#### 1. Forma agrupada (`PaginationState<T>`)
+El componente `hub-ui-table` admite **tres** modos de datos / paginación:
+
+#### 1. En cliente (automático) — pásale un array
+
+Dale a la tabla el **array completo** y deja que pagine, busque, ordene y filtre **en memoria** — sin lógica en el padre. Es el modo por defecto siempre que `[data]` sea un array, `paginate` sea `true` (su valor por defecto) y **no** indiques `totalItems`; la tabla calcula el total ella misma. Replica el comportamiento en cliente de `<hub-ui-list>`.
+
+```html
+<hub-ui-table [data]="allRows()" [headers]="headers" [(page)]="page" [perPage]="20" [searchable]="true"></hub-ui-table>
+```
+
+> El buscador global, las cabeceras ordenables y todos los filtros por columna (filtros "row" y el motor de reglas "menu") se resuelven en cliente, y la página se resetea/ajusta automáticamente al cambiar el resultado. Pon `[paginate]="false"` para renderizar el array completo sin paginar.
+
+#### 2. Forma agrupada (`PaginationState<T>`) — en servidor
+
+Pasar un `PaginationState` mantiene la tabla en **modo servidor**: renderiza `data` tal cual y lee `page` / `perPage` / `totalItems` del objeto.
 
 ```html
 <hub-ui-table
@@ -1284,11 +1298,13 @@ Esto permite adaptar cualquier filtro visual sin perder reactividad.
 ></hub-ui-table>
 ```
 
-#### 2. Forma separada (inputs individuales)
+#### 3. Forma separada (inputs individuales) — en servidor
 
 ```html
-<hub-ui-table [data]="data()" [page]="page()" [perPage]="perPage()" [totalItems]="totalItems()"></hub-ui-table>
+<hub-ui-table [data]="pageRows()" [page]="page()" [perPage]="perPage()" [totalItems]="totalItems()"></hub-ui-table>
 ```
+
+> Indica **`totalItems`** para activar el modo servidor (la tabla renderiza `data` tal cual). Si pasas un array **sin** `totalItems`, la tabla asume el modo cliente (#1) y lo pagina por ti.
 
 ## 🧬 Interfaz `PaginationState<T>`
 

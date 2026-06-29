@@ -39,6 +39,7 @@ import { PaginableStateDefault } from '../../../interfaces/paginable-state';
 import { PaginableTableOptions } from '../../../interfaces/paginable-table-options';
 import { DragPointerMode, DragTarget, HubListDragService } from '../../../services/hub-list-drag.service';
 import { PaginableDefaultsService } from '../../../services/paginable-defaults.service';
+import { PaginableService } from '../../../services/paginable.service';
 import { PaginableStateOutlet } from '../../state-outlet/paginable-state-outlet.component';
 import {
 	computeTargetIndex,
@@ -122,6 +123,14 @@ export class ListComponent<T = any> {
 	/** Resolved application-wide default state components. */
 	readonly defaults = inject(PaginableDefaultsService);
 
+	/** Application-wide paginable configuration (holds the input defaults). */
+	readonly #config = inject(PaginableService);
+
+	/** Resolved default input values from {@link providePaginable}. */
+	get #defaults() {
+		return this.#config.config.defaults ?? {};
+	}
+
 	/** Loading state indicator for the list. Consumer-driven. */
 	readonly loading = model<boolean>(false);
 
@@ -154,10 +163,10 @@ export class ListComponent<T = any> {
 		}
 	});
 
-	readonly paginate = input<boolean>(false);
+	readonly paginate = input<boolean>(this.#defaults.paginate ?? false);
 	readonly page = model<number>(1);
-	readonly perPage = model<number>(10);
-	readonly perPageOptions = input<Array<number>>([10, 20, 50]);
+	readonly perPage = model<number>(this.#defaults.perPage ?? 10);
+	readonly perPageOptions = input<Array<number>>(this.#defaults.perPageOptions ?? [10, 20, 50]);
 	readonly totalItems = model<number>(0);
 
 	/**

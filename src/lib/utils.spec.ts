@@ -1,6 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { ApplicationRef, signal } from '@angular/core';
-import { debouncedSignal, equals, isDefined, isObject, mergeDeep, generateUniqueId, interpolateString, getValue } from './utils';
+// These utilities were migrated to `ng-hub-ui-utils`; the local `./utils` now only keeps
+// `normalizeStateDefault`. Import from the package root so this suite tests the real
+// (re-exported) implementations instead of failing to compile.
+import {
+	debouncedSignal,
+	equals,
+	isDefined,
+	isObject,
+	mergeDeep,
+	generateUniqueId,
+	interpolateString,
+	getValue
+} from 'ng-hub-ui-utils';
 
 /**
  * Test suite for utility functions

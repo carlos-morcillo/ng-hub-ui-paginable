@@ -1,5 +1,31 @@
 # Changelog
 
+## [22.3.0] - 2026-06-29
+
+### Added
+
+- **table — automatic client-side pagination.** When `<hub-ui-table>` receives a plain array in `[data]` and `paginate` is `true` (the default) with no `totalItems` provided, the table now searches, filters, sorts and slices the data **entirely in memory** and computes the total itself — mirroring the client-side behaviour of `<hub-list>`. The global search box, sortable headers and every per-column filter (inline "row" filters — text, dropdown, boolean, number-range, date-range — and the advanced "menu" rule engine with AND/OR operators) all resolve client-side, and the page resets/clamps automatically as the result set changes. New internal `TableClientDataService` powers the engine; new public `clientMode`, `clientFilteredRows` and `displayedRows` signals on `TableComponent`.
+- **application-wide input defaults via the provider.** `providePaginable()` (and `HubUITableModule.forRoot`) now accepts a `defaults` block — `PaginableDefaults` — to set library-wide default values for component inputs: `paginate`, `perPage`, `perPageOptions`, `paginationPosition`, `paginationInfo`, `searchable` and `debounce`. Any instance `@Input` still overrides them, and keys left unset keep each component's own default (e.g. `paginate` stays `true` for the table and `false` for the list). Example: `providePaginable({ defaults: { perPage: 25, perPageOptions: [25, 50, 100] } })`.
+
+### Changed
+
+- **table — `paginate` input is now functional.** It was previously declared but inert. It now gates the client-side mode described above. Passing a `PaginationState` to `[data]`, or setting `[totalItems]`, keeps the table in server mode (renders `[data]` as-is) exactly as before.
+
+### Migration
+
+- If you currently hand a **full array** to `<hub-ui-table>` expecting **all** rows to render without pagination, set `[paginate]="false"` — otherwise the table will now paginate it in memory (default page size `perPage`, 10). Consumers using server-side pagination (a `PaginationState`, or an array together with `[totalItems]`) are unaffected.
+
+### Fixed
+
+- **Documentation accuracy pass.** Rewrote `FUNCTIONALITIES.md` to separate "Implemented" from "Example available" and corrected stale rows (e.g. server-side pagination, resizable columns, row click, custom filter templates were marked as not covered despite being implemented); removed the non-existent "Ordinal Pipe" entry. Corrected the table's documented API (inputs/outputs) to match the real component: removed invented inputs (`pagination`, `selected`) and outputs (`rowClick`, `selectionChange`, `sortChange`, `filterChange`), documented the actual two-way `model` outputs (`pageChange`, `ordinationChange`, `filtersChange`, `searchTermChange`…) and the `clickFn` input. Fixed the CSS-variables section, whose group headings were rendering raw i18n keys (`DOCS.PAGINABLE.API.CSS_GROUP.*`) because those keys were never defined. Registered six existing-but-unhooked examples (action buttons, column visibility, custom filter templates, empty/error states, resizable columns, row click) and fixed the row-click example, which bound a non-existent `(rowClick)` output instead of the `clickFn` input.
+- **`utils.spec.ts`** now imports the migrated helpers from `ng-hub-ui-utils` instead of the local `./utils` (which only re-exports `normalizeStateDefault`), unblocking the library's unit-test compilation.
+
+## [22.2.0] - 2026-06-29
+
+### Added
+
+- **Agnostic form-controls integration.** The table's primitive controls (global search input, rows-per-page select) can now be rendered by an external component library without `ng-hub-ui-paginable` taking a hard dependency on it. New `HUB_PAGINABLE_FORM_CONTROLS` token, `provideHubPaginableFormControls()` provider, `HubPaginableControlDirective` and the `HubPaginableFormControlsAdapter` / `HubPaginableControlConfig` / `HubPaginableControlHandle` contract. With no adapter the table keeps rendering native `<input>` / `<select>` (zero dependencies); provide one (e.g. `hubFormControlAdapter` from `ng-hub-ui-forms`) and the controls upgrade automatically via dynamic component creation — `provideHubPaginableFormControls(hubFormControlAdapter)`.
+
 ## [22.1.3] - 2026-06-26
 
 ### Changed

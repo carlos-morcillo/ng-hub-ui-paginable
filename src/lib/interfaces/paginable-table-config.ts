@@ -1,3 +1,4 @@
+import { PaginableDefaults } from './paginable-defaults';
 import { PaginableStateDefault } from './paginable-state';
 
 export interface PaginableTableConfig {
@@ -22,4 +23,10 @@ export interface PaginableTableConfig {
 		error?: PaginableStateDefault;
 		noResults?: PaginableStateDefault;
 	};
+	/**
+	 * Application-wide default values for component inputs (pagination on/off, page
+	 * size, page-size options…). Applied unless overridden by an instance `@Input`.
+	 * Register through {@link providePaginable}.
+	 */
+	defaults?: PaginableDefaults;
 }

@@ -39,23 +39,47 @@
 					>
 						<i class="hub-table__search-icon hub-table__icon hub-table__icon--search" aria-hidden="true"></i>
 					</button>
-					<input
-						type="text"
-						class="hub-table__search-input"
-						(input)="searchProxy$.next($any($event.target).value)"
-						[value]="searchTerm()"
-						[attr.placeholder]="'SEARCH' | translate | ucfirst"
-						[attr.aria-label]="'SEARCH' | translate | ucfirst"
-					/>
+					@if (formControlsAdapter) {
+						<ng-container
+							hubPaginableControl="input"
+							controlType="text"
+							[value]="searchTerm()"
+							[placeholder]="'SEARCH' | translate | ucfirst"
+							[ariaLabel]="'SEARCH' | translate | ucfirst"
+							cssClass="hub-table__search-input"
+							(valueChange)="searchProxy$.next($any($event))"
+						></ng-container>
+					} @else {
+						<input
+							type="text"
+							class="hub-table__search-input"
+							(input)="searchProxy$.next($any($event.target).value)"
+							[value]="searchTerm()"
+							[attr.placeholder]="'SEARCH' | translate | ucfirst"
+							[attr.aria-label]="'SEARCH' | translate | ucfirst"
+						/>
+					}
 				} @else {
-					<input
-						type="text"
-						class="hub-table__search-input"
-						(input)="searchProxy$.next($any($event.target).value)"
-						[value]="searchTerm()"
-						[attr.placeholder]="'SEARCH' | translate | ucfirst"
-						[attr.aria-label]="'SEARCH' | translate | ucfirst"
-					/>
+					@if (formControlsAdapter) {
+						<ng-container
+							hubPaginableControl="input"
+							controlType="text"
+							[value]="searchTerm()"
+							[placeholder]="'SEARCH' | translate | ucfirst"
+							[ariaLabel]="'SEARCH' | translate | ucfirst"
+							cssClass="hub-table__search-input"
+							(valueChange)="searchProxy$.next($any($event))"
+						></ng-container>
+					} @else {
+						<input
+							type="text"
+							class="hub-table__search-input"
+							(input)="searchProxy$.next($any($event.target).value)"
+							[value]="searchTerm()"
+							[attr.placeholder]="'SEARCH' | translate | ucfirst"
+							[attr.aria-label]="'SEARCH' | translate | ucfirst"
+						/>
+					}
 					<button
 						class="hub-table__search-button btn btn-outline-dark"
 						type="button"
@@ -246,8 +270,8 @@
 						/>
 					</td>
 				</tr>
-			} @else if (rows().length) {
-				@for (item of rows(); track $index) {
+			} @else if (displayedRows().length) {
+				@for (item of displayedRows(); track $index) {
 					<ng-container
 						[ngTemplateOutlet]="templateRow() || defaultRowTemplate"
 						[ngTemplateOutletContext]="{ $implicit: item }"
@@ -285,27 +309,38 @@
 		}
 		<div class="hub-table__bottom-bar-settings hub-paginator__settings">
 			<label class="hub-paginator__label"> {{ 'ROWS_PER_PAGE' | translate | ucfirst }}: </label>
-			<select
-				class="hub-paginator__select"
-				[ngModel]="perPage()"
-				(ngModelChange)="perPage.set($event)"
-				[ngModelOptions]="{ standalone: true }"
-			>
-				@for (option of perPageOptions(); track option) {
-					<option [ngValue]="option" class="hub-paginator__select-option">
-						{{ option }}
-					</option>
-				}
-			</select>
+			@if (formControlsAdapter) {
+				<ng-container
+					hubPaginableControl="select"
+					[value]="perPage()"
+					[options]="perPageControlOptions()"
+					[ariaLabel]="'ROWS_PER_PAGE' | translate | ucfirst"
+					cssClass="hub-paginator__select"
+					(valueChange)="perPage.set($any($event))"
+				></ng-container>
+			} @else {
+				<select
+					class="hub-paginator__select"
+					[ngModel]="perPage()"
+					(ngModelChange)="perPage.set($event)"
+					[ngModelOptions]="{ standalone: true }"
+				>
+					@for (option of perPageOptions(); track option) {
+						<option [ngValue]="option" class="hub-paginator__select-option">
+							{{ option }}
+						</option>
+					}
+				</select>
+			}
 		</div>
-		@if (totalItems() !== null && totalItems() !== undefined) {
+		@if (clientMode() || (totalItems() !== null && totalItems() !== undefined)) {
 			<p class="hub-table__bottom-bar-info hub-paginator__info">
 				{{
 					'SHOWING_X_OF_Y_ROWS'
 						| translate
 							: {
-									amount: rows().length,
-									total: totalItems()
+									amount: displayedRows().length,
+									total: clientMode() ? clientFilteredRows().length : totalItems()
 							  }
 						| ucfirst
 				}}
