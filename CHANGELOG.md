@@ -1,5 +1,30 @@
 # Changelog
 
+## [22.4.0] - 2026-07-05
+
+### Added
+
+- **table — themeable header, row divider and scroll / sticky-header slots.** New CSS variables expose the header surface (`--hub-table-head-bg`, `--hub-table-head-color`), the inter-row divider (`--hub-table-row-divider-color`, independent of the outer frame and vertical borders), and a fixed-height scroll body with a working sticky header (`--hub-table-container-max-block-size` — set it together with `options.scrollable` to cap the body height; `--hub-table-head-sticky-top` for a sticky offset above a toolbar). Every token defaults to an existing value, so there is **no visual change** until one is set.
+- **table — every built-in icon is now an overridable SVG token.** On top of the sort and row-expander caret glyphs, the remaining hard-coded icons — `search`, `filter`, `eraser`, `info`, `chevron-up/down/left/right`, `angle-left/right`, `angle-double-left/right`, `ellipsis-v`, `trash`, `plus` — now read a `--hub-table-icon-<name>` variable (painted through `mask-image`, tinted with `currentColor`), so a product can swap any of them to match its own iconography. Consumer icons passed through `header.icon` / `button.icon` still accept any icon-font class (Font Awesome, etc.).
+- **table — master-detail expanding-row template gets a `colspan`.** The `*paginableTableExpandingRow` template context now exposes `colspan` (read it with `let-colspan="colspan"`) so a detail `<tr><td [attr.colspan]="colspan">` always spans the full table width. Both the expanding row and the state rows (loading / error / no-results) now use a full-width colspan that the browser clamps to the real column count — no manual counting needed.
+- **table — multiple sticky columns per side.** `sticky: 'start' | 'end'` now supports **more than one** column pinned to the same side: a new `hubStickyColumns` directive measures each pinned column's real width and applies a cumulative offset, so sticky columns stack side by side instead of collapsing onto `left: 0` / `right: 0`. It re-syncs on viewport / column resize (`ResizeObserver`) and row / column changes (`MutationObserver`), and is SSR-safe (a no-op on the server). A single sticky column per side is unchanged.
+- **list — opt-in item connector (timeline / pipeline look).** New `connected` input draws a vertical line between consecutive items (list display only, skipped in cards), themed via `--hub-list-connector-color` / `--hub-list-connector-width` / `--hub-list-connector-style` / `--hub-list-connector-offset`. Default-off — existing lists are unchanged.
+
+### Fixed
+
+- **list (cards) — long labels no longer overflow their card / grid track.** `.hub-list__label` now sets `min-width: 0` so the flex label can shrink to its column; in cards mode a long unbreakable token wraps (`overflow-wrap: anywhere`) instead of blowing out the item and overlapping the adjacent card.
+
+### Changed
+
+- **selectable rows / list items now show a `pointer` cursor on hover.** A `selectable` table row and a `selectable` list item (and card) advertise their interactivity with `cursor: pointer` — previously the pointer only appeared when a `clickFn` was set. Selection behaviour is unchanged (toggled via the checkbox).
+
+## [22.3.1] - 2026-07-02
+
+### Changed
+
+- Hardcoded style values now consume the matching ds tokens (with the ds defaults as fallbacks) — no visual change.
+- Docs: `docs/css-variables-reference.md` default values resynchronized with the actual code declarations (now guarded by the repo-level `tokens-parity` check F).
+
 ## [22.3.0] - 2026-06-29
 
 ### Added

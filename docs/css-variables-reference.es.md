@@ -313,6 +313,18 @@ Estos tokens estilizan el paginador embebido desde el host de la lista:
 | `--hub-list-ghost-shadow` | `0 0.5rem 1rem rgba(0, 0, 0, 0.15)` | Sombra del fantasma flotante de arrastre táctil |
 
 
+### Connector (List)
+
+Opt-in con el input `connected` — dibuja una línea vertical entre items consecutivos (aspecto timeline / pipeline). Solo en modo lista; se omite en cards.
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-list-connector-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Color de la línea del conector |
+| `--hub-list-connector-width` | `2px` | Grosor de la línea del conector |
+| `--hub-list-connector-style` | `solid` | Estilo de borde del conector (p. ej. `dashed`) |
+| `--hub-list-connector-offset` | `var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem))` | Desplazamiento en línea desde el borde inicial del item |
+
+
 ### Misc
 
 | Variable | Default | Description |
@@ -374,6 +386,8 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | `--hub-table-border-radius` | `var(--hub-ref-radius-md)` | Border radius of the table container |
 | `--hub-table-border-width` | `var(--hub-ref-border-width)` | Border width of the table container |
 | `--hub-table-container-gap` | `var(--hub-ref-space-3)` | Separación entre la barra superior, la tabla y la barra inferior |
+| `--hub-table-container-max-block-size` | `none` | Altura máxima del cuerpo con scroll; con `options.scrollable`, fíjala para acotar el cuerpo y activar la cabecera fija |
+| `--hub-table-head-sticky-top` | `0` | Desplazamiento de la cabecera fija mientras el cuerpo hace scroll (p. ej. para dejar hueco a una barra de herramientas) |
 
 ### Search (Table)
 
@@ -401,6 +415,9 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | `--hub-table-border-color` | `var(--hub-sys-border-color-default)` | Border color of table rows and cells |
 | `--hub-table-border-width` | `var(--hub-ref-border-width)` | Border width of table rows and cells |
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default)` | Color of the separator between thead and tbody |
+| `--hub-table-head-bg` | `var(--hub-table-bg)` | Superficie de la cabecera (thead); se mantiene opaca para que la cabecera fija cubra el cuerpo al hacer scroll |
+| `--hub-table-head-color` | `var(--hub-table-color)` | Color del texto de la cabecera (thead) |
+| `--hub-table-row-divider-color` | `var(--hub-table-border-color)` | Color del divisor entre filas del cuerpo (independiente del marco y los bordes verticales) |
 
 ### Cell Spacing
 
@@ -464,6 +481,8 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 | `--hub-table-icon-sort` | `url("…")` (SVG) | Glifo del indicador de orden (sin ordenar) |
 | `--hub-table-icon-sort-up` | `url("…")` (SVG) | Glifo del indicador de orden ascendente |
 | `--hub-table-icon-sort-down` | `url("…")` (SVG) | Glifo del indicador de orden descendente |
+| `--hub-table-icon-caret-up` | `url("…")` (SVG) | Glifo del expansor de fila (expandido) |
+| `--hub-table-icon-caret-down` | `url("…")` (SVG) | Glifo del expansor de fila (colapsado) |
 
 ### Responsive Breakpoints
 

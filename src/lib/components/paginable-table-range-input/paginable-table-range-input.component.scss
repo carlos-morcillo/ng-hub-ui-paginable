@@ -5,14 +5,14 @@
 	&__label {
 		//font-size: 10px;
 		margin-bottom: 0;
-		padding-left: 0.25rem;
+		padding-left: var(--hub-ref-space-1, 0.25rem);
 	}
 
 	&__control {
 		border: none;
 		outline: none;
 		height: 20px;
-		margin: 0.25rem;
+		margin: var(--hub-ref-space-1, 0.25rem);
 
 		&[type="number"] {
 			width: 64px;
@@ -33,14 +33,14 @@
 	label {
 		//font-size: 10px;
 		margin-bottom: 0;
-		padding-left: 0.25rem;
+		padding-left: var(--hub-ref-space-1, 0.25rem);
 	}
 
 	input {
 		border: none;
 		outline: none;
 		height: 20px;
-		margin: 0.25rem;
+		margin: var(--hub-ref-space-1, 0.25rem);
 
 		&[type="number"] {
 			width: 64px;

@@ -110,6 +110,7 @@
 	@let striped = options().striped;
 	<table
 		class="hub-table__element"
+		hubStickyColumns
 		[class.hub-table__hover]="(options().hoverableRows || selectable()) && !loading()"
 		[class.hub-table__striped-odd]="striped === 'rows-odd'"
 		[class.hub-table__striped-even]="striped === 'rows-even'"
@@ -122,7 +123,7 @@
 		<thead class="hub-table__head" [formGroup]="filtersFG">
 			<tr class="hub-table__head-row">
 				@if (selectable()) {
-					<th class="hub-table__header-cell hub-table__header-cell--actions sticky-start">
+					<th class="hub-table__header-cell hub-table__header-cell--actions sticky-start" data-col="__hub_select">
 						@if (multipleSelectable()) {
 							<input
 								type="checkbox"
@@ -139,6 +140,7 @@
 						<th
 							class="hub-table__header-cell"
 							resizable
+							[attr.data-col]="header.property"
 							[class.sticky-start]="header.sticky === 'start'"
 							[class.sticky-end]="header.sticky === 'end'"
 							[class.text-start]="header.align === 'start'"
@@ -211,7 +213,7 @@
 					}
 				}
 				@if (templateExpandingRows().length) {
-					<th class="hub-table__header-cell hub-table__header-cell--expander sticky-end"></th>
+					<th class="hub-table__header-cell hub-table__header-cell--expander sticky-end" data-col="__hub_expander"></th>
 				}
 			</tr>
 
@@ -219,13 +221,14 @@
 			@if (hasColumnFilters()) {
 				<tr class="hub-table__filter-row">
 					@if (selectable() || batchActions.length) {
-						<th class="hub-table__filter-cell sticky-start"></th>
+						<th class="hub-table__filter-cell sticky-start" data-col="__hub_select"></th>
 					}
 					@for (header of fixedHeaders(); track $index; let last = $last) {
 						@if (!(isColumnHidden(header) | async)) {
 							@let formControlName = header.filter?.key || header.property;
 							<th
 								class="hub-table__filter-cell"
+								[attr.data-col]="header.property"
 								[class.sticky-start]="header.sticky === 'start'"
 								[class.sticky-end]="header.sticky === 'end'"
 							>
@@ -248,25 +251,25 @@
 		<tbody class="hub-table__body">
 			@if (loading()) {
 				<tr class="hub-table__body-row">
-					<td class="hub-table__cell" [attr.colspan]="headersCount()">
+					<td class="hub-table__cell" [attr.colspan]="fullColspan">
 						<hub-state-outlet
 							[template]="loadingTpt()"
 							[instanceDefault]="loadingComponent()"
 							[globalDefault]="defaults.loading()"
 							[fallback]="defaultLoadingTpt"
-							[context]="{ colspan: headersCount() }"
+							[context]="{ colspan: fullColspan }"
 						/>
 					</td>
 				</tr>
 			} @else if (error()) {
 				<tr class="hub-table__body-row">
-					<td class="hub-table__cell" [attr.colspan]="headersCount()">
+					<td class="hub-table__cell" [attr.colspan]="fullColspan">
 						<hub-state-outlet
 							[template]="errorTpt()"
 							[instanceDefault]="errorComponent()"
 							[globalDefault]="defaults.error()"
 							[fallback]="defaultErrorTpt"
-							[context]="{ error: error(), colspan: headersCount() }"
+							[context]="{ error: error(), colspan: fullColspan }"
 						/>
 					</td>
 				</tr>
@@ -280,13 +283,13 @@
 				}
 			} @else {
 				<tr>
-					<td [attr.colspan]="headersCount()">
+					<td [attr.colspan]="fullColspan">
 						<hub-state-outlet
 							[template]="noResultsTpt()"
 							[instanceDefault]="noResultsComponent()"
 							[globalDefault]="defaults.noResults()"
 							[fallback]="defaultNoResultsTpt"
-							[context]="{ colspan: headersCount(), filters: filters() ?? undefined }"
+							[context]="{ colspan: fullColspan, filters: filters() ?? undefined }"
 						/>
 					</td>
 				</tr>
@@ -357,7 +360,7 @@
 		[ngClass]="_getRowClass(item)"
 	>
 		@if (selectable() || batchActions.length) {
-			<td class="hub-table__cell hub-table__cell--select sticky-start">
+			<td class="hub-table__cell hub-table__cell--select sticky-start" data-col="__hub_select">
 				<input
 					type="checkbox"
 					[(ngModel)]="item.selected"
@@ -370,6 +373,7 @@
 			@if (!(isColumnHidden(header) | async)) {
 				<td
 					class="hub-table__cell"
+					[attr.data-col]="header.property"
 					[class.sticky-start]="header.sticky === 'start'"
 					[class.sticky-end]="header.sticky === 'end'"
 					[class.text-start]="header.align === 'start'"
@@ -391,7 +395,7 @@
 			}
 		}
 		@if (templateExpandingRows().length) {
-			<td class="hub-table__cell hub-table__cell--expander sticky-end" [class.sticky-end]="stickyActions()">
+			<td class="hub-table__cell hub-table__cell--expander sticky-end" data-col="__hub_expander" [class.sticky-end]="stickyActions()">
 				@if (templateExpandingRows().length) {
 					<button (click)="toggleExpandedRow(item)" type="button" class="hub-table__expander-btn btn btn-link px-2">
 						<i
@@ -407,7 +411,7 @@
 	</tr>
 	@if (!item.collapsed) {
 		@for (template of templateExpandingRows(); track template) {
-			<ng-container [ngTemplateOutlet]="template.templateRef" [ngTemplateOutletContext]="{ item: item }"> </ng-container>
+			<ng-container [ngTemplateOutlet]="template.templateRef" [ngTemplateOutletContext]="{ item: item, colspan: fullColspan }"> </ng-container>
 		}
 	}
 </ng-template>

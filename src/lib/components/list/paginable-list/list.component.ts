@@ -193,6 +193,13 @@ export class ListComponent<T = any> {
 	readonly keyboardSortable = input<boolean>(false);
 
 	/**
+	 * Draws a vertical connector between consecutive items — a timeline / pipeline look.
+	 * Opt-in and default-off; applies to the list (column) display only, not cards. Style
+	 * it through the `--hub-list-connector-*` variables.
+	 */
+	readonly connected = input<boolean>(false);
+
+	/**
 	 * Emitted by the destination list after a drag-and-drop reorder or cross-list transfer.
 	 */
 	readonly sorted = output<ListSortEvent<T>>();

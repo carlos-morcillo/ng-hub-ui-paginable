@@ -32,6 +32,7 @@ import { PaginableTableFilterDirective } from '../../directives/paginable-table-
 import { PaginableTableHeaderDirective } from '../../directives/paginable-table-header.directive';
 import { PaginableLoadingDirective } from '../../directives/paginable-loading.directive';
 import { PaginableTableRowDirective } from '../../directives/paginable-table-row.directive';
+import { HubStickyColumnsDirective } from '../../directives/paginable-sticky-columns.directive';
 import { SelectionTypes } from '../../enums/selection-types';
 import { PaginableActionButton, TableRowEvent } from '../../interfaces';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
@@ -75,7 +76,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		AsyncPipe,
 		GetPipe,
 		PaginableStateOutlet,
-		HubPaginableControlDirective
+		HubPaginableControlDirective,
+		HubStickyColumnsDirective
 	],
 	animations: [
 		trigger('fadeInOut', [
@@ -253,6 +255,14 @@ export class TableComponent<T = any> {
 		}
 		return count;
 	});
+
+	/**
+	 * Colspan used by the full-width rows (loading / error / no-results state rows
+	 * and the master-detail expanding row). A value larger than any realistic column
+	 * count: the browser clamps `colspan` to the row's actual number of columns, so
+	 * the cell always spans the whole table width without having to compute it.
+	 */
+	protected readonly fullColspan = 1000;
 
 	/** Computed list of headers that have filter configurations */
 	headerFilters = computed(() => {

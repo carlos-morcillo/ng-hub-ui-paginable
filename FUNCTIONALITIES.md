@@ -30,7 +30,8 @@ This table lists the functionalities of the `ng-hub-ui-paginable` library:
 | | Row action buttons (per-row `buttons`) | ✅ | ✅ |
 | | Batch actions (on selected items) | ✅ | ✅ |
 | **Advanced Features** | Expandable rows (master-detail) | ✅ | ✅ |
-| | Sticky columns (start/end) | ✅ | ✅ |
+| | Sticky columns (start/end, multiple per side) | ✅ | ✅ |
+| | Sticky header on scroll (`scrollable` + `--hub-table-container-max-block-size`) | ✅ | ❌ |
 | | Sticky actions (`stickyActions`) | ✅ | ❌ |
 | | Column visibility (`hidden`) | ✅ | ✅ |
 | | Responsive layouts & breakpoints | ✅ | ✅ |

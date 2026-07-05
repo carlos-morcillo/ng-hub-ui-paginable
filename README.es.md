@@ -1030,7 +1030,7 @@ También puedes usar `tableRowTpt` con componentes expandibles.
 La librería `ng-hub-ui-paginable` es totalmente configurable mediante **CSS custom properties** para **Table**, **List** y **Paginator**.
 
 Para el catálogo completo y actualizado de tokens, consulta [CSS Variables Reference](./docs/css-variables-reference.md).
-Table y List también exponen tokens contextuales de paginación (`--hub-table-pagination-*`, `--hub-list-pagination-*`) para que el paginador embebido siga el tema del componente.
+El paginador embebido en Table y List se tematiza mediante los tokens compartidos `--hub-paginator-*` — sobrescríbelos en el componente anfitrión para adaptarlo al contexto.
 
 ### 🔗 Cómo incluir los estilos en tu aplicación
 
@@ -1056,6 +1056,39 @@ Table y List también exponen tokens contextuales de paginación (`--hub-table-p
 .hub-paginator {
 	--hub-paginator-link-active-bg: #0d6efd;
 	--hub-paginator-link-active-color: #fff;
+}
+```
+
+### 🔗 Lista conectada (`connected`)
+
+El input `connected` de `<hub-list>` dibuja un conector vertical entre elementos consecutivos (aspecto timeline / pipeline; solo en modo lista, se omite en cards). Se tematiza con `--hub-list-connector-color` / `-width` / `-style` / `-offset`. Desactivado por defecto.
+
+```html
+<hub-list [items]="pasos" [connected]="true" [bindLabel]="'title'"> … </hub-list>
+```
+
+### 🧩 Mixins SCSS — theming en una llamada
+
+En lugar de fijar los tokens `--hub-*` a mano, puedes tematizar la tabla o la lista en un solo `@include`. Cada parámetro es opcional y por defecto `null`, así que solo se emiten los que pasas (el resto conserva los valores por defecto del componente). Importa el mixin que necesites:
+
+```scss
+@use 'ng-hub-ui-paginable/styles/mixins/table-theme' as *;
+@use 'ng-hub-ui-paginable/styles/mixins/list-theme' as *;
+```
+
+**`hub-table-theme(…)`** — color (`$accent`, `$bg`, `$color`, `$border-color`, `$hover-bg`, `$hover-color`, `$selected-bg`, `$selected-color`, `$striped-bg`, `$striped-color`), borde (`$border-width`, `$border-radius`), densidad (`$cell-padding-x`, `$cell-padding-y`) y footer (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`):
+
+```scss
+.tabla-facturas {
+	@include hub-table-theme($accent: var(--hub-sys-color-success), $border-radius: 0.5rem, $cell-padding-y: 0.375rem, $footer-justify: end);
+}
+```
+
+**`hub-list-theme(…)`** — color, borde/radio, densidad (`$gap`, `$item-padding-*`), layout de cards (`$cards-min-column-width`, `$cards-gap`, …) y footer, para `<hub-list>` en modos lista y cards:
+
+```scss
+.lista-equipo {
+	@include hub-list-theme($accent: var(--hub-sys-color-success), $item-border-radius: 0.75rem, $gap: 0.5rem, $cards-min-column-width: 16rem);
 }
 ```
 

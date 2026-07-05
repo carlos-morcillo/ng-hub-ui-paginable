@@ -1103,6 +1103,7 @@ interface TableRowEvent<T> {
 | `batchActions` | `Array<PaginableTableDropdown \| PaginableActionButton>` | `[]`         | Actions for selected items.                                                                                    |
 | `clickFn`      | `(event: ListClickEvent<T>) => void`          | `null`       | Handler for item click events.                                                                                 |
 | `rowClass`     | `string \| ((item: T) => string)`             | `null`       | Custom CSS class for a list item. Can be a fixed string or a function that returns a class based on item data. |
+| `connected`    | `boolean`                                     | `false`      | Draws a vertical connector between consecutive items for a timeline / pipeline look (list display only, skipped in cards). Themed via `--hub-list-connector-color` / `-width` / `-style` / `-offset`. |
 
 **List Click Event (`ListClickEvent<T>`):**
 
@@ -1232,7 +1233,7 @@ You can also use `tableRowTpt` with expandable components.
 The `ng-hub-ui-paginable` library is fully style-configurable through **CSS custom properties (CSS variables)** for **Table**, **List**, and **Paginator**.
 
 For a complete and up-to-date token catalog, see [CSS Variables Reference](./docs/css-variables-reference.md).
-Table and List also expose context pagination tokens (`--hub-table-pagination-*`, `--hub-list-pagination-*`) so embedded paginators follow component themes by default.
+The paginator embedded in Table and List is themed through the shared `--hub-paginator-*` tokens — override them on the host component to re-theme it in context.
 
 ### 🔗 Import styles
 
@@ -1258,6 +1259,45 @@ Table and List also expose context pagination tokens (`--hub-table-pagination-*`
 .hub-paginator {
 	--hub-paginator-link-active-bg: #0d6efd;
 	--hub-paginator-link-active-color: #fff;
+}
+```
+
+### 🧩 SCSS mixins — one-call theming
+
+Instead of setting the `--hub-*` tokens by hand, you can theme the table or the list in a single `@include`. Every parameter is optional and defaults to `null`, so only the ones you pass are emitted (the rest keep the component defaults). Import the mixin you need from the distributed styles:
+
+```scss
+@use 'ng-hub-ui-paginable/styles/mixins/table-theme' as *;
+@use 'ng-hub-ui-paginable/styles/mixins/list-theme' as *;
+```
+
+#### `hub-table-theme(…)` — theme `<hub-table>`
+
+Colour (`$accent`, `$bg`, `$color`, `$border-color`, `$hover-bg`, `$hover-color`, `$selected-bg`, `$selected-color`, `$striped-bg`, `$striped-color`), border (`$border-width`, `$border-radius`), density (`$cell-padding-x`, `$cell-padding-y`) and footer / bottom-bar (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`).
+
+```scss
+.invoices-table {
+	@include hub-table-theme(
+		$accent: var(--hub-sys-color-success),
+		$border-radius: 0.5rem,
+		$cell-padding-y: 0.375rem,
+		$footer-justify: end
+	);
+}
+```
+
+#### `hub-list-theme(…)` — theme `<hub-list>` (list & cards)
+
+Colour (`$accent`, `$bg`, `$item-bg`, `$item-color`, `$item-border-color`, `$hover-bg`, `$selected-bg`, `$selected-color`), border/radius (`$border-radius`, `$item-border-radius`), density (`$item-padding-x`, `$item-padding-y`, `$gap`), the cards layout (`$cards-bg`, `$cards-border-color`, `$cards-border-radius`, `$cards-padding-x`, `$cards-padding-y`, `$cards-min-column-width`, `$cards-gap`) and footer (`$footer-gap`, `$footer-justify`, `$footer-align`, `$footer-wrap`).
+
+```scss
+.team-list {
+	@include hub-list-theme(
+		$accent: var(--hub-sys-color-success),
+		$item-border-radius: 0.75rem,
+		$gap: 0.5rem,
+		$cards-min-column-width: 16rem
+	);
 }
 ```
 
@@ -1974,9 +2014,9 @@ headers = [
 
 ```scss
 .hub-table {
-	--hub-body-bg: #f8f9fa;
-	--hub-body-color: #212529;
-	--hub-border-color: #dee2e6;
+	--hub-table-bg: #f8f9fa;
+	--hub-table-color: #212529;
+	--hub-table-border-color: #dee2e6;
 }
 ```
 

@@ -108,6 +108,11 @@
 	--hub-list-placeholder-min-height: 2.5rem;
 	--hub-list-ghost-opacity: 0.85;
 	--hub-list-ghost-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+	// Item connector (opt-in `connected` — timeline / pipeline look)
+	--hub-list-connector-color: var(--hub-sys-border-color-default, #dee2e6);
+	--hub-list-connector-width: 2px;
+	--hub-list-connector-style: solid;
+	--hub-list-connector-offset: var(--hub-list-item-padding-x, var(--hub-ref-space-3, 1rem));
 }
 
 // The host element carries the `.hub-list` block class, but Angular's emulated
@@ -179,7 +184,7 @@
 		padding: var(--hub-list-action-btn-padding-y) var(--hub-list-action-btn-padding-x);
 		color: var(--hub-list-action-btn-color);
 		background-color: var(--hub-list-action-btn-bg);
-		border: 1px solid var(--hub-list-action-btn-border-color);
+		border: var(--hub-ref-border-width, 1px) solid var(--hub-list-action-btn-border-color);
 		border-radius: var(--hub-list-action-btn-border-radius);
 		transition:
 			background-color 0.15s ease-in-out,
@@ -258,6 +263,21 @@
 		}
 	}
 
+	// Opt-in vertical connector between consecutive items (timeline / pipeline look).
+	// List (column) display only — skipped in cards (grid) mode. The segment sits in
+	// the gap above each item (the first item has none), so items read as connected.
+	&__items--connected:not(.hub-list__items--cards) {
+		> .hub-list__item + .hub-list__item::before {
+			content: '';
+			position: absolute;
+			inset-block-start: calc(-1 * var(--hub-list-items-gap));
+			inset-inline-start: var(--hub-list-connector-offset);
+			block-size: var(--hub-list-items-gap);
+			border-inline-start: var(--hub-list-connector-width) var(--hub-list-connector-style)
+				var(--hub-list-connector-color);
+		}
+	}
+
 	&__search {
 		display: flex;
 		flex-wrap: nowrap;
@@ -331,6 +351,11 @@
 			}
 		}
 
+		// Selectable items advertise interactivity with a pointer cursor
+		&--selectable {
+			cursor: pointer;
+		}
+
 		&--selected {
 			background-color: var(--hub-list-item-selected-bg) !important;
 			color: var(--hub-list-item-selected-color);
@@ -386,6 +411,8 @@
 			overflow: visible;
 			text-overflow: initial;
 			white-space: normal;
+			// A long unbreakable token wraps instead of blowing out the grid track.
+			overflow-wrap: anywhere;
 		}
 	}
 
@@ -394,6 +421,10 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		flex-grow: 1;
+		// Allow the flex child to shrink below its content's intrinsic width so a
+		// long projected label ellipses (list) / wraps (cards) instead of
+		// overflowing its item and, in cards mode, its grid column.
+		min-width: 0;
 	}
 
 	&__item-content {
