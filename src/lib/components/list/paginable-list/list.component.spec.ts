@@ -163,6 +163,38 @@ describe('ListComponent', () => {
 		expect(rootList.classList.contains('hub-list__items--cards')).toBe(true);
 	});
 
+	it('should map a semantic variant name to its ds accent token with a raw fallback', () => {
+		fixture.componentRef.setInput('options', {
+			display: 'list',
+			cursor: 'default',
+			hoverableRows: false,
+			striped: null,
+			variant: 'primary',
+			searchable: false,
+			collapsed: true,
+			rtl: false
+		});
+		fixture.detectChanges();
+
+		expect(fixture.nativeElement.style.getPropertyValue('--hub-list-accent')).toBe('var(--hub-sys-color-primary, primary)');
+	});
+
+	it('should pass a literal accent colour through unchanged', () => {
+		fixture.componentRef.setInput('options', {
+			display: 'list',
+			cursor: 'default',
+			hoverableRows: false,
+			striped: null,
+			variant: '#ff0000',
+			searchable: false,
+			collapsed: true,
+			rtl: false
+		});
+		fixture.detectChanges();
+
+		expect(fixture.nativeElement.style.getPropertyValue('--hub-list-accent')).toBe('#ff0000');
+	});
+
 	// HUBUI-004 — a long unbreakable label renders inside the card's `.hub-list__label`
 	// in cards mode (the element the cards-scoped wrap rules `white-space: normal` +
 	// `overflow-wrap: anywhere` target). The visual wrap itself is a layout property

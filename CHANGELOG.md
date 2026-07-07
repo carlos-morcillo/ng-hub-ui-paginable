@@ -1,5 +1,17 @@
 # Changelog
 
+## [22.6.0] - 2026-07-07
+
+### Fixed
+
+- **table — `[stickyHeader]` now pins the header inside a consumer's OWN scroll container.** The built-in `.hub-table__container` always established a scroll context (`overflow: auto`), which **trapped** the sticky header: when a product wrapped `<hub-table [stickyHeader]="true">` in its own fixed-height `overflow:auto` box (the common `max-height` + `overflow:auto` pattern), scrolling that box let the whole frame — header included — scroll out of view instead of pinning. `[stickyHeader]` now **releases** the container's scroll context (new `--hub-table-container-overflow`, flipped to `visible`) so the header sticks to the nearest scrolling ancestor, whether that is the built-in frame or an external box. The `options.scrollable` + `--hub-table-container-max-block-size` internal-scroll path is unchanged.
+- **table — row/cell background is re-themeable by a plain tag selector (fixes dark-mode re-theming).** The surface tokens (`--hub-table-bg` / `--hub-table-color` and the `--hub-table-container-*` pair) were declared on `:host` (specificity `0,1,0`), which out-ranked a consumer's `hub-table { --hub-table-bg: … }` tag rule (`0,0,1`): re-mapping the surface for a dark theme reached the header but left the data cells/rows **white** (illegible) unless `!important` was used. Those surface tokens are no longer declared on `:host`; instead every consumption site reads them as `var(--hub-table-bg, <default>)`, so a plain `hub-table { --hub-table-bg: var(--su-surface) }` tag rule now reaches the rows and cells with **no `!important`**, while the default (and the sticky header) always resolve to an opaque colour via the same fallback. Built-in variant (`.hub-table__<variant>`) and state class rules are unchanged.
+
+### Added
+
+- **table — `--hub-table-container-overflow`** (default `auto`): the scroll behaviour of the built-in container. `[stickyHeader]` sets it to `visible` (see above) so the header pins to an external scroll ancestor; a product can also override it directly.
+- **table — optional selected-row accent bar.** `--hub-table-selected-bar-width` (default `0` — no visual change) and `--hub-table-selected-bar-color` (defaults to the accent) draw a solid bar on the selected row's leading edge. Combined with the `hub-table__row--selected` tint (added in 22.5.0), a product can render the master-detail "active row" look — soft tint **plus** a leading accent bar — entirely through the `--hub-table-selected-*` tokens and `[rowClass]`, with no `!important`. RTL-aware (the bar mirrors to the trailing visual edge).
+
 ## [22.5.0] - 2026-07-07
 
 ### Added

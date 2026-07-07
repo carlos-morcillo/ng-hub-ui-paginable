@@ -23,7 +23,7 @@ import {
 	NG_VALUE_ACCESSOR,
 	ReactiveFormsModule
 } from '@angular/forms';
-import { generateUniqueId, getValue, TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
+import { generateUniqueId, getValue, resolveHubAccent, TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 import { HubListDragPlaceholderDirective } from '../../../directives/list-drag-placeholder.directive';
 import { HubListDragPreviewDirective } from '../../../directives/list-drag-preview.directive';
 import { PaginableErrorDirective } from '../../../directives/paginable-error.directive';
@@ -77,6 +77,7 @@ interface KeyboardDragState {
 		class: 'hub-list',
 		'[class.hub-list--rtl]': 'isRtl()',
 		'[attr.data-variant]': 'options.variant ?? null',
+		'[style.--hub-list-accent]': 'accentVar()',
 		'[attr.data-hub-drag-owner]': '_listId'
 	},
 	providers: [
@@ -245,6 +246,22 @@ export class ListComponent<T = any> {
 	 */
 	isRtl(): boolean {
 		return this.options.rtl === true;
+	}
+
+	/**
+	 * Resolves the list's accent slot from `options.variant`, accepting ANY colour.
+	 *
+	 * A bareword (semantic name, registered accent or CSS named colour) resolves to
+	 * the matching `--hub-sys-color-*` ds token with the raw word as fallback, while a
+	 * literal `#hex` / `rgb()` / `oklch()` / `var()` is passed through unchanged. The
+	 * value is bound to the single `--hub-list-accent` slot (the SCSS derives the
+	 * `-emphasis` / `-subtle` / `-on` family from it); `null` (no variant) defers to
+	 * the SCSS default and the built-in `[data-variant]` class rules.
+	 *
+	 * @returns The `--hub-list-accent` value, or `null` when no variant is set.
+	 */
+	accentVar(): string | null {
+		return resolveHubAccent(this.options.variant);
 	}
 
 	/**

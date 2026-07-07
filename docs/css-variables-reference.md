@@ -346,8 +346,10 @@ The table reads a single accent slot and derives its family locally (same genera
 |----------|---------|-------------|
 | `--hub-table-accent` | `var(--hub-sys-color-primary, #0d6efd)` | Accent slot — drives selection tint and accent layers |
 | `--hub-table-accent-subtle` | `color-mix(in oklch, var(--hub-table-accent) 12%, var(--hub-sys-surface-page, #ffffff))` | Soft accent tint (derived) |
-| `--hub-table-selected-bg` | `var(--hub-table-accent-subtle)` | Selected row background |
+| `--hub-table-selected-bg` | `var(--hub-table-accent-subtle)` | Selected row background. Applies to the built-in selection **and** a consumer-set `hub-table__row--selected` class (via `[rowClass]`) |
 | `--hub-table-selected-color` | `var(--hub-sys-text-primary, #212529)` | Selected row text color |
+| `--hub-table-selected-bar-width` | `0` | Width of the accent bar on the selected row's leading edge (master-detail "active row"). `0` = off (no visual change); set e.g. `3px` to reveal it |
+| `--hub-table-selected-bar-color` | `var(--hub-table-accent)` | Colour of the selected-row accent bar |
 
 ### Bottom Bar Layout (Table)
 
@@ -386,21 +388,22 @@ The table reads a single accent slot and derives its family locally (same genera
 | `--hub-table-border-width` | `var(--hub-ref-border-width, 1px)` | Border width of the table container |
 | `--hub-table-container-gap` | `var(--hub-ref-space-3, 1rem)` | Gap between the top bar, table and bottom bar |
 | `--hub-table-container-max-block-size` | `none` | Max height of the scroll body; with `options.scrollable`, set it to cap the body height and engage the sticky header |
+| `--hub-table-container-overflow` | `auto` | Scroll behaviour of the built-in container. `[stickyHeader]` flips it to `visible` so the container does **not** trap the sticky header, letting it pin to the consumer's own scroll ancestor (a `max-height` + `overflow:auto` box). Override to force a specific behaviour |
 | `--hub-table-head-sticky-top` | `0` | Sticky offset of the header while the body scrolls (e.g. to clear a toolbar) |
 
 ### Search (Table)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `--hub-table-search-input-bg` | `var(--hub-table-container-bg)` | Background of the search input |
+| `--hub-table-search-input-bg` | `var(--hub-table-container-bg, var(--hub-ref-color-white, #fff))` | Background of the search input |
 | `--hub-table-search-input-border-color` | `var(--hub-table-border-color)` | Border color of the search input |
-| `--hub-table-search-input-color` | `var(--hub-table-container-color)` | Text color of the search input |
+| `--hub-table-search-input-color` | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text color of the search input |
 | `--hub-table-search-input-padding-x` | `0.75rem` | Horizontal padding of the search input |
 | `--hub-table-search-input-padding-y` | `0.375rem` | Vertical padding of the search input |
 | `--hub-table-search-input-font-size` | `1rem` | Font size of the search input |
-| `--hub-table-search-button-bg` | `var(--hub-table-container-bg)` | Background of the search button |
+| `--hub-table-search-button-bg` | `var(--hub-table-container-bg, var(--hub-ref-color-white, #fff))` | Background of the search button |
 | `--hub-table-search-button-border-color` | `var(--hub-table-border-color)` | Border color of the search button |
-| `--hub-table-search-button-color` | `var(--hub-table-container-color)` | Text/icon color of the search button |
+| `--hub-table-search-button-color` | `var(--hub-table-container-color, var(--hub-sys-text-primary, #212529))` | Text/icon color of the search button |
 | `--hub-table-search-button-min-width` | `2.75rem` | Minimum width of the search button |
 | `--hub-table-search-border-width` | `var(--hub-table-border-width)` | Shared border width for search input/button |
 | `--hub-table-search-border-radius` | `var(--hub-table-border-radius)` | Shared border radius for search input/button |
@@ -414,8 +417,8 @@ The table reads a single accent slot and derives its family locally (same genera
 | `--hub-table-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Border color of table rows and cells |
 | `--hub-table-border-width` | `var(--hub-ref-border-width, 1px)` | Border width of table rows and cells |
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Color of the separator between thead and tbody |
-| `--hub-table-head-bg` | `var(--hub-table-bg)` | Header (thead) surface; kept opaque so a sticky header covers the scrolling body |
-| `--hub-table-head-color` | `var(--hub-table-color)` | Header (thead) text color |
+| `--hub-table-head-bg` | `var(--hub-table-bg, var(--hub-ref-color-white, #fff))` | Header (thead) surface; kept opaque so a sticky header covers the scrolling body |
+| `--hub-table-head-color` | `var(--hub-table-color, var(--hub-sys-text-primary, #212529))` | Header (thead) text color |
 | `--hub-table-head-font-size` | `inherit` | Header (thead) cell font size |
 | `--hub-table-head-font-weight` | `bold` | Header (thead) cell font weight (browser `th` default; set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look) |
 | `--hub-table-head-padding-x` | `var(--hub-table-cell-padding-x)` | Header (thead) cell horizontal padding |
@@ -455,6 +458,8 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 | `--hub-table-bg-state` | `initial` | Background set by interaction state (hover, active) |
 | `--hub-table-color-type` | `initial` | Color set by variant type |
 | `--hub-table-color-state` | `initial` | Color set by interaction state |
+| `--hub-table-cell-bar-width` | `var(--hub-table-selected-bar-width)` | Per-cell leading accent-bar width (internal; the selected row sets it from `--hub-table-selected-bar-width`) |
+| `--hub-table-cell-bar-color` | `var(--hub-table-selected-bar-color, var(--hub-table-accent))` | Per-cell leading accent-bar colour (internal; set from `--hub-table-selected-bar-color`) |
 
 ### Filter Button & Count Badge
 

@@ -1,8 +1,19 @@
+// Default token catalogue on `:host`. Angular emulated encapsulation shims `:host`
+// → `[_nghost]`, which the host element carries, so every default reliably applies.
+// (`:where(:host)` is NOT used: ShadowCss shims it to `[_ngcontent]:where([_nghost])`,
+// a content-attr the host does NOT carry, so the whole block would silently never
+// match — leaving the cells and the sticky header transparent.)
+//
+// The re-themeable SURFACE tokens — `--hub-table-bg` / `--hub-table-color` and the
+// container pair — are deliberately NOT declared here. A `:host` declaration (0,1,0)
+// would out-rank a consumer's `hub-table { --hub-table-bg: … }` tag rule (0,0,1), so
+// the rows/cells would ignore a dark-mode re-theme (only headers picked it up). Each
+// consumption site instead reads them as `var(--hub-table-bg, <default>)`, so a plain
+// tag selector re-themes the surface WITHOUT `!important`, and the header always
+// resolves to an opaque colour via the same fallback.
 :root,
 :host {
 	// Table Properties
-	--hub-table-container-bg: var(--hub-ref-color-white, #fff);
-	--hub-table-container-color: var(--hub-sys-text-primary, #212529);
 	--hub-table-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-table-border-radius: var(--hub-ref-radius-md, 0.375rem);
 	--hub-table-border-width: var(--hub-ref-border-width, 1px);
@@ -13,6 +24,14 @@
 	// default; set `--hub-table-container-max-block-size` (with `options.scrollable`)
 	// to cap the body height and engage the already-present sticky header.
 	--hub-table-container-max-block-size: none;
+	// Scroll behaviour of the built-in `.hub-table__container`. Defaults to `auto`
+	// (the frame owns vertical + horizontal scroll and, with a capped
+	// `--hub-table-container-max-block-size`, pins the header itself). `[stickyHeader]`
+	// flips this to `visible` so the container does NOT establish its own scroll
+	// context: the header then sticks to the consumer's OWN scroll ancestor (a plain
+	// `max-height` + `overflow:auto` box) instead of being trapped inside a frame that
+	// isn't the one actually scrolling.
+	--hub-table-container-overflow: auto;
 	--hub-table-head-sticky-top: 0;
 	// NOTE: responsive breakpoints (576/768/992/1200/1400px) are fixed and live in the
 	// `@media` queries below. CSS custom properties cannot be read inside `@media`
@@ -78,12 +97,18 @@
 	--hub-table-accent-on: oklch(from var(--hub-table-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
 	--hub-table-selected-bg: var(--hub-table-accent-subtle);
 	--hub-table-selected-color: var(--hub-sys-text-primary, #212529);
-	--hub-table-bg: var(--hub-ref-color-white, #fff);
-	// Header (thead) surface — defaults to the table surface so the header stays
-	// opaque while the body scrolls under a sticky header. Override for a distinct
-	// header chrome.
-	--hub-table-head-bg: var(--hub-table-bg);
-	--hub-table-head-color: var(--hub-table-color);
+	// Optional accent bar on the selected row's leading (inline-start) edge — the
+	// master-detail "active row" affordance. Off by default (`width: 0`, no visual
+	// change); set `--hub-table-selected-bar-width` to reveal a solid bar keyed to
+	// `--hub-table-selected-bar-color` (defaults to the accent). Applies to both the
+	// built-in selection and a consumer-set `hub-table__row--selected` ([rowClass]).
+	--hub-table-selected-bar-width: 0;
+	--hub-table-selected-bar-color: var(--hub-table-accent);
+	// Header (thead) surface — defaults to the table surface, carrying the SAME opaque
+	// white / text fallback the cells use, so the header stays opaque under a sticky
+	// header even before a consumer sets `--hub-table-bg`. Override for distinct chrome.
+	--hub-table-head-bg: var(--hub-table-bg, var(--hub-ref-color-white, #fff));
+	--hub-table-head-color: var(--hub-table-color, var(--hub-sys-text-primary, #212529));
 	// Header chrome — typography + padding. `-bg` / `-color` already exist above, so
 	// only the genuinely-missing slots are added here, in the SAME `--hub-table-head-*`
 	// namespace. Each defaults to an existing value (cell padding / browser `th`
@@ -104,17 +129,16 @@
 	--hub-table-cell-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-table-cell-padding-y-sm: var(--hub-ref-space-1, 0.25rem);
 	--hub-table-cell-vertical-align: middle;
-	--hub-table-color: var(--hub-sys-text-primary, #212529);
 	--hub-table-color-state: initial;
 	--hub-table-color-type: initial;
 	--hub-table-group-separator-color: var(--hub-sys-border-color-default, #dee2e6);
-	--hub-table-search-button-bg: var(--hub-table-container-bg);
+	--hub-table-search-button-bg: var(--hub-table-container-bg, var(--hub-ref-color-white, #fff));
 	--hub-table-search-button-border-color: var(--hub-table-border-color);
-	--hub-table-search-button-color: var(--hub-table-container-color);
+	--hub-table-search-button-color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
 	--hub-table-search-button-min-width: 2.75rem;
-	--hub-table-search-input-bg: var(--hub-table-container-bg);
+	--hub-table-search-input-bg: var(--hub-table-container-bg, var(--hub-ref-color-white, #fff));
 	--hub-table-search-input-border-color: var(--hub-table-border-color);
-	--hub-table-search-input-color: var(--hub-table-container-color);
+	--hub-table-search-input-color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
 	--hub-table-search-border-width: var(--hub-table-border-width);
 	--hub-table-search-border-radius: var(--hub-table-border-radius);
 	--hub-table-search-input-padding-x: 0.75rem;
@@ -152,7 +176,7 @@
 	flex-direction: column;
 	gap: var(--hub-table-container-gap);
 	min-width: 0;
-	color: var(--hub-table-container-color);
+	color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
 
 	// Top bar (actions and filters)
 	.hub-table__top-bar {
@@ -477,12 +501,12 @@
 
 	// Table container
 	.hub-table__container {
-		overflow: auto;
+		overflow: var(--hub-table-container-overflow, auto);
 		max-block-size: var(--hub-table-container-max-block-size);
-		background-color: var(--hub-table-container-bg);
+		background-color: var(--hub-table-container-bg, var(--hub-ref-color-white, #fff));
 		border: var(--hub-table-border-width) solid var(--hub-table-border-color);
 		border-radius: var(--hub-table-border-radius);
-		color: var(--hub-table-container-color);
+		color: var(--hub-table-container-color, var(--hub-sys-text-primary, #212529));
 	}
 
 	// Table element
@@ -493,19 +517,19 @@
 		border-spacing: 0;
 		vertical-align: var(--hub-table-cell-vertical-align);
 		border-color: var(--hub-table-border-color);
-		background-color: var(--hub-table-bg);
-		color: var(--hub-table-color);
+		background-color: var(--hub-table-bg, var(--hub-ref-color-white, #fff));
+		color: var(--hub-table-color, var(--hub-sys-text-primary, #212529));
 
 		// Sticky columns
 		.sticky-start {
-			background-color: var(--hub-table-bg);
+			background-color: var(--hub-table-bg, var(--hub-ref-color-white, #fff));
 			left: 0;
 			position: sticky;
 			z-index: 9;
 		}
 
 		.sticky-end {
-			background-color: var(--hub-table-bg);
+			background-color: var(--hub-table-bg, var(--hub-ref-color-white, #fff));
 			right: 0;
 			position: sticky;
 			z-index: 9;
@@ -524,12 +548,18 @@
 			padding: var(--hub-table-cell-padding-y) var(--hub-table-cell-padding-x);
 			vertical-align: var(--hub-table-cell-vertical-align);
 			// Following the cascade pattern: https://codepen.io/miriamsuzanne/full/vYNgodb
-			color: var(--hub-table-color-state, var(--hub-table-color-type, var(--hub-table-color)));
-			background-color: var(--hub-table-bg);
+			color: var(--hub-table-color-state, var(--hub-table-color-type, var(--hub-table-color, var(--hub-sys-text-primary, #212529))));
+			background-color: var(--hub-table-bg, var(--hub-ref-color-white, #fff));
 			border-bottom-style: solid;
 			border-bottom-color: var(--hub-table-row-divider-color);
 			border-bottom-width: var(--hub-table-border-width);
-			box-shadow: inset 0 0 0 9999px var(--hub-table-bg-state, var(--hub-table-bg-type, var(--hub-table-accent-bg)));
+			// Leading accent bar (per-cell `--hub-table-cell-bar-*`, default 0/transparent =
+			// invisible) composited ON TOP of the state/tint layer. Painting it from THIS
+			// base rule lets a selected row reveal the bar by setting the two custom
+			// properties, with no specificity battle over the `box-shadow` property.
+			box-shadow:
+				inset var(--hub-table-cell-bar-width, 0) 0 0 0 var(--hub-table-cell-bar-color, transparent),
+				inset 0 0 0 9999px var(--hub-table-bg-state, var(--hub-table-bg-type, var(--hub-table-accent-bg)));
 		}
 
 		> tbody {
@@ -572,11 +602,20 @@
 	// Sticky header ([stickyHeader]) — pins the header while the body scrolls,
 	// decoupled from the built-in scroll frame so it works inside ANY consumer
 	// scroll container (`max-height` + `overflow:auto`). The header surface is
-	// already opaque via `--hub-table-header-bg`, so it covers the scrolling body.
-	&.hub-table--sticky-header .hub-table__element > thead {
-		position: var(--hub-table-head-position, sticky);
-		top: var(--hub-table-head-sticky-top, 0);
-		z-index: 10;
+	// already opaque via `--hub-table-head-bg`, so it covers the scrolling body.
+	&.hub-table--sticky-header {
+		// Release the built-in container's scroll context so the sticky header can
+		// pin to the consumer's OWN scroll ancestor. Without this, `.hub-table__container`
+		// (`overflow:auto`) would be the nearest scroll container and, having no height
+		// cap, would let the whole frame — header included — scroll out of the external
+		// box: the header would disappear instead of sticking. See `--hub-table-container-overflow`.
+		--hub-table-container-overflow: visible;
+
+		.hub-table__element > thead {
+			position: var(--hub-table-head-position, sticky);
+			top: var(--hub-table-head-sticky-top, 0);
+			z-index: 10;
+		}
 	}
 
 	// Group divider
@@ -675,6 +714,17 @@
 		--hub-table-bg-state: var(--hub-table-selected-bg);
 	}
 
+	// Leading accent bar on the selected row's first cell — the master-detail
+	// "active row" affordance. Opt-in via `--hub-table-selected-bar-width` (default
+	// `0` = invisible). Only the per-cell bar tokens are set here; the base cell rule
+	// paints the bar via its box-shadow, so it coexists with the tint without fighting
+	// that (more specific) rule for the `box-shadow` property.
+	.hub-table__body-row--selected > *:first-child,
+	.hub-table__row--selected > *:first-child {
+		--hub-table-cell-bar-width: var(--hub-table-selected-bar-width);
+		--hub-table-cell-bar-color: var(--hub-table-selected-bar-color, var(--hub-table-accent));
+	}
+
 	// Selectable rows advertise interactivity with a pointer cursor
 	.hub-table__selectable > tbody > tr.hub-table__body-row {
 		cursor: pointer;
@@ -754,6 +804,14 @@ $hub-table-variants: primary, secondary, success, danger, warning, info, neutral
 	.hub-table__header-icon {
 		margin-right: 0;
 		margin-left: var(--hub-ref-space-2, 0.5rem);
+	}
+
+	// Mirror the selected-row accent bar to the right (leading edge in RTL): a
+	// negative bar width makes the base cell's inset shadow draw from the right edge.
+	.hub-table__body-row--selected > *:first-child,
+	.hub-table__row--selected > *:first-child {
+		--hub-table-cell-bar-width: calc(-1 * var(--hub-table-selected-bar-width));
+		--hub-table-cell-bar-color: var(--hub-table-selected-bar-color, var(--hub-table-accent));
 	}
 }
 

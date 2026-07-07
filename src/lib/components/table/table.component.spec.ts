@@ -122,6 +122,82 @@ describe('TableComponent', () => {
         });
     });
 
+    describe('Colour accent normalization', () => {
+        it('should map a semantic variant name to its ds accent token with a raw fallback', () => {
+            fixture.componentRef.setInput('options', {
+                cursor: 'default',
+                hoverableRows: false,
+                striped: null,
+                variant: 'primary'
+            });
+            fixture.detectChanges();
+
+            expect(fixture.nativeElement.style.getPropertyValue('--hub-table-accent')).toBe(
+                'var(--hub-sys-color-primary, primary)'
+            );
+        });
+
+        it('should pass a literal accent colour through unchanged', () => {
+            fixture.componentRef.setInput('options', {
+                cursor: 'default',
+                hoverableRows: false,
+                striped: null,
+                variant: '#ff0000'
+            });
+            fixture.detectChanges();
+
+            expect(fixture.nativeElement.style.getPropertyValue('--hub-table-accent')).toBe('#ff0000');
+        });
+    });
+
+    describe('Sticky header ([stickyHeader]) — external scroll container', () => {
+        it('should NOT set the sticky-header host class by default', () => {
+            expect(fixture.nativeElement.classList.contains('hub-table--sticky-header')).toBe(false);
+        });
+
+        it('should set the hub-table--sticky-header host class when [stickyHeader] is enabled', () => {
+            // The class is what releases the container scroll context
+            // (`--hub-table-container-overflow: visible`) and pins the thead, so a sticky
+            // header works inside a consumer's OWN `max-height` + `overflow:auto` box.
+            fixture.componentRef.setInput('stickyHeader', true);
+            fixture.detectChanges();
+
+            expect(fixture.nativeElement.classList.contains('hub-table--sticky-header')).toBe(true);
+        });
+
+        it('should coerce a string "true" (attribute usage) to the sticky-header class', () => {
+            fixture.componentRef.setInput('stickyHeader', '' as unknown as boolean);
+            fixture.detectChanges();
+
+            // booleanAttribute: presence (empty string) means enabled.
+            expect(fixture.nativeElement.classList.contains('hub-table--sticky-header')).toBe(true);
+        });
+    });
+
+    describe('Selected row via [rowClass] — master-detail (HUBUI-006b)', () => {
+        it('should land the public hub-table__row--selected class on the matching <tr>', () => {
+            // A consumer marks the active row from its OWN state via [rowClass]; the class
+            // reuses the built-in --hub-table-selected-* tint (no repaint, no !important).
+            fixture.componentRef.setInput('headers', [
+                { property: 'id', title: 'ID' },
+                { property: 'name', title: 'Name' }
+            ] as Array<PaginableTableHeader>);
+            fixture.componentRef.setInput('data', [
+                { id: 1, name: 'Ada', active: false },
+                { id: 2, name: 'Alan', active: true }
+            ]);
+            fixture.componentRef.setInput('rowClass', (row: { active?: boolean }) =>
+                row.active ? 'hub-table__row--selected' : ''
+            );
+            fixture.detectChanges();
+
+            const rows = fixture.nativeElement.querySelectorAll('tr.hub-table__body-row') as NodeListOf<HTMLElement>;
+            expect(rows.length).toBe(2);
+            expect(rows[0].classList.contains('hub-table__row--selected')).toBe(false);
+            expect(rows[1].classList.contains('hub-table__row--selected')).toBe(true);
+        });
+    });
+
     describe('Headers Configuration', () => {
         it('should handle string headers', () => {
             component.headers.set(['name', 'email', 'age']);

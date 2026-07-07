@@ -387,6 +387,7 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | `--hub-table-border-width` | `var(--hub-ref-border-width)` | Border width of the table container |
 | `--hub-table-container-gap` | `var(--hub-ref-space-3)` | Separación entre la barra superior, la tabla y la barra inferior |
 | `--hub-table-container-max-block-size` | `none` | Altura máxima del cuerpo con scroll; con `options.scrollable`, fíjala para acotar el cuerpo y activar la cabecera fija |
+| `--hub-table-container-overflow` | `auto` | Comportamiento de scroll del contenedor propio. `[stickyHeader]` lo cambia a `visible` para que el contenedor **no** atrape la cabecera fija y esta se ancle al contenedor scrollable del propio consumidor (una caja `max-height` + `overflow:auto`). Puedes forzar un valor concreto |
 | `--hub-table-head-sticky-top` | `0` | Desplazamiento de la cabecera fija mientras el cuerpo hace scroll (p. ej. para dejar hueco a una barra de herramientas) |
 
 ### Search (Table)
@@ -456,6 +457,19 @@ These variables power the cascade pattern for row states (`striped`, `hover`, `a
 | `--hub-table-bg-state` | `initial` | Background set by interaction state (hover, active) |
 | `--hub-table-color-type` | `initial` | Color set by variant type |
 | `--hub-table-color-state` | `initial` | Color set by interaction state |
+| `--hub-table-cell-bar-width` | `0` | Ancho de la barra de acento por celda (interno; la fila seleccionada lo fija desde `--hub-table-selected-bar-width`) |
+| `--hub-table-cell-bar-color` | `transparent` | Color de la barra de acento por celda (interno; se fija desde `--hub-table-selected-bar-color`) |
+
+### Fila seleccionada (Table)
+
+El tinte de selección se aplica tanto a la selección propia de la librería como a una clase `hub-table__row--selected` puesta por el consumidor vía `[rowClass]` (patrón master-detail), sin necesidad de `!important`.
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--hub-table-selected-bg` | `var(--hub-table-accent-subtle)` | Fondo de la fila seleccionada |
+| `--hub-table-selected-color` | `var(--hub-sys-text-primary)` | Color de texto de la fila seleccionada |
+| `--hub-table-selected-bar-width` | `0` | Ancho de la barra de acento en el borde inicial de la fila seleccionada («fila activa» master-detail). `0` = desactivada (sin cambio visual); pon p. ej. `3px` para mostrarla |
+| `--hub-table-selected-bar-color` | `var(--hub-table-accent)` | Color de la barra de acento de la fila seleccionada |
 
 ### Icons
 

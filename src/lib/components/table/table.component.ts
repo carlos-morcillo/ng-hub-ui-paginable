@@ -17,7 +17,16 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
-import { debouncedSignal, generateUniqueId, GetPipe, IsObservablePipe, TranslatePipe, UcfirstPipe, UnwrapAsyncPipe } from 'ng-hub-ui-utils';
+import {
+	debouncedSignal,
+	generateUniqueId,
+	GetPipe,
+	IsObservablePipe,
+	resolveHubAccent,
+	TranslatePipe,
+	UcfirstPipe,
+	UnwrapAsyncPipe
+} from 'ng-hub-ui-utils';
 import { BehaviorSubject, Observable, debounceTime, distinctUntilChanged, isObservable, of } from 'rxjs';
 import { TableBreakpoint } from '../../constants/breakpoints';
 import { PaginableStateDefault } from '../../interfaces/paginable-state';
@@ -96,7 +105,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 	host: {
 		class: 'hub-table',
 		'[class.hub-table--rtl]': 'isRtl()',
-		'[class.hub-table--sticky-header]': 'stickyHeader()'
+		'[class.hub-table--sticky-header]': 'stickyHeader()',
+		'[style.--hub-table-accent]': 'accentVar()'
 	}
 })
 /**
@@ -184,6 +194,20 @@ export class TableComponent<T = any> {
 	isRtl(): boolean {
 		return this.options()?.rtl === true;
 	}
+
+	/**
+	 * Resolves the table's accent slot from `options.variant`, accepting ANY colour.
+	 *
+	 * A bareword (semantic name, registered accent or CSS named colour) resolves to
+	 * the matching `--hub-sys-color-*` ds token with the raw word as fallback, while a
+	 * literal `#hex` / `rgb()` / `oklch()` / `var()` is passed through unchanged. The
+	 * value is bound to the single `--hub-table-accent` slot (the SCSS derives the
+	 * `-emphasis` / `-subtle` / `-on` family from it); `null` (no variant) defers to
+	 * the SCSS default and the built-in `.hub-table__<variant>` class rules.
+	 *
+	 * @returns The `--hub-table-accent` value, or `null` when no variant is set.
+	 */
+	protected readonly accentVar = computed<string | null>(() => resolveHubAccent(this.options()?.variant));
 
 	/**
 	 * Collection of selected rows
