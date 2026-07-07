@@ -1,5 +1,16 @@
 # Changelog
 
+## [22.5.0] - 2026-07-07
+
+### Added
+
+- **table — `[stickyHeader]` input + `--hub-table-head-position`.** Pins the header while the body scrolls, **decoupled** from the built-in scroll frame: `[stickyHeader]="true"` makes the `thead` `position: sticky; top: 0` inside **any** consumer-provided scroll container (`max-height` + `overflow: auto`), not just the `options.scrollable` frame. The position is overridable via `--hub-table-head-position` (default `sticky`) and the offset via the existing `--hub-table-head-sticky-top`. Off by default — no change unless enabled.
+- **table — themeable header typography & padding.** The header surface and text colour were already themeable via `--hub-table-head-bg` / `--hub-table-head-color`; the missing chrome is now exposed in the same namespace: `--hub-table-head-font-size`, `--hub-table-head-font-weight`, `--hub-table-head-padding-x`, `--hub-table-head-padding-y` (consumed by `.hub-table__header-cell` / `.hub-table__header-title-text`). Every token defaults to an existing value (cell padding / browser `th` weight), so there is **no visual change** until one is set.
+
+### Changed
+
+- **table — consumer-settable selected row.** The selected-row tint (`--hub-table-selected-bg` / `--hub-table-selected-color`) now also applies to a `hub-table__row--selected` class, so a product can drive the selected look from its own state via `[rowClass]` (e.g. `[rowClass]="row => row.isSelected ? 'hub-table__row--selected' : ''"`) instead of repainting the row. The built-in selection styling is unchanged.
+
 ## [22.4.0] - 2026-07-05
 
 ### Added

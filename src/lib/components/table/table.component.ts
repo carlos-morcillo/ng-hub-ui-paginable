@@ -3,6 +3,7 @@ import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
 	Component,
 	TemplateRef,
+	booleanAttribute,
 	computed,
 	contentChild,
 	contentChildren,
@@ -94,7 +95,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 	],
 	host: {
 		class: 'hub-table',
-		'[class.hub-table--rtl]': 'isRtl()'
+		'[class.hub-table--rtl]': 'isRtl()',
+		'[class.hub-table--sticky-header]': 'stickyHeader()'
 	}
 })
 /**
@@ -534,6 +536,18 @@ export class TableComponent<T = any> {
 
 	/** Whether action buttons should stick to viewport during scrolling */
 	readonly stickyActions = input<boolean>(false);
+
+	/**
+	 * Pins the table header to the top while the body scrolls.
+	 *
+	 * When enabled the `thead` becomes `position: sticky; top: 0`, so the header stays
+	 * visible when the table lives inside a fixed-height scroll container
+	 * (`max-height` + `overflow: auto`). Unlike the `options.scrollable` path this does
+	 * not require the built-in scroll frame — it works with any consumer-provided
+	 * scroll parent. The sticky position itself is overridable via
+	 * `--hub-table-head-position` and the offset via `--hub-table-head-sticky-top`.
+	 */
+	readonly stickyHeader = input(false, { transform: booleanAttribute });
 
 	/** Actions that can be performed on multiple selected rows */
 	readonly batchActions = input<

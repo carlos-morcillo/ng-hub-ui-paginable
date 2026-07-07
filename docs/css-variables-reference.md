@@ -416,6 +416,11 @@ The table reads a single accent slot and derives its family locally (same genera
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default, #dee2e6)` | Color of the separator between thead and tbody |
 | `--hub-table-head-bg` | `var(--hub-table-bg)` | Header (thead) surface; kept opaque so a sticky header covers the scrolling body |
 | `--hub-table-head-color` | `var(--hub-table-color)` | Header (thead) text color |
+| `--hub-table-head-font-size` | `inherit` | Header (thead) cell font size |
+| `--hub-table-head-font-weight` | `bold` | Header (thead) cell font weight (browser `th` default; set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look) |
+| `--hub-table-head-padding-x` | `var(--hub-table-cell-padding-x)` | Header (thead) cell horizontal padding |
+| `--hub-table-head-padding-y` | `var(--hub-table-cell-padding-y)` | Header (thead) cell vertical padding |
+| `--hub-table-head-position` | `sticky` | CSS `position` of the header when `[stickyHeader]` is set; override to `static` to opt a table out |
 | `--hub-table-row-divider-color` | `var(--hub-table-border-color)` | Color of the divider between body rows (independent of the frame and vertical borders) |
 
 ### Cell Spacing

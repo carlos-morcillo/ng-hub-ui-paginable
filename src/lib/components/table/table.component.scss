@@ -84,6 +84,19 @@
 	// header chrome.
 	--hub-table-head-bg: var(--hub-table-bg);
 	--hub-table-head-color: var(--hub-table-color);
+	// Header chrome — typography + padding. `-bg` / `-color` already exist above, so
+	// only the genuinely-missing slots are added here, in the SAME `--hub-table-head-*`
+	// namespace. Each defaults to an existing value (cell padding / browser `th`
+	// weight), so there is no visual change until a consumer overrides one.
+	--hub-table-head-font-size: inherit;
+	// Defaults to `bold` to match the browser `th` default (zero visual change);
+	// set to `var(--hub-ref-font-weight-semibold, 600)` for the DS look.
+	--hub-table-head-font-weight: bold;
+	--hub-table-head-padding-x: var(--hub-table-cell-padding-x);
+	--hub-table-head-padding-y: var(--hub-table-cell-padding-y);
+	// Sticky-header position knob (consumed when [stickyHeader] is set). Override to
+	// `static` to opt a specific table out without touching the input.
+	--hub-table-head-position: sticky;
 	--hub-table-bg-state: initial;
 	--hub-table-bg-type: initial;
 	--hub-table-cell-padding-x: var(--hub-ref-space-3, 1rem);
@@ -526,11 +539,22 @@
 		> thead {
 			vertical-align: bottom;
 
-			// Header surface — kept opaque so a sticky header covers the
-			// scrolling body. Defaults match the table surface (no visual change).
+			// Header surface — kept opaque so a sticky header covers the scrolling
+			// body. Defaults match the table surface (no visual change until set).
 			> tr > * {
 				background-color: var(--hub-table-head-bg);
 				color: var(--hub-table-head-color);
+			}
+
+			// Header cell chrome — padding and typography, each defaulting to an
+			// existing value (cell padding / browser `th` weight) for zero change.
+			.hub-table__header-cell {
+				padding: var(--hub-table-head-padding-y) var(--hub-table-head-padding-x);
+			}
+
+			.hub-table__header-title-text {
+				font-size: var(--hub-table-head-font-size);
+				font-weight: var(--hub-table-head-font-weight);
 			}
 		}
 	}
@@ -543,6 +567,16 @@
 			top: var(--hub-table-head-sticky-top);
 			z-index: 10;
 		}
+	}
+
+	// Sticky header ([stickyHeader]) — pins the header while the body scrolls,
+	// decoupled from the built-in scroll frame so it works inside ANY consumer
+	// scroll container (`max-height` + `overflow:auto`). The header surface is
+	// already opaque via `--hub-table-header-bg`, so it covers the scrolling body.
+	&.hub-table--sticky-header .hub-table__element > thead {
+		position: var(--hub-table-head-position, sticky);
+		top: var(--hub-table-head-sticky-top, 0);
+		z-index: 10;
 	}
 
 	// Group divider
@@ -629,10 +663,14 @@
 		}
 	}
 
-	// Selected row — soft accent tint (persists over hover). Previously the
-	// `--selected` class carried no styling; it now reads as a themed row.
+	// Selected row — soft accent tint (persists over hover). Applies both to the
+	// built-in selection (`--body-row--selected`) and to a consumer-set
+	// `hub-table__row--selected` class (e.g. via `[rowClass]`), so a product can
+	// drive the selected look from its own state without repainting the row.
 	.hub-table__body-row--selected > *,
-	.hub-table__hover > tbody > tr.hub-table__body-row--selected:hover > * {
+	.hub-table__row--selected > *,
+	.hub-table__hover > tbody > tr.hub-table__body-row--selected:hover > *,
+	.hub-table__hover > tbody > tr.hub-table__row--selected:hover > * {
 		--hub-table-color-state: var(--hub-table-selected-color);
 		--hub-table-bg-state: var(--hub-table-selected-bg);
 	}

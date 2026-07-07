@@ -417,6 +417,11 @@ Estos tokens estilizan el paginador embebido desde el host de la tabla:
 | `--hub-table-group-separator-color` | `var(--hub-sys-border-color-default)` | Color of the separator between thead and tbody |
 | `--hub-table-head-bg` | `var(--hub-table-bg)` | Superficie de la cabecera (thead); se mantiene opaca para que la cabecera fija cubra el cuerpo al hacer scroll |
 | `--hub-table-head-color` | `var(--hub-table-color)` | Color del texto de la cabecera (thead) |
+| `--hub-table-head-font-size` | `inherit` | Tamaño de fuente de las celdas de la cabecera (thead) |
+| `--hub-table-head-font-weight` | `bold` | Grosor de fuente de las celdas de la cabecera (thead) (valor por defecto del `th` del navegador; usa `var(--hub-ref-font-weight-semibold, 600)` para el estilo del DS) |
+| `--hub-table-head-padding-x` | `var(--hub-table-cell-padding-x)` | Relleno horizontal de las celdas de la cabecera (thead) |
+| `--hub-table-head-padding-y` | `var(--hub-table-cell-padding-y)` | Relleno vertical de las celdas de la cabecera (thead) |
+| `--hub-table-head-position` | `sticky` | `position` CSS de la cabecera cuando `[stickyHeader]` está activo; usa `static` para desactivarla en una tabla |
 | `--hub-table-row-divider-color` | `var(--hub-table-border-color)` | Color del divisor entre filas del cuerpo (independiente del marco y los bordes verticales) |
 
 ### Cell Spacing

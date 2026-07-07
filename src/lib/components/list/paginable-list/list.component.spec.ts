@@ -162,4 +162,31 @@ describe('ListComponent', () => {
 		const rootList = fixture.nativeElement.querySelector('.hub-list__items--root') as HTMLElement;
 		expect(rootList.classList.contains('hub-list__items--cards')).toBe(true);
 	});
+
+	// HUBUI-004 — a long unbreakable label renders inside the card's `.hub-list__label`
+	// in cards mode (the element the cards-scoped wrap rules `white-space: normal` +
+	// `overflow-wrap: anywhere` target). The visual wrap itself is a layout property
+	// verified in the showcase demo; jsdom does not resolve the nested cards override.
+	it('should render a long unbreakable label inside the card label in cards mode', () => {
+		const longToken = 'Supercalifragilisticexpialidocioussupercalifragilistic';
+		fixture.componentRef.setInput('items', [{ id: 1, label: longToken }]);
+		fixture.componentRef.setInput('options', {
+			display: 'cards',
+			cursor: 'default',
+			hoverableRows: false,
+			striped: null,
+			variant: null,
+			searchable: false,
+			collapsed: true,
+			rtl: false
+		});
+		fixture.detectChanges();
+
+		const rootList = fixture.nativeElement.querySelector('.hub-list__items--root') as HTMLElement;
+		expect(rootList.classList.contains('hub-list__items--cards')).toBe(true);
+
+		const label = fixture.nativeElement.querySelector('.hub-list__label') as HTMLElement;
+		expect(label).toBeTruthy();
+		expect(label.textContent).toContain(longToken);
+	});
 });
