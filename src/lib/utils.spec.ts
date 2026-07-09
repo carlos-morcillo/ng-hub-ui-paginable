@@ -342,6 +342,20 @@ describe('Utils', () => {
     });
 
     describe('debouncedSignal', () => {
+        /**
+         * Awaits a real timer.
+         *
+         * These tests drive `debouncedSignal` with real timers, so the wait after the last change
+         * must clear the debounce window by a wide margin. A tight margin (the old 35ms against a
+         * 20ms debounce whose last change landed at 10ms) loses the race under load — and because
+         * the assertion used to live inside a `setTimeout`, a failure never resolved the promise and
+         * the test died of a 5s timeout instead of reporting what went wrong.
+         *
+         * @param ms - Milliseconds to wait.
+         * @returns A promise resolved once the timer fires.
+         */
+        const after = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
         beforeEach(() => {
             TestBed.configureTestingModule({});
         });
@@ -369,67 +383,55 @@ describe('Utils', () => {
                 });
             }));
 
-        it('should use default delay of 0', () =>
-            new Promise<void>((resolve) => {
-                TestBed.runInInjectionContext(() => {
-                    const appRef = TestBed.inject(ApplicationRef);
-                    const source = signal('initial');
-                    const debounced = debouncedSignal(source);
+        it('should use default delay of 0', async () => {
+            const appRef = TestBed.inject(ApplicationRef);
+            const source = signal('initial');
+            const debounced = TestBed.runInInjectionContext(() => debouncedSignal(source));
 
-                    source.set('updated');
-                    // Flush the effect so it schedules the debounced update.
-                    appRef.tick();
+            source.set('updated');
+            // Flush the effect so it schedules the debounced update.
+            appRef.tick();
 
-                    setTimeout(() => {
-                        expect(debounced()).toBe('updated');
-                        resolve();
-                    }, 5);
-                });
-            }));
+            await after(30);
+            expect(debounced()).toBe('updated');
+        });
 
-        it('should accept signal for debounce delay', () =>
-            new Promise<void>((resolve) => {
-                TestBed.runInInjectionContext(() => {
-                    const appRef = TestBed.inject(ApplicationRef);
-                    const delay = signal(10);
-                    const source = signal(0);
-                    const debounced = debouncedSignal(source, delay);
+        it('should accept signal for debounce delay', async () => {
+            const appRef = TestBed.inject(ApplicationRef);
+            const delay = signal(10);
+            const source = signal(0);
+            const debounced = TestBed.runInInjectionContext(() => debouncedSignal(source, delay));
 
-                    source.set(1);
-                    // Flush the effect so it schedules the debounced update.
-                    appRef.tick();
+            source.set(1);
+            // Flush the effect so it schedules the debounced update.
+            appRef.tick();
 
-                    setTimeout(() => {
-                        expect(debounced()).toBe(1);
-                        resolve();
-                    }, 15);
-                });
-            }));
+            await after(60);
+            expect(debounced()).toBe(1);
+        });
 
-        it('should cancel previous timeout on rapid changes', () =>
-            new Promise<void>((resolve) => {
-                TestBed.runInInjectionContext(() => {
-                    const appRef = TestBed.inject(ApplicationRef);
-                    const source = signal(0);
-                    const debounced = debouncedSignal(source, 20);
+        it('should cancel previous timeout on rapid changes', async () => {
+            const appRef = TestBed.inject(ApplicationRef);
+            const source = signal(0);
+            const debounced = TestBed.runInInjectionContext(() => debouncedSignal(source, 20));
 
-                    source.set(1);
-                    appRef.tick();
-                    setTimeout(() => {
-                        source.set(2);
-                        appRef.tick();
-                    }, 5);
-                    setTimeout(() => {
-                        source.set(3);
-                        appRef.tick();
-                    }, 10);
+            source.set(1);
+            appRef.tick();
+            await after(5);
 
-                    setTimeout(() => {
-                        // Only the last value should be set
-                        expect(debounced()).toBe(3);
-                        resolve();
-                    }, 35);
-                });
-            }));
+            source.set(2);
+            appRef.tick();
+            await after(5);
+
+            source.set(3);
+            appRef.tick();
+
+            // Each change restarts the window, so nothing has landed 10ms into a 20ms debounce.
+            expect(debounced()).toBe(0);
+
+            // Only the last value should be set.
+            await after(80);
+            expect(debounced()).toBe(3);
+        });
     });
 });
