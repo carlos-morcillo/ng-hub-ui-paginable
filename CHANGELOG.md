@@ -1,5 +1,15 @@
 # Changelog
 
+## [22.6.1] - 2026-07-26
+
+### Fixed
+
+- **SSR: importing the package no longer crashes on the server.** `DEFAULT_LANGUAGE` read `navigator.language` at module scope, so merely importing `ng-hub-ui-paginable` under Node/SSR threw `navigator is not defined` before any component ran. The constant now guards for a missing `navigator` and falls back to `'en'`.
+
+### Removed
+
+- Dead `ViewsService` (internal, never exported from the public API): `getViews()` threw `'not developed'`, `delete()` was commented out, and nothing consumed it.
+
 ## [22.6.0] - 2026-07-07
 
 ### Fixed
