@@ -1,5 +1,12 @@
 # Changelog
 
+## [22.7.0] - 2026-07-29
+
+### Added
+
+- **`--hub-table-head-border-width`** — the header's bottom-border thickness, until now locked to the shared `--hub-table-border-width` with no independent knob. Defaults to that same shared width, so nothing moves until overridden; a Bootstrap-style thicker header is `calc(var(--hub-table-border-width) * 2)` and keeps following the base width (upstream report: a theme thickening the grid moved every cell border but left the header behind).
+- **`--hub-table-head-text-transform`** (default `none`) and **`--hub-table-head-letter-spacing`** (default `normal`) on the header titles — uppercase/tracked column headers without reaching for a `th` rule.
+
 ## [22.6.1] - 2026-07-26
 
 ### Fixed
