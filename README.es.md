@@ -1352,6 +1352,10 @@ export interface PaginationState<T = any> {
 
 ## 🌍 Internacionalización y traducciones
 
+### Proveedor global de traducciones
+
+Configura `provideHubTranslationAdapter()` una sola vez en `app.config.ts`. Paginable lee el diccionario activo mediante `HubTranslationService`, por lo que comparte la misma fuente de idioma que Calendar y Stepper sin suscripciones en componentes.
+
 ### Uso con Transloco
 
 ```typescript

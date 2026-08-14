@@ -23,7 +23,7 @@ import {
 	NG_VALUE_ACCESSOR,
 	ReactiveFormsModule
 } from '@angular/forms';
-import { generateUniqueId, getValue, resolveHubAccent, TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
+import { generateUniqueId, getValue, HUB_TRANSLATION_PREFIX, resolveHubAccent, TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 import { HubListDragPlaceholderDirective } from '../../../directives/list-drag-placeholder.directive';
 import { HubListDragPreviewDirective } from '../../../directives/list-drag-preview.directive';
 import { PaginableErrorDirective } from '../../../directives/paginable-error.directive';
@@ -81,6 +81,7 @@ interface KeyboardDragState {
 		'[attr.data-hub-drag-owner]': '_listId'
 	},
 	providers: [
+		{ provide: HUB_TRANSLATION_PREFIX, useValue: 'HUBUI.PAGINABLE' },
 		{
 			provide: NG_VALUE_ACCESSOR,
 			useExisting: ListComponent,

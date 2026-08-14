@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
 	Component,
@@ -21,6 +20,7 @@ import {
 	debouncedSignal,
 	generateUniqueId,
 	GetPipe,
+	HUB_TRANSLATION_PREFIX,
 	IsObservablePipe,
 	resolveHubAccent,
 	TranslatePipe,
@@ -89,13 +89,8 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 		HubPaginableControlDirective,
 		HubStickyColumnsDirective
 	],
-	animations: [
-		trigger('fadeInOut', [
-			transition(':enter', [style({ opacity: 0 }), animate('256ms 256ms', style({ opacity: 1, height: 'auto' }))]),
-			transition(':leave', [animate('256ms ease-out', style({ opacity: 0, height: '0' }))])
-		])
-	],
 	providers: [
+		{ provide: HUB_TRANSLATION_PREFIX, useValue: 'HUBUI.PAGINABLE' },
 		{
 			provide: NG_VALUE_ACCESSOR,
 			useExisting: forwardRef(() => TableComponent),

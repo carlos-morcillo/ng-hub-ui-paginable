@@ -2226,6 +2226,10 @@ export interface PaginationState<T = any> {
 
 The `ng-hub-ui-paginable` library includes built-in support for internationalization (i18n) with customizable translations. You can easily integrate it with your preferred translation library.
 
+### Application-wide translation provider
+
+Configure `provideHubTranslationAdapter()` once in `app.config.ts`. Paginable reads the active dictionary through `HubTranslationService`, so it follows the same language source as Calendar and Stepper without component-level subscriptions.
+
 ### Using with Transloco
 
 If you're using Transloco as your translation library, here's how to set up dynamic translation updates:

@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, input, model } from '@angular/core';
-import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
+import { HUB_TRANSLATION_PREFIX, TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 
 @Component({
 	selector: 'hub-paginator, paginable-table-paginator',
@@ -7,7 +7,8 @@ import { TranslatePipe, UcfirstPipe } from 'ng-hub-ui-utils';
 	templateUrl: './paginator.component.html',
 	styleUrl: './paginator.component.scss',
 	encapsulation: ViewEncapsulation.None,
-	imports: [TranslatePipe, UcfirstPipe]
+	imports: [TranslatePipe, UcfirstPipe],
+	providers: [{ provide: HUB_TRANSLATION_PREFIX, useValue: 'HUBUI.PAGINABLE' }]
 })
 /**
  * Component for handling pagination controls in a table or list throughout the library.

@@ -1,5 +1,19 @@
 # Changelog
 
+## [22.8.0] - 2026-08-14
+
+### Changed
+
+- **Translation lookups now resolve `HUBUI.PAGINABLE.*` before the legacy flat keys.** The table, list and paginator provide the namespace through `HUB_TRANSLATION_PREFIX`, so an application dictionary can feed them via `provideHubTranslationAdapter()` without reserving generic top-level keys. Existing flat dictionaries keep working — the bare key is still the fallback.
+
+### Added
+
+- README documentation for the application-wide translation adapter (`provideHubTranslationAdapter()` from `ng-hub-ui-utils`).
+
+### Removed
+
+- **Removed the `@angular/animations` peer dependency** and the unused table `fadeInOut` trigger declaration. The package is deprecated upstream and the trigger was never bound in the template. Applications that installed it only for `ng-hub-ui-paginable` can drop it.
+
 ## [22.7.1] - 2026-08-08
 
 ### Fixed
