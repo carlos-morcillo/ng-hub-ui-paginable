@@ -214,6 +214,33 @@
 		border-radius: var(--hub-table-border-radius);
 	}
 
+	// A row-action button is sized by the LINE BOX of the glyph inside it, and an icon font's
+	// glyph is an inline-block sitting on the baseline — so a 16px glyph in a 24px line box
+	// hangs from the baseline and leaves the descender gap beneath it. Measured on a 28px
+	// button: 4px of air above, 8px below.
+	//
+	// The height is pinned here rather than fixed at the glyph, because the two changes that
+	// look like the fix each destroy the thing that sets the height:
+	//   · `display: flex` on the button or on the icon host removes the line box, and the
+	//     button collapses from 28px to 20px;
+	//   · `vertical-align: middle` does not centre — it overshoots to 7.78 / 4.22.
+	// Giving the content row an explicit height keeps the button at 28px while freeing the
+	// glyph to be centred in it instead of resting on a baseline. Measured after: 6 / 6.
+	.hub-table__cell-btn-content {
+		// Declared rather than left to the `d-flex` in the template: the geometry below depends
+		// on this box being a flex row, and the utility classes come from the consumer's sheet.
+		display: flex;
+		align-items: center;
+		min-height: 1.5rem;
+
+		hub-icon,
+		ng-hub-ui-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
 	// Search
 	.hub-table__search {
 		display: flex;

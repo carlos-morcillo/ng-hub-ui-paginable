@@ -1,5 +1,15 @@
 # Changelog
 
+## [22.8.1] - 2026-08-16
+
+### Fixed
+
+- **Row-action icons sat low in their buttons.** The button took its height from the line box of the glyph inside it, and an icon font's glyph is an inline-block resting on the baseline — so a 16px glyph in a 24px line box hung from that baseline and left the descender gap underneath. Measured on a 28px button: 4px of air above, 8px below.
+
+    The content row now carries an explicit height and centres the glyph inside it, which keeps the button at 28px and splits the gap evenly. Measured after: 28px, 6 / 6.
+
+    Recorded because both obvious repairs make it worse, and the next reader will reach for one of them: `display: flex` on the button or on the icon host removes the very line box that sets the height, collapsing the button from 28px to 20px; and `vertical-align: middle` does not centre, it overshoots to 7.78 / 4.22.
+
 ## [22.8.0] - 2026-08-14
 
 ### Changed
