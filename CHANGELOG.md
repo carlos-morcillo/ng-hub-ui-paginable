@@ -1,5 +1,15 @@
 # Changelog
 
+## [22.12.2] - 2026-08-18
+
+### Removed
+
+- **An XML namespace that was declared and never used.** The table's loading spinner carried `xmlns:xlink="http://www.w3.org/1999/xlink"` on its inline `<svg>`, and `xlink:href` appears nowhere in this monorepo — the attribute had been dead since it was written.
+
+    Worth a line because of how it surfaced: a supply-chain scanner reports the package as containing "fragments of URLs or external IP addresses, which the package may be accessing at runtime", and this was one of them. It was never an address — a namespace URI names a vocabulary and is never dereferenced — but one of the two it found turned out to be genuinely dead, so it goes.
+
+    The other one stays: `http://www.w3.org/2000/svg` survives around fifty times, from the table's own icons, which are `data:image/svg+xml` URLs in SCSS. A `data:` URI is parsed as XML rather than as HTML, so the namespace declaration is what makes the icon render at all. The reasoning, and the decision to accept the alert rather than break the icons for it, is written down in `socket.yml` at the workspace root.
+
 ## [22.12.1] - 2026-08-17
 
 ### Fixed
