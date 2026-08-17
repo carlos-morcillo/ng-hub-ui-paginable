@@ -169,7 +169,7 @@
 								(change)="onGroupSelectionChange(formGroup)"
 								(click)="$event.stopPropagation()"
 							/>
-						} @else if (singleSelectable()) {
+						} @else if (singleSelectable() && !item.children?.length) {
 							<input
 								class="hub-list__radio"
 								type="radio"

@@ -559,4 +559,33 @@ describe('ListComponent', () => {
 			expect(component.page()).toBe(1);
 		});
 	});
+	describe('single selection over a grouped list', () => {
+		beforeEach(() => {
+			fixture.componentRef.setInput('items', [
+				{
+					id: 10,
+					label: 'Building',
+					children: [
+						{ id: 11, label: 'Room A' },
+						{ id: 12, label: 'Room B' }
+					]
+				}
+			]);
+			fixture.componentRef.setInput('selectable', SelectionTypes.Single);
+			fixture.detectChanges();
+		});
+
+		it('gives a group no radio: a heading is not one of the things to choose', () => {
+			const groupRow = fixture.nativeElement.querySelector('.hub-list__item');
+
+			expect(groupRow.querySelector(':scope > .hub-list__item-content .hub-list__radio')).toBeNull();
+		});
+
+		it('gives every room one, once the group is open', () => {
+			fixture.componentRef.setInput('options', { collapsed: false });
+			fixture.detectChanges();
+
+			expect(fixture.nativeElement.querySelectorAll('.hub-list__radio').length).toBe(2);
+		});
+	});
 });

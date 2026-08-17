@@ -1,5 +1,12 @@
 # Changelog
 
+## [22.12.1] - 2026-08-17
+
+### Fixed
+
+- **A group row gets no radio in single selection.** The control was drawn on every row, so in a list grouped with `bindChildren` a heading became one of the things to choose — picking "Edificio Triana" answered with a building, which nobody can book. Only leaves carry a radio now, which is the single-selection twin of the cascade 22.12.0 gave `multiple`. It was the last thing standing between a grouped single-choice list and the primitive: a consumer needing one had to draw the control itself.
+
+
 ## [22.12.0] - 2026-08-17
 
 ### Changed
