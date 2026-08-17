@@ -60,6 +60,7 @@ import { MenuFilterComponent } from '../menu-filter/menu-filter.component';
 import { PaginableTableDropdownComponent } from '../paginable-table-dropdown/paginable-table-dropdown.component';
 import { PaginableTableRangeInputComponent } from '../paginable-table-range-input/paginable-table-range-input.component';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { HubTableTooltipDirective } from '../../table-tooltip';
 
 @Component({
 	selector: 'hub-table, hub-ui-table',
@@ -67,6 +68,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
 	templateUrl: './table.component.html',
 	styleUrl: './table.component.scss',
 	imports: [
+		HubTableTooltipDirective,
 		NgClass,
 		NgTemplateOutlet,
 		AsyncPipe,

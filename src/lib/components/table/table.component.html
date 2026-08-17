@@ -587,7 +587,7 @@
 						<button
 							type="button"
 							class="hub-table__cell-btn"
-							[attr.title]="button.tooltip | unwrapAsync"
+							[hubTableTooltip]="button.tooltip | unwrapAsync"
 							(click)="handleAction($event, button, row)"
 							[ngClass]="getRowActionClassList(button)"
 						>

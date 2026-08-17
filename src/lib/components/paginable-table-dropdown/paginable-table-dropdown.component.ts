@@ -16,12 +16,14 @@ import { TableRowEvent } from '../../interfaces';
 import { PaginableActionButton } from '../../interfaces/paginable-action-button';
 import { PaginableTableDropdown } from '../../interfaces/paginable-table-dropdown';
 import { HubIconComponent } from '../icon/icon.component';
+import { HubTableTooltipDirective } from '../../table-tooltip';
 
 @Component({
 	selector: 'hub-table-dropdown, paginable-table-dropdown',
 
 	standalone: true,
-	imports: [NgClass, HubIconComponent, UnwrapAsyncPipe],
+	imports: [
+		HubTableTooltipDirective,NgClass, HubIconComponent, UnwrapAsyncPipe],
 	templateUrl: './paginable-table-dropdown.component.html',
 	styleUrls: ['./paginable-table-dropdown.component.scss']
 })

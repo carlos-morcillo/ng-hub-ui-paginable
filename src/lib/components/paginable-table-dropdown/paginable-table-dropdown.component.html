@@ -3,7 +3,7 @@
 		class="table-dropdown__toggle px-2 dropdown-toggle"
 		type="button"
 		[ngClass]="buttonClass"
-		[attr.title]="options.tooltip | unwrapAsync"
+		[hubTableTooltip]="options.tooltip | unwrapAsync"
 		[attr.aria-expanded]="shown"
 		(click)="toggle(); $event.stopPropagation()"
 		[disabled]="disabled()"
@@ -31,7 +31,7 @@
 					<button
 						class="table-dropdown__item dropdown-item"
 						type="button"
-						[attr.title]="dropdownItem.title | unwrapAsync"
+						[hubTableTooltip]="dropdownItem.title | unwrapAsync"
 						[ngClass]="getDropdownItemClassList(dropdownItem)"
 						(click)="executeDropdownAction(dropdownItem)"
 					>

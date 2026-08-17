@@ -72,3 +72,5 @@ export { locale as deLocale } from './assets/i18n/de';
 export { locale as zhLocale } from './assets/i18n/zh';
 export { locale as arLocale } from './assets/i18n/ar';
 export { locale as ruLocale } from './assets/i18n/ru';
+
+export * from './table-tooltip';

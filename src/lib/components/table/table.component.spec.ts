@@ -731,4 +731,30 @@ describe('TableComponent', () => {
             expect(component.displayedRows().length).toBe(10);
         });
     });
+
+    /**
+     * The wiring the directive's own spec cannot see: the row-action button must take its
+     * label from the table's tooltip directive rather than from a hardcoded attribute.
+     * With no adapter registered what comes out is still the native `title`, so nothing
+     * changes for an application that has not opted in — plus the accessible name a bare
+     * icon button never had.
+     */
+    describe('Row-action tooltip', () => {
+        it('routes the button tooltip through the table tooltip directive', () => {
+            fixture.componentRef.setInput('headers', [
+                {
+                    property: '',
+                    buttons: [{ icon: 'pencil', tooltip: 'Rectify the invoice', handler: () => { } }]
+                }
+            ] as Array<PaginableTableHeader>);
+            fixture.componentRef.setInput('data', [{ id: 1 }]);
+            fixture.detectChanges();
+
+            const button = fixture.nativeElement.querySelector('.hub-table__cell-btn') as HTMLElement;
+
+            expect(button).toBeTruthy();
+            expect(button.getAttribute('title')).toBe('Rectify the invoice');
+            expect(button.getAttribute('aria-label')).toBe('Rectify the invoice');
+        });
+    });
 });

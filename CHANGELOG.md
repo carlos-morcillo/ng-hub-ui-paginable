@@ -1,5 +1,27 @@
 # Changelog
 
+## [22.9.0] - 2026-08-17
+
+### Added
+
+- **`provideHubTableTooltip`, to give the table's own controls a themed tooltip.** Row actions and dropdown entries are drawn by the table from the `headers` configuration, so a consumer cannot reach them to restyle anything — their labels were stuck on the browser's native `title`, which ignores every theme and appears where the browser decides.
+
+    Registering an adapter routes those labels to whatever tooltip the application already uses. Without one, the native `title` stays exactly as before: the table has no business requiring `ng-hub-ui-utils/styles/tooltip` in an application that never asked for it, and a themed tooltip missing its stylesheet is worse than the native one it replaced.
+
+    ```ts
+    provideHubTableTooltip({
+        attach: (host, text) => {
+            const controller = new HubTooltipController(host);
+            controller.setText(text);
+            return { update: (next) => controller.setText(next), destroy: () => controller.destroy() };
+        }
+    });
+    ```
+
+### Fixed
+
+- **Icon-only row actions had no accessible name.** `title` was quietly serving as it. Moving the label to a tooltip and stopping there would have left a screen reader with an unlabelled button, so the text is now mirrored to `aria-label` — but only where the control renders no text of its own. Where a visible label exists it *is* the name, and overriding it with different words breaks WCAG 2.5.3 (Label in Name) in the belief of improving it.
+
 ## [22.8.1] - 2026-08-16
 
 ### Fixed
