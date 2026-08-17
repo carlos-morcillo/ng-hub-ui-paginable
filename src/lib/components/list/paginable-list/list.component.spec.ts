@@ -367,4 +367,196 @@ describe('ListComponent', () => {
 			expect(mine.name).not.toBe(theirs.name);
 		});
 	});
+	describe('clickFn payload', () => {
+		it('hands over the row, which is what the type has always promised', () => {
+			let seen: any = null;
+			fixture.componentRef.setInput('clickFn', (event: any) => (seen = event));
+			fixture.detectChanges();
+
+			(fixture.nativeElement.querySelector('.hub-list__item') as HTMLElement).click();
+
+			expect(seen.item).toEqual({ id: 1, label: 'First item' });
+			expect(seen.value).toBe('First item');
+			expect(seen.children).toEqual([]);
+		});
+
+		it('hands over a group\'s children as items too, not as internal wrappers', () => {
+			fixture.componentRef.setInput('items', [
+				{ id: 10, label: 'Building', children: [{ id: 11, label: 'Room' }] }
+			]);
+			let seen: any = null;
+			fixture.componentRef.setInput('clickFn', (event: any) => (seen = event));
+			fixture.detectChanges();
+
+			(fixture.nativeElement.querySelector('.hub-list__item') as HTMLElement).click();
+
+			expect(seen.children).toEqual([{ id: 11, label: 'Room' }]);
+		});
+	});
+
+	describe('rebuilding the items', () => {
+		it('keeps the selection: a refresh is not the user changing their mind', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+
+			component.writeValue([2] as any);
+			fixture.detectChanges();
+
+			fixture.componentRef.setInput('items', [
+				{ id: 1, label: 'First item' },
+				{ id: 2, label: 'Second item' }
+			]);
+			fixture.detectChanges();
+
+			expect(component.value).toEqual([2]);
+		});
+
+		it('drops only what the new items no longer offer', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+
+			component.writeValue([1, 2] as any);
+			fixture.detectChanges();
+
+			fixture.componentRef.setInput('items', [{ id: 1, label: 'First item' }]);
+			fixture.detectChanges();
+
+			expect(component.value).toEqual([1]);
+		});
+
+		it('says nothing through the CVA when the refresh changed nothing', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+
+			component.writeValue([2] as any);
+			fixture.detectChanges();
+
+			let told = 0;
+			component.registerOnChange(() => told++);
+
+			fixture.componentRef.setInput('items', [
+				{ id: 1, label: 'First item' },
+				{ id: 2, label: 'Second item' }
+			]);
+			fixture.detectChanges();
+
+			expect(told).toBe(0);
+		});
+	});
+
+	describe('a disabled list', () => {
+		it('disables its controls rather than only remembering it was told to', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.detectChanges();
+
+			component.setDisabledState!(true);
+			fixture.detectChanges();
+
+			const boxes = [...fixture.nativeElement.querySelectorAll('.hub-list__checkbox')];
+			expect(boxes.length).toBeGreaterThan(0);
+			expect(boxes.every((box: HTMLInputElement) => box.disabled)).toBe(true);
+		});
+
+		it('does not change the selection when something drives it anyway', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+
+			component.setDisabledState!(true);
+			component.onSelectionChange();
+
+			expect(component.value).toEqual([]);
+		});
+	});
+
+	describe('a group of children', () => {
+		beforeEach(() => {
+			fixture.componentRef.setInput('items', [
+				{
+					id: 10,
+					label: 'Building',
+					children: [
+						{ id: 11, label: 'Room A' },
+						{ id: 12, label: 'Room B' }
+					]
+				}
+			]);
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+		});
+
+		it('does not travel in the selection: a heading is not a datum', () => {
+			component.writeValue([11, 12] as any);
+			fixture.detectChanges();
+
+			expect(component.value).toEqual([11, 12]);
+		});
+
+		it('ticking it takes everything under it', () => {
+			const group = component.form.controls[0];
+			group.get('selected')!.setValue(true);
+			component.onGroupSelectionChange(group);
+
+			expect(component.value).toEqual([11, 12]);
+		});
+
+		it('is indeterminate while it holds some of its children but not all', () => {
+			component.writeValue([11] as any);
+			fixture.detectChanges();
+
+			expect(component.isPartiallySelected(component.form.controls[0])).toBe(true);
+
+			component.writeValue([11, 12] as any);
+			fixture.detectChanges();
+
+			expect(component.isPartiallySelected(component.form.controls[0])).toBe(false);
+		});
+	});
+
+	describe('search', () => {
+		beforeEach(() => {
+			fixture.componentRef.setInput('options', { searchable: true });
+			fixture.detectChanges();
+		});
+
+		it('filters, which is what the box has always looked like it did', () => {
+			component.searchFG.setValue('second');
+			component.filter();
+			fixture.detectChanges();
+
+			const labels = [...fixture.nativeElement.querySelectorAll('.hub-list__label')].map(
+				(el: HTMLElement) => el.textContent?.trim()
+			);
+			expect(labels).toEqual(['Second item']);
+		});
+
+		it('keeps a group whose child matches, or the match would be hidden with it', () => {
+			fixture.componentRef.setInput('items', [
+				{ id: 10, label: 'Building', children: [{ id: 11, label: 'Timple room' }] }
+			]);
+			fixture.detectChanges();
+
+			component.searchFG.setValue('timple');
+			component.filter();
+			fixture.detectChanges();
+
+			expect(component.getVisibleItems(component.items, true).length).toBe(1);
+		});
+
+		it('returns to the first page, so a narrowed list is not shown empty', () => {
+			fixture.componentRef.setInput('paginate', true);
+			fixture.componentRef.setInput('perPage', 1);
+			component.page.set(2);
+			fixture.detectChanges();
+
+			component.searchFG.setValue('first');
+			component.filter();
+
+			expect(component.page()).toBe(1);
+		});
+	});
 });

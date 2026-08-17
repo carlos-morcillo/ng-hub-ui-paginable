@@ -1,5 +1,22 @@
 # Changelog
 
+## [22.12.0] - 2026-08-17
+
+### Changed
+
+- **BREAKING — `clickFn` hands over the item, not the internal wrapper.** `ListClickEvent.item` carried the form group wrapping each row — `{selected, collapsed, data, children}` — while the published type said `item: T`. A consumer reading `event.item.<field>` by the types got `undefined`: no error, no warning, every guard silently false. It is the item now. `value` reads `bindLabel` from the item rather than from the wrapper (it was almost always `undefined` before), and a new `children: T[]` hands over a group's children as items. See `BREAKING_CHANGES.md`.
+
+- **BREAKING — a group row selects its children instead of itself.** With `bindChildren`, a group's checkbox put the group's own value into the selection and left its children alone, so ticking a building meant "the building", which nobody can book, and a building with one room chosen looked exactly like one with none. Ticking a group now takes everything under it, a partly-selected group renders `indeterminate`, and only leaves travel in the value.
+
+### Fixed
+
+- **Rebuilding `items` no longer clears the selection, nor claims the user did.** The setter emptied the form and published the empty selection through the CVA, so a list that merely re-read its data dropped the choice *and* told the consumer the user had cleared it — with no way to tell a refresh from an edit. The selection is carried across the rebuild and matched by `bindValue`; only what the new items no longer offer falls out of it; and nothing is published unless something really went.
+
+- **`setDisabledState` disables.** It assigned a flag the template never read, so a disabled list still changed its selection. The flag now disables the form — reaching every `selected` control, however deep — and the selection is left alone even when something drives it programmatically. Through the form and not a `[disabled]` binding, because Angular ignores that binding on a reactive control: it warns and the box stays live.
+
+- **`options.searchable` searches.** The component rendered a search box wired to a `filter()` whose body was entirely commented out: a control the API offered and the component ignored. It filters now, with a `searchTerm` model and an optional `searchFn` — the same two names `hub-table` uses, so the components do not disagree about what "searchable" means. A group survives while any descendant matches, because hiding a building for not being named "Timple" would hide the Timple room inside it. Submitting returns to the first page: staying on page four of a list that just became three rows long shows an empty list, which reads as "nothing matched".
+
+
 ## [22.11.0] - 2026-08-17
 
 ### Added

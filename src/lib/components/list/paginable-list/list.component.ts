@@ -167,6 +167,27 @@ export class ListComponent<T = any> {
 	 */
 	readonly flush = input(false, { transform: booleanAttribute });
 
+	/**
+	 * The term the list is filtered by, when `options.searchable` is on.
+	 *
+	 * A `model` like the table's, so a consumer can drive the search from outside — restore
+	 * it from a URL, clear it from a button — as well as read what was typed. The box the
+	 * component renders writes here when the search is submitted.
+	 *
+	 * The box used to be drawn and wired to a `filter()` whose body was entirely commented
+	 * out: a control the API offered and the component ignored.
+	 */
+	readonly searchTerm = model<string>('');
+
+	/**
+	 * How an item is matched, when the default is not what you mean by "matches".
+	 *
+	 * The default reads `bindLabel` and falls back to the whole item stringified, which is
+	 * right for a list of names and wrong for anything whose identity is spread across
+	 * fields. Same shape as the table's `searchFn`, so the two read alike.
+	 */
+	readonly searchFn = input<((item: T, term: string) => boolean) | null>(null);
+
 	readonly bindValue = input<string>();
 	readonly bindLabel = input<string>('label');
 	readonly bindChildren = input<string>('children');
@@ -226,7 +247,7 @@ export class ListComponent<T = any> {
 
 	readonly numberOfPages = computed(() => {
 		const perPage = this.perPage();
-		const totalItems = this.totalItems() || this._items.length;
+		const totalItems = this.totalItems() || this.#filteredItems().length;
 
 		if (perPage && totalItems) {
 			return Math.ceil(totalItems / perPage);
@@ -316,10 +337,37 @@ export class ListComponent<T = any> {
 		return this._items;
 	}
 	set items(v: any) {
+		// What the user had chosen, before the form that holds it is thrown away.
+		const chosen = this.value;
+
 		this._items = v ?? [];
 		this.form.clear();
 		this.buildForm(this.form, this._items);
-		this.onSelectionChange();
+
+		if (this.isDisabled) {
+			this.form.disable({ emitEvent: false });
+		}
+
+		// Rebuilding is not the user changing their mind. This used to clear the form and
+		// publish the empty selection through the CVA, so a list that merely re-read its
+		// data dropped the choice AND told the consumer the user had cleared it — with no
+		// way to tell the two apart. The selection is carried across instead, and only what
+		// is no longer on offer falls out of it.
+		this.applySelectionFromValue(this.form.controls, this.#asArray(chosen));
+
+		const survived = this.collectSelectedValues(this.form.controls);
+		this.value = this.singleSelectable() ? (survived[0] ?? null) : survived;
+
+		// Silence unless something really went: a refresh that changes nothing must not
+		// look like an edit.
+		if (!this.isEqual(this.value, chosen)) {
+			this.onChange(this.value);
+		}
+	}
+
+	/** The selection as a list, whichever shape the mode publishes it in. */
+	#asArray(value: any): Array<any> {
+		return Array.isArray(value) ? value : value == null ? [] : [value];
 	}
 
 	/**
@@ -459,6 +507,16 @@ export class ListComponent<T = any> {
 
 	setDisabledState?(isDisabled: boolean): void {
 		this.isDisabled = isDisabled;
+
+		// Through the form, not through a `[disabled]` binding: the checkbox is a reactive
+		// control, and Angular ignores that binding on one (it warns and carries on, so the
+		// box stayed live). Disabling the array reaches every `selected` inside it, however
+		// deep, and the radio — which is not a reactive control — reads the flag directly.
+		isDisabled
+			? this.form.disable({ emitEvent: false })
+			: this.form.enable({ emitEvent: false });
+
+		this.#cdr.markForCheck();
 	}
 
 	/**
@@ -516,11 +574,18 @@ export class ListComponent<T = any> {
 	 * Nested controls are intentionally not paginated.
 	 */
 	getVisibleControls(controls: ReadonlyArray<AbstractControl>, isRoot: boolean): ReadonlyArray<AbstractControl> {
-		if (!isRoot || !this.paginate()) {
+		if (!isRoot) {
 			return controls;
 		}
-		const { start, end } = this.getSliceRange(controls.length);
-		return controls.slice(start, end);
+
+		const kept = controls.filter((control) => this.#matches((control as any).get('data')?.value));
+
+		if (!this.paginate()) {
+			return kept;
+		}
+
+		const { start, end } = this.getSliceRange(kept.length);
+		return kept.slice(start, end);
 	}
 
 	/**
@@ -528,17 +593,127 @@ export class ListComponent<T = any> {
 	 * Nested items are intentionally not paginated.
 	 */
 	getVisibleItems(items: ReadonlyArray<any>, isRoot: boolean): ReadonlyArray<any> {
-		if (!isRoot || !this.paginate()) {
+		if (!isRoot) {
 			return items;
 		}
-		const { start, end } = this.getSliceRange(items.length);
-		return items.slice(start, end);
+
+		// The same predicate the controls are filtered by, in the same order, so the two
+		// collections the template walks in parallel keep the same indices.
+		const kept = items.filter((item) => this.#matches(item));
+
+		if (!this.paginate()) {
+			return kept;
+		}
+
+		const { start, end } = this.getSliceRange(kept.length);
+		return kept.slice(start, end);
+	}
+
+	/**
+	 * Whether an item survives the current search.
+	 *
+	 * A group survives when any of its descendants does: hiding a building because its name
+	 * does not contain the term would hide the room that does.
+	 */
+	#matches(item: any): boolean {
+		const term = (this.searchTerm() ?? '').trim().toLowerCase();
+
+		if (!term || !this.options.searchable) {
+			return true;
+		}
+
+		const searchFn = this.searchFn();
+
+		if (searchFn) {
+			return (
+				searchFn(item as T, term) ||
+				(item?.[this.bindChildren()] ?? []).some((child: any) => this.#matches(child))
+			);
+		}
+
+		const label = this.bindLabel() ? getValue(item, this.bindLabel()) : item;
+		const haystack = (label ?? item) == null ? '' : String(label ?? JSON.stringify(item));
+
+		return (
+			haystack.toLowerCase().includes(term) ||
+			(item?.[this.bindChildren()] ?? []).some((child: any) => this.#matches(child))
+		);
+	}
+
+	/**
+	 * A row was ticked: carry the answer down if it has children, then publish.
+	 *
+	 * A group's checkbox used to select the group and nothing else, so its own value entered
+	 * the array beside its children's — and a heading is not a datum. Ticking a building
+	 * meant "the building", which nobody can book. It now means what it looks like it means:
+	 * everything under it.
+	 */
+	onGroupSelectionChange(group: AbstractControl): void {
+		if (this.isDisabled) {
+			return;
+		}
+
+		const children = (group.get('children') as FormArray | null)?.controls ?? [];
+
+		if (children.length) {
+			this.#setSubtree(children, !!group.get('selected')?.value);
+		}
+
+		this.onSelectionChange();
+	}
+
+	/** Tick or untick every row under this one, however deep. */
+	#setSubtree(controls: ReadonlyArray<AbstractControl>, selected: boolean): void {
+		for (const control of controls) {
+			control.get('selected')?.setValue(selected, { emitEvent: false });
+
+			const children = (control.get('children') as FormArray | null)?.controls ?? [];
+
+			if (children.length) {
+				this.#setSubtree(children, selected);
+			}
+		}
+	}
+
+	/**
+	 * Whether a group holds some of its children but not all.
+	 *
+	 * The third state a checkbox has and a boolean does not. Without it, a building with one
+	 * room chosen looks exactly like a building with none.
+	 */
+	isPartiallySelected(group: AbstractControl): boolean {
+		const children = (group.get('children') as FormArray | null)?.controls ?? [];
+
+		if (!children.length) {
+			return false;
+		}
+
+		const leaves = this.#leavesOf(children);
+		const chosen = leaves.filter((leaf) => !!leaf.get('selected')?.value).length;
+
+		return chosen > 0 && chosen < leaves.length;
+	}
+
+	/** Every row under this one that has no children of its own. */
+	#leavesOf(controls: ReadonlyArray<AbstractControl>): AbstractControl[] {
+		const leaves: AbstractControl[] = [];
+
+		for (const control of controls) {
+			const children = (control.get('children') as FormArray | null)?.controls ?? [];
+			children.length ? leaves.push(...this.#leavesOf(children)) : leaves.push(control);
+		}
+
+		return leaves;
 	}
 
 	/**
 	 * Handles item selection changes and propagates selected values through ControlValueAccessor.
 	 */
 	onSelectionChange(): void {
+		if (this.isDisabled) {
+			return;
+		}
+
 		this.value = this.collectSelectedValues(this.form.controls);
 
 		// Single answers with the value, not with a list of one. `hub-select` reads the same
@@ -557,6 +732,10 @@ export class ListComponent<T = any> {
 	 * @param group - Form group backing the row that was picked.
 	 */
 	onSingleSelect(group: AbstractControl): void {
+		if (this.isDisabled) {
+			return;
+		}
+
 		const value = this.resolveValue(group.get('data')?.value);
 
 		this.applySelectionFromValue(this.form.controls, [value]);
@@ -627,20 +806,33 @@ export class ListComponent<T = any> {
 	 * @remarks
 	 * If the `clickFn` callback is not defined, the method exits early and no event is emitted.
 	 */
-	onItemClick({ collapsed, selected, ...item }: any, depth: number, index: number, event: MouseEvent) {
+	onItemClick(
+		{ collapsed, selected, data, children }: any,
+		depth: number,
+		index: number,
+		event: MouseEvent
+	) {
 		const clickFn = this.clickFn();
 		if (!clickFn) {
 			return;
 		}
 
+		// `data` is the row. What used to travel here was the form group wrapping it —
+		// `{selected, collapsed, data, children}` — while `ListClickEvent<T>` promised `T`,
+		// so a consumer reading `event.item.<field>` by the types got `undefined`: no error,
+		// no warning, every guard silently false. The wrapper's other halves already have
+		// fields of their own on the event, so nothing is lost by handing over the row.
 		const bindLabel = this.bindLabel();
 		clickFn({
 			depth,
 			index,
 			selected,
 			collapsed,
-			value: bindLabel ? getValue(item, bindLabel) : item,
-			item: item as T,
+			// The label, as `bindLabel` names it. It read the wrapper before, so it was
+			// `undefined` for every consumer who had not set `bindLabel` to `'data'`.
+			value: bindLabel ? getValue(data, bindLabel) : data,
+			item: data as T,
+			children: (children ?? []).map((child: any) => child?.data),
 			mouseEvent: event
 		});
 	}
@@ -653,22 +845,29 @@ export class ListComponent<T = any> {
 		// this.triggerTheParamChanges();
 	}
 
-	filter() {
-		// if (!this.data) {
-		// 	return;
-		// }
-		// this.data.currentPage = 1;
-		// this.filterChange.emit({
-		// 	searchText: this.searchFG?.value ?? null,
-		// 	specificSearch: this.specificSearchFG?.value ?? null
-		// });
+	/**
+	 * Run the search the box holds.
+	 *
+	 * Its body was entirely commented out, so the box the component rendered filtered
+	 * nothing: submitting did no work and reported none. It publishes the term now and
+	 * returns to the first page, because staying on page four of a list that just became
+	 * three rows long shows an empty list, which reads as "nothing matched".
+	 */
+	filter(): void {
+		this.searchTerm.set(this.searchFG?.value ?? '');
+		this.page.set(1);
 	}
 
 	/**
 	 * Returns the total amount of items considering explicit totalItems or local items length.
 	 */
 	getEffectiveTotalItems(): number {
-		return this.totalItems() || this._items.length;
+		return this.totalItems() || this.#filteredItems().length;
+	}
+
+	/** The root items the current search leaves, which is what the paging counts. */
+	#filteredItems(): ReadonlyArray<any> {
+		return (this._items ?? []).filter((item: any) => this.#matches(item));
 	}
 
 	private getSliceRange(total: number): { start: number; end: number } {
@@ -1400,12 +1599,14 @@ export class ListComponent<T = any> {
 			const group = control as any;
 			const isSelected = !!group.get('selected')?.value;
 			const data = group.get('data')?.value;
+			const children = (group.get('children') as FormArray | null)?.controls ?? [];
 
-			if (isSelected) {
+			// A group's own tick is the state of its children, not a value of its own: a
+			// building is a heading and nobody books it. Only leaves travel.
+			if (isSelected && !children.length) {
 				selectedValues.push(this.resolveValue(data));
 			}
 
-			const children = (group.get('children') as FormArray | null)?.controls ?? [];
 			if (children.length) {
 				selectedValues.push(...this.collectSelectedValues(children));
 			}

@@ -1,5 +1,21 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## v22.12.0
+
+### `clickFn` hands over the item, not the internal wrapper
+
+- **Change**: `ListClickEvent.item` now carries the list item you passed in `items`. It used to carry the form group wrapping it — `{selected, collapsed, data, children}` — while the published type said `item: T`. `value` now reads `bindLabel` from the item rather than from that wrapper, and a new `children: T[]` carries a group's children as items.
+- **Impact**: code written against the **runtime** rather than the type — reading `event.item.data`, or `event.item.children` expecting wrappers — breaks. Code written against the **published type** — `event.item.<field>` — starts working, having silently received `undefined` until now.
+- **Migration**: delete the unwrapping. `event.item.data` becomes `event.item`; `event.item.children.map(c => c.data)` becomes `event.children`. A consumer that defended against both shapes (`item.data ?? item`) needs no change.
+- **Why not an alias**: adding `event.row` and deprecating `item` would leave the library carrying a field that is documented as the item and is not, for ever, to protect code that depends on a contradiction between the runtime and the type. One name, correct, is the cheaper price — and it is paid once.
+
+### A group row no longer contributes its own value to the selection
+
+- **Change**: with `bindChildren`, ticking a group's checkbox now selects **its children**, and the group's own value no longer enters the selection. A group whose children are partly selected renders indeterminate.
+- **Impact**: a consumer who relied on a group's value appearing in the array — treating a heading as a selectable datum — gets the leaves instead.
+- **Migration**: read the leaves. If a group genuinely is a datum in your data, it should not have `children`.
+
+
 ## v22.1.1
 
 ### Tooltip directive moved to `ng-hub-ui-utils`

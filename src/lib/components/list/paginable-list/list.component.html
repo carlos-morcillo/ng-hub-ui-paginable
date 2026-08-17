@@ -163,8 +163,10 @@
 								class="hub-list__checkbox"
 								type="checkbox"
 								draggable="false"
+								[disabled]="isDisabled"
+								[indeterminate]="isPartiallySelected(formGroup)"
 								formControlName="selected"
-								(change)="onSelectionChange()"
+								(change)="onGroupSelectionChange(formGroup)"
 								(click)="$event.stopPropagation()"
 							/>
 						} @else if (singleSelectable()) {
@@ -172,6 +174,7 @@
 								class="hub-list__radio"
 								type="radio"
 								draggable="false"
+								[disabled]="isDisabled"
 								[name]="radioGroupName"
 								[checked]="formGroup.get('selected')?.value"
 								[attr.aria-label]="resolveSelectionLabel(items[index])"

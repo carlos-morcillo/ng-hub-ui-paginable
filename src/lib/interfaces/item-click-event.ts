@@ -34,22 +34,31 @@ export interface ListClickEvent<T = any> {
 	collapsed: boolean;
 
 	/**
-	 * The value associated with the list item.
+	 * The item's label, as `bindLabel` names it.
 	 *
-	 * If a `bindValue` input is defined, this property will contain the value
-	 * extracted from the item using that key. Otherwise, it defaults to the full item object.
-	 *
-	 * Useful for binding simple primitive values or unique identifiers (e.g., `item.id`).
+	 * `bindLabel` rather than `bindValue`, and it defaults to `'label'` — so on an item that
+	 * has no such property this is `undefined`, which is the honest answer and not an error.
+	 * For the item itself, read {@link item}.
 	 */
 	value: T;
 
 	/**
-	 * The full object representing the list item.
+	 * The list item itself — the object you passed in `items`, untouched.
 	 *
-	 * This includes all original properties and metadata, regardless of the `bindValue` configuration.
-	 * Use this when full context is needed (e.g., for rendering, tooltips, nested actions).
+	 * Until 22.12.0 this carried the internal form group wrapping the item
+	 * (`{selected, collapsed, data, children}`) while this type promised `T`, so a consumer
+	 * reading `event.item.<field>` by the types got `undefined` with no error and no warning.
+	 * It is the item now; `selected`, `collapsed` and `children` have fields of their own here.
 	 */
 	item: T;
+
+	/**
+	 * The children of a group row, when the item has any.
+	 *
+	 * The items themselves, in the shape they were passed, not the internal wrapping. Empty
+	 * for a leaf. Useful for a group heading that acts on everything under it.
+	 */
+	children: T[];
 
 	/**
 	 * The native MouseEvent that triggered this interaction.
