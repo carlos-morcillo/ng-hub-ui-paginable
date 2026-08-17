@@ -11,6 +11,7 @@ This table lists the functionalities of the `ng-hub-ui-paginable` library:
 | :--- | :--- | :---: | :---: |
 | **Basic Usage** | Simple table (auto columns) | ✅ | ✅ |
 | | Striped & hoverable rows | ✅ | ✅ |
+| | Flush (`flush`) — no chrome per row, a rule between them; for a collection inside a surface that already framed it | ✅ | ✅ |
 | | Automatic client-side pagination (full array + `paginate`, in-memory search/filter/sort/slice) | ✅ | ✅ |
 | | Pagination positioning (top / bottom / both) | ✅ | ❌ |
 | | Server-side pagination (`page`, `perPage`, `totalItems`, `PaginationState`) | ✅ | ✅ |

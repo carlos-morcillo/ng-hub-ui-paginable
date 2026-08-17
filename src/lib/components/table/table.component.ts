@@ -103,6 +103,7 @@ import { HubTableTooltipDirective } from '../../table-tooltip';
 		class: 'hub-table',
 		'[class.hub-table--rtl]': 'isRtl()',
 		'[class.hub-table--sticky-header]': 'stickyHeader()',
+		'[class.hub-table--flush]': 'flush()',
 		'[style.--hub-table-accent]': 'accentVar()'
 	}
 })
@@ -569,6 +570,20 @@ export class TableComponent<T = any> {
 	 * `--hub-table-head-position` and the offset via `--hub-table-head-sticky-top`.
 	 */
 	readonly stickyHeader = input(false, { transform: booleanAttribute });
+
+	/**
+	 * Draw the table flush: no outer border, no radius, no cell rules — only a hairline
+	 * between rows.
+	 *
+	 * The default dresses a data grid, which is right for a browsable collection. A table of
+	 * choices inside a dialog is not that: its borders read as a frame around a frame, and the
+	 * dialog already drew one.
+	 *
+	 * An input rather than something a consumer reaches with CSS, for the same reason as the
+	 * list's: the defaults sit on `:host`, which is the element a consumer would put a class
+	 * on, so their assignment ties on specificity and loses on source order.
+	 */
+	readonly flush = input(false, { transform: booleanAttribute });
 
 	/** Actions that can be performed on multiple selected rows */
 	readonly batchActions = input<

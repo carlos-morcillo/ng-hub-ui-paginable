@@ -321,4 +321,50 @@ describe('ListComponent', () => {
 		expect(label).toBeTruthy();
 		expect(label.textContent).toContain(longToken);
 	});
+	describe('flush', () => {
+		it('does not mark the host by default: a list is a stack of cards until told otherwise', () => {
+			expect(fixture.nativeElement.classList.contains('hub-list--flush')).toBe(false);
+		});
+
+		it('marks the host so the variant can out-weigh the defaults on :host', () => {
+			fixture.componentRef.setInput('flush', true);
+			fixture.detectChanges();
+
+			expect(fixture.nativeElement.classList.contains('hub-list--flush')).toBe(true);
+		});
+
+		it('accepts the bare attribute, so <hub-list flush> is enough', () => {
+			fixture.componentRef.setInput('flush', '');
+			fixture.detectChanges();
+
+			expect(component.flush()).toBe(true);
+		});
+	});
+
+	describe('single selection', () => {
+		it('draws a radio per row rather than nothing at all', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Single);
+			fixture.detectChanges();
+
+			const radios = fixture.nativeElement.querySelectorAll('.hub-list__radio');
+			expect(radios.length).toBe(2);
+			expect(fixture.nativeElement.querySelectorAll('.hub-list__checkbox').length).toBe(0);
+		});
+
+		it('groups its radios per list instance, so two lists do not fight over one name', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Single);
+			fixture.detectChanges();
+
+			const other = TestBed.createComponent(ListComponent<TestListItem>);
+			other.componentRef.setInput('items', [{ id: 3, label: 'Third item' }]);
+			other.componentRef.setInput('selectable', SelectionTypes.Single);
+			other.detectChanges();
+
+			const mine = fixture.nativeElement.querySelector('.hub-list__radio') as HTMLInputElement;
+			const theirs = other.nativeElement.querySelector('.hub-list__radio') as HTMLInputElement;
+
+			expect(mine.name).toBeTruthy();
+			expect(mine.name).not.toBe(theirs.name);
+		});
+	});
 });

@@ -179,6 +179,28 @@
 	--hub-table-striped-color: var(--hub-sys-text-primary, #212529);
 }
 
+/**
+ * Flush: the table drawn as rows rather than as a grid.
+ *
+ * The default is a bordered data grid, which is right for a browsable collection standing on
+ * a page. Inside a dialog or a panel it is a frame within a frame — the surface already drew
+ * one — and the cell rules turn a short list of choices into a spreadsheet.
+ *
+ * Declared on `:host(.hub-table--flush)` for the same reason the token block above is on
+ * `:host` rather than `:root, :host`: the host is the element a consumer would put a class on,
+ * so an assignment from outside ties on specificity and loses on source order. The `flush`
+ * input binds the class here, where it out-weighs the defaults it overrides.
+ *
+ * The row divider survives on purpose. A table with no line between rows stops being readable
+ * across its columns, which is the one thing a table is for.
+ */
+:host(.hub-table--flush) {
+	--hub-table-border-width: 0;
+	--hub-table-border-radius: 0;
+	--hub-table-head-border-width: 0;
+	--hub-table-cell-padding-x: 0;
+}
+
 :host {
 	// Layout
 	display: flex;

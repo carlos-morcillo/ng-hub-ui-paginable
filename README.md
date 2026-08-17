@@ -1047,6 +1047,7 @@ filters = signal({
 | `searchFn`           | `(a: T, b: T) => boolean`                     | `null`          | Custom search function for filtering.                                                                    |
 | `selectable`         | `boolean`                                     | `false`         | Whether rows can be selected.                                                                            |
 | `multiple`           | `boolean`                                     | `false`         | Whether multiple row selection is allowed.                                                               |
+| `flush`              | `boolean`                                     | `false`         | Drops the outer border, the radius, the head rule and the cell padding, keeping the row divider. For a table of choices inside a dialog, where the surface already drew the frame. |
 | `bindValue`          | `string`                                      | `null`          | Property used to uniquely identify selected items.                                                       |
 | `ordination`         | `PaginableTableOrdination`                    | `null`          | Current sorting configuration (model signal).                                                            |
 | `filters`            | `Record<string, any>`                         | `{}`            | Active column filters (model signal).                                                                    |
@@ -1104,6 +1105,21 @@ interface TableRowEvent<T> {
 | `clickFn`      | `(event: ListClickEvent<T>) => void`          | `null`       | Handler for item click events.                                                                                 |
 | `rowClass`     | `string \| ((item: T) => string)`             | `null`       | Custom CSS class for a list item. Can be a fixed string or a function that returns a class based on item data. |
 | `connected`    | `boolean`                                     | `false`      | Draws a vertical connector between consecutive items for a timeline / pipeline look (list display only, skipped in cards). Themed via `--hub-list-connector-color` / `-width` / `-style` / `-offset`. |
+| `flush`        | `boolean`                                     | `false`      | Draws the list as a list rather than a stack of cards: no border, radius or surface per row, a rule between them instead. Themed via `--hub-list-divider-width` / `-color`. Applies to the cards display too. An input rather than CSS because the token defaults sit on the host, where a consumer class ties on specificity and loses on source order. |
+
+Theming it from a stylesheet instead of a template — every list in a region, without touching
+the markup — is the `hub-list-flush` mixin:
+
+```scss
+@use 'ng-hub-ui-paginable/styles/mixins/list-theme' as *;
+
+.booking-dialog hub-list {
+	@include hub-list-flush($divider-color: var(--hub-sys-color-border-subtle));
+}
+```
+
+The component includes that same mixin under `:host(.hub-list--flush)`, so the input and the
+mixin cannot drift apart.
 
 **List Click Event (`ListClickEvent<T>`):**
 

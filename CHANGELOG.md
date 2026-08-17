@@ -1,5 +1,26 @@
 # Changelog
 
+## [22.11.0] - 2026-08-17
+
+### Added
+
+- **`flush` on `hub-list` and `hub-table`: the collection drawn as a list rather than as a stack of cards.** Every row wears its own border, radius and surface by default. That is right for a collection standing on a page and wrong for a list of choices inside a dialog or a panel, where a bordered box per row reads as a region of its own rather than as one list to pick from — and where the surface has already drawn the frame.
+
+    It had to be an input rather than something a consumer reaches with CSS, and the reason is worth writing down because it is a trap the whole token catalogue shares: `hub-list` declares its defaults on `:root, :host`, and the host is the very element a consumer puts a class on. Their assignment therefore ties on specificity and loses on source order — silently, with no error and no warning, which reads as "the token does nothing". The variant is declared on `:host(.hub-list--flush)`, where it out-weighs what it overrides, and `flush` binds the class.
+
+    Two tokens come with it, read only under the variant: `--hub-list-divider-width` and `--hub-list-divider-color`, the rule that stands in for the gap. It falls between siblings only, so the list neither opens nor closes with one; a group and the collection it opens keep none between them; and the cards display gets none at all, because a grid separated by rules would draw them across the gaps.
+
+    `hub-table` takes the same input, zeroing the outer border, the radius, the head rule and the cell padding. Its **row divider survives on purpose** — a table with no line between rows stops being readable across its columns, which is the one thing a table is for.
+
+- **`hub-list-flush` as a mixin too**, in `styles/mixins/_list-theme.scss`, beside `hub-list-theme`. The input covers the common case with no stylesheet at all; the mixin is for the other one — applying the shape from your own selector, to every list in a region, without touching templates. The component includes that same mixin under `:host(.hub-list--flush)`, so the two cannot drift apart.
+
+### Fixed
+
+- **The package's stylesheets ship where the documentation says they do.** `ng-package.json` copied `src/lib/styles` with the short `assets` form, which **preserves the source path**, so the theming mixins landed at `ng-hub-ui-paginable/src/lib/styles/mixins/…` while their own docblocks told consumers to `@use 'ng-hub-ui-paginable/styles/mixins/list-theme'`. That path never resolved — `hub-list-theme` has been documented at an address it was not published to since it shipped. Now the long form with `output: "styles"`, which is what `utils` and `forms` already use.
+
+- **The single-selection radio has a rule.** It shipped with the mode in 22.10.0 and had no CSS at all: `.hub-list__radio` matched nothing in the component, so the control rendered at the browser's own size beside a themed list, visibly not part of it. It now takes `--hub-list-radio-size` — defaulting to the checkbox's, since the two are the same control wearing a different rule about how many may be on — and the list's accent.
+
+
 ## [22.10.0] - 2026-08-17
 
 ### Added

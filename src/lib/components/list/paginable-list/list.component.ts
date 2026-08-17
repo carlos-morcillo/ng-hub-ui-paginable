@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Input,
 	TemplateRef,
+	booleanAttribute,
 	computed,
 	contentChild,
 	inject,
@@ -76,6 +77,7 @@ interface KeyboardDragState {
 	host: {
 		class: 'hub-list',
 		'[class.hub-list--rtl]': 'isRtl()',
+		'[class.hub-list--flush]': 'flush()',
 		'[attr.data-variant]': 'options.variant ?? null',
 		'[style.--hub-list-accent]': 'accentVar()',
 		'[attr.data-hub-drag-owner]': '_listId'
@@ -148,6 +150,22 @@ export class ListComponent<T = any> {
 	readonly errorComponent = input<PaginableStateDefault | null>(null);
 	/** Per-instance default component for the no-results state. */
 	readonly noResultsComponent = input<PaginableStateDefault | null>(null);
+
+	/**
+	 * Draw the list flush: no border, radius or surface per row, a rule between them instead.
+	 *
+	 * The default is a stack of cards, which is right for a collection standing on a page. It
+	 * is wrong for a list of choices inside a dialog or a panel, where a bordered box per row
+	 * reads as a region of its own rather than as one list to pick from.
+	 *
+	 * An input rather than something a consumer can reach with CSS, because the tokens that
+	 * would do it are declared on `:root, :host` — and the host is the element a consumer puts
+	 * a class on, so their assignment ties on specificity and loses on source order, silently.
+	 * Setting `--hub-list-divider-*` alone changes nothing until this is on.
+	 *
+	 * Applies to the cards display too: flush cards are a grid with no chrome.
+	 */
+	readonly flush = input(false, { transform: booleanAttribute });
 
 	readonly bindValue = input<string>();
 	readonly bindLabel = input<string>('label');

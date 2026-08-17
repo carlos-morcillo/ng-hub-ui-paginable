@@ -330,6 +330,9 @@ Opt-in via the `connected` input — draws a vertical line between consecutive i
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `--hub-list-checkbox-size` | `1rem` | Size of selection checkboxes |
+| `--hub-list-radio-size` | `var(--hub-list-checkbox-size)` | Size of the single-selection radio |
+| `--hub-list-divider-width` | `var(--hub-ref-border-width, 1px)` | Width of the rule between rows when the list is flush |
+| `--hub-list-divider-color` | `var(--hub-list-item-border-color)` | Colour of that rule |
 | `--hub-list-chevron-size` | `var(--hub-ref-icon-size, 1em)` | Size of expand/collapse chevrons |
 
 ---

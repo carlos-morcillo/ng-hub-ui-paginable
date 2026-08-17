@@ -330,6 +330,9 @@ Opt-in con el input `connected` — dibuja una línea vertical entre items conse
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `--hub-list-checkbox-size` | `1rem` | Size of selection checkboxes |
+| `--hub-list-radio-size` | `var(--hub-list-checkbox-size)` | Tamaño del radio de selección simple |
+| `--hub-list-divider-width` | `var(--hub-ref-border-width, 1px)` | Grosor de la regla entre filas cuando la lista es flush |
+| `--hub-list-divider-color` | `var(--hub-list-item-border-color)` | Color de esa regla |
 | `--hub-list-chevron-size` | `var(--hub-ref-icon-size)` | Size of expand/collapse chevrons |
 
 ---

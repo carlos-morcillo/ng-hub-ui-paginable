@@ -137,3 +137,67 @@
 	}
 }
 // scss-docs-end hub-list-theme
+
+// ─────────────────────────────────────────────────────────────────────────
+// hub-list-flush — the list drawn as a list, not as a stack of cards
+// ─────────────────────────────────────────────────────────────────────────
+//
+// Every row wears its own border, radius and surface by default. That is right
+// for a collection standing on a page: the cards are what separate it from the
+// page. It is wrong inside a dialog or a panel, where the surface has already
+// drawn the frame and a bordered box per row reads as a region of its own
+// rather than as one list to pick from.
+//
+// Most consumers want the `flush` INPUT — `<hub-list flush>` — which needs no
+// stylesheet at all. This mixin is for the other case: applying the shape from
+// your own selector, to every list in a region, without touching templates.
+//
+// The component includes this same mixin under `:host(.hub-list--flush)`, so
+// the input and the mixin cannot drift apart.
+//
+// @example
+//
+//   @use 'ng-hub-ui-paginable/styles/mixins/list-theme' as *;
+//
+//   .booking-dialog hub-list {
+//     @include hub-list-flush($divider-color: var(--hub-sys-color-border-subtle));
+//   }
+//
+// scss-docs-start hub-list-flush
+@mixin hub-list-flush($divider-width: null, $divider-color: null) {
+	--hub-list-item-bg: transparent;
+	--hub-list-item-border-width: 0;
+	--hub-list-item-border-radius: 0;
+	--hub-list-item-padding-x: 0;
+	--hub-list-items-gap: 0;
+	--hub-list-cards-bg: transparent;
+	--hub-list-cards-border-width: 0;
+	--hub-list-cards-border-radius: 0;
+	--hub-list-cards-shadow: none;
+
+	@if $divider-width != null {
+		--hub-list-divider-width: #{$divider-width};
+	}
+	@if $divider-color != null {
+		--hub-list-divider-color: #{$divider-color};
+	}
+
+	// The rule that stands in for the gap. Between siblings only, so the list
+	// neither opens nor closes with one and sits flush against what holds it.
+	.hub-list__item + .hub-list__item {
+		border-top: var(--hub-list-divider-width) solid var(--hub-list-divider-color);
+	}
+
+	// A group and its first child belong together: no rule between a parent row
+	// and the collection it opens.
+	.hub-list__items .hub-list__items > .hub-list__item:first-child {
+		border-top: 0;
+	}
+
+	// Cards are a grid, and a grid separated by rules would draw them across the
+	// gaps rather than between the cards.
+	.hub-list__items--cards .hub-list__item + .hub-list__item {
+		border-top: 0;
+	}
+}
+// scss-docs-end hub-list-flush
