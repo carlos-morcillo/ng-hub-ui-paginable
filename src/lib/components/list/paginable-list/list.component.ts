@@ -218,6 +218,24 @@ export class ListComponent<T = any> {
 
 	readonly multipleSelectable = computed(() => this.selectable() === SelectionTypes.Multiple);
 
+	/**
+	 * Whether the list picks exactly one row, which renders a radio rather than a checkbox.
+	 *
+	 * `selectable` has enumerated `single` since it shipped — its own transform even turns a
+	 * bare `true` into it — but nothing read the value, so writing it bought a pointer cursor
+	 * and silence. "Choose one of these" is the ordinary shape (a room, a plan, a payment
+	 * method), and every consumer that needed it had to build the row control by hand.
+	 */
+	readonly singleSelectable = computed(() => this.selectable() === SelectionTypes.Single);
+
+	/**
+	 * Name shared by the radios of THIS list, and by no other.
+	 *
+	 * A radio group is scoped by name across the whole document, so two lists rendered on one
+	 * page would silently fight over a single selection if they shared one.
+	 */
+	readonly radioGroupName = `hub-list-selection-${generateUniqueId(8)}`;
+
 	private _options: PaginableTableOptions = {
 		display: 'list',
 		rtl: false,
@@ -400,9 +418,17 @@ export class ListComponent<T = any> {
 
 	// NOTE: Control access value
 
-	writeValue(value: Array<T> = []): void {
-		this.value = Array.isArray(value) ? [...value] : [];
+	writeValue(value: Array<T> | T | null = []): void {
+		// Single mode is written with a bare value because that is what it emits; the internal
+		// bookkeeping stays a list either way, so nothing below has to know which mode it is in.
+		this.value = Array.isArray(value) ? [...value] : value == null ? [] : [value as T];
 		this.applySelectionFromValue(this.form.controls, this.value);
+
+		// The form calls this from outside our own change detection, and the single-mode radio
+		// is a plain `[checked]` binding rather than a `formControlName` — which writes to the
+		// DOM itself and so never needed this. Without the mark, patching the control from the
+		// consumer's form moves the selection and repaints nothing.
+		this.#cdr.markForCheck();
 	}
 
 	registerOnChange(fn: any): void {
@@ -496,8 +522,40 @@ export class ListComponent<T = any> {
 	 */
 	onSelectionChange(): void {
 		this.value = this.collectSelectedValues(this.form.controls);
-		this.onChange(this.value);
+
+		// Single answers with the value, not with a list of one. `hub-select` reads the same
+		// way, and a consumer asking "which one" should not have to reach for `[0]` and then
+		// tell an empty array apart from a missing answer.
+		this.onChange(this.singleSelectable() ? (this.value[0] ?? null) : this.value);
 		this.onTouch();
+	}
+
+	/**
+	 * Selects one row, releasing whatever was selected before.
+	 *
+	 * The clearing is what makes it single, and it runs over the whole tree rather than over
+	 * the visible page: a selection the reader paged away from is still a selection.
+	 *
+	 * @param group - Form group backing the row that was picked.
+	 */
+	onSingleSelect(group: AbstractControl): void {
+		const value = this.resolveValue(group.get('data')?.value);
+
+		this.applySelectionFromValue(this.form.controls, [value]);
+		this.onSelectionChange();
+	}
+
+	/**
+	 * Names a selection control for a screen reader.
+	 *
+	 * The row's own content is the visible label, but it is projected through a template the
+	 * list cannot see into, so it cannot be pointed at with `aria-labelledby`.
+	 *
+	 * @param data - The row's underlying item.
+	 */
+	resolveSelectionLabel(data: any): string | null {
+		const label = getValue(data, this.bindLabel());
+		return label == null ? null : String(label);
 	}
 
 	/**

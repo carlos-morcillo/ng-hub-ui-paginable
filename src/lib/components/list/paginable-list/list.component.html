@@ -167,6 +167,17 @@
 								(change)="onSelectionChange()"
 								(click)="$event.stopPropagation()"
 							/>
+						} @else if (singleSelectable()) {
+							<input
+								class="hub-list__radio"
+								type="radio"
+								draggable="false"
+								[name]="radioGroupName"
+								[checked]="formGroup.get('selected')?.value"
+								[attr.aria-label]="resolveSelectionLabel(items[index])"
+								(change)="onSingleSelect(formGroup)"
+								(click)="$event.stopPropagation()"
+							/>
 						}
 						<div class="hub-list__label">
 							<ng-container

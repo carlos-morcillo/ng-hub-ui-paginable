@@ -1,5 +1,21 @@
 # Changelog
 
+## [22.10.0] - 2026-08-17
+
+### Added
+
+- **`hub-list` single selection actually selects.** `selectable` has enumerated `single` since it shipped — its own transform even turns a bare `true` into it — and then nothing read the value. In the whole template `selectable()` was read once, to add a pointer cursor; the checkbox that mutates the selection was gated on `multiple`, and the row's click handler never touched it. So a consumer writing `selectable="single"` got a cursor and silence: an API typed, enumerated and inert.
+
+    It is not an edge case — "choose one of these" is the ordinary shape for a room, a plan or a payment method — and every consumer that needed it built the row control by hand on top of an API that looked like it already did the job.
+
+    Single now renders a radio per row, grouped per list instance so two lists on one page cannot fight over one selection, and picking a row releases the previous one across the whole tree rather than the visible page.
+
+    **The value is the value, not a list of one.** Single emits the bare value (or `null`), and accepts one, exactly as `hub-select` does — asking "which one" should never mean reading `[0]` and then telling an empty array apart from a missing answer. `multiple` is untouched and still emits an array.
+
+### Fixed
+
+- **A value written by the form repainted nothing in single mode.** `writeValue` runs outside the component's own change detection, and the radio is a plain `[checked]` binding rather than a `formControlName` — which writes to the DOM itself and so never needed marking. Patching the control from the consumer's form moved the selection internally and left the rendered choice behind.
+
 ## [22.9.0] - 2026-08-17
 
 ### Added

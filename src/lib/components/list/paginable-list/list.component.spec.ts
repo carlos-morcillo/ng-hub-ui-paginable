@@ -101,6 +101,106 @@ describe('ListComponent', () => {
 		expect(fixture.nativeElement.querySelectorAll('.hub-list__checkbox').length).toBe(2);
 	});
 
+	/**
+	 * `selectable` enumerated `single` from the start and then nothing read it: the value
+	 * added a pointer cursor and no control, so "choose one of these" — the ordinary shape for
+	 * a room, a plan, a payment method — had to be built by hand on top of a typed API that
+	 * looked like it already did the job.
+	 */
+	describe('single selection', () => {
+		/** Picks a row the way a reader does, through its control. */
+		function pickRow(index: number): void {
+			const radios = fixture.nativeElement.querySelectorAll('.hub-list__radio') as NodeListOf<HTMLInputElement>;
+			radios[index].click();
+			fixture.detectChanges();
+		}
+
+		beforeEach(() => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Single);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+		});
+
+		it('renders a radio per row, and no checkbox', () => {
+			expect(fixture.nativeElement.querySelectorAll('.hub-list__radio').length).toBe(2);
+			expect(fixture.nativeElement.querySelectorAll('.hub-list__checkbox').length).toBe(0);
+		});
+
+		/**
+		 * The value shape is the decision this mode had to make. It answers with the value
+		 * rather than a list of one, exactly as `hub-select` does — a consumer asking "which
+		 * one" should not have to reach for `[0]` and then tell an empty array apart from a
+		 * missing answer.
+		 */
+		it('emits the value itself, not a list of one', () => {
+			const emitted: unknown[] = [];
+			component.registerOnChange((value: unknown) => emitted.push(value));
+
+			pickRow(0);
+
+			expect(emitted).toEqual([1]);
+		});
+
+		it('releases the previous row when another is picked', () => {
+			const emitted: unknown[] = [];
+			component.registerOnChange((value: unknown) => emitted.push(value));
+
+			pickRow(0);
+			pickRow(1);
+
+			expect(emitted).toEqual([1, 2]);
+
+			const radios = fixture.nativeElement.querySelectorAll('.hub-list__radio') as NodeListOf<HTMLInputElement>;
+			expect(radios[0].checked).toBe(false);
+			expect(radios[1].checked).toBe(true);
+		});
+
+		it('accepts a bare value from the form, since that is what it emits', () => {
+			component.writeValue(2 as never);
+			fixture.detectChanges();
+
+			const radios = fixture.nativeElement.querySelectorAll('.hub-list__radio') as NodeListOf<HTMLInputElement>;
+			expect(radios[0].checked).toBe(false);
+			expect(radios[1].checked).toBe(true);
+		});
+
+		it('reports nothing selected as null rather than an empty list', () => {
+			const emitted: unknown[] = [];
+			component.registerOnChange((value: unknown) => emitted.push(value));
+
+			pickRow(0);
+			component.writeValue(null as never);
+			component.onSelectionChange();
+
+			expect(emitted[emitted.length - 1]).toBeNull();
+		});
+
+		/**
+		 * A radio group is scoped by name across the whole document, so two lists on one page
+		 * would fight over one selection if they shared a name.
+		 */
+		it('gives each list its own radio group', () => {
+			const other = TestBed.createComponent(ListComponent<TestListItem>);
+
+			expect(other.componentInstance.radioGroupName).not.toBe(component.radioGroupName);
+		});
+	});
+
+	it('keeps emitting an array in multiple selection', () => {
+		fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+		fixture.componentRef.setInput('bindValue', 'id');
+		fixture.detectChanges();
+
+		const emitted: unknown[] = [];
+		component.registerOnChange((value: unknown) => emitted.push(value));
+
+		const boxes = fixture.nativeElement.querySelectorAll('.hub-list__checkbox') as NodeListOf<HTMLInputElement>;
+		boxes[0].click();
+		fixture.detectChanges();
+
+		expect(emitted).toEqual([[1]]);
+	});
+
 	it('should render the initial per-page value in the selector', async () => {
 		fixture.componentRef.setInput('paginate', true);
 		fixture.detectChanges();
