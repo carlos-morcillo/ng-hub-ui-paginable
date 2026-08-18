@@ -200,6 +200,51 @@
 	--hub-table-head-border-width: 0;
 }
 
+/**
+ * Flush fields: the controls in the cells drawn as a spreadsheet, not as a form.
+ *
+ * Governed entirely through `ng-hub-ui-forms`' own tokens, which it declares at `:root` and
+ * never redeclares on a component host — so setting them here, on an ancestor of every cell,
+ * reaches every field inside by inheritance, including whatever a consumer projects into a
+ * cell template.
+ *
+ * The select's twins are set alongside the shared ones on purpose: `hub-select` declares its
+ * own `--hub-select-border-width` and `--hub-select-bg`, so the fallback to the input's never
+ * fires for it and setting only the shared pair would leave selects boxed among flat inputs.
+ */
+:host(.hub-table--flush-fields) {
+	// The field itself: no box, no surface.
+	--hub-input-border-width: 0;
+	--hub-input-bg: transparent;
+	--hub-select-border-width: 0;
+	--hub-select-bg: transparent;
+
+	// Static addons read as their content, not as a chip.
+	--hub-input-group-addon-bg: transparent;
+	--hub-select-group-addon-bg: transparent;
+
+	// A projected action stops being part of a strip: its own corners back, and room between
+	// one and the next. The radius reaches the CONTROL's shared corners too — nothing here is
+	// joined to anything, so nothing should carry the flat side that says it is.
+	--hub-input-group-attached-radius: var(--hub-ref-radius-md, 0.375rem);
+	--hub-select-group-attached-radius: var(--hub-ref-radius-md, 0.375rem);
+	--hub-input-group-attached-gap: var(--hub-ref-space-1, 0.25rem);
+	--hub-select-group-attached-gap: var(--hub-ref-space-1, 0.25rem);
+
+	// …and it keeps the border the field just gave up. Attached chrome is restated rather
+	// than inherited from the field on purpose: an action still has to read as something you
+	// press, and an outline button carries its whole shape in that one line — drop it and the
+	// button collapses into a glyph floating in the cell.
+	--hub-input-group-attached-border-width: var(--hub-ref-border-width, 1px);
+	--hub-select-group-attached-border-width: var(--hub-ref-border-width, 1px);
+
+	// The colour comes from the action itself rather than from the field it no longer shares
+	// an edge with: `currentColor` is an outline button's own colour, so a destructive action
+	// stays red and an accented one stays accented instead of being repainted the field's grey.
+	--hub-input-group-attached-border-color: currentColor;
+	--hub-select-group-attached-border-color: currentColor;
+}
+
 :host {
 	// Layout
 	display: flex;

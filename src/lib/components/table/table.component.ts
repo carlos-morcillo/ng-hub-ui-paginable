@@ -104,6 +104,7 @@ import { HubTableTooltipDirective } from '../../table-tooltip';
 		'[class.hub-table--rtl]': 'isRtl()',
 		'[class.hub-table--sticky-header]': 'stickyHeader()',
 		'[class.hub-table--flush]': 'flush()',
+		'[class.hub-table--flush-fields]': 'flushFields()',
 		'[style.--hub-table-accent]': 'accentVar()'
 	}
 })
@@ -584,6 +585,27 @@ export class TableComponent<T = any> {
 	 * on, so their assignment ties on specificity and loses on source order.
 	 */
 	readonly flush = input(false, { transform: booleanAttribute });
+
+	/**
+	 * Draw the form controls inside the cells as a spreadsheet does: no border, no surface of
+	 * their own, the value sitting directly on the row.
+	 *
+	 * A field is boxed so it can be told apart from the page around it. A table cell already
+	 * does that job — it has its own grid — so the box is drawn twice and the result reads as
+	 * a form that fell into a table rather than as an editable table.
+	 *
+	 * What it does to attached content is deliberate and not the same for the two kinds:
+	 * static `prepend`/`append` content loses its surface and reads as the plain text or icon
+	 * it is, while a projected button stops being welded to its neighbours — it gets its
+	 * corners back and a gap, because a run of actions in a cell is several things to press,
+	 * not one strip.
+	 *
+	 * Implemented as a token assignment on the cells rather than as an input on each field:
+	 * `ng-hub-ui-forms` declares its tokens at `:root` and never redeclares them on a component
+	 * host, so an ancestor governs them by plain inheritance. That also means it reaches
+	 * whatever a consumer projects into `cellTpt`, which an input per field never would.
+	 */
+	readonly flushFields = input(false, { transform: booleanAttribute });
 
 	/** Actions that can be performed on multiple selected rows */
 	readonly batchActions = input<

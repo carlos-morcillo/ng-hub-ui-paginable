@@ -1,5 +1,17 @@
 # Changelog
 
+## [22.13.0] - 2026-08-18
+
+### Added
+
+- **`flushFields` on `hub-table`: the controls in the cells drawn as a spreadsheet, not as a form.** A field is boxed so it can be told apart from the page around it. A table cell already does that job — it has its own grid — so the box gets drawn twice, and an editable table ends up reading as a form that fell into a table.
+
+    With it: the fields lose their border and surface, a static `prepend`/`append` reads as the plain text or icon it is rather than as a chip, and a projected button stops being welded to its neighbour — it gets its corners back, a gap, and its own border colour, because two actions in a cell are two things to press rather than one strip. The control's own shared corners come back too: nothing here is joined to anything, so nothing should show the flat side that says it is.
+
+    Implemented as a token assignment on the cells rather than as an input on each field, which is why it reaches a consumer's own `cellTpt` content as well. It needs `ng-hub-ui-forms@22.21.0` for the seam tokens; on an older version the fields still go flat and the attached strip simply stays welded.
+
+    One detail worth knowing before reaching for it: `hub-select` declares its own `--hub-select-border-width` and `--hub-select-bg`, so the bundle restates the select's twins — set only the shared pair and you get boxed selects among flat inputs.
+
 ## [22.12.3] - 2026-08-18
 
 ### Fixed
