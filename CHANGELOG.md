@@ -1,5 +1,13 @@
 # Changelog
 
+## [22.12.3] - 2026-08-18
+
+### Fixed
+
+- **`flush` keeps the padding, in the list and in the table.** The variant zeroed `--hub-list-item-padding-x` — and `--hub-table-cell-padding-x` — along with the border, the radius and the surface. In a list that left the checkbox or radio hard against one edge and the trailing figure against the other; in a table it ran the columns into each other, which costs a table the one thing it is for. It was also incoherent with itself: the vertical padding stayed, so a flush collection had breathing room on one axis and none on the other.
+
+    Flush answers to Bootstrap's `.list-group-flush`, which drops the side borders and the radius and **keeps** the padding — taking off the chrome is not the same as taking off the space to read in. A consumer who really does want the text bleeding to the edge sets `--hub-list-item-padding-x: 0` from outside, which is what the token is for.
+
 ## [22.12.2] - 2026-08-18
 
 ### Removed

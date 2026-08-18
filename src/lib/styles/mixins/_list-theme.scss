@@ -163,12 +163,18 @@
 //     @include hub-list-flush($divider-color: var(--hub-sys-color-border-subtle));
 //   }
 //
+// Flush takes off the CHROME, never the breathing room. The variant used to zero
+// `--hub-list-item-padding-x` as well, which left the control against one edge of
+// the list and the trailing figure against the other, and was incoherent with
+// itself: the vertical padding stayed. Bootstrap's `.list-group-flush`, the
+// pattern this answers to, drops the side borders and the radius and keeps the
+// padding. A consumer who really wants the text bleeding to the edge sets the
+// token to 0 from outside, which is what a token is for.
 // scss-docs-start hub-list-flush
 @mixin hub-list-flush($divider-width: null, $divider-color: null) {
 	--hub-list-item-bg: transparent;
 	--hub-list-item-border-width: 0;
 	--hub-list-item-border-radius: 0;
-	--hub-list-item-padding-x: 0;
 	--hub-list-items-gap: 0;
 	--hub-list-cards-bg: transparent;
 	--hub-list-cards-border-width: 0;
