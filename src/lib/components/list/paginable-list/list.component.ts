@@ -348,21 +348,17 @@ export class ListComponent<T = any> {
 			this.form.disable({ emitEvent: false });
 		}
 
-		// Rebuilding is not the user changing their mind. This used to clear the form and
-		// publish the empty selection through the CVA, so a list that merely re-read its
-		// data dropped the choice AND told the consumer the user had cleared it — with no
-		// way to tell the two apart. The selection is carried across instead, and only what
-		// is no longer on offer falls out of it.
+		// Rebuilding is not the user changing their mind, so this paints and says nothing.
+		//
+		// The value written into the control is kept whole, and the form is given only the
+		// part of it that is on offer. Recomputing the value from what survived looked
+		// right and was not: `items` shrinking can mean "those are gone" or it can mean
+		// "this is page two", and **this component cannot tell the difference** — only the
+		// consumer, who did the paging or the filtering, can. Pruning on its behalf turned
+		// a read into a silent edit, and publishing it through the CVA told the consumer
+		// the user had cleared something they never touched. Angular's own `<select>` takes
+		// the same position: an option disappearing does not clear the model.
 		this.applySelectionFromValue(this.form.controls, this.#asArray(chosen));
-
-		const survived = this.collectSelectedValues(this.form.controls);
-		this.value = this.singleSelectable() ? (survived[0] ?? null) : survived;
-
-		// Silence unless something really went: a refresh that changes nothing must not
-		// look like an edit.
-		if (!this.isEqual(this.value, chosen)) {
-			this.onChange(this.value);
-		}
 	}
 
 	/** The selection as a list, whichever shape the mode publishes it in. */

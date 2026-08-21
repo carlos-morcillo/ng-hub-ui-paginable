@@ -160,7 +160,7 @@
 								</ng-container>
 								@if (header.sortable || header.filter?.mode === 'menu') {
 									<div class="hub-table__header-cell-actions d-flex gap-2 ms-auto align-items-center">
-										<button class="hub-table__sort-btn btn" (click)="sort(header)">
+										<button class="hub-table__sort-btn" (click)="sort(header)">
 											@if (header.sortable) {
 												<i
 													class="hub-table__sort-icon hub-table__icon"

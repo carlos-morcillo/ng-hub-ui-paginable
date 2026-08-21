@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- **The sort trigger stops borrowing chrome the host may not have.** `<hub-table>` draws its own sort button and styled only the glyph inside it, leaving the `<button>` to whatever the application provided — and it carried a bare `btn`, which is Bootstrap's and which this family neither ships nor depends on. In an application without Bootstrap the class matched nothing and every sortable column header showed the browser's native grey button around the glyph. The class is gone from the markup and the component now styles its own trigger: no box, no background, no padding, the header cell's own colour, and `--hub-table-sort-btn-hover-color` for the hover.
+
+### Changed
+
+- **Rebuilding `items` no longer prunes the selection, and no longer publishes.** The setter used to recompute the value from whatever survived the rebuild and, if it differed, announce it through the CVA. It reads as tidy and it is a guess: `items` shrinking means "those are gone" on a filtered catalogue and "this is page two" on a paged one, and the component sees the same thing in both cases — only the consumer, who did the paging, can tell. So a list that merely turned a page told its consumer the user had removed a selection they never touched, with no way to distinguish that from a real removal. The written value is now kept whole and only the part that is on offer is ticked. Angular's own `<select>` takes the same position: an option disappearing does not clear the model.
+
+    **This is a behaviour change.** A consumer that relied on the list pruning its own value has to prune it itself, where it knows why the offer changed.
+
+
 ## [22.13.0] - 2026-08-18
 
 ### Added

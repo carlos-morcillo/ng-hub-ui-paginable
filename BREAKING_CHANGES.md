@@ -1,5 +1,15 @@
 # Breaking Changes: ng-hub-ui-paginable
 
+## Unreleased
+
+### Rebuilding `items` keeps the whole selection and publishes nothing
+
+- **Change**: the `items` setter no longer recomputes the value from what survived the rebuild, and no longer calls `onChange`. What was written into the control stays written; only the part of it that the new items can show is ticked.
+- **Impact**: a consumer that paged or filtered its own data and relied on the list pruning the value for it now keeps entries that are not on the current page. A consumer that listened for that publication to learn "the selection shrank" no longer hears it — which is the point: it was indistinguishable from the user clearing the field.
+- **Migration**: prune on the consumer's side, where the reason for the change is known. If the offer really shrank (an item was deleted), intersect the value with the new items and write it back. If it only paged, do nothing — which is what most callers wanted and could not get.
+- **Why not an option**: a flag would ask every consumer to answer a question the library cannot pose properly. The distinction is not "prune or not", it is "why did `items` change", and only the caller holds that.
+
+
 ## v22.12.0
 
 ### `clickFn` hands over the item, not the internal wrapper

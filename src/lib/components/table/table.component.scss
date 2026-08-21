@@ -274,6 +274,26 @@
 		}
 	}
 
+	// The sort trigger is a button this component draws, and only the glyph inside it was
+	// ever styled — so in an application that does not ship Bootstrap (this family does not)
+	// the `<button>` fell back to the browser's native grey chrome in every sortable header.
+	//
+	// The glyph is the whole affordance, so the button around it has to be nothing at all:
+	// no box, no background, no padding, and the header cell's own colour rather than the
+	// browser's button colour.
+	.hub-table__sort-btn {
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		line-height: 1;
+		cursor: pointer;
+
+		&:hover {
+			color: var(--hub-table-sort-btn-hover-color, var(--hub-sys-color-primary));
+		}
+	}
+
 	.hub-table__batch-actions-btn--default,
 	.hub-table__cell-btn--default {
 		border: var(--hub-table-border-width) solid var(--hub-table-border-color);

@@ -412,7 +412,16 @@ describe('ListComponent', () => {
 			expect(component.value).toEqual([2]);
 		});
 
-		it('drops only what the new items no longer offer', () => {
+		/**
+		 * Changed in 22.14.0, and the reason is the whole point of this block.
+		 *
+		 * This used to answer `[1]`: the value was recomputed from whatever survived the
+		 * rebuild. It reads as tidy and it is a guess — `items` shrinking means "those are
+		 * gone" on a filtered catalogue and "this is page two" on a paged one, and the
+		 * component sees the same thing in both cases. The consumer did the paging; it is
+		 * the one that can tell.
+		 */
+		it('keeps what is no longer on offer, because only the consumer knows why it went', () => {
 			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
 			fixture.componentRef.setInput('bindValue', 'id');
 			fixture.detectChanges();
@@ -423,7 +432,45 @@ describe('ListComponent', () => {
 			fixture.componentRef.setInput('items', [{ id: 1, label: 'First item' }]);
 			fixture.detectChanges();
 
-			expect(component.value).toEqual([1]);
+			expect(component.value).toEqual([1, 2]);
+		});
+
+		/** Kept whole in the model, but only the part it can draw is ticked. */
+		it('ticks only the rows it can actually show', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+
+			component.writeValue([1, 2] as any);
+			fixture.detectChanges();
+
+			fixture.componentRef.setInput('items', [{ id: 1, label: 'First item' }]);
+			fixture.detectChanges();
+
+			const ticked = fixture.nativeElement.querySelectorAll('input[type="checkbox"]:checked');
+			expect(ticked.length).toBe(1);
+		});
+
+		/**
+		 * The defect this change exists for: paging a list published the off-page selection
+		 * as if the user had removed it, and the consumer had no way to tell that from a
+		 * real removal.
+		 */
+		it('says nothing through the CVA when the offer shrinks', () => {
+			fixture.componentRef.setInput('selectable', SelectionTypes.Multiple);
+			fixture.componentRef.setInput('bindValue', 'id');
+			fixture.detectChanges();
+
+			component.writeValue([1, 2] as any);
+			fixture.detectChanges();
+
+			let told = 0;
+			component.registerOnChange(() => told++);
+
+			fixture.componentRef.setInput('items', [{ id: 1, label: 'First item' }]);
+			fixture.detectChanges();
+
+			expect(told).toBe(0);
 		});
 
 		it('says nothing through the CVA when the refresh changed nothing', () => {
