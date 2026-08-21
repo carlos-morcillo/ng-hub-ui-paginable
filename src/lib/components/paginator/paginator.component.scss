@@ -115,12 +115,32 @@
 		margin-bottom: 0;
 	}
 
-	&__select {
+	/*
+	 * The native control's own skin — and only the native control's.
+	 *
+	 * This stylesheet is `encapsulation: None`, so the rule is global. Written as a bare
+	 * class it also landed on the HOST of the `<hub-select>` that
+	 * `provideHubPaginableFormControls` renders, drawing a second border and a second
+	 * padding around a control that already draws its own: the page-size picker came out
+	 * boxed twice. Naming the element confines it to the fallback it was written for.
+	 */
+	select#{&}__select {
 		background-color: var(--hub-paginator-select-bg);
 		border: var(--hub-paginator-select-border-width) solid var(--hub-paginator-select-border-color);
 		border-radius: var(--hub-paginator-select-border-radius);
 		color: var(--hub-paginator-select-color);
 		padding: var(--hub-paginator-select-padding-y) var(--hub-paginator-select-padding-x);
+	}
+
+	/*
+	 * The adapter's control is a component, and its host is a wrapper: whatever box the
+	 * host draws frames the control's own skin a second time. So the host draws none, and
+	 * the field inside is left to be a field.
+	 */
+	hub-select#{&}__select {
+		padding: 0;
+		border: 0;
+		background: transparent;
 	}
 
 	&__info {

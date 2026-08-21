@@ -39,6 +39,47 @@ export interface PaginableActionButton<T = any> {
 	hidden?: boolean | ((row: TableRow<T>) => boolean);
 
 	/**
+	 * Appearance of the button, from the same vocabulary `hubButton` uses.
+	 *
+	 * This table draws its own action buttons — plain `<button>` elements, not the
+	 * primitive — and `hub-buttons` styles its appearance through `:host(...)` selectors,
+	 * which match nothing on an element the primitive did not create. So a consumer who
+	 * wanted a row action to look like the buttons beside it had no way to say so, and
+	 * ended up rebuilding the tint by hand in its own stylesheet: two copies of one
+	 * formula, free to drift the moment either side changes.
+	 *
+	 * `default` stays the default: it is the plain bordered button this table has always
+	 * drawn, and every table already in use expects it. `soft` is what a consumer reaches
+	 * for when the row actions should read as the tinted controls they usually are.
+	 *
+	 * @default 'default'
+	 */
+	variant?: 'default' | 'solid' | 'soft' | 'outline' | 'ghost';
+
+	/**
+	 * Accent of the button, from the design system's semantic roles.
+	 *
+	 * Ignored when `variant` is `default`, which has no accent — that is the plain
+	 * bordered button, and giving it a colour would be giving it a variant.
+	 *
+	 * Left open with `(string & {})`, as the rest of the family does: the roles below are
+	 * what the shipped tints cover and what autocomplete offers, but `color` has been an
+	 * open string on the dropdown since before this, carrying values like `light` and
+	 * `muted`. Closing it here would have made those a type error in code that works.
+	 *
+	 * @default 'neutral'
+	 */
+	color?:
+		| 'primary'
+		| 'secondary'
+		| 'success'
+		| 'warning'
+		| 'danger'
+		| 'info'
+		| 'neutral'
+		| (string & {});
+
+	/**
 	 * Optional CSS class list for action button customization.
 	 */
 	classlist?: string[] | string;

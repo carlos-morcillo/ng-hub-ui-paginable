@@ -294,6 +294,83 @@
 		}
 	}
 
+	/*
+	 * Appearance for the action buttons this table draws itself.
+	 *
+	 * `hub-buttons` cannot reach them: it styles appearance through `:host(...)`, which
+	 * matches nothing on a plain `<button>` this component created. So a consumer who
+	 * wanted a row action to read like the buttons beside it had to rebuild the tint in
+	 * its own stylesheet — two copies of one formula, free to drift apart.
+	 *
+	 * The formula is the primitive's own, restated here rather than imported because the
+	 * two packages do not depend on each other: `subtle` is the accent at 12% over the
+	 * page surface, `emphasis` the accent at 80% over the ink, and hover shifts the subtle
+	 * 20% further toward the accent. Side by side with a real `hubButton variant="soft"`
+	 * they read the same.
+	 */
+	.hub-table__cell-btn,
+	.hub-table__batch-actions-btn {
+		&--soft,
+		&--solid,
+		&--outline,
+		&--ghost {
+			--hub-table-action-subtle: color-mix(
+				in oklch,
+				var(--hub-table-action-accent) 12%,
+				var(--hub-sys-surface-page, #ffffff)
+			);
+			--hub-table-action-emphasis: color-mix(
+				in oklch,
+				var(--hub-table-action-accent) 80%,
+				var(--hub-sys-color-ink, #212529)
+			);
+
+			border: var(--hub-table-border-width) solid transparent;
+			border-radius: var(--hub-table-border-radius);
+		}
+
+		&--soft {
+			color: var(--hub-table-action-emphasis);
+			background-color: var(--hub-table-action-subtle);
+
+			&:hover {
+				background-color: color-mix(
+					in oklch,
+					var(--hub-table-action-subtle) 80%,
+					var(--hub-table-action-accent)
+				);
+			}
+		}
+
+		&--solid {
+			color: var(--hub-sys-surface-page, #ffffff);
+			background-color: var(--hub-table-action-accent);
+
+			&:hover {
+				background-color: var(--hub-table-action-emphasis);
+			}
+		}
+
+		&--outline {
+			color: var(--hub-table-action-emphasis);
+			background-color: transparent;
+			border-color: var(--hub-table-action-accent);
+
+			&:hover {
+				background-color: var(--hub-table-action-subtle);
+			}
+		}
+
+		&--ghost {
+			color: var(--hub-table-action-emphasis);
+			background-color: transparent;
+
+			&:hover {
+				background-color: var(--hub-table-action-subtle);
+			}
+		}
+	}
+
 	.hub-table__batch-actions-btn--default,
 	.hub-table__cell-btn--default {
 		border: var(--hub-table-border-width) solid var(--hub-table-border-color);
@@ -363,7 +440,14 @@
 			min-width: var(--hub-table-search-button-min-width);
 			color: var(--hub-table-search-button-color);
 			background-color: var(--hub-table-search-button-bg);
-			border-color: var(--hub-table-search-button-border-color);
+			// Width and style as well as colour. Only the colour was declared, which
+			// assumed the host application brought Bootstrap's `.btn` to supply the rest
+			// — this family does not ship it, so without it the browser's own button
+			// chrome showed through beside the search field.
+			border: var(--hub-table-search-border-width) solid
+				var(--hub-table-search-button-border-color);
+			// One hairline between field and button, not two touching.
+			border-inline-start: 0;
 			border-radius: 0 var(--hub-table-search-border-radius) var(--hub-table-search-border-radius) 0;
 		}
 	}
@@ -902,6 +986,36 @@ $hub-table-variants: primary, secondary, success, danger, warning, info, neutral
 			margin-right: 0;
 			margin-left: var(--hub-table-batch-actions-btn-icon-gap);
 		}
+	}
+
+	/*
+	 * The search field when it is rendered through the hub-forms adapter.
+	 *
+	 * `provideHubPaginableFormControls` forwards `hub-table__search-input` to the HOST of
+	 * a component this table creates dynamically, and a dynamically created component
+	 * carries no `_ngcontent` attribute — so every rule above, written for the native
+	 * `<input>` under emulated encapsulation, simply never reaches it. The field came out
+	 * with none of the group geometry: a standalone rounded control sitting next to a
+	 * button it was supposed to be joined to.
+	 *
+	 * `::ng-deep` because that is the only way out of the emulation from here, and scoped
+	 * under `:host` so it cannot leak past this table. The element selector confines it to
+	 * the adapter's control, leaving the native fallback to the rules above.
+	 */
+	:host ::ng-deep hub-input.hub-table__search-input {
+		flex: 1 1 auto;
+		min-width: 0;
+		margin-block-end: 0;
+
+		// The host is a wrapper; the control inside already draws the box.
+		padding: 0;
+		border: 0;
+		background: transparent;
+
+		// Flatten the trailing corners so field and button read as one piece. The control
+		// takes its radius from this token, and the button mirrors it from the same one.
+		--hub-input-border-radius: var(--hub-table-search-border-radius) 0 0
+			var(--hub-table-search-border-radius);
 	}
 
 	.hub-table__search {

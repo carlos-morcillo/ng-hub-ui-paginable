@@ -2,7 +2,26 @@
 
 ## [Unreleased]
 
+## [22.14.0] - 2026-08-21
+
+### Changed
+
+- **A row action's colour is resolved, not enumerated.** `PaginableActionButton.color` is typed `… | (string & {})` and accepts any string on purpose, but the accent arrived as a class the stylesheet matched against seven built-in names. Anything else — a role a consumer declared, a literal `#ff6600` — produced a class matching no rule, an unset custom property and a `color-mix` with nothing to mix: a button with no accent, no error and no warning, from an API whose type said any string was welcome.
+
+    The accent is a value now, written on the element through `resolveHubAccent` — the same helper this component already used for its own variant, and the list for hers. A bare word becomes `var(--hub-sys-color-<word>, <word>)` so both the system's roles and a consumer's own resolve; anything already a colour passes through untouched. The seven rules are gone, and the bench now pins that the stylesheet names no colours at all.
+
+
+### Added
+
+- **`variant` and `color` on a row action, so it can look like the buttons beside it.** The table draws these buttons itself — plain `<button>` elements — and `hub-buttons` styles appearance through `:host(...)`, which matches nothing on an element the primitive did not create. A consumer who wanted a tinted row action therefore rebuilt the tint in its own stylesheet: two copies of one formula, free to drift the moment either side changed.
+
+    The vocabulary is `hubButton`'s (`solid`, `soft`, `outline`, `ghost`, plus the `default` this table has always drawn) and the tints ship here, built with the primitive's own arithmetic — the accent at 12% over the page surface for the subtle, at 80% over the ink for the emphasis — so the two read the same side by side. `default` stays the default and takes no colour: colouring it would be giving it a variant by the back door. A variant with no colour is `neutral`, not colourless.
+
 ### Fixed
+
+- **The table's chrome controls survive being rendered through the hub-forms adapter.** `provideHubPaginableFormControls` swaps the search box and the page-size picker for `<hub-input>` and `<hub-select>`, and the CSS for them was written for the native fallbacks. The two encapsulation modes then failed in opposite directions: the table's stylesheet is **emulated**, so its `.hub-table__search-input` rule carried an `_ngcontent` attribute and never reached a dynamically created component — the field came out with none of the group geometry, a standalone rounded control beside the button it was meant to be joined to; the paginator's ships with **`encapsulation: None`**, so its `.hub-paginator__select` rule *did* reach the component's host and drew a second border and padding around a control that already draws its own. One rule too narrow, one too wide, from the same assumption. The native skin now names the native element, the adapter's host draws no box, and the search field is reached through `::ng-deep` scoped to the table's host.
+
+- **The search button declares its own border.** It set a border *colour* and no width or style, which draws nothing unless something else supplies them — Bootstrap's `.btn`, which this family does not ship. Without it, the browser's own button chrome showed beside the search field.
 
 - **The sort trigger stops borrowing chrome the host may not have.** `<hub-table>` draws its own sort button and styled only the glyph inside it, leaving the `<button>` to whatever the application provided — and it carried a bare `btn`, which is Bootstrap's and which this family neither ships nor depends on. In an application without Bootstrap the class matched nothing and every sortable column header showed the browser's native grey button around the glyph. The class is gone from the markup and the component now styles its own trigger: no box, no background, no padding, the header cell's own colour, and `--hub-table-sort-btn-hover-color` for the hover.
 

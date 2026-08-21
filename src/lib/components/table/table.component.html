@@ -14,6 +14,7 @@
 						<button
 							class="hub-table__batch-actions-btn"
 							[ngClass]="getBatchActionClassList(button)"
+							[style.--hub-table-action-accent]="actionAccent(button)"
 							role="button"
 							(click)="handleBatchAction(button)"
 							[disabled]="!value.length"
@@ -589,6 +590,7 @@
 							[hubTableTooltip]="button.tooltip | unwrapAsync"
 							(click)="handleAction($event, button, row)"
 							[ngClass]="getRowActionClassList(button)"
+							[style.--hub-table-action-accent]="actionAccent(button)"
 						>
 							<div class="hub-table__cell-btn-content d-flex flex-nowrap align-items-center gap-1">
 								<ng-hub-ui-icon [config]="button.icon"></ng-hub-ui-icon>

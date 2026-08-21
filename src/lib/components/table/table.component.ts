@@ -1013,8 +1013,46 @@ export class TableComponent<T = any> {
 	 * @param button Row action button definition.
 	 * @returns List of CSS class names to bind in template.
 	 */
+	/**
+	 * The accent an action button paints with, resolved the way the rest of the family does.
+	 *
+	 * Through `resolveHubAccent` rather than a class per colour. `PaginableActionButton.color`
+	 * is typed `… | (string & {})` — it accepts any string on purpose, so a consumer can name
+	 * a role of their own — and a stylesheet that enumerates the seven built-in names honours
+	 * exactly those seven. Everything else got a class matching no rule, left the custom
+	 * property unset, and broke the `color-mix` into a button with no accent at all: no error,
+	 * no warning, and a typed API quietly telling a lie.
+	 *
+	 * The helper covers the general case: a bare word becomes `var(--hub-sys-color-<word>,
+	 * <word>)`, so both the system's roles and a consumer's own resolve, and anything that is
+	 * already a colour — a hex, an `rgb()` — passes through untouched. It is also what this
+	 * very component uses for its own variant two hundred lines up; the row actions were the
+	 * exception, not the rule.
+	 *
+	 * @param button - The action being drawn.
+	 * @returns A CSS colour value, or `null` when the variant has no accent to paint.
+	 */
+	actionAccent(button: PaginableActionButton): string | null {
+		// `default` is the plain bordered button: colouring it would be giving it a variant by
+		// the back door, exactly as the class list below refuses to.
+		if ((button.variant ?? 'default') === 'default') {
+			return null;
+		}
+
+		return resolveHubAccent(button.color ?? 'neutral');
+	}
+
 	getRowActionClassList(button: PaginableActionButton): Array<string> {
-		return this.withDefaultActionClass(button.classlist, 'hub-table__cell-btn--default');
+		const variant = button.variant ?? 'default';
+		const classes = [`hub-table__cell-btn--${variant}`];
+
+		if (button.classlist) {
+			classes.push(
+				...(Array.isArray(button.classlist) ? button.classlist : [button.classlist])
+			);
+		}
+
+		return classes;
 	}
 
 	/**

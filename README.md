@@ -805,11 +805,33 @@ interface PaginableActionButton<T = any> {
 	icon?: string | Icon;
 	handler?: (event: TableRowEvent<T>) => void;
 	hidden?: boolean | ((row: TableRow<T>) => boolean);
+	variant?: 'default' | 'solid' | 'soft' | 'outline' | 'ghost'; // default: 'default'
+	color?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral' | (string & {});
 	classlist?: string[] | string;
 }
 ```
 
 > **Tip**: Use `Observable<string>` for reactive translations with `HubTranslationService` or any i18n library.
+
+#### Appearance (`variant` / `color`)
+
+The table draws these buttons itself, so `hubButton` cannot skin them — its appearance
+rules are `:host(...)`-scoped and match nothing on an element the primitive did not
+create. `variant` and `color` take the same vocabulary, and the tints ship with the table,
+built with the primitive's own arithmetic, so the two read the same side by side:
+
+```typescript
+buttons: [
+	{ icon: 'icon--ph--eye', tooltip: 'View', handler: view },                      // plain bordered
+	{ icon: 'icon--ph--pencil', variant: 'soft', color: 'primary', handler: edit },
+	{ icon: 'icon--ph--trash', variant: 'soft', color: 'danger', handler: remove },
+	{ icon: 'icon--ph--dots-three-vertical', variant: 'ghost', handler: more }      // neutral
+];
+```
+
+`default` is the default and takes **no** colour — it is the plain bordered button this
+table has always drawn, and colouring it would be giving it a variant by the back door. A
+variant that names no colour is `neutral`, not colourless.
 
 ### Range Input Component (`<hub-ui-range-input>`)
 
